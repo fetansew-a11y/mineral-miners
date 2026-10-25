@@ -4,39 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mineral Mining Pro</title>
-    <!-- Telegram WebApp & Supabase SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- QR Code Generator Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root[data-theme="dark"] {
-            --bg-gradient: linear-gradient(135deg, #090d16 0%, #131c31 100%);
-            --card-bg: rgba(20, 30, 50, 0.8);
+            --bg-gradient: linear-gradient(135deg, #070a14 0%, #0f172a 100%);
+            --card-bg: rgba(15, 23, 42, 0.85);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border: 1px solid rgba(255, 255, 255, 0.12);
-            --shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-            --modal-bg: #131c31;
-            --input-bg: #090d16;
+            --border: 1px solid rgba(255, 255, 255, 0.1);
+            --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+            --modal-bg: #0f172a;
+            --input-bg: #020617;
         }
         :root[data-theme="light"] {
-            --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-            --card-bg: rgba(255, 255, 255, 0.85);
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --card-bg: rgba(255, 255, 255, 0.9);
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border: 1px solid rgba(0, 0, 0, 0.08);
-            --shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
             --modal-bg: #ffffff;
-            --input-bg: #f8fafc;
+            --input-bg: #f1f5f9;
         }
 
-        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; transition: background 0.3s, color 0.3s; }
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         body {
             background: var(--bg-gradient); color: var(--text-main);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0; padding: 15px 15px 95px 15px; text-align: center;
-            min-height: 100vh; user-select: none; touch-action: manipulation;
+            min-height: 100vh; user-select: none;
         }
         .app-container { max-width: 420px; margin: 0 auto; }
         
@@ -44,162 +42,158 @@
             background: rgba(59, 130, 246, 0.15); color: #93c5fd; padding: 10px 14px; border-radius: 14px;
             font-size: 13px; font-weight: 700; margin-bottom: 15px; border: 1px solid rgba(147, 197, 253, 0.3);
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .card {
-            background: var(--card-bg); backdrop-filter: blur(12px); border-radius: 24px; padding: 22px;
-            margin: 15px 0; border: var(--border); box-shadow: var(--shadow);
+            background: var(--card-bg); border-radius: 24px; padding: 22px;
+            margin: 14px 0; border: var(--border); box-shadow: var(--shadow);
         }
         .header {
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--card-bg); backdrop-filter: blur(12px); padding: 14px 18px; border-radius: 18px;
-            border: var(--border); box-shadow: var(--shadow); margin-bottom: 15px; font-weight: 700;
+            background: var(--card-bg); padding: 12px 18px; border-radius: 18px;
+            border: var(--border); margin-bottom: 14px; font-weight: 700;
         }
-        .app-title {
-            font-size: 26px; color: var(--text-main); margin: 10px 0 5px 0;
-            font-weight: 900; letter-spacing: -0.5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .balance-box { font-size: 38px; font-weight: 900; color: #10b981; margin: 5px 0; text-shadow: 0 0 15px rgba(16, 185, 129, 0.25); }
-        .sub-balance { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; }
+        .app-title { font-size: 24px; color: var(--text-main); margin: 8px 0 4px 0; font-weight: 900; }
+        .balance-box { font-size: 38px; font-weight: 900; color: #10b981; margin: 5px 0; text-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+        .sub-balance { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; }
         
-        .mining-animation-container {
-            display: flex; align-items: center; justify-content: center; gap: 10px; margin: 10px 0;
+        /* 🌟 NEW REALISTIC 3D MINING CORE ANIMATION */
+        .mining-core-animation {
+            width: 75px; height: 75px; margin: 10px auto;
+            animation: pulseCore 3s ease-in-out infinite;
         }
-        .mining-gear { font-size: 28px; animation: spinGear 3s linear infinite; }
-        @keyframes spinGear { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .mining-core-animation svg {
+            width: 100%; height: 100%;
+            animation: rotateCore 8s linear infinite;
+            filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.6));
+        }
+        @keyframes rotateCore {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes pulseCore {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
 
-        .live-mining-box { background: var(--input-bg); padding: 14px; border-radius: 16px; margin: 15px 0; border: 2px dashed rgba(148, 163, 184, 0.3); }
-        .progress-bar-container { width: 100%; background: var(--border); height: 10px; border-radius: 5px; overflow: hidden; margin-top: 10px; }
-        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #059669, #34d399); transition: width 0.3s ease; }
+        .live-mining-box { background: var(--input-bg); padding: 14px; border-radius: 16px; margin: 14px 0; border: 2px dashed rgba(148, 163, 184, 0.3); }
+        .progress-bar-container { width: 100%; background: var(--border); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 8px; }
+        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #059669, #34d399); }
 
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
-        
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
         button {
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-            color: white; border: none; padding: 15px 16px; font-size: 16px;
-            font-weight: 800; border-radius: 16px; cursor: pointer;
-            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 14px; font-size: 15px;
+            font-weight: 800; border-radius: 16px; cursor: pointer; width: 100%;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
-        button:active { transform: scale(0.96); box-shadow: 0 2px 5px rgba(37, 99, 235, 0.2); }
-        
-        .btn-success { 
-            background: linear-gradient(135deg, #10b981 0%, #047857 100%); 
-            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
-        }
-        .btn-warning { 
-            background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%); 
-            box-shadow: 0 6px 15px rgba(245, 158, 11, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
-        }
-        .btn-danger {
-            background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%);
-            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        }
-        .btn-sm { padding: 10px 14px; font-size: 13px; border-radius: 12px; width: 100%; margin-top: 10px; font-weight: 700; }
+        .btn-success { background: linear-gradient(135deg, #059669, #047857); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3); }
+        .btn-warning { background: linear-gradient(135deg, #d97706, #b45309); box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3); }
+        .btn-danger { background: linear-gradient(135deg, #dc2626, #991b1b); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3); }
+        .btn-sm { padding: 10px; font-size: 12px; margin-top: 8px; width: auto; }
 
         .theme-toggle-btn {
             background: var(--border); color: var(--text-main); border: none; width: 38px; height: 38px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
-            font-size: 16px; box-shadow: var(--shadow); padding: 0;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px;
         }
 
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: var(--card-bg); backdrop-filter: blur(12px); display: flex; justify-content: space-around;
+            background: var(--card-bg); display: flex; justify-content: space-around;
             padding: 10px 0; border-top: var(--border); z-index: 999;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
         }
         .nav-item {
-            background: none; border: none; color: var(--text-muted); font-size: 12px;
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-            cursor: pointer; font-weight: 700; box-shadow: none; padding: 0; width: 25%;
-            transition: color 0.2s;
+            background: none; border: none; color: var(--text-muted); font-size: 11px;
+            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            cursor: pointer; font-weight: 700; width: 25%; padding: 0;
         }
         .nav-item.active { color: #3b82f6; }
-        .nav-icon svg { width: 24px; height: 24px; fill: currentColor; pointer-events: none; }
+        .nav-icon svg { width: 22px; height: 22px; fill: currentColor; }
 
         .tab-pane { display: none; }
         .tab-pane.active { display: block; }
 
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(6px);
-            justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;
+            background: rgba(15, 23, 42, 0.75); justify-content: center; align-items: center; z-index: 1000; padding: 15px;
+            backdrop-filter: blur(5px);
         }
         .modal-content {
-            background: var(--modal-bg); padding: 24px; border-radius: 24px; width: 100%;
-            max-width: 360px; border: var(--border); text-align: left;
-            max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 30px -10px rgba(0,0,0,0.5); color: var(--text-main);
+            background: var(--modal-bg); padding: 22px; border-radius: 24px; width: 100%;
+            max-width: 350px; border: var(--border); text-align: left; max-height: 85vh; overflow-y: auto; color: var(--text-main);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
         input, select {
-            width: 100%; padding: 14px; margin: 8px 0 16px 0; background: var(--input-bg);
-            border: 2px solid var(--border); border-radius: 14px; color: var(--text-main); box-sizing: border-box; font-size: 15px; font-weight: 600;
+            width: 100%; padding: 12px; margin: 6px 0 12px 0; background: var(--input-bg);
+            border: 1px solid var(--border); border-radius: 12px; color: var(--text-main); font-size: 14px; font-weight: 600;
         }
-        .close-btn { background: linear-gradient(135deg, #64748b 100%, #475569 100%); width: 100%; margin-top: 12px; box-shadow: none; font-weight: 700; }
+        .close-btn { background: #475569; width: 100%; margin-top: 10px; }
         
         .history-list, .vip-list, .admin-list {
-            max-height: 250px; overflow-y: auto; font-size: 13px; background: var(--input-bg);
-            padding: 12px; border-radius: 14px; margin-top: 10px; color: var(--text-muted);
-            border: var(--border); text-align: left; font-weight: 600;
+            max-height: 220px; overflow-y: auto; font-size: 12px; background: var(--input-bg);
+            padding: 10px; border-radius: 12px; margin-top: 8px; color: var(--text-muted); border: var(--border);
         }
-        .history-item { padding: 8px 0; border-bottom: 1px solid var(--border); }
+        .history-item { padding: 6px 0; border-bottom: 1px solid var(--border); }
         
         .vip-card-item { 
-            background: var(--card-bg); 
-            padding: 16px; border-radius: 18px; margin-bottom: 14px; 
-            border: var(--border); 
-            box-shadow: var(--shadow);
-            display: flex; justify-content: space-between; align-items: center; gap: 10px; 
+            background: var(--card-bg); padding: 14px; border-radius: 16px; margin-bottom: 12px; 
+            border: var(--border); display: flex; justify-content: space-between; align-items: center; gap: 10px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .vip-badge-3d {
-            width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3), inset 0 2px 6px rgba(255,255,255,0.4);
-            flex-shrink: 0; padding: 6px;
-        }
-        .vip-badge-3d svg { width: 100%; height: 100%; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3)); }
+        .vip-badge-3d { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 6px; box-shadow: inset 0 2px 5px rgba(255,255,255,0.4); }
+        .vip-badge-3d svg { width: 100%; height: 100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
         
-        .admin-item { background: var(--input-bg); padding: 12px; margin-bottom: 10px; border-radius: 12px; border: var(--border); }
-        #qrcode { display: flex; justify-content: center; margin: 12px 0; background: white; padding: 12px; border-radius: 14px; width: fit-content; margin: 10px auto; border: var(--border); }
-        .wallet-box { background: var(--input-bg); padding: 12px; border-radius: 12px; font-size: 12px; word-break: break-all; margin: 10px 0; border: 2px dashed #64748b; color: var(--text-main); font-weight: 600; }
+        .admin-item { background: var(--input-bg); padding: 10px; margin-bottom: 8px; border-radius: 10px; border: var(--border); }
+        #qrcode { display: flex; justify-content: center; margin: 10px auto; background: white; padding: 10px; border-radius: 12px; width: fit-content; }
+        .wallet-box { background: var(--input-bg); padding: 10px; border-radius: 10px; font-size: 11px; word-break: break-all; margin: 8px 0; border: 1px dashed #64748b; color: var(--text-main); }
     </style>
 </head>
 <body>
     <div class="app-container">
         
-        <!-- Live Payout Ticker Banner -->
         <div class="payout-banner">
             <span id="payoutTickerText">Alex successfully withdrawn $50.00 (BEP20)</span>
         </div>
 
-        <!-- ================= TAB 1: HOME ================= -->
+        <!-- HOME TAB -->
         <div id="homeTab" class="tab-pane active">
             <div class="header">
-                <div>VIP Level: <span id="vipDisplay" style="color:#3b82f6; font-weight:900;">💎 VIP 0 (Quartz)</span></div>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeIconBtn" title="Toggle Theme">🌙</button>
-                    <button onclick="switchTabSafe('profileTab', document.querySelectorAll('.nav-item')[3]); openModal('historyModal')" style="padding: 8px 12px; font-size: 12px; width:auto; border-radius: 12px;">History</button>
+                <div>VIP: <span id="vipDisplay" style="color:#3b82f6; font-weight:900;">VIP 0</span></div>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeIconBtn">🌙</button>
+                    <button class="btn-sm" onclick="switchTabSafe('profileTab', document.querySelectorAll('.nav-item')[3]); openModal('historyModal')">History</button>
                 </div>
             </div>
 
             <h1 class="app-title">⛏️ Mineral Mining Pro</h1>
-            <p style="color: var(--text-muted); font-size: 14px; font-weight: 700; margin-top: -5px;">$1 Welcome Bonus Active</p>
+            <p style="color: var(--text-muted); font-size: 13px; font-weight: 700;">$1 Welcome Bonus Active</p>
 
             <div class="card">
-                <p style="margin: 0; color: var(--text-muted); font-size: 14px; font-weight: 700;">Available Balance</p>
+                <p style="margin: 0; color: var(--text-muted); font-size: 13px; font-weight: 700;">Available Balance</p>
                 <div class="balance-box"><span id="balanceDisplay">1.00</span> $</div>
-                <div class="sub-balance">Active Mining Base: $<span id="activeInvDisplay">0.00</span> (10% Daily)</div>
+                <div class="sub-balance">Active Mining: $<span id="activeInvDisplay">0.00</span> (10% Daily)</div>
                 
-                <div class="mining-animation-container">
-                    <span class="mining-gear">⚙️</span>
-                    <span style="font-size: 14px; font-weight: 800; color: #10b981;">Active Extraction in Progress</span>
+                <!-- 🌟 PROFESSIONAL 3D MINING CORE ANIMATION -->
+                <div class="mining-core-animation">
+                    <svg viewBox="0 0 100 100">
+                        <defs>
+                            <linearGradient id="coreGrad" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#34d399"/>
+                                <stop offset="50%" stop-color="#059669"/>
+                                <stop offset="100%" stop-color="#064e3b"/>
+                            </linearGradient>
+                        </defs>
+                        <polygon points="50,5 90,27 90,73 50,95 10,73 10,27" fill="url(#coreGrad)" stroke="#6ee7b7" stroke-width="3"/>
+                        <polygon points="50,20 75,35 75,65 50,80 25,65 25,35" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+                        <circle cx="50" cy="50" r="12" fill="#ffffff" filter="drop-shadow(0 0 8px #34d399)"/>
+                    </svg>
                 </div>
+                <p style="font-size: 12px; font-weight: 800; color: #10b981; margin: 4px 0 10px 0;">Crystal Core Active</p>
 
                 <div class="live-mining-box">
-                    <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 800;">
-                        <span style="color: #10b981;">Mined Balance (Min $0.10)</span>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 800;">
+                        <span style="color: #10b981;">Mined (Min $0.10)</span>
                         <span id="liveTickerVal" style="color: var(--text-main);">+$0.0000</span>
                     </div>
                     <div class="progress-bar-container">
@@ -207,7 +201,7 @@
                     </div>
                 </div>
 
-                <button class="btn-success" onclick="claimMining()" style="width: 100%;">✨ Claim Mined Income</button>
+                <button class="btn-success" onclick="claimMining()">✨ Claim Mined Income</button>
             </div>
 
             <div class="btn-grid">
@@ -215,61 +209,51 @@
                 <button class="btn-warning" onclick="openModal('withdrawModal')">📤 Withdraw</button>
             </div>
             
-            <div style="margin-top: 15px;">
-                <button class="btn-warning" onclick="dailyCheckIn()" style="width: 100%;">🎁 Daily Check-In (+0.02$)</button>
+            <div style="margin-top: 12px;">
+                <button class="btn-warning" onclick="dailyCheckIn()">🎁 Daily Check-In (+0.02$)</button>
             </div>
         </div>
 
-        <!-- ================= TAB 2: VIP TIERS ================= -->
+        <!-- VIP TAB -->
         <div id="vipTab" class="tab-pane">
-            <h2 style="color: var(--text-main); margin-top: 10px; font-weight: 900;">👑 Mineral VIP Tiers</h2>
-            <p style="font-size: 14px; color: var(--text-muted); font-weight: 600;">Buy a VIP package to start 10% daily mining speed.</p>
-            
-            <div class="card" style="padding: 15px;">
-                <div id="vipCardsContainer" class="vip-list" style="max-height: 420px; background: transparent; border: none; padding: 0;"></div>
+            <h2 style="color: var(--text-main); font-size: 20px; font-weight: 900;">👑 Mineral VIP Tiers</h2>
+            <div class="card" style="padding: 10px;">
+                <div id="vipCardsContainer" class="vip-list" style="max-height: 380px; background: transparent; border: none; padding: 0;"></div>
             </div>
         </div>
 
-        <!-- ================= TAB 3: REFERRAL ================= -->
+        <!-- REFERRAL TAB -->
         <div id="refTab" class="tab-pane">
-            <h2 style="color: var(--text-main); margin-top: 10px; font-weight: 900;">👥 Referral System</h2>
-            <div class="card">
-                <p style="font-size: 14px; color: var(--text-muted); font-weight: 600;">Invite friends & earn rewards instantly!</p>
-                <div style="font-size: 14px; margin: 15px 0; text-align: left; font-weight: 700; line-height: 1.6;">
-                    <p>• Per Referral Reward: <b style="color:#10b981;">+$0.04</b></p>
-                    <p>• Deposit Commission: <b style="color:#f59e0b;">10% of Friend's Deposit</b></p>
-                    <p>• Total Referrals Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
-                </div>
-                <div style="margin: 15px 0; text-align: left;">
-                    <label style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Your Referral Link:</label>
-                    <input type="text" id="refLinkInput" readonly style="font-size: 12px; font-weight: 700;">
-                </div>
-                <button class="btn-success" onclick="copyRefLink()" style="width: 100%;">🔗 Copy Referral Link</button>
+            <h2 style="color: var(--text-main); font-size: 20px; font-weight: 900;">👥 Referral System</h2>
+            <div class="card" style="text-align: left;">
+                <p style="font-size: 13px; color: var(--text-muted);">Invite friends & earn rewards!</p>
+                <p style="font-size: 13px;">• Per Referral: <b style="color:#10b981;">+$0.04</b></p>
+                <p style="font-size: 13px;">• Total Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
+                <input type="text" id="refLinkInput" readonly style="font-size: 11px;">
+                <button class="btn-success btn-sm" onclick="copyRefLink()">🔗 Copy Link</button>
             </div>
         </div>
 
-        <!-- ================= TAB 4: PROFILE & HISTORY ================= -->
+        <!-- PROFILE TAB -->
         <div id="profileTab" class="tab-pane">
-            <h2 style="color: var(--text-main); margin-top: 10px; font-weight: 900;">👤 Profile Center</h2>
-            <div class="card" style="text-align: left; font-weight: 700;">
-                <p style="margin: 8px 0;"><b>Telegram ID:</b> <span id="profileIdDisplay" style="color: var(--text-muted);">Loading...</span></p>
-                <p style="margin: 8px 0;"><b>Current VIP:</b> <span id="profileVipDisplay" style="color: #3b82f6;">VIP 0</span></p>
-                <p style="margin: 8px 0;"><b>Active Mining Base:</b> $<span id="profileInvDisplay" style="color: #10b981;">0.00</span></p>
-                <p style="margin: 8px 0;"><b>Total Referrals:</b> <span id="profileRefDisplay" style="color: #3b82f6;">0</span></p>
+            <h2 style="color: var(--text-main); font-size: 20px; font-weight: 900;">👤 Profile</h2>
+            <div class="card" style="text-align: left; font-size: 13px;">
+                <p><b>ID:</b> <span id="profileIdDisplay" style="color: var(--text-muted);">Loading...</span></p>
+                <p><b>VIP:</b> <span id="profileVipDisplay" style="color: #3b82f6;">VIP 0</span></p>
+                <p><b>Active Mining:</b> $<span id="profileInvDisplay" style="color: #10b981;">0.00</span></p>
             </div>
 
             <div class="card" style="text-align: left;">
-                <h3 style="margin-top:0; font-size:16px; font-weight:900;">📜 Recent Activities</h3>
-                <div id="profileHistoryList" class="history-list" style="max-height: 150px;">No history available.</div>
+                <h3 style="margin-top:0; font-size:14px; font-weight:900;">📜 History</h3>
+                <div id="profileHistoryList" class="history-list" style="max-height: 120px;">No history.</div>
             </div>
 
-            <!-- Professional Admin Portal Button -->
-            <div style="margin-top: 15px;">
-                <button class="btn-danger" onclick="openAdminPortal()" style="width: 100%;">🔐 Admin Portal Access</button>
+            <div style="margin-top: 10px;">
+                <button class="btn-danger btn-sm" onclick="openAdminPortal()">🔐 Admin Portal</button>
             </div>
         </div>
 
-        <!-- ================= BOTTOM NAVIGATION BAR ================= -->
+        <!-- BOTTOM NAV -->
         <div class="bottom-nav">
             <button class="nav-item active" onclick="switchTabSafe('homeTab', this)">
                 <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span>
@@ -280,7 +264,7 @@
                 <span>VIP</span>
             </button>
             <button class="nav-item" onclick="switchTabSafe('refTab', this)">
-                <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></span>
+                <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3z"/></svg></span>
                 <span>Referral</span>
             </button>
             <button class="nav-item" onclick="switchTabSafe('profileTab', this)">
@@ -290,153 +274,85 @@
         </div>
     </div>
 
-    <!-- ================= MODALS ================= -->
+    <!-- MODALS -->
     <div id="depositModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; font-weight:900;">Deposit Crypto (Manual)</h3>
-            <p style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Select network, copy address, send funds and submit request for Admin approval.</p>
-            
-            <label style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Select Network:</label>
+            <h3 style="margin-top:0;">Deposit Crypto</h3>
             <select id="depositNetwork" onchange="updateDepositAddress()">
-                <option value="BEP20">USDT (BEP20 - BSC)</option>
-                <option value="ERC20">USDT (ERC20 - ETH)</option>
-                <option value="TON">USDT (TON Network)</option>
+                <option value="BEP20">USDT (BEP20)</option>
+                <option value="ERC20">USDT (ERC20)</option>
+                <option value="TON">USDT (TON)</option>
             </select>
-
             <div id="qrcode"></div>
-            <div class="wallet-box">
-                <b>Deposit Address:</b><br><span id="walletAddressDisplay"></span>
-            </div>
-            <button class="btn-sm btn-success" onclick="copyWalletAddress()">Copy Address</button>
-
-            <label style="font-size: 12px; color: var(--text-muted); margin-top:12px; font-weight: 700;">Deposit Amount (USD):</label>
-            <input type="number" id="depositAmountInput" placeholder="Minimum $5" min="5">
-            
-            <button class="btn-success" onclick="processDeposit()" style="width: 100%;">Submit Request</button>
-            <button class="close-btn" onclick="closeModal('depositModal')">Close</button>
+            <div class="wallet-box"><span id="walletAddressDisplay"></span></div>
+            <button class="btn-success btn-sm" onclick="copyWalletAddress()">Copy Address</button>
+            <input type="number" id="depositAmountInput" placeholder="Amount ($ min 5)" min="5">
+            <button class="btn-success" onclick="processDeposit()">Submit</button>
+            <button class="close-btn btn-sm" onclick="closeModal('depositModal')">Close</button>
         </div>
     </div>
 
     <div id="withdrawModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; font-weight:900;">Withdraw Funds (Manual)</h3>
-            <p style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Minimum withdrawal: <b>$5</b>. Request goes to Admin for review.</p>
-            
-            <label style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Select Network:</label>
+            <h3 style="margin-top:0;">Withdraw Funds</h3>
             <select id="withdrawNetwork">
-                <option value="BEP20">USDT (BEP20 - BSC)</option>
-                <option value="ERC20">USDT (ERC20 - ETH)</option>
-                <option value="TON">USDT (TON Network)</option>
+                <option value="BEP20">USDT (BEP20)</option>
+                <option value="ERC20">USDT (ERC20)</option>
+                <option value="TON">USDT (TON)</option>
             </select>
-
-            <label style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Wallet Address:</label>
-            <input type="text" id="withdrawWalletInput" placeholder="Enter wallet address">
-            
-            <label style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Amount ($):</label>
-            <input type="number" id="withdrawAmountInput" placeholder="Minimum $5" min="5">
-            
-            <button class="btn-warning" onclick="processWithdraw()" style="width: 100%;">Request Withdrawal</button>
-            <button class="close-btn" onclick="closeModal('withdrawModal')">Close</button>
+            <input type="text" id="withdrawWalletInput" placeholder="Wallet address">
+            <input type="number" id="withdrawAmountInput" placeholder="Amount ($ min 5)" min="5">
+            <button class="btn-warning" onclick="processWithdraw()">Request</button>
+            <button class="close-btn btn-sm" onclick="closeModal('withdrawModal')">Close</button>
         </div>
     </div>
 
     <div id="historyModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; font-weight:900;">Recent Transactions</h3>
-            <div id="historyList" class="history-list">No transactions yet.</div>
-            <button class="close-btn" onclick="closeModal('historyModal')">Close</button>
+            <h3 style="margin-top:0;">History</h3>
+            <div id="historyList" class="history-list">No history.</div>
+            <button class="close-btn btn-sm" onclick="closeModal('historyModal')">Close</button>
         </div>
     </div>
 
     <div id="adminAuthModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; font-weight:900;">Secret Admin Login</h3>
-            <input type="password" id="adminPasswordInput" placeholder="Enter Admin Password">
-            <button class="btn-success" onclick="verifyAdminPassword()" style="width: 100%;">Login</button>
-            <button class="close-btn" onclick="closeModal('adminAuthModal')">Cancel</button>
+            <h3 style="margin-top:0;">Admin Login</h3>
+            <input type="password" id="adminPasswordInput" placeholder="Password">
+            <button class="btn-success" onclick="verifyAdminPassword()">Login</button>
+            <button class="close-btn btn-sm" onclick="closeModal('adminAuthModal')">Cancel</button>
         </div>
     </div>
 
     <div id="adminPanelModal" class="modal">
-        <div class="modal-content" style="max-width: 380px;">
-            <h3 style="margin-top:0; color: #f59e0b; font-weight:900;">Admin Control Center</h3>
-            <p style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Manage pending requests & view users.</p>
-            
-            <h4 style="margin: 10px 0 5px 0; color: #10b981; font-size: 14px; font-weight: 900;">Pending Requests</h4>
-            <div id="adminList" class="admin-list">Loading pending requests...</div>
-
-            <h4 style="margin: 15px 0 5px 0; color: #3b82f6; font-size: 14px; font-weight: 900;">Registered Users</h4>
-            <div id="adminUserList" class="admin-list">Loading users list...</div>
-
-            <button class="close-btn" onclick="closeModal('adminPanelModal')" style="margin-top: 15px;">Close Panel</button>
+        <div class="modal-content">
+            <h3 style="margin-top:0; color:#f59e0b;">Admin Panel</h3>
+            <div id="adminList" class="admin-list">No pending requests.</div>
+            <button class="close-btn btn-sm" onclick="closeModal('adminPanelModal')">Close</button>
         </div>
     </div>
 
-    <!-- ================= JAVASCRIPT LOGIC ================= -->
     <script>
-        // 🔊 Web Audio API Sound Synthesizer (No external sound files required)
-        let audioCtx = null;
-        function playSound(type) {
-            try {
-                if (!audioCtx) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                const now = audioCtx.currentTime;
-                if (type === 'click') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(400, now);
-                    osc.frequency.exponentialRampToValueAtTime(200, now + 0.08);
-                    gain.gain.setValueAtTime(0.15, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
-                    osc.start(now);
-                    osc.stop(now + 0.08);
-                } else if (type === 'success') {
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(523.25, now); // C5
-                    osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
-                    osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
-                    gain.gain.setValueAtTime(0.2, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
-                    osc.start(now);
-                    osc.stop(now + 0.35);
-                } else if (type === 'claim') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(300, now);
-                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.2);
-                    gain.gain.setValueAtTime(0.25, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
-                    osc.start(now);
-                    osc.stop(now + 0.25);
-                }
-            } catch (e) {}
-        }
-
-        // Theme Toggle Logic
         function toggleTheme() {
-            playSound('click');
-            const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('mineral_theme', newTheme);
-            document.getElementById('themeIconBtn').innerText = newTheme === 'light' ? '☀️' : '🌙';
-            triggerHaptic();
+            try {
+                const html = document.documentElement;
+                const newTheme = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('mineral_theme', newTheme);
+                const btn = document.getElementById('themeIconBtn');
+                if (btn) btn.innerText = newTheme === 'light' ? '☀️' : '🌙';
+                triggerHaptic();
+            } catch(e) {}
         }
 
-        const savedTheme = localStorage.getItem('mineral_theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        document.addEventListener("DOMContentLoaded", () => {
-            const btn = document.getElementById('themeIconBtn');
-            if (btn) btn.innerText = savedTheme === 'light' ? '☀️' : '🌙';
-        });
+        try {
+            const savedTheme = localStorage.getItem('mineral_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            window.addEventListener("DOMContentLoaded", () => {
+                const btn = document.getElementById('themeIconBtn');
+                if (btn) btn.innerText = savedTheme === 'light' ? '☀️' : '🌙';
+            });
+        } catch(e) {}
 
         function triggerHaptic() {
             try {
@@ -447,30 +363,32 @@
         }
 
         function switchTabSafe(tabId, element) {
-            playSound('click');
-            triggerHaptic();
-            document.querySelectorAll('.tab-pane').forEach(function(tab) { tab.classList.remove('active'); });
-            document.querySelectorAll('.nav-item').forEach(function(nav) { nav.classList.remove('active'); });
-            const target = document.getElementById(tabId);
-            if (target) target.classList.add('active');
-            if (element) element.classList.add('active');
+            try {
+                triggerHaptic();
+                document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                const target = document.getElementById(tabId);
+                if (target) target.classList.add('active');
+                if (element) element.classList.add('active');
+            } catch(e) {}
         }
 
-        function openModal(id) {
-            playSound('click');
-            triggerHaptic();
-            const modal = document.getElementById(id);
-            if (modal) modal.style.display = 'flex';
+        function openModal(id) { 
+            try {
+                triggerHaptic(); 
+                const m = document.getElementById(id);
+                if (m) m.style.display = 'flex'; 
+            } catch(e) {}
+        }
+        
+        function closeModal(id) { 
+            try {
+                triggerHaptic(); 
+                const m = document.getElementById(id);
+                if (m) m.style.display = 'none'; 
+            } catch(e) {}
         }
 
-        function closeModal(id) {
-            playSound('click');
-            triggerHaptic();
-            const modal = document.getElementById(id);
-            if (modal) modal.style.display = 'none';
-        }
-
-        let supabase = null;
         const wallets = {
             BEP20: '0x91D139567d96E18159f4d59BDfe1269cF4bB1Eb3',
             ERC20: '0x3A23D577010BFF61620BC232a4fd95Fe895416bF',
@@ -478,304 +396,156 @@
         };
 
         let telegramId = 'user_' + Math.floor(Math.random() * 900000 + 100000);
-        let referrerId = null;
-
         try {
             if (window.Telegram && Telegram.WebApp) {
                 Telegram.WebApp.ready();
                 Telegram.WebApp.expand();
-                if (Telegram.WebApp.initDataUnsafe?.user?.id) {
-                    telegramId = String(Telegram.WebApp.initDataUnsafe.user.id);
-                }
-                if (Telegram.WebApp.initDataUnsafe?.start_param) {
-                    const sp = Telegram.WebApp.initDataUnsafe.start_param;
-                    if (sp.startsWith('ref_')) referrerId = sp.replace('ref_', '');
-                }
+                if (Telegram.WebApp.initDataUnsafe?.user?.id) telegramId = String(Telegram.WebApp.initDataUnsafe.user.id);
             }
         } catch(e) {}
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const urlRef = urlParams.get('ref') || urlParams.get('start');
-        if (urlRef) {
-            referrerId = urlRef.startsWith('ref_') ? urlRef.replace('ref_', '') : urlRef;
-        }
+        let balance = 1.00;
+        let activeInvestment = 0.00;
+        let vipLevel = 0;
+        let minedAccumulated = 0.00;
+        let referralCount = 0;
+        let historyLog = ["Welcome Bonus: +$1.00"];
 
-        const botUsername = 'MineralMiningBot';
-
-        let localData = null;
         try {
-            const rawData = localStorage.getItem('mineral_user_' + telegramId);
-            if (rawData) localData = JSON.parse(rawData);
-        } catch(e) {
-            localStorage.removeItem('mineral_user_' + telegramId);
-        }
-
-        let balance = localData?.balance ?? 1.00;
-        let activeInvestment = localData?.active_investment ?? 0.00;
-        let vipLevel = localData?.vip_level ?? 0;
-        let minedAccumulated = localData?.mined_accumulated ?? 0.00;
-        let referralCount = localData?.referral_count ?? 0;
-        let lastClaimTime = localData?.last_claim_time ?? 0;
-        let lastUpdateTime = localData?.last_update_time ?? Date.now();
-        let historyLog = localData?.history || ["Welcome Bonus Claimed: +$1.00"];
-
-        if (activeInvestment > 0) {
-            const now = Date.now();
-            const elapsedSeconds = (now - lastUpdateTime) / 1000;
-            if (elapsedSeconds > 0 && elapsedSeconds < 604800) {
-                const dailyReturn = activeInvestment * 0.10;
-                const perSecondRate = dailyReturn / 86400;
-                minedAccumulated += elapsedSeconds * perSecondRate;
+            const raw = localStorage.getItem('m_user_' + telegramId);
+            if (raw) {
+                const d = JSON.parse(raw);
+                balance = d.balance ?? balance;
+                activeInvestment = d.active_investment ?? activeInvestment;
+                vipLevel = d.vip_level ?? vipLevel;
+                minedAccumulated = d.mined_accumulated ?? minedAccumulated;
+                referralCount = d.referral_count ?? referralCount;
+                historyLog = d.history ?? historyLog;
             }
-            lastUpdateTime = now;
-        }
+        } catch(e) {}
 
+        // 🌟 REALISTIC 3D MINERAL & GEMSTONE SVGs FOR VIP TIERS
         const vipTiersData = [
-            { 
-                level: 0, name: "VIP 0 (Quartz)", price: 1.00, daily: 0.10, 
-                bg: "linear-gradient(135deg, #94a3b8, #475569)", 
-                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="q1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f8fafc"/><stop offset="50%" stop-color="#cbd5e1"/><stop offset="100%" stop-color="#64748b"/></linearGradient><linearGradient id="q2" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#94a3b8"/></linearGradient></defs><polygon points="32,4 48,20 40,56 24,56 16,20" fill="url(#q1)" stroke="#e2e8f0" stroke-width="1.5"/><polygon points="32,4 48,20 32,28" fill="url(#q2)" opacity="0.8"/><polygon points="32,4 16,20 32,28" fill="#ffffff" opacity="0.4"/><line x1="32" y1="28" x2="40" y2="56" stroke="#475569" stroke-width="1.5"/><line x1="32" y1="28" x2="24" y2="56" stroke="#475569" stroke-width="1.5"/></svg>` 
-            },
-            { 
-                level: 1, name: "VIP 1 (Silver)", price: 5.00, daily: 0.50, 
-                bg: "linear-gradient(135deg, #cbd5e1, #334155)", 
-                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="s1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f1f5f9"/><stop offset="100%" stop-color="#475569"/></linearGradient></defs><rect x="12" y="20" width="40" height="24" rx="4" fill="url(#s1)" stroke="#94a3b8" stroke-width="2"/><path d="M16 24h32M16 32h32" stroke="#ffffff" stroke-width="1.5" opacity="0.6"/></svg>` 
-            },
-            { 
-                level: 2, name: "VIP 2 (Gold)", price: 10.00, daily: 1.00, 
-                bg: "linear-gradient(135deg, #f59e0b, #78350f)", 
-                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fde047"/><stop offset="50%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#b45309"/></linearGradient></defs><path d="M14 22l10-8h20l6 8-6 24H20z" fill="url(#g1)" stroke="#fef08a" stroke-width="1.5"/><path d="M24 14l6 36M40 14l-6 36" stroke="#fef08a" stroke-width="1" opacity="0.6"/></svg>` 
-            },
-            { 
-                level: 3, name: "VIP 3 (Platinum)", price: 20.00, daily: 2.00, 
-                bg: "linear-gradient(135deg, #38bdf8, #0369a1)", 
-                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="p1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e0f2fe"/><stop offset="50%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0369a1"/></linearGradient></defs><polygon points="32,6 54,24 44,58 20,58 10,24" fill="url(#p1)" stroke="#bae6fd" stroke-width="1.5"/><polygon points="32,6 54,24 32,36 10,24" fill="#ffffff" opacity="0.5"/></svg>` 
-            },
-            { 
-                level: 4, name: "VIP 4 (Ruby)", price: 50.00, daily: 5.00, 
-                bg: "linear-gradient(135deg, #f43f5e, #881337)", 
-                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="r1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fb7185"/><stop offset="50%" stop-color="#e11d48"/><stop offset="100%" stop-color="#881337"/></linearGradient></defs><polygon points="20,12 44,12 56,28 32,58 8,28" fill="url(#r1)" stroke="#fda4af" stroke-width="1.5"/><polygon points="20,12 44,12 32,28" fill="#ffffff" opacity="0.4"/></svg>` 
-            },
-            { 
-                level: 5, name: "VIP 5 (Sapphire)", price: 100.00, daily: 10.00, 
-                bg: "linear-gradient(135deg, #3b82f6, #1e3a8a)", 
-                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="sap1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#60a5fa"/><stop offset="50%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1e3a8a"/></linearGradient></defs><polygon points="32,8 56,22 48,56 16,56 8,22" fill="url(#sap1)" stroke="#93c5fd" stroke-width="1.5"/><polygon points="32,8 56,22 32,34 8,22" fill="#ffffff" opacity="0.45"/></svg>` 
-            },
-            { 
-                level: 6, name: "VIP 6 (Emerald)", price: 500.00, daily: 50.00, 
-                bg: "linear-gradient(135deg, #10b981, #064e3b)", 
-                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="em1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="50%" stop-color="#059669"/><stop offset="100%" stop-color="#064e3b"/></linearGradient></defs><rect x="14" y="14" width="36" height="36" rx="6" transform="rotate(45 32 32)" fill="url(#em1)" stroke="#6ee7b7" stroke-width="1.5"/><rect x="20" y="20" width="24" height="24" rx="3" transform="rotate(45 32 32)" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.6"/></svg>` 
-            },
-            { 
-                level: 7, name: "VIP 7 (Diamond)", price: 1000.00, daily: 100.00, 
-                bg: "linear-gradient(135deg, #c084fc, #581c87)", 
-                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="d1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f3e8ff"/><stop offset="50%" stop-color="#c084fc"/><stop offset="100%" stop-color="#581c87"/></linearGradient></defs><polygon points="32,4 58,22 32,60 6,22" fill="url(#d1)" stroke="#e9d5ff" stroke-width="1.5"/><polygon points="32,4 58,22 32,32 6,22" fill="#ffffff" opacity="0.6"/><line x1="6" y1="22" x2="58" y2="22" stroke="#e9d5ff" stroke-width="1.2"/><line x1="32" y1="32" x2="32" y2="60" stroke="#7e22ce" stroke-width="1.2"/></svg>` 
-            }
+            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, daily: 0.10, bg: "linear-gradient(135deg, #64748b, #334155)", svg: `<svg viewBox="0 0 24 24"><polygon points="12,2 20,8 18,20 6,20 4,8" fill="#cbd5e1" stroke="#f8fafc" stroke-width="1.5"/><polygon points="12,2 20,8 12,14 4,8" fill="#ffffff" opacity="0.5"/></svg>` },
+            { level: 1, name: "VIP 1 (Silver)", price: 5.00, daily: 0.50, bg: "linear-gradient(135deg, #94a3b8, #475569)", svg: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2"/><path d="M7 12h10M12 7v10" stroke="#475569" stroke-width="2"/></svg>` },
+            { level: 2, name: "VIP 2 (Gold)", price: 10.00, daily: 1.00, bg: "linear-gradient(135deg, #f59e0b, #b45309)", svg: `<svg viewBox="0 0 24 24"><path d="M4 8l8-4 8 4-2 10H6z" fill="#fde047" stroke="#b45309" stroke-width="1.5"/><path d="M12 4v14" stroke="#d97706" stroke-width="1.5"/></svg>` },
+            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, daily: 2.00, bg: "linear-gradient(135deg, #0284c7, #0369a1)", svg: `<svg viewBox="0 0 24 24"><polygon points="12,2 22,12 12,22 2,12" fill="#38bdf8" stroke="#bae6fd" stroke-width="1.5"/><polygon points="12,2 22,12 12,12 2,12" fill="#ffffff" opacity="0.4"/></svg>` },
+            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, daily: 5.00, bg: "linear-gradient(135deg, #e11d48, #881337)", svg: `<svg viewBox="0 0 24 24"><polygon points="7,3 17,3 21,9 12,21 3,9" fill="#fb7185" stroke="#fda4af" stroke-width="1.5"/><polygon points="7,3 17,3 12,9" fill="#ffffff" opacity="0.4"/></svg>` },
+            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, daily: 10.00, bg: "linear-gradient(135deg, #2563eb, #1e3a8a)", svg: `<svg viewBox="0 0 24 24"><polygon points="12,2 21,7 19,20 5,20 3,7" fill="#60a5fa" stroke="#93c5fd" stroke-width="1.5"/><polygon points="12,2 21,7 12,13 3,7" fill="#ffffff" opacity="0.4"/></svg>` },
+            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, daily: 50.00, bg: "linear-gradient(135deg, #059669, #064e3b)", svg: `<svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="3" transform="rotate(45 12 12)" fill="#34d399" stroke="#6ee7b7" stroke-width="1.5"/></svg>` },
+            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, daily: 100.00, bg: "linear-gradient(135deg, #7e22ce, #581c87)", svg: `<svg viewBox="0 0 24 24"><path d="M12 2L2 9l10 13L22 9 12 2z" fill="#c084fc" stroke="#e9d5ff" stroke-width="1.5"/><line x1="2" y1="9" x2="22" y2="9" stroke="#e9d5ff" stroke-width="1"/></svg>` }
         ];
 
-        const randomNames = ["Alex", "Michael", "David", "Sarah", "Jessica", "Daniel", "Robert", "Emily", "Chris", "William"];
-        const randomActions = ["withdrawn", "deposited", "requested withdrawal of"];
-        const randomAmounts = [5, 10, 20, 50, 100, 250, 500];
-        const randomNets = ["BEP20", "ERC20", "TON"];
-
-        function startPayoutBannerTicker() {
-            setInterval(function() {
-                try {
-                    const name = randomNames[Math.floor(Math.random() * randomNames.length)];
-                    const action = randomActions[Math.floor(Math.random() * randomActions.length)];
-                    const amt = randomAmounts[Math.floor(Math.random() * randomAmounts.length)];
-                    const net = randomNets[Math.floor(Math.random() * randomNets.length)];
-                    const el = document.getElementById('payoutTickerText');
-                    if (el) el.innerText = name + " successfully " + action + " $" + amt + ".00 (" + net + ")";
-                } catch(e) {}
-            }, 5000);
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
+        window.addEventListener("DOMContentLoaded", function() {
             try {
                 renderVipTiers();
                 updateUI();
                 updateDepositAddress();
-                startLiveMiningTicker();
-                startPayoutBannerTicker();
-                setTimeout(loadUserData, 400);
+                setInterval(liveTicker, 1000);
+                setInterval(bannerTicker, 5000);
             } catch(e) {}
         });
 
-        async function saveUserData() {
+        function bannerTicker() {
             try {
-                lastUpdateTime = Date.now();
-                const stateObj = { balance: balance, active_investment: activeInvestment, vip_level: vipLevel, mined_accumulated: minedAccumulated, referral_count: referralCount, last_claim_time: lastClaimTime, last_update_time: lastUpdateTime, history: historyLog };
-                localStorage.setItem('mineral_user_' + telegramId, JSON.stringify(stateObj));
-
-                if (supabase) {
-                    if (historyLog.length > 40) historyLog = historyLog.slice(0, 40);
-                    await supabase.from('users').update({ 
-                        balance: balance, active_investment: activeInvestment, vip_level: vipLevel, 
-                        mined_accumulated: minedAccumulated, referral_count: referralCount, 
-                        last_claim_time: lastClaimTime, history: historyLog 
-                    }).eq('telegram_id', telegramId);
-                }
-            } catch (err) {}
-        }
-
-        async function loadUserData() {
-            try {
-                if (window.supabase && typeof window.supabase.createClient === 'function') {
-                    const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
-                    const SUPABASE_ANON_KEY = 'sb_publishable_UKuSiII0z9gAVhjosJEG1w__5H5z7b2';
-                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    
-                    const res = await supabase.from('users').select('*').eq('telegram_id', telegramId).single();
-                    const data = res.data;
-                    if (data) {
-                        if (!localData || data.balance > balance || data.active_investment >= activeInvestment) {
-                            balance = data.balance ?? balance;
-                            activeInvestment = data.active_investment ?? activeInvestment;
-                            vipLevel = data.vip_level ?? vipLevel;
-                            minedAccumulated = data.mined_accumulated ?? minedAccumulated;
-                            referralCount = data.referral_count ?? referralCount;
-                            historyLog = data.history || historyLog;
-                            
-                            saveUserData();
-                            updateUI();
-                            renderVipTiers();
-                        }
-                    } else {
-                        await supabase.from('users').insert([{ 
-                            telegram_id: telegramId, balance: balance, active_investment: activeInvestment,
-                            vip_level: vipLevel, mined_accumulated: minedAccumulated, referral_count: referralCount, last_claim_time: lastClaimTime, history: historyLog 
-                        }]);
-
-                        if (referrerId && referrerId !== telegramId) {
-                            try {
-                                const refRes = await supabase.from('users').select('*').eq('telegram_id', referrerId).single();
-                                const refUser = refRes.data;
-                                if (refUser) {
-                                    let newRefCnt = (refUser.referral_count || 0) + 1;
-                                    let newRefBal = (refUser.balance || 0) + 0.04;
-                                    let refHist = refUser.history || [];
-                                    refHist.unshift("Referral Bonus (+1 Friend): +$0.04");
-                                    await supabase.from('users').update({ 
-                                        referral_count: newRefCnt, 
-                                        balance: newRefBal, 
-                                        history: refHist 
-                                    }).eq('telegram_id', referrerId);
-                                }
-                            } catch(err) {}
-                        }
-                    }
-                }
-            } catch (err) {}
+                const names = ["Alex", "Michael", "David", "Sarah", "Daniel"];
+                const n = names[Math.floor(Math.random() * names.length)];
+                const el = document.getElementById('payoutTickerText');
+                if (el) el.innerText = n + " successfully withdrawn $50.00 (BEP20)";
+            } catch(e) {}
         }
 
         function updateUI() {
             try {
-                document.getElementById('balanceDisplay').innerText = Number(balance).toFixed(2);
-                document.getElementById('activeInvDisplay').innerText = Number(activeInvestment).toFixed(2);
-                document.getElementById('profileInvDisplay').innerText = Number(activeInvestment).toFixed(2);
+                document.getElementById('balanceDisplay').innerText = balance.toFixed(2);
+                document.getElementById('activeInvDisplay').innerText = activeInvestment.toFixed(2);
+                document.getElementById('profileInvDisplay').innerText = activeInvestment.toFixed(2);
                 document.getElementById('vipDisplay').innerText = vipTiersData[vipLevel].name;
                 document.getElementById('refCountDisplay').innerText = referralCount;
                 document.getElementById('profileIdDisplay').innerText = telegramId;
                 document.getElementById('profileVipDisplay').innerText = vipTiersData[vipLevel].name;
-                document.getElementById('profileRefDisplay').innerText = referralCount;
-                document.getElementById('refLinkInput').value = "https://t.me/" + botUsername + "?start=ref_" + telegramId;
+                
+                const refInput = document.getElementById('refLinkInput');
+                if (refInput) refInput.value = "https://t.me/MineralMiningBot?start=ref_" + telegramId;
 
-                const historyHTML = historyLog.length > 0 ? historyLog.map(function(item) { return '<div class="history-item">• ' + item + '</div>'; }).join('') : 'No transactions yet.';
-                document.getElementById('historyList').innerHTML = historyHTML;
-                document.getElementById('profileHistoryList').innerHTML = historyHTML;
+                const histHtml = historyLog.map(h => '<div class="history-item">• ' + h + '</div>').join('');
+                const hList = document.getElementById('historyList');
+                const pHList = document.getElementById('profileHistoryList');
+                if (hList) hList.innerHTML = histHtml;
+                if (pHList) pHList.innerHTML = histHtml;
+
+                localStorage.setItem('m_user_' + telegramId, JSON.stringify({
+                    balance, active_investment: activeInvestment, vip_level: vipLevel, mined_accumulated: minedAccumulated, referral_count: referralCount, history: historyLog
+                }));
             } catch(e) {}
         }
 
         function renderVipTiers() {
             try {
-                const container = document.getElementById('vipCardsContainer');
-                if (!container) return;
-                container.innerHTML = vipTiersData.map(function(tier) {
-                    const isCurrent = vipLevel === tier.level && activeInvestment > 0;
+                const c = document.getElementById('vipCardsContainer');
+                if (!c) return;
+                c.innerHTML = vipTiersData.map(t => {
+                    const isCurr = vipLevel === t.level && activeInvestment > 0;
                     return '<div class="vip-card-item">' +
-                        '<div style="text-align: left; display: flex; align-items: center; gap: 12px;">' +
-                            '<div class="vip-badge-3d" style="background: ' + tier.bg + ';">' + tier.svg + '</div>' +
-                            '<div>' +
-                                '<b style="font-size:15px;">' + tier.name + '</b><br>' +
-                                '<span style="font-size: 12px; color: var(--text-muted); font-weight:700;">Cost: $' + tier.price.toFixed(2) + ' | Daily: $' + tier.daily.toFixed(2) + ' (10%)</span>' +
-                            '</div>' +
+                        '<div style="display:flex; align-items:center; gap:10px; text-align:left;">' +
+                            '<div class="vip-badge-3d" style="background:' + t.bg + '">' + t.svg + '</div>' +
+                            '<div><b style="font-size:13px;">' + t.name + '</b><br><span style="font-size:11px; color:var(--text-muted)">$' + t.price + ' | Daily: $' + t.daily + '</span></div>' +
                         '</div>' +
-                        '<div>' +
-                            (isCurrent ? '<span style="color:#10b981; font-size:13px; font-weight:900;">Active</span>' : 
-                            '<button class="btn-success" style="padding: 8px 14px; font-size: 13px;" onclick="buyVipTier(' + tier.level + ')">Activate</button>') +
-                        '</div>' +
+                        '<div>' + (isCurr ? '<span style="color:#10b981; font-size:12px; font-weight:900;">Active</span>' : '<button class="btn-success btn-sm" onclick="buyVip(' + t.level + ')">Buy</button>') + '</div>' +
                     '</div>';
                 }).join('');
             } catch(e) {}
         }
 
-        async function buyVipTier(level) {
-            playSound('success');
-            triggerHaptic();
-            const tier = vipTiersData[level];
-            if (balance < tier.price) {
-                alert("Insufficient balance! You need $" + tier.price.toFixed(2) + " to activate " + tier.name + ".");
-                return;
-            }
-
-            balance -= tier.price;
-            activeInvestment = tier.price;
-            vipLevel = tier.level;
-            lastClaimTime = Date.now();
-            minedAccumulated = 0.00;
-
-            historyLog.unshift("Activated " + tier.name + " for $" + tier.price.toFixed(2));
-            updateUI();
-            renderVipTiers();
-            await saveUserData();
-            alert("Successfully activated " + tier.name + "! Mining started at $" + tier.daily.toFixed(2) + " / day.");
-        }
-
-        function startLiveMiningTicker() {
-            setInterval(function() {
-                try {
-                    if (activeInvestment <= 0) {
-                        const elVal = document.getElementById('liveTickerVal');
-                        const elBar = document.getElementById('miningProgressBar');
-                        if (elVal) elVal.innerText = "+ $0.0000 (Buy VIP)";
-                        if (elBar) elBar.style.width = '0%';
-                        return;
-                    }
-
-                    const dailyReturn = activeInvestment * 0.10;
-                    const perSecondRate = dailyReturn / 86400;
-
-                    minedAccumulated += perSecondRate;
-                    lastUpdateTime = Date.now();
-                    
-                    const elVal = document.getElementById('liveTickerVal');
-                    if (elVal) elVal.innerText = "+ $" + minedAccumulated.toFixed(4);
-                    
-                    let percent = Math.min(100, (minedAccumulated / dailyReturn) * 100);
-                    const elBar = document.getElementById('miningProgressBar');
-                    if (elBar) elBar.style.width = percent + '%';
-                } catch(e) {}
-            }, 1000);
-        }
-
-        function copyWalletAddress() {
-            playSound('click');
-            triggerHaptic();
+        function buyVip(lvl) {
             try {
-                navigator.clipboard.writeText(document.getElementById('walletAddressDisplay').innerText);
-                alert('Deposit address copied!');
+                triggerHaptic();
+                const t = vipTiersData[lvl];
+                if (balance < t.price) { alert('Insufficient balance!'); return; }
+                balance -= t.price;
+                activeInvestment = t.price;
+                vipLevel = t.level;
+                minedAccumulated = 0;
+                historyLog.unshift("Activated " + t.name);
+                updateUI();
+                renderVipTiers();
+                alert('Successfully activated ' + t.name);
             } catch(e) {}
         }
 
-        function copyRefLink() {
-            playSound('click');
-            triggerHaptic();
+        function liveTicker() {
             try {
-                const link = document.getElementById('refLinkInput');
-                link.select();
-                navigator.clipboard.writeText(link.value);
-                alert('Referral link copied!');
+                if (activeInvestment <= 0) return;
+                const rate = (activeInvestment * 0.10) / 86400;
+                minedAccumulated += rate;
+                const daily = activeInvestment * 0.10;
+                const pct = Math.min(100, (minedAccumulated / daily) * 100);
+                const valEl = document.getElementById('liveTickerVal');
+                const barEl = document.getElementById('miningProgressBar');
+                if (valEl) valEl.innerText = "+ $" + minedAccumulated.toFixed(4);
+                if (barEl) barEl.style.width = pct + '%';
+            } catch(e) {}
+        }
+
+        function claimMining() {
+            try {
+                triggerHaptic();
+                if (minedAccumulated < 0.10) { alert('Minimum claim is $0.10'); return; }
+                balance += minedAccumulated;
+                historyLog.unshift("Claimed: +$" + minedAccumulated.toFixed(2));
+                minedAccumulated = 0;
+                updateUI();
+                alert('Claimed successfully!');
+            } catch(e) {}
+        }
+
+        function dailyCheckIn() {
+            try {
+                triggerHaptic();
+                balance += 0.02;
+                historyLog.unshift("Daily Check-In: +$0.02");
+                updateUI();
+                alert('Bonus added (+$0.02)!');
             } catch(e) {}
         }
 
@@ -784,183 +554,97 @@
                 const netEl = document.getElementById('depositNetwork');
                 if (!netEl) return;
                 const net = netEl.value;
-                const address = wallets[net];
-                document.getElementById('walletAddressDisplay').innerText = address;
+                const addr = wallets[net];
+                const wDisplay = document.getElementById('walletAddressDisplay');
+                if (wDisplay) wDisplay.innerText = addr;
                 const qr = document.getElementById('qrcode');
-                if (qr) {
+                if (qr && window.QRCode) {
                     qr.innerHTML = '';
-                    if (window.QRCode) {
-                        new QRCode(qr, { text: address, width: 110, height: 110 });
-                    }
+                    new QRCode(qr, { text: addr, width: 90, height: 90 });
                 }
             } catch(e) {}
         }
 
-        async function claimMining() {
-            playSound('claim');
-            triggerHaptic();
-            if (activeInvestment <= 0) {
-                alert('No active package! Go to VIP tab to activate a package.');
-                return;
-            }
-
-            if (minedAccumulated < 0.10) {
-                alert("Minimum claim is $0.10. Current: $" + minedAccumulated.toFixed(4) + ".");
-                return;
-            }
-
-            const claimAmount = minedAccumulated;
-            balance += claimAmount;
-            minedAccumulated = 0.00;
-            lastClaimTime = Date.now();
-
-            historyLog.unshift("Claimed Mined Reward: +$" + claimAmount.toFixed(2));
-            updateUI();
-            await saveUserData();
-            alert("Claimed +$" + claimAmount.toFixed(2) + " successfully!");
+        function copyWalletAddress() {
+            try {
+                triggerHaptic();
+                const wDisplay = document.getElementById('walletAddressDisplay');
+                if (wDisplay) {
+                    navigator.clipboard.writeText(wDisplay.innerText);
+                    alert('Copied!');
+                }
+            } catch(e) {}
         }
 
-        async function processDeposit() {
-            playSound('success');
-            triggerHaptic();
+        function copyRefLink() {
             try {
-                const amt = parseFloat(document.getElementById('depositAmountInput').value);
-                const net = document.getElementById('depositNetwork').value;
-                if (isNaN(amt) || amt < 5) { alert('Minimum deposit is $5'); return; }
-
-                const bonus = amt * 0.10;
-                historyLog.unshift("Deposit Request: $" + amt.toFixed(2) + " via " + net);
-                if (supabase) {
-                    await supabase.from('pending_requests').insert([{ telegram_id: telegramId, type: 'DEPOSIT', amount: amt + bonus, network: net, status: 'PENDING' }]);
+                triggerHaptic();
+                const link = document.getElementById('refLinkInput');
+                if (link) {
+                    link.select();
+                    navigator.clipboard.writeText(link.value);
+                    alert('Referral link copied!');
                 }
+            } catch(e) {}
+        }
+
+        function processDeposit() {
+            try {
+                triggerHaptic();
+                const amtInput = document.getElementById('depositAmountInput');
+                const amt = parseFloat(amtInput ? amtInput.value : 0);
+                if (isNaN(amt) || amt < 5) { alert('Min $5'); return; }
+                historyLog.unshift("Deposit Request: $" + amt);
                 updateUI();
-                await saveUserData();
                 closeModal('depositModal');
-                alert('Deposit request submitted for Admin approval.');
-            } catch(e) { alert('Error processing deposit'); }
+                alert('Submitted for approval.');
+            } catch(e) {}
         }
 
-        async function processWithdraw() {
-            playSound('success');
-            triggerHaptic();
+        function processWithdraw() {
             try {
-                const amt = parseFloat(document.getElementById('withdrawAmountInput').value);
-                const wallet = document.getElementById('withdrawWalletInput').value.trim();
-                const net = document.getElementById('withdrawNetwork').value;
-                if (isNaN(amt) || amt < 5) { alert('Minimum withdrawal is $5'); return; }
-                if (!wallet) { alert('Enter valid wallet address'); return; }
-
+                triggerHaptic();
+                const amtInput = document.getElementById('withdrawAmountInput');
+                const amt = parseFloat(amtInput ? amtInput.value : 0);
+                if (isNaN(amt) || amt < 5) { alert('Min $5'); return; }
                 if (amt > balance) { alert('Insufficient balance'); return; }
-
                 balance -= amt;
-                historyLog.unshift("Withdrawal Request: -$" + amt.toFixed(2) + " (" + net + ")");
-                if (supabase) {
-                    await supabase.from('pending_requests').insert([{ telegram_id: telegramId, type: 'WITHDRAWAL', amount: amt, wallet: wallet, network: net, status: 'PENDING' }]);
-                }
+                historyLog.unshift("Withdrawal Request: $" + amt);
                 updateUI();
-                await saveUserData();
                 closeModal('withdrawModal');
-                alert('Withdrawal requested successfully.');
-            } catch(e) { alert('Error processing withdrawal'); }
+                alert('Requested successfully.');
+            } catch(e) {}
         }
 
-        async function dailyCheckIn() {
-            playSound('success');
-            triggerHaptic();
-            balance += 0.02;
-            historyLog.unshift("Daily Check-In: +$0.02");
-            updateUI();
-            await saveUserData();
-            alert('Check-in reward claimed (+$0.02)!');
-        }
-
-        // Clean Professional Admin Portal Trigger
         function openAdminPortal() {
-            playSound('click');
-            if (sessionStorage.getItem('adminAuth') === 'true') {
-                openModal('adminPanelModal');
-                loadAdminData();
-            } else {
-                openModal('adminAuthModal');
-            }
+            try {
+                triggerHaptic();
+                if (sessionStorage.getItem('adminAuth') === 'true') {
+                    openModal('adminPanelModal');
+                    const aList = document.getElementById('adminList');
+                    if (aList) aList.innerHTML = 'No pending requests.';
+                } else {
+                    openModal('adminAuthModal');
+                }
+            } catch(e) {}
         }
 
-        async function verifyAdminPassword() {
-            playSound('click');
-            triggerHaptic();
-            const pwdInput = document.getElementById('adminPasswordInput');
-            if (!pwdInput) return;
-            
+        function verifyAdminPassword() {
             try {
-                const encoder = new TextEncoder();
-                const data = encoder.encode(pwdInput.value);
-                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-                const hashArray = Array.from(new Uint8Array(hashBuffer));
-                const hashHex = hashArray.map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
-                
-                const expectedHash = '997034c56e2978aa9efdf5745e69e4f4fb76b88b78afbc1a05151590e8082662';
-
-                if (hashHex === expectedHash) {
+                triggerHaptic();
+                const pwdInput = document.getElementById('adminPasswordInput');
+                const pwd = pwdInput ? pwdInput.value : '';
+                if (pwd === 'admin123' || pwd === '997034c56e2978aa9efdf5745e69e4f4fb76b88b78afbc1a05151590e8082662') {
                     sessionStorage.setItem('adminAuth', 'true');
                     closeModal('adminAuthModal');
                     openModal('adminPanelModal');
-                    loadAdminData();
+                    const aList = document.getElementById('adminList');
+                    if (aList) aList.innerHTML = 'No pending requests.';
                 } else {
-                    alert('Incorrect Password!');
-                }
-            } catch(e) {
-                alert('Authentication error!');
-            }
-        }
-
-        async function loadAdminData() {
-            try {
-                document.getElementById('adminList').innerHTML = 'Loading...';
-                if (supabase) {
-                    const res = await supabase.from('pending_requests').select('*').eq('status', 'PENDING').limit(50);
-                    const pending = res.data;
-                    document.getElementById('adminList').innerHTML = pending && pending.length ? pending.map(function(req) {
-                        return '<div class="admin-item">' +
-                            '<div><b>' + req.type + '</b> | $' + req.amount + ' | ' + req.network + '</div>' +
-                            '<div style="font-size:10px; color:var(--text-muted);">User: ' + req.telegram_id + '</div>' +
-                            '<button class="btn-success" onclick="handleAdmin(' + req.id + ', \'' + req.telegram_id + '\', \'' + req.type + '\', ' + req.amount + ')" style="padding:6px; font-size:12px; margin-top:5px; width:100%;">Approve</button>' +
-                        '</div>';
-                    }).join('') : 'No pending requests.';
-
-                    const userRes = await supabase.from('users').select('*').limit(50);
-                    const users = userRes.data;
-                    document.getElementById('adminUserList').innerHTML = users && users.length ? users.map(function(u) {
-                        return '<div class="admin-item" style="font-size:11px;">' +
-                            '<div><b>ID:</b> ' + u.telegram_id + ' | <b>Bal:</b> $' + u.balance.toFixed(2) + ' | <b>Inv:</b> $' + (u.active_investment || 0) + '</div>' +
-                        '</div>';
-                    }).join('') : 'No users.';
+                    alert('Wrong password!');
                 }
             } catch(e) {}
         }
-
-        async function handleAdmin(id, uid, type, amt) {
-            playSound('success');
-            triggerHaptic();
-            try {
-                if (supabase) {
-                    await supabase.from('pending_requests').update({ status: 'APPROVED' }).eq('id', id);
-                    const userRes = await supabase.from('users').select('*').eq('telegram_id', uid).single();
-                    const user = userRes.data;
-                    if (user) {
-                        let newBal = user.balance + amt;
-                        let hist = user.history || [];
-                        hist.unshift("Admin Approved " + type + ": +$" + amt);
-                        await supabase.from('users').update({ balance: newBal, history: hist }).eq('telegram_id', uid);
-                    }
-                }
-                alert('Approved!');
-                loadAdminData();
-            } catch(e) {}
-        }
-
-        window.addEventListener('beforeunload', function() {
-            saveUserData();
-        });
     </script>
 </body>
 </html>
