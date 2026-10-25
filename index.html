@@ -95,26 +95,24 @@
 
         .sub-balance { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; }
         
-        /* 🌟 Photo Character Animation Styling */
+        /* 🌟 Modern Spinning Settings Gear Animation */
         .mining-core-animation {
-            width: 140px; height: 140px; margin: 10px auto;
-            position: relative;
-            animation: photoFloat 3s ease-in-out infinite;
-        }
-        @keyframes photoFloat {
-            0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 15px rgba(52, 211, 153, 0.4)); }
-            50% { transform: translateY(-5px); filter: drop-shadow(0 0 25px rgba(52, 211, 153, 0.7)); }
+            width: 130px; height: 130px; margin: 15px auto;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(59, 130, 246, 0.08); border-radius: 50%;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
         }
         
-        .photo-miner-img {
-            width: 100%; height: 100%; object-fit: contain;
-            border-radius: 50%;
-            animation: photoSwing 1.2s ease-in-out infinite;
-            transform-origin: center bottom;
+        .spinning-gear-svg {
+            width: 75px; height: 75px;
+            fill: #3b82f6;
+            filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.6));
+            animation: spinGear 6s linear infinite;
         }
-        @keyframes photoSwing {
-            0%, 100% { transform: rotate(-4deg) scale(1); }
-            50% { transform: rotate(6deg) scale(1.04); }
+        @keyframes spinGear {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .live-mining-box { background: var(--input-bg); padding: 14px; border-radius: 16px; margin: 14px 0; border: 2px dashed rgba(148, 163, 184, 0.3); }
@@ -291,11 +289,13 @@
 
                 <div class="sub-balance">Active Mining: $<span id="activeInvDisplay">0.00</span> (<span id="activeRateDisplay">6%</span> Daily)</div>
                 
-                <!-- 🌟 User's 3D Miner Photo with Lively Animation -->
+                <!-- 🌟 Modern Spinning Settings Gear Animation Component -->
                 <div class="mining-core-animation">
-                    <img src="https://i.ibb.co/6803207/9989-3.jpg" alt="3D Miner Character" class="photo-miner-img">
+                    <svg class="spinning-gear-svg" viewBox="0 0 24 24">
+                        <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.53,5.05 19.27,4.97 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.97 4.47,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.47,18.95 4.73,19.03 4.95,18.95L7.44,17.95C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.95L19.05,18.95C19.27,19.03 19.53,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/>
+                    </svg>
                 </div>
-                <p style="font-size: 12px; font-weight: 800; color: #10b981; margin: 4px 0 10px 0;">3D Animated Miner Active</p>
+                <p style="font-size: 12px; font-weight: 800; color: #3b82f6; margin: 4px 0 10px 0;">System Mining Core Active</p>
 
                 <div class="live-mining-box">
                     <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 800;">
