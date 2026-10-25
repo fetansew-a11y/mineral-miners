@@ -95,30 +95,48 @@
 
         .sub-balance { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; }
         
-        /* 🌟 Animated Miner Character Container */
+        /* 🌟 Ultra Realistic Miner Animation Container */
         .mining-core-animation {
-            width: 120px; height: 120px; margin: 10px auto;
+            width: 130px; height: 130px; margin: 10px auto;
             position: relative;
         }
         .mining-core-animation svg { width: 100%; height: 100%; }
 
-        /* Miner Pickaxe Swinging Animation */
-        .miner-pickaxe-arm {
-            transform-origin: 55px 55px;
-            animation: swingPickaxe 1.2s ease-in-out infinite;
+        /* Coordinated Miner Body & Pickaxe Swing */
+        .miner-body-group {
+            animation: minerBodyBounce 1s ease-in-out infinite;
+            transform-origin: 60px 80px;
         }
-        @keyframes swingPickaxe {
-            0%, 100% { transform: rotate(-15deg); }
-            50% { transform: rotate(35deg); }
+        @keyframes minerBodyBounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(2px) rotate(-2deg); }
         }
 
-        /* Headlamp Glow Pulse */
-        .miner-headlamp {
-            animation: lampGlow 1.5s ease-in-out infinite;
+        .miner-pickaxe-group {
+            transform-origin: 65px 72px;
+            animation: swingPickaxePrecise 1s ease-in-out infinite;
         }
-        @keyframes lampGlow {
-            0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 4px #fbbf24); }
-            50% { opacity: 1; filter: drop-shadow(0 0 12px #f59e0b); }
+        @keyframes swingPickaxePrecise {
+            0%, 100% { transform: rotate(-18deg); }
+            50% { transform: rotate(38deg); }
+        }
+
+        /* Glowing Headlamp Animation */
+        .miner-headlamp {
+            animation: lampGlowPulse 1.2s ease-in-out infinite;
+        }
+        @keyframes lampGlowPulse {
+            0%, 100% { opacity: 0.7; filter: drop-shadow(0 0 5px #fbbf24); }
+            50% { opacity: 1; filter: drop-shadow(0 0 16px #f59e0b); }
+        }
+
+        /* Spark Effect */
+        .mining-spark {
+            animation: sparkFlash 0.5s ease-in-out infinite;
+        }
+        @keyframes sparkFlash {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.4); }
         }
 
         .live-mining-box { background: var(--input-bg); padding: 14px; border-radius: 16px; margin: 14px 0; border: 2px dashed rgba(148, 163, 184, 0.3); }
@@ -295,13 +313,13 @@
 
                 <div class="sub-balance">Active Mining: $<span id="activeInvDisplay">0.00</span> (<span id="activeRateDisplay">6%</span> Daily)</div>
                 
-                <!-- 🌟 Detailed Animated Miner Character with Hard Hat, Headlamp, Colorful Clothes & Double-Sided Pickaxe -->
+                <!-- 🌟 Ultra Realistic Miner Animation with Two-Handed Pickaxe Grip & Coordinated Swing -->
                 <div class="mining-core-animation">
-                    <svg viewBox="0 0 120 120">
+                    <svg viewBox="0 0 130 130">
                         <defs>
                             <linearGradient id="suitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#3b82f6"/>
-                                <stop offset="100%" stop-color="#1d4ed8"/>
+                                <stop offset="0%" stop-color="#2563eb"/>
+                                <stop offset="100%" stop-color="#1e40af"/>
                             </linearGradient>
                             <linearGradient id="hatGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" stop-color="#f59e0b"/>
@@ -316,54 +334,74 @@
                                 <stop offset="50%" stop-color="#94a3b8"/>
                                 <stop offset="100%" stop-color="#475569"/>
                             </linearGradient>
+                            <linearGradient id="skinTone" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#fde68a"/>
+                                <stop offset="100%" stop-color="#f59e0b"/>
+                            </linearGradient>
                         </defs>
 
-                        <!-- Ground Rock & Mineral Ore -->
-                        <path d="M 20 105 Q 60 90 100 105 L 115 118 L 5 118 Z" fill="#1e293b" stroke="#334155" stroke-width="2"/>
-                        <polygon points="45,100 55,92 65,102 55,110" fill="#34d399" filter="drop-shadow(0 0 5px #10b981)"/>
-                        <polygon points="75,104 82,98 90,105 82,112" fill="#38bdf8" filter="drop-shadow(0 0 5px #0284c7)"/>
+                        <!-- Ground Rock & Glowing Minerals with Sparkles -->
+                        <path d="M 10 112 Q 65 98 120 112 L 128 125 C 100 128 30 128 2 125 Z" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+                        <polygon points="45,108 54,98 63,110 54,118" fill="#34d399" filter="drop-shadow(0 0 8px #10b981)"/>
+                        <polygon points="76,112 85,102 94,114 85,122" fill="#38bdf8" filter="drop-shadow(0 0 8px #0284c7)"/>
+                        
+                        <!-- Dynamic Sparks at Mining Contact Point -->
+                        <circle cx="68" cy="102" r="3.5" fill="#fef08a" class="mining-spark"/>
+                        <circle cx="64" cy="98" r="2" fill="#ffffff" class="mining-spark"/>
 
-                        <!-- Miner Torso / Colorful Suit -->
-                        <path d="M 42 75 C 42 62 78 62 78 75 L 84 102 C 84 106 80 108 76 108 L 44 108 C 40 108 36 106 36 102 Z" fill="url(#suitGrad)" stroke="#60a5fa" stroke-width="1.5"/>
-                        <!-- Safety Vest Stripes -->
-                        <path d="M 50 65 L 48 108 M 70 65 L 72 108" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+                        <!-- Miner Body Group (Bouncing & Swinging Together) -->
+                        <g class="miner-body-group">
+                            <!-- Torso & Suit -->
+                            <path d="M 42 76 C 42 62 82 62 82 76 L 88 106 C 88 111 82 113 78 113 L 46 113 C 42 113 36 111 36 106 Z" fill="url(#suitGrad)" stroke="#60a5fa" stroke-width="1.5"/>
+                            <!-- Safety Vest High-Vis Stripes -->
+                            <path d="M 50 66 L 48 113 M 74 66 L 76 113" stroke="#fbbf24" stroke-width="5" stroke-linecap="round"/>
 
-                        <!-- Miner Head & Face -->
-                        <circle cx="60" cy="50" r="14" fill="#fcd34d" stroke="#f59e0b" stroke-width="1.5"/>
-                        <!-- Friendly Eyes & Smile -->
-                        <circle cx="55" cy="48" r="1.5" fill="#1e293b"/>
-                        <circle cx="65" cy="48" r="1.5" fill="#1e293b"/>
-                        <path d="M 57 55 Q 60 58 63 55" stroke="#1e293b" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                            <!-- Detailed Face & Head -->
+                            <!-- Ears -->
+                            <circle cx="44" cy="50" r="3.5" fill="#d97706"/>
+                            <circle cx="80" cy="50" r="3.5" fill="#d97706"/>
+                            <!-- Head Skin -->
+                            <ellipse cx="62" cy="50" rx="16" ry="17" fill="url(#skinTone)" stroke="#d97706" stroke-width="1.5"/>
+                            <!-- Eyes -->
+                            <ellipse cx="56" cy="48" rx="2.5" ry="3" fill="#ffffff"/>
+                            <circle cx="56" cy="48" r="1.2" fill="#0f172a"/>
+                            <ellipse cx="68" cy="48" rx="2.5" ry="3" fill="#ffffff"/>
+                            <circle cx="68" cy="48" r="1.2" fill="#0f172a"/>
+                            <!-- Nose -->
+                            <path d="M 62 50 L 60 56 L 63 56 Z" fill="#d97706" stroke="#b45309" stroke-width="0.8"/>
+                            <!-- Mouth -->
+                            <path d="M 58 60 Q 62 64 66 60" stroke="#b45309" stroke-width="1.8" fill="none" stroke-linecap="round"/>
 
-                        <!-- Miner Hard Hat (Yellow Construction Helmet) -->
-                        <path d="M 43 45 C 43 32 77 32 77 45 Z" fill="url(#hatGrad)" stroke="#fde047" stroke-width="1.5"/>
-                        <path d="M 39 44 Q 60 40 81 44 L 83 47 Q 60 43 37 47 Z" fill="#d97706"/>
-                        <!-- Glowing Headlamp on Hat -->
-                        <ellipse cx="60" cy="36" rx="4" ry="3" fill="#ffffff" class="miner-headlamp"/>
-                        <path d="M 60 33 L 55 18 L 65 18 Z" fill="#fef08a" opacity="0.3" class="miner-headlamp"/>
+                            <!-- Hard Hat -->
+                            <path d="M 44 44 C 44 26 80 26 80 44 Z" fill="url(#hatGrad)" stroke="#fde047" stroke-width="1.5"/>
+                            <path d="M 38 43 Q 62 37 86 43 L 88 46 C 62 40 36 46 38 43 Z" fill="#d97706"/>
+                            <!-- Glowing Headlamp -->
+                            <ellipse cx="62" cy="34" rx="5" ry="4" fill="#ffffff" class="miner-headlamp"/>
+                            <path d="M 62 30 L 53 10 L 71 10 Z" fill="#fef08a" opacity="0.35" class="miner-headlamp"/>
 
-                        <!-- Left Arm (Stationary) -->
-                        <path d="M 40 70 L 32 90 L 38 94" fill="none" stroke="#2563eb" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="38" cy="94" r="3.5" fill="#fcd34d"/>
+                            <!-- 🌟 Coordinated Swinging Right Arm & Double-Sided Pickaxe -->
+                            <g class="miner-pickaxe-group">
+                                <!-- Upper & Lower Arm holding pickaxe -->
+                                <path d="M 76 72 L 88 88 L 78 96" fill="none" stroke="#2563eb" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="78" cy="96" r="4.2" fill="#fcd34d"/>
 
-                        <!-- Right Arm & Double-Sided Pickaxe Group (Animated Swinging) -->
-                        <g class="miner-pickaxe-arm" transform="translate(75, 70)">
-                            <!-- Arm -->
-                            <path d="M 0 0 L 14 12 L 20 18" fill="none" stroke="#2563eb" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                            <circle cx="20" cy="18" r="3.5" fill="#fcd34d"/>
-                            
-                            <!-- Wooden Pickaxe Handle -->
-                            <line x1="12" y1="12" x2="35" y2="-22" stroke="url(#woodHandle)" stroke-width="4.5" stroke-linecap="round"/>
-                            
-                            <!-- Double-Sided Metal Pickaxe Head -->
-                            <g transform="translate(35, -22) rotate(45)">
-                                <!-- Central Holder -->
-                                <rect x="-4" y="-4" width="8" height="8" fill="#334155" rx="1"/>
-                                <!-- Left Blade -->
-                                <path d="M -4 0 L -24 -6 C -32 -9 -28 -3 -20 2 Z" fill="url(#metalBlade)" stroke="#ffffff" stroke-width="0.8"/>
-                                <!-- Right Blade -->
-                                <path d="M 4 0 L 24 -6 C 32 -9 28 -3 20 2 Z" fill="url(#metalBlade)" stroke="#ffffff" stroke-width="0.8"/>
+                                <!-- Wooden Pickaxe Handle (Firmly gripped in hands) -->
+                                <line x1="60" y1="52" x2="98" y2="108" stroke="url(#woodHandle)" stroke-width="5.5" stroke-linecap="round"/>
+
+                                <!-- Double-Sided Metal Pickaxe Head -->
+                                <g transform="translate(98, 108) rotate(45)">
+                                    <!-- Center Joint -->
+                                    <rect x="-6" y="-6" width="12" height="12" fill="#334155" rx="2"/>
+                                    <!-- Left Blade (Pointing towards ore) -->
+                                    <path d="M -6 0 L -30 -8 C -38 -12 -34 -4 -24 3 Z" fill="url(#metalBlade)" stroke="#ffffff" stroke-width="1"/>
+                                    <!-- Right Blade -->
+                                    <path d="M 6 0 L 30 -8 C 38 -12 34 -4 24 3 Z" fill="url(#metalBlade)" stroke="#ffffff" stroke-width="1"/>
+                                </g>
                             </g>
+
+                            <!-- Left Arm (Supporting Grip) -->
+                            <path d="M 48 72 L 68 86 L 76 96" fill="none" stroke="#2563eb" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="76" cy="96" r="4.2" fill="#fcd34d"/>
                         </g>
                     </svg>
                 </div>
