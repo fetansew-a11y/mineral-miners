@@ -4,21 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mineral Mining Pro</title>
-    <!-- Telegram WebApp & Supabase SDK (Async to never block UI) -->
-    <script src="https://telegram.org/js/telegram-web-app.js" async></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" async></script>
+    <!-- Telegram WebApp & Supabase SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- QR Code Generator Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #475569;
-            --accent-green: #059669;
-            --accent-blue: #2563eb;
-            --accent-warning: #d97706;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            --border: 1px solid #cbd5e1;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+            --accent-warning: #f59e0b;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            --border: 1px solid rgba(255, 255, 255, 0.1);
         }
         * {
             -webkit-tap-highlight-color: transparent;
@@ -38,31 +39,44 @@
         .app-container { max-width: 420px; margin: 0 auto; }
         
         .payout-banner {
-            background: #eff6ff; color: #1e40af; padding: 10px 14px; border-radius: 12px;
-            font-size: 13px; font-weight: 700; margin-bottom: 15px; border: 1px solid #93c5fd;
+            background: rgba(59, 130, 246, 0.15); color: #93c5fd; padding: 10px 14px; border-radius: 12px;
+            font-size: 13px; font-weight: 700; margin-bottom: 15px; border: 1px solid rgba(147, 197, 253, 0.3);
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
         }
 
         .card {
-            background: var(--card-bg); border-radius: 20px; padding: 22px;
+            background: var(--card-bg); backdrop-filter: blur(10px); border-radius: 20px; padding: 22px;
             margin: 15px 0; border: var(--border); box-shadow: var(--shadow);
         }
         .header {
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--card-bg); padding: 14px 18px; border-radius: 16px;
+            background: var(--card-bg); backdrop-filter: blur(10px); padding: 14px 18px; border-radius: 16px;
             border: var(--border); box-shadow: var(--shadow); margin-bottom: 15px;
             font-weight: 700;
         }
         .app-title {
-            font-size: 26px; color: var(--text-main); margin: 10px 0 5px 0;
+            font-size: 26px; color: #ffffff; margin: 10px 0 5px 0;
             cursor: pointer; font-weight: 900; letter-spacing: -0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
-        .balance-box { font-size: 38px; font-weight: 900; color: #059669; margin: 5px 0; }
+        .balance-box { font-size: 38px; font-weight: 900; color: #34d399; margin: 5px 0; text-shadow: 0 0 15px rgba(52, 211, 153, 0.3); }
         .sub-balance { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; }
         
-        .live-mining-box { background: #f8fafc; padding: 14px; border-radius: 14px; margin: 15px 0; border: 2px dashed #94a3b8; }
-        .progress-bar-container { width: 100%; background: #e2e8f0; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 10px; }
+        /* Mining Animation Icon */
+        .mining-animation-container {
+            display: flex; align-items: center; justify-content: center; gap: 10px; margin: 10px 0;
+        }
+        .mining-gear {
+            font-size: 28px; animation: spinGear 3s linear infinite;
+        }
+        @keyframes spinGear {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .live-mining-box { background: rgba(15, 23, 42, 0.6); padding: 14px; border-radius: 14px; margin: 15px 0; border: 2px dashed rgba(148, 163, 184, 0.3); }
+        .progress-bar-container { width: 100%; background: #334155; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 10px; }
         .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #059669, #34d399); transition: width 0.3s ease; }
 
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
@@ -70,21 +84,21 @@
             background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: white; border: none; padding: 15px 16px; font-size: 16px;
             font-weight: 700; border-radius: 14px; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
             display: flex; align-items: center; justify-content: center; gap: 8px;
             transition: transform 0.1s ease;
         }
         button:active { transform: scale(0.96); }
-        .btn-success { background: linear-gradient(135deg, #059669 0%, #047857 100%); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3); }
-        .btn-warning { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3); }
+        .btn-success { background: linear-gradient(135deg, #059669 0%, #047857 100%); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4); }
+        .btn-warning { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4); }
         .btn-sm { padding: 10px 14px; font-size: 13px; border-radius: 10px; width: 100%; margin-top: 10px; font-weight: 700; }
 
         /* Bottom Navigation Bar */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #ffffff; display: flex; justify-content: space-around;
-            padding: 10px 0; border-top: 2px solid #e2e8f0; z-index: 999;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.08);
+            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around;
+            padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 999;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
         }
         .nav-item {
             background: none; border: none; color: var(--text-muted); font-size: 12px;
@@ -92,7 +106,7 @@
             cursor: pointer; font-weight: 700; box-shadow: none; padding: 0; width: 25%;
             transition: color 0.2s;
         }
-        .nav-item.active { color: var(--accent-blue); }
+        .nav-item.active { color: #60a5fa; }
         .nav-icon svg { width: 24px; height: 24px; fill: currentColor; pointer-events: none; }
 
         /* Tab Content Sections */
@@ -102,30 +116,46 @@
         /* Modals */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(5px);
+            background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(5px);
             justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;
         }
         .modal-content {
-            background: #ffffff; padding: 24px; border-radius: 20px; width: 100%;
+            background: #1e293b; padding: 24px; border-radius: 20px; width: 100%;
             max-width: 360px; border: var(--border); text-align: left;
-            max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+            max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);
+            color: #f8fafc;
         }
         input, select {
-            width: 100%; padding: 14px; margin: 8px 0 16px 0; background: #f8fafc;
-            border: 2px solid #cbd5e1; border-radius: 12px; color: var(--text-main); box-sizing: border-box; font-size: 15px; font-weight: 600;
+            width: 100%; padding: 14px; margin: 8px 0 16px 0; background: #0f172a;
+            border: 2px solid #334155; border-radius: 12px; color: #fff; box-sizing: border-box; font-size: 15px; font-weight: 600;
         }
         .close-btn { background: linear-gradient(135deg, #475569 100%, #334155 100%); width: 100%; margin-top: 12px; box-shadow: none; font-weight: 700; }
         
         .history-list, .vip-list, .admin-list {
-            max-height: 250px; overflow-y: auto; font-size: 13px; background: #f8fafc;
+            max-height: 250px; overflow-y: auto; font-size: 13px; background: rgba(15, 23, 42, 0.5);
             padding: 12px; border-radius: 12px; margin-top: 10px; color: var(--text-muted);
-            border: 2px solid #e2e8f0; text-align: left; font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.05); text-align: left; font-weight: 600;
         }
-        .history-item { padding: 8px 0; border-bottom: 1px solid #e2e8f0; }
-        .vip-card-item { background: #f8fafc; padding: 14px; border-radius: 12px; margin-bottom: 12px; border: 2px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-        .admin-item { background: #ffffff; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: var(--border); }
+        .history-item { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        
+        /* Realistic 3D Metallic / Gemstone VIP Cards */
+        .vip-card-item { 
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%); 
+            padding: 16px; border-radius: 16px; margin-bottom: 14px; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+            display: flex; justify-content: space-between; align-items: center; gap: 10px; 
+        }
+        .vip-badge-3d {
+            width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4), inset 0 2px 5px rgba(255,255,255,0.4);
+            flex-shrink: 0; padding: 8px;
+        }
+        .vip-badge-3d svg { width: 100%; height: 100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+        
+        .admin-item { background: #0f172a; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: var(--border); }
         #qrcode { display: flex; justify-content: center; margin: 12px 0; background: white; padding: 12px; border-radius: 12px; width: fit-content; margin: 10px auto; border: var(--border); }
-        .wallet-box { background: #f8fafc; padding: 12px; border-radius: 12px; font-size: 12px; word-break: break-all; margin: 10px 0; border: 2px dashed #64748b; color: var(--text-main); font-weight: 600; }
+        .wallet-box { background: #0f172a; padding: 12px; border-radius: 12px; font-size: 12px; word-break: break-all; margin: 10px 0; border: 2px dashed #475569; color: #f8fafc; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -140,25 +170,31 @@
         <div id="homeTab" class="tab-pane active">
             <!-- Header -->
             <div class="header">
-                <div>VIP Level: <span id="vipDisplay" style="color:#2563eb; font-weight:900;">💎 VIP 0 (Quartz)</span></div>
+                <div>VIP Level: <span id="vipDisplay" style="color:#60a5fa; font-weight:900;">💎 VIP 0 (Quartz)</span></div>
                 <button onclick="triggerHaptic(); openModal('historyModal')" style="padding: 8px 14px; font-size: 13px; width:auto;">History</button>
             </div>
 
             <!-- Secret Trigger Title (Tap 5 times for Admin) -->
-            <h1 class="app-title" onclick="triggerHaptic(); handleTitleTap()">🪨 Mineral Mining Pro</h1>
+            <h1 class="app-title" onclick="triggerHaptic(); handleTitleTap()">⛏️ Mineral Mining Pro</h1>
             <p style="color: var(--text-muted); font-size: 14px; font-weight: 700; margin-top: -5px;">$1 Welcome Bonus Active</p>
 
-            <!-- Main Balance Card with Live Mining Ticker -->
+            <!-- Main Balance Card with Live Mining Ticker & Animation -->
             <div class="card">
                 <p style="margin: 0; color: var(--text-muted); font-size: 14px; font-weight: 700;">Available Balance</p>
                 <div class="balance-box"><span id="balanceDisplay">1.00</span> $</div>
                 <div class="sub-balance">Active Mining Base: $<span id="activeInvDisplay">0.00</span> (10% Daily)</div>
                 
+                <!-- Live Mining Animation Box -->
+                <div class="mining-animation-container">
+                    <span class="mining-gear">⚙️</span>
+                    <span style="font-size: 14px; font-weight: 800; color: #34d399;">Active Extraction in Progress</span>
+                </div>
+
                 <!-- Live Ticker Animation Box -->
                 <div class="live-mining-box">
                     <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 800;">
-                        <span style="color: #059669;">Mined Balance (Min $0.10)</span>
-                        <span id="liveTickerVal" style="color: #0f172a;">+$0.0000</span>
+                        <span style="color: #34d399;">Mined Balance (Min $0.10)</span>
+                        <span id="liveTickerVal" style="color: #f8fafc;">+$0.0000</span>
                     </div>
                     <div class="progress-bar-container">
                         <div id="miningProgressBar" class="progress-bar"></div>
@@ -181,7 +217,7 @@
 
         <!-- ================= TAB 2: VIP TIERS ================= -->
         <div id="vipTab" class="tab-pane">
-            <h2 style="color: var(--text-main); margin-top: 10px; font-weight: 900;">👑 Mineral VIP Tiers</h2>
+            <h2 style="color: #f8fafc; margin-top: 10px; font-weight: 900;">👑 Mineral VIP Tiers</h2>
             <p style="font-size: 14px; color: var(--text-muted); font-weight: 600;">Buy a VIP package to start 10% daily mining speed.</p>
             
             <div class="card" style="padding: 15px;">
@@ -193,13 +229,13 @@
 
         <!-- ================= TAB 3: REFERRAL ================= -->
         <div id="refTab" class="tab-pane">
-            <h2 style="color: var(--text-main); margin-top: 10px; font-weight: 900;">👥 Referral System</h2>
+            <h2 style="color: #f8fafc; margin-top: 10px; font-weight: 900;">👥 Referral System</h2>
             <div class="card">
                 <p style="font-size: 14px; color: var(--text-muted); font-weight: 600;">Invite friends & earn rewards instantly!</p>
                 <div style="font-size: 14px; margin: 15px 0; text-align: left; font-weight: 700; line-height: 1.6;">
-                    <p>• Per Referral Reward: <b style="color:#059669;">+$0.04</b></p>
-                    <p>• Deposit Commission: <b style="color:#d97706;">10% of Friend's Deposit</b></p>
-                    <p>• Total Referrals Invited: <b id="refCountDisplay" style="color:#2563eb;">0</b></p>
+                    <p>• Per Referral Reward: <b style="color:#34d399;">+$0.04</b></p>
+                    <p>• Deposit Commission: <b style="color:#f59e0b;">10% of Friend's Deposit</b></p>
+                    <p>• Total Referrals Invited: <b id="refCountDisplay" style="color:#60a5fa;">0</b></p>
                 </div>
                 <div style="margin: 15px 0; text-align: left;">
                     <label style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Your Referral Link:</label>
@@ -211,12 +247,12 @@
 
         <!-- ================= TAB 4: PROFILE & HISTORY ================= -->
         <div id="profileTab" class="tab-pane">
-            <h2 style="color: var(--text-main); margin-top: 10px; font-weight: 900;">👤 Profile Center</h2>
+            <h2 style="color: #f8fafc; margin-top: 10px; font-weight: 900;">👤 Profile Center</h2>
             <div class="card" style="text-align: left; font-weight: 700;">
                 <p style="margin: 8px 0;"><b>Telegram ID:</b> <span id="profileIdDisplay" style="color: var(--text-muted);">Loading...</span></p>
-                <p style="margin: 8px 0;"><b>Current VIP:</b> <span id="profileVipDisplay" style="color: var(--accent-blue);">VIP 0</span></p>
-                <p style="margin: 8px 0;"><b>Active Mining Base:</b> $<span id="profileInvDisplay" style="color: var(--accent-green);">0.00</span></p>
-                <p style="margin: 8px 0;"><b>Total Referrals:</b> <span id="profileRefDisplay" style="color: var(--accent-blue);">0</span></p>
+                <p style="margin: 8px 0;"><b>Current VIP:</b> <span id="profileVipDisplay" style="color: #60a5fa;">VIP 0</span></p>
+                <p style="margin: 8px 0;"><b>Active Mining Base:</b> $<span id="profileInvDisplay" style="color: #34d399;">0.00</span></p>
+                <p style="margin: 8px 0;"><b>Total Referrals:</b> <span id="profileRefDisplay" style="color: #60a5fa;">0</span></p>
             </div>
 
             <div class="card" style="text-align: left;">
@@ -260,7 +296,7 @@
     <!-- Deposit Modal -->
     <div id="depositModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; color:var(--text-main); font-weight:900;">Deposit Crypto</h3>
+            <h3 style="margin-top:0; color:#fff; font-weight:900;">Deposit Crypto</h3>
             <p style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Select network, copy address, send funds and submit. Includes 10% bonus!</p>
             
             <label style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Select Network:</label>
@@ -288,7 +324,7 @@
     <!-- Withdraw Modal -->
     <div id="withdrawModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; color:var(--text-main); font-weight:900;">Withdraw Funds</h3>
+            <h3 style="margin-top:0; color:#fff; font-weight:900;">Withdraw Funds</h3>
             <p style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Minimum withdrawal: <b>$5</b>. Select your network.</p>
             
             <label style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Select Network:</label>
@@ -312,7 +348,7 @@
     <!-- History Modal -->
     <div id="historyModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; color:var(--text-main); font-weight:900;">Recent Transactions</h3>
+            <h3 style="margin-top:0; color:#fff; font-weight:900;">Recent Transactions</h3>
             <div id="historyList" class="history-list">No transactions yet.</div>
             <button class="close-btn" onclick="triggerHaptic(); closeModal('historyModal')">Close</button>
         </div>
@@ -321,7 +357,7 @@
     <!-- Admin Auth Modal -->
     <div id="adminAuthModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; color:var(--text-main); font-weight:900;">Secret Admin Login</h3>
+            <h3 style="margin-top:0; color:#fff; font-weight:900;">Secret Admin Login</h3>
             <input type="password" id="adminPasswordInput" placeholder="Enter Admin Password">
             <button class="btn-success" onclick="triggerHaptic(); verifyAdminPassword()" style="width: 100%;">Login</button>
             <button class="close-btn" onclick="triggerHaptic(); closeModal('adminAuthModal')">Cancel</button>
@@ -331,13 +367,13 @@
     <!-- Admin Panel Modal -->
     <div id="adminPanelModal" class="modal">
         <div class="modal-content" style="max-width: 380px;">
-            <h3 style="margin-top:0; color: #d97706; font-weight:900;">Admin Control Center</h3>
+            <h3 style="margin-top:0; color: #f59e0b; font-weight:900;">Admin Control Center</h3>
             <p style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Manage pending requests & view users.</p>
             
-            <h4 style="margin: 10px 0 5px 0; color: #059669; font-size: 14px; font-weight: 900;">Pending Requests</h4>
+            <h4 style="margin: 10px 0 5px 0; color: #34d399; font-size: 14px; font-weight: 900;">Pending Requests</h4>
             <div id="adminList" class="admin-list">Loading pending requests...</div>
 
-            <h4 style="margin: 15px 0 5px 0; color: #2563eb; font-size: 14px; font-weight: 900;">Registered Users</h4>
+            <h4 style="margin: 15px 0 5px 0; color: #60a5fa; font-size: 14px; font-weight: 900;">Registered Users</h4>
             <div id="adminUserList" class="admin-list">Loading users list...</div>
 
             <button class="close-btn" onclick="triggerHaptic(); closeModal('adminPanelModal')" style="margin-top: 15px;">Close Panel</button>
@@ -346,7 +382,6 @@
 
     <!-- ================= JAVASCRIPT LOGIC ================= -->
     <script>
-        // UI functions execute instantly without waiting for network/CDNs
         function switchTab(tabId, element) {
             try {
                 document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('active'));
@@ -410,25 +445,64 @@
 
         const botUsername = 'MineralMiningBot';
 
-        let balance = 1.00;
-        let activeInvestment = 0.00;
-        let vipLevel = 0;
-        let minedAccumulated = 0.00;
-        let referralCount = 0;
-        let lastClaimTime = 0;
-        let historyLog = ["Welcome Bonus Claimed: +$1.00"];
+        // Local-First State Loading (Prevents reset on back/offline)
+        let localData = null;
+        try {
+            localData = JSON.parse(localStorage.getItem('mineral_user_' + telegramId));
+        } catch(e) {}
+
+        let balance = localData?.balance ?? 1.00;
+        let activeInvestment = localData?.active_investment ?? 0.00;
+        let vipLevel = localData?.vip_level ?? 0;
+        let minedAccumulated = localData?.mined_accumulated ?? 0.00;
+        let referralCount = localData?.referral_count ?? 0;
+        let lastClaimTime = localData?.last_claim_time ?? 0;
+        let historyLog = localData?.history || ["Welcome Bonus Claimed: +$1.00"];
         let tapCount = 0;
         let tapTimer = null;
 
+        // Realistic 3D Metallic & Gemstone SVG Icons for VIP Tiers
         const vipTiersData = [
-            { level: 0, icon: "💎", name: "VIP 0 (Quartz)", price: 1.00, daily: 0.10 },
-            { level: 1, icon: "🥈", name: "VIP 1 (Silver)", price: 5.00, daily: 0.50 },
-            { level: 2, icon: "🥇", name: "VIP 2 (Gold)", price: 10.00, daily: 1.00 },
-            { level: 3, icon: "💠", name: "VIP 3 (Platinum)", price: 20.00, daily: 2.00 },
-            { level: 4, icon: "🔴", name: "VIP 4 (Ruby)", price: 50.00, daily: 5.00 },
-            { level: 5, icon: "🔵", name: "VIP 5 (Sapphire)", price: 100.00, daily: 10.00 },
-            { level: 6, icon: "🟢", name: "VIP 6 (Emerald)", price: 500.00, daily: 50.00 },
-            { level: 7, icon: "👑", name: "VIP 7 (Diamond)", price: 1000.00, daily: 100.00 }
+            { 
+                level: 0, name: "VIP 0 (Quartz)", price: 1.00, daily: 0.10, 
+                bg: "linear-gradient(135deg, #64748b, #334155)",
+                svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#e2e8f0" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`
+            },
+            { 
+                level: 1, name: "VIP 1 (Silver)", price: 5.00, daily: 0.50, 
+                bg: "linear-gradient(135deg, #94a3b8, #475569)",
+                svg: `<svg viewBox="0 0 24 24" fill="url(#silverGrad)"><defs><linearGradient id="silverGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f1f5f9"/><stop offset="100%" stop-color="#64748b"/></linearGradient></defs><circle cx="12" cy="12" r="10"/><path d="M12 6v12M8 10h8" stroke="#1e293b" stroke-width="2"/></svg>`
+            },
+            { 
+                level: 2, name: "VIP 2 (Gold)", price: 10.00, daily: 1.00, 
+                bg: "linear-gradient(135deg, #f59e0b, #b45309)",
+                svg: `<svg viewBox="0 0 24 24" fill="url(#goldGrad)"><defs><linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fde047"/><stop offset="100%" stop-color="#d97706"/></linearGradient></defs><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3" fill="#78350f"/></svg>`
+            },
+            { 
+                level: 3, name: "VIP 3 (Platinum)", price: 20.00, daily: 2.00, 
+                bg: "linear-gradient(135deg, #38bdf8, #0369a1)",
+                svg: `<svg viewBox="0 0 24 24" fill="url(#platGrad)"><defs><linearGradient id="platGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e0f2fe"/><stop offset="100%" stop-color="#0284c7"/></linearGradient></defs><path d="M12 2l7 7-7 7-7-7 7-7z"/></svg>`
+            },
+            { 
+                level: 4, name: "VIP 4 (Ruby)", price: 50.00, daily: 5.00, 
+                bg: "linear-gradient(135deg, #f43f5e, #9f1239)",
+                svg: `<svg viewBox="0 0 24 24" fill="url(#rubyGrad)"><defs><linearGradient id="rubyGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fb7185"/><stop offset="100%" stop-color="#be123c"/></linearGradient></defs><path d="M6 3h12l4 6-10 12L2 9l4-6z"/></svg>`
+            },
+            { 
+                level: 5, name: "VIP 5 (Sapphire)", price: 100.00, daily: 10.00, 
+                bg: "linear-gradient(135deg, #3b82f6, #1e3a8a)",
+                svg: `<svg viewBox="0 0 24 24" fill="url(#sapGrad)"><defs><linearGradient id="sapGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient></defs><polygon points="12,2 22,8 18,22 6,22 2,8"/></svg>`
+            },
+            { 
+                level: 6, name: "VIP 6 (Emerald)", price: 500.00, daily: 50.00, 
+                bg: "linear-gradient(135deg, #10b981, #065f46)",
+                svg: `<svg viewBox="0 0 24 24" fill="url(#emGrad)"><defs><linearGradient id="emGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#047857"/></linearGradient></defs><rect x="4" y="4" width="16" height="16" rx="3" transform="rotate(45 12 12)"/></svg>`
+            },
+            { 
+                level: 7, name: "VIP 7 (Diamond)", price: 1000.00, daily: 100.00, 
+                bg: "linear-gradient(135deg, #c084fc, #581c87)",
+                svg: `<svg viewBox="0 0 24 24" fill="url(#diamGrad)"><defs><linearGradient id="diamGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f3e8ff"/><stop offset="50%" stop-color="#c084fc"/><stop offset="100%" stop-color="#7e22ce"/></linearGradient></defs><path d="M12 2L2 9l10 13L22 9 12 2z"/></svg>`
+            }
         ];
 
         const randomNames = ["Alex", "Michael", "David", "Sarah", "Jessica", "Daniel", "Robert", "Emily", "Chris", "William"];
@@ -457,61 +531,19 @@
             } catch (e) {}
         }
 
-        // Initialize UI immediately so the app never freezes or looks like a static photo
+        // Render UI instantly using LocalStorage state
         renderVipTiers();
         updateUI();
         updateDepositAddress();
         startLiveMiningTicker();
         startPayoutBannerTicker();
 
-        // Load database data safely in background without blocking UI
-        async function loadUserData() {
-            try {
-                if (window.supabase) {
-                    const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
-                    const SUPABASE_ANON_KEY = 'sb_publishable_UKuSiII0z9gAVhjosJEG1w__5H5z7b2';
-                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    
-                    const { data } = await supabase.from('users').select('*').eq('telegram_id', telegramId).single();
-                    if (data) {
-                        balance = data.balance ?? 1.00;
-                        activeInvestment = data.active_investment ?? 0.00;
-                        vipLevel = data.vip_level ?? 0;
-                        minedAccumulated = data.mined_accumulated ?? 0.00;
-                        referralCount = data.referral_count ?? 0;
-                        lastClaimTime = data.last_claim_time ?? 0;
-                        historyLog = data.history || historyLog;
-                    } else {
-                        await supabase.from('users').insert([{ 
-                            telegram_id: telegramId, balance: 1.00, active_investment: 0.00,
-                            vip_level: 0, mined_accumulated: 0.00, referral_count: 0, last_claim_time: 0, history: historyLog 
-                        }]);
-
-                        if (referrerId && referrerId !== telegramId) {
-                            try {
-                                const { data: refUser } = await supabase.from('users').select('*').eq('telegram_id', referrerId).single();
-                                if (refUser) {
-                                    let newRefCnt = (refUser.referral_count || 0) + 1;
-                                    let newRefBal = (refUser.balance || 0) + 0.04;
-                                    let refHist = refUser.history || [];
-                                    refHist.unshift(`Referral Bonus (+1 Friend): +$0.04`);
-                                    await supabase.from('users').update({ 
-                                        referral_count: newRefCnt, 
-                                        balance: newRefBal, 
-                                        history: refHist 
-                                    }).eq('telegram_id', referrerId);
-                                }
-                            } catch(err) {}
-                        }
-                    }
-                    updateUI();
-                    renderVipTiers();
-                }
-            } catch (err) {}
-        }
-
+        // Save state instantly to LocalStorage & Supabase
         async function saveUserData() {
             try {
+                const stateObj = { balance, active_investment: activeInvestment, vip_level: vipLevel, mined_accumulated: minedAccumulated, referral_count: referralCount, last_claim_time: lastClaimTime, history: historyLog };
+                localStorage.setItem('mineral_user_' + telegramId, JSON.stringify(stateObj));
+
                 if (supabase) {
                     if (historyLog.length > 40) historyLog = historyLog.slice(0, 40);
                     await supabase.from('users').update({ 
@@ -523,249 +555,12 @@
             } catch (err) {}
         }
 
-        function updateUI() {
+        // Background Sync (Local-First Priority to protect user VIP and balance data)
+        async function loadUserData() {
             try {
-                document.getElementById('balanceDisplay').innerText = Number(balance).toFixed(2);
-                document.getElementById('activeInvDisplay').innerText = Number(activeInvestment).toFixed(2);
-                document.getElementById('profileInvDisplay').innerText = Number(activeInvestment).toFixed(2);
-                document.getElementById('vipDisplay').innerText = `${vipTiersData[vipLevel].icon} ${vipTiersData[vipLevel].name}`;
-                document.getElementById('refCountDisplay').innerText = referralCount;
-                document.getElementById('profileIdDisplay').innerText = telegramId;
-                document.getElementById('profileVipDisplay').innerText = `${vipTiersData[vipLevel].icon} ${vipTiersData[vipLevel].name}`;
-                document.getElementById('profileRefDisplay').innerText = referralCount;
-                document.getElementById('refLinkInput').value = `https://t.me/${botUsername}?start=ref_${telegramId}`;
-
-                const historyHTML = historyLog.length > 0 ? historyLog.map(item => `<div class="history-item">• ${item}</div>`).join('') : 'No transactions yet.';
-                document.getElementById('historyList').innerHTML = historyHTML;
-                document.getElementById('profileHistoryList').innerHTML = historyHTML;
-            } catch(e) {}
-        }
-
-        function renderVipTiers() {
-            try {
-                const container = document.getElementById('vipCardsContainer');
-                if (!container) return;
-                container.innerHTML = vipTiersData.map(tier => {
-                    const isCurrent = vipLevel === tier.level && activeInvestment > 0;
-                    return `
-                        <div class="vip-card-item">
-                            <div style="text-align: left; display: flex; align-items: center; gap: 10px;">
-                                <span style="font-size: 26px;">${tier.icon}</span>
-                                <div>
-                                    <b style="font-size:15px;">${tier.name}</b><br>
-                                    <span style="font-size: 12px; color: var(--text-muted); font-weight:700;">Cost: $${tier.price.toFixed(2)} | Daily: $${tier.daily.toFixed(2)} (10%)</span>
-                                </div>
-                            </div>
-                            <div>
-                                ${isCurrent ? '<span style="color:#059669; font-size:13px; font-weight:900;">Active</span>' : 
-                                `<button class="btn-success" style="padding: 8px 14px; font-size: 13px;" onclick="triggerHaptic(); buyVipTier(${tier.level})">Activate</button>`}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            } catch(e) {}
-        }
-
-        async function buyVipTier(level) {
-            const tier = vipTiersData[level];
-            if (balance < tier.price) {
-                alert(`Insufficient balance! You need $${tier.price.toFixed(2)} to activate ${tier.name}.`);
-                return;
-            }
-
-            balance -= tier.price;
-            activeInvestment = tier.price;
-            vipLevel = tier.level;
-            lastClaimTime = Date.now();
-            minedAccumulated = 0.00;
-
-            historyLog.unshift(`Activated ${tier.name} for $${tier.price.toFixed(2)}`);
-            updateUI();
-            renderVipTiers();
-            await saveUserData();
-            alert(`Successfully activated ${tier.name}! Mining started at $${tier.daily.toFixed(2)} / day.`);
-        }
-
-        function startLiveMiningTicker() {
-            setInterval(() => {
-                try {
-                    if (activeInvestment <= 0) {
-                        document.getElementById('liveTickerVal').innerText = `+ $0.0000 (Buy VIP)`;
-                        document.getElementById('miningProgressBar').style.width = '0%';
-                        return;
-                    }
-
-                    const dailyReturn = activeInvestment * 0.10;
-                    const perSecondRate = dailyReturn / 86400;
-
-                    minedAccumulated += perSecondRate;
-                    document.getElementById('liveTickerVal').innerText = `+ $${minedAccumulated.toFixed(4)}`;
+                if (window.supabase) {
+                    const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
+                    const SUPABASE_ANON_KEY = 'sb_publishable_UKuSiII0z9gAVhjosJEG1w__5H5z7b2';
+                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                     
-                    let percent = Math.min(100, (minedAccumulated / dailyReturn) * 100);
-                    document.getElementById('miningProgressBar').style.width = percent + '%';
-                } catch(e) {}
-            }, 1000);
-        }
-
-        function copyWalletAddress() {
-            try {
-                navigator.clipboard.writeText(document.getElementById('walletAddressDisplay').innerText);
-                alert('Deposit address copied!');
-            } catch(e) {}
-        }
-
-        function copyRefLink() {
-            try {
-                const link = document.getElementById('refLinkInput');
-                link.select();
-                navigator.clipboard.writeText(link.value);
-                alert('Referral link copied!');
-            } catch(e) {}
-        }
-
-        function updateDepositAddress() {
-            try {
-                const net = document.getElementById('depositNetwork').value;
-                const address = wallets[net];
-                document.getElementById('walletAddressDisplay').innerText = address;
-                const qr = document.getElementById('qrcode');
-                qr.innerHTML = '';
-                if (window.QRCode) {
-                    new QRCode(qr, { text: address, width: 110, height: 110 });
-                }
-            } catch(e) {}
-        }
-
-        async function claimMining() {
-            if (activeInvestment <= 0) {
-                alert('No active package! Go to VIP tab to activate a package.');
-                return;
-            }
-
-            if (minedAccumulated < 0.10) {
-                alert(`Minimum claim is $0.10. Current: $${minedAccumulated.toFixed(4)}.`);
-                return;
-            }
-
-            const claimAmount = minedAccumulated;
-            balance += claimAmount;
-            minedAccumulated = 0.00;
-            lastClaimTime = Date.now();
-
-            historyLog.unshift(`Claimed Mined Reward: +$${claimAmount.toFixed(2)}`);
-            updateUI();
-            await saveUserData();
-            alert(`Claimed +$${claimAmount.toFixed(2)} successfully!`);
-        }
-
-        async function processDeposit() {
-            try {
-                const amt = parseFloat(document.getElementById('depositAmountInput').value);
-                const net = document.getElementById('depositNetwork').value;
-                if (isNaN(amt) || amt < 5) { alert('Minimum deposit is $5'); return; }
-
-                const bonus = amt * 0.10;
-                historyLog.unshift(`Deposit Request: $${amt.toFixed(2)} via ${net}`);
-                if (supabase) {
-                    await supabase.from('pending_requests').insert([{ telegram_id: telegramId, type: 'DEPOSIT', amount: amt + bonus, network: net, status: 'PENDING' }]);
-                }
-                updateUI();
-                await saveUserData();
-                closeModal('depositModal');
-                alert('Deposit request submitted for Admin approval.');
-            } catch(e) { alert('Error processing deposit'); }
-        }
-
-        async function processWithdraw() {
-            try {
-                const amt = parseFloat(document.getElementById('withdrawAmountInput').value);
-                const wallet = document.getElementById('withdrawWalletInput').value.trim();
-                const net = document.getElementById('withdrawNetwork').value;
-                if (isNaN(amt) || amt < 5) { alert('Minimum withdrawal is $5'); return; }
-                if (!wallet) { alert('Enter valid wallet address'); return; }
-
-                if (amt > balance) { alert('Insufficient balance'); return; }
-
-                balance -= amt;
-                historyLog.unshift(`Withdrawal Request: -$${amt.toFixed(2)} (${net})`);
-                if (supabase) {
-                    await supabase.from('pending_requests').insert([{ telegram_id: telegramId, type: 'WITHDRAWAL', amount: amt, wallet: wallet, network: net, status: 'PENDING' }]);
-                }
-                updateUI();
-                await saveUserData();
-                closeModal('withdrawModal');
-                alert('Withdrawal requested successfully.');
-            } catch(e) { alert('Error processing withdrawal'); }
-        }
-
-        async function dailyCheckIn() {
-            balance += 0.02;
-            historyLog.unshift(`Daily Check-In: +$0.02`);
-            updateUI();
-            await saveUserData();
-            alert('Check-in reward claimed (+$0.02)!');
-        }
-
-        function handleTitleTap() {
-            tapCount++;
-            clearTimeout(tapTimer);
-            if (tapCount >= 5) {
-                tapCount = 0;
-                if (sessionStorage.getItem('adminAuth') === 'true') { openModal('adminPanelModal'); loadAdminData(); }
-                else { openModal('adminAuthModal'); }
-            } else { tapTimer = setTimeout(() => tapCount = 0, 2000); }
-        }
-
-        function verifyAdminPassword() {
-            const pwdInput = document.getElementById('adminPasswordInput');
-            if (pwdInput && pwdInput.value === 'Bini2160') {
-                sessionStorage.setItem('adminAuth', 'true');
-                closeModal('adminAuthModal');
-                openModal('adminPanelModal');
-                loadAdminData();
-            } else { alert('Incorrect Password!'); }
-        }
-
-        async function loadAdminData() {
-            try {
-                document.getElementById('adminList').innerHTML = 'Loading...';
-                if (supabase) {
-                    const { data: pending } = await supabase.from('pending_requests').select('*').eq('status', 'PENDING').limit(50);
-                    document.getElementById('adminList').innerHTML = pending?.length ? pending.map(req => `
-                        <div class="admin-item">
-                            <div><b>${req.type}</b> | $${req.amount} | ${req.network}</div>
-                            <div style="font-size:10px; color:#64748b;">User: ${req.telegram_id}</div>
-                            <button class="btn-success" onclick="handleAdmin(${req.id}, '${req.telegram_id}', '${req.type}', ${req.amount}, 'APPROVE')" style="padding:6px; font-size:12px; margin-top:5px; width:100%;">Approve</button>
-                        </div>`).join('') : 'No pending requests.';
-
-                    const { data: users } = await supabase.from('users').select('*').limit(50);
-                    document.getElementById('adminUserList').innerHTML = users?.length ? users.map(u => `
-                        <div class="admin-item" style="font-size:11px;">
-                            <div><b>ID:</b> ${u.telegram_id} | <b>Bal:</b> $${u.balance.toFixed(2)} | <b>Inv:</b> $${u.active_investment || 0}</div>
-                        </div>`).join('') : 'No users.';
-                }
-            } catch(e) {}
-        }
-
-        async function handleAdmin(id, uid, type, amt, action) {
-            try {
-                if (supabase) {
-                    await supabase.from('pending_requests').update({ status: 'APPROVED' }).eq('id', id);
-                    const { data: user } = await supabase.from('users').select('*').eq('telegram_id', uid).single();
-                    if (user) {
-                        let newBal = user.balance + amt;
-                        let hist = user.history || [];
-                        hist.unshift(`Admin Approved ${type}: +$${amt}`);
-                        await supabase.from('users').update({ balance: newBal, history: hist }).eq('telegram_id', uid);
-                    }
-                }
-                alert('Approved!');
-                loadAdminData();
-            } catch(e) {}
-        }
-
-        // Trigger background sync safely
-        setTimeout(loadUserData, 500);
-    </script>
-</body>
-</html>
+                    const { data }
