@@ -62,40 +62,20 @@
             border: var(--border); margin-bottom: 14px; font-weight: 700;
         }
         
-        /* Title & Male Miner Character Layout */
         .title-header-box {
-            display: flex; align-items: center; justify-content: center; gap: 12px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
             margin: 8px 0 4px 0; cursor: pointer;
         }
         .app-title { font-size: 22px; color: var(--text-main); font-weight: 900; margin: 0; }
         
-        /* Animated Male Miner Character SVG */
-        .miner-doll-icon {
-            width: 50px; height: 50px; flex-shrink: 0;
-            filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.6));
-            animation: minerBounce 2s ease-in-out infinite;
+        .pro-logo-icon {
+            width: 42px; height: 42px; flex-shrink: 0;
+            filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.5));
+            animation: proLogoPulse 3s ease-in-out infinite;
         }
-        @keyframes minerBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-        /* Blinking Eyes Animation */
-        .doll-eyes {
-            animation: blinkEyes 3.5s infinite;
-            transform-origin: center;
-        }
-        @keyframes blinkEyes {
-            0%, 90%, 100% { transform: scaleY(1); }
-            95% { transform: scaleY(0.1); }
-        }
-        /* Double-ended Pickaxe Working Animation */
-        .doll-pickaxe {
-            animation: swingPickaxe 1.4s ease-in-out infinite;
-            transform-origin: 32px 36px;
-        }
-        @keyframes swingPickaxe {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(-35deg); }
+        @keyframes proLogoPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .balance-box { 
@@ -115,27 +95,20 @@
 
         .sub-balance { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; }
         
-        /* Stunning Multi-Layered Glowing Crystal Reactor Animation */
         .mining-core-animation {
-            width: 95px; height: 95px; margin: 12px auto;
+            width: 100px; height: 100px; margin: 14px auto;
             animation: pulseCoreReactor 2.5s ease-in-out infinite;
         }
-        .mining-core-animation svg {
-            width: 100%; height: 100%;
-        }
-        .core-layer-1 {
-            animation: rotateClockwise 9s linear infinite;
+        .mining-core-animation svg { width: 100%; height: 100%; }
+        .quantum-ring-1 {
+            animation: rotateClockwise 8s linear infinite;
             transform-origin: 60px 60px;
         }
-        .core-layer-2 {
-            animation: rotateCounter 6s linear infinite;
+        .quantum-ring-2 {
+            animation: rotateCounter 5s linear infinite;
             transform-origin: 60px 60px;
         }
-        .ring-outer {
-            animation: rotateClockwise 14s linear infinite;
-            transform-origin: 60px 60px;
-        }
-        .core-orb {
+        .quantum-core-orb {
             animation: pulseOrb 2s ease-in-out infinite;
             transform-origin: 60px 60px;
         }
@@ -148,12 +121,12 @@
             100% { transform: rotate(-360deg); }
         }
         @keyframes pulseCoreReactor {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.5)); }
-            50% { transform: scale(1.08); filter: drop-shadow(0 0 28px rgba(52, 211, 153, 0.9)); }
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.4)); }
+            50% { transform: scale(1.06); filter: drop-shadow(0 0 25px rgba(52, 211, 153, 0.8)); }
         }
         @keyframes pulseOrb {
-            0%, 100% { transform: scale(1); opacity: 0.85; }
-            50% { transform: scale(1.15); opacity: 1; }
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.12); opacity: 1; }
         }
 
         .live-mining-box { background: var(--input-bg); padding: 14px; border-radius: 16px; margin: 14px 0; border: 2px dashed rgba(148, 163, 184, 0.3); }
@@ -263,8 +236,8 @@
             border: var(--border); display: flex; justify-content: space-between; align-items: center; gap: 10px; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .vip-badge-3d { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 6px; box-shadow: inset 0 2px 5px rgba(255,255,255,0.4); }
-        .vip-badge-3d svg { width: 100%; height: 100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+        .vip-badge-3d { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 6px; box-shadow: inset 0 3px 6px rgba(255,255,255,0.35), 0 6px 12px rgba(0,0,0,0.3); }
+        .vip-badge-3d svg { width: 100%; height: 100%; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.4)); }
         
         #qrcode { display: flex; justify-content: center; margin: 10px auto; background: white; padding: 10px; border-radius: 12px; width: fit-content; }
         .wallet-box { background: var(--input-bg); padding: 10px; border-radius: 10px; font-size: 11px; word-break: break-all; margin: 8px 0; border: 1px dashed #64748b; color: var(--text-main); }
@@ -299,30 +272,20 @@
                 </div>
             </div>
 
-            <!-- Title & Male Miner Character Header -->
+            <!-- Sleek Pro Logo Header -->
             <div class="title-header-box" onclick="handleTitleTap()">
-                <!-- Animated Male Miner Character SVG holding a double-ended pickaxe -->
-                <svg class="miner-doll-icon" viewBox="0 0 64 64">
-                    <path d="M16 28 C16 16 48 16 48 28 Z" fill="#f59e0b"/>
-                    <rect x="26" y="14" width="12" height="4" rx="2" fill="#ef4444"/>
-                    <circle cx="32" cy="15" r="3.5" fill="#ffffff" filter="drop-shadow(0 0 5px #fde047)"/>
-
-                    <rect x="20" y="24" width="24" height="20" rx="7" fill="#fed7aa"/>
-                    <g class="doll-eyes">
-                        <circle cx="26" cy="32" r="2" fill="#1e293b"/>
-                        <circle cx="38" cy="32" r="2" fill="#1e293b"/>
-                    </g>
-                    <path d="M22 39 Q32 45 42 39 Z" fill="#78350f" opacity="0.35"/>
-                    <path d="M28 39 Q32 41 36 39" fill="none" stroke="#1e293b" stroke-width="1.5"/>
-
-                    <rect x="18" y="43" width="28" height="18" rx="4" fill="#1e293b"/>
-                    <rect x="24" y="43" width="16" height="18" fill="#d97706"/>
-
-                    <g class="doll-pickaxe">
-                        <line x1="10" y1="28" x2="36" y2="54" stroke="#78350f" stroke-width="3.5" stroke-linecap="round"/>
-                        <path d="M2 20 Q12 16 22 26 Q12 30 2 20 Z" fill="#94a3b8" stroke="#cbd5e1" stroke-width="1.5"/>
-                        <path d="M16 24 Q26 20 36 30 Q26 34 16 24 Z" fill="#94a3b8" stroke="#cbd5e1" stroke-width="1.5"/>
-                    </g>
+                <svg class="pro-logo-icon" viewBox="0 0 64 64">
+                    <defs>
+                        <linearGradient id="proLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#34d399"/>
+                            <stop offset="100%" stop-color="#059669"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="32" cy="32" r="30" fill="url(#proLogoGrad)" opacity="0.2"/>
+                    <circle cx="32" cy="32" r="30" fill="none" stroke="#34d399" stroke-width="2"/>
+                    <path d="M18 18 L46 46 M46 18 L18 46" stroke="#34d399" stroke-width="4" stroke-linecap="round"/>
+                    <polygon points="46,18 52,14 48,22" fill="#ffffff"/>
+                    <polygon points="18,46 12,50 16,42" fill="#ffffff"/>
                 </svg>
 
                 <h1 class="app-title">Mineral Mining Pro</h1>
@@ -345,33 +308,25 @@
                 <div class="mining-core-animation">
                     <svg viewBox="0 0 120 120">
                         <defs>
-                            <linearGradient id="crystalOuter" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <linearGradient id="quantumGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" stop-color="#34d399"/>
                                 <stop offset="50%" stop-color="#059669"/>
-                                <stop offset="100%" stop-color="#047857"/>
+                                <stop offset="100%" stop-color="#2563eb"/>
                             </linearGradient>
-                            <linearGradient id="crystalInner" x1="100%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#6ee7b7"/>
-                                <stop offset="50%" stop-color="#10b981"/>
-                                <stop offset="100%" stop-color="#047857"/>
-                            </linearGradient>
-                            <filter id="glowEffect" x="-50%" y="-50%" width="200%" height="200%">
-                                <feGaussianBlur stdDeviation="6" result="blur" />
+                            <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur stdDeviation="5" result="blur" />
                                 <feComposite in="SourceGraphic" in2="blur" operator="over"/>
                             </filter>
                         </defs>
-                        <circle cx="60" cy="60" r="52" fill="none" stroke="#34d399" stroke-width="1.8" stroke-dasharray="10 5" opacity="0.6" class="ring-outer"/>
-                        <g class="core-layer-1" transform="translate(60,60)">
-                            <polygon points="0,-46 40,-23 40,23 0,46 -40,23 -40,-23" fill="url(#crystalOuter)" stroke="#a7f3d0" stroke-width="2" filter="url(#glowEffect)" opacity="0.85"/>
+                        <circle cx="60" cy="60" r="52" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="14 8" opacity="0.7" class="quantum-ring-1"/>
+                        <g class="quantum-ring-2" transform="translate(60,60)">
+                            <polygon points="0,-38 33,-19 33,19 0,38 -33,19 -33,-19" fill="none" stroke="url(#quantumGrad)" stroke-width="2.5" filter="url(#neonGlow)"/>
                         </g>
-                        <g class="core-layer-2" transform="translate(60,60)">
-                            <polygon points="0,-32 28,-16 28,16 0,32 -28,16 -28,-16" fill="url(#crystalInner)" stroke="#ffffff" stroke-width="1.5" opacity="0.9"/>
-                        </g>
-                        <circle cx="60" cy="60" r="14" fill="#ffffff" filter="url(#glowEffect)" class="core-orb"/>
-                        <circle cx="60" cy="60" r="6" fill="#a7f3d0"/>
+                        <circle cx="60" cy="60" r="16" fill="#34d399" filter="url(#neonGlow)" class="quantum-core-orb"/>
+                        <circle cx="60" cy="60" r="8" fill="#ffffff"/>
                     </svg>
                 </div>
-                <p style="font-size: 12px; font-weight: 800; color: #10b981; margin: 4px 0 10px 0;">Crystal Core Active</p>
+                <p style="font-size: 12px; font-weight: 800; color: #10b981; margin: 4px 0 10px 0;">Quantum Core Active</p>
 
                 <div class="live-mining-box">
                     <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 800;">
@@ -383,7 +338,10 @@
                     </div>
                 </div>
 
-                <button class="btn-3d-success" onclick="claimMining()">✨ Claim Mined Income</button>
+                <!-- 🌟 Professional Crystal Gem Vector Icon for Claim Mined Income -->
+                <button class="btn-3d-success" onclick="claimMining()">
+                    <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M6 2h12l4 7-10 13L2 9l4-7z"/></svg></span> Claim Mined Income
+                </button>
             </div>
 
             <div class="btn-grid">
@@ -653,14 +611,46 @@
         let lastCheckInTime = 0;
 
         const vipTiersData = [
-            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.06, daily: 0.06, bg: "linear-gradient(135deg, #64748b, #334155)", svg: `<svg viewBox="0 0 24 24"><polygon points="12,2 20,8 18,20 6,20 4,8" fill="#cbd5e1" stroke="#f8fafc" stroke-width="1.5"/><polygon points="12,2 20,8 12,14 4,8" fill="#ffffff" opacity="0.5"/></svg>` },
-            { level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, bg: "linear-gradient(135deg, #94a3b8, #475569)", svg: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2"/><path d="M7 12h10M12 7v10" stroke="#475569" stroke-width="2"/></svg>` },
-            { level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.08, daily: 0.80, bg: "linear-gradient(135deg, #f59e0b, #b45309)", svg: `<svg viewBox="0 0 24 24"><path d="M4 8l8-4 8 4-2 10H6z" fill="#fde047" stroke="#b45309" stroke-width="1.5"/><path d="M12 4v14" stroke="#d97706" stroke-width="1.5"/></svg>` },
-            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.10, daily: 2.00, bg: "linear-gradient(135deg, #0284c7, #0369a1)", svg: `<svg viewBox="0 0 24 24"><polygon points="12,2 22,12 12,22 2,12" fill="#38bdf8" stroke="#bae6fd" stroke-width="1.5"/><polygon points="12,2 22,12 12,12 2,12" fill="#ffffff" opacity="0.4"/></svg>` },
-            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.12, daily: 6.00, bg: "linear-gradient(135deg, #e11d48, #881337)", svg: `<svg viewBox="0 0 24 24"><polygon points="7,3 17,3 21,9 12,21 3,9" fill="#fb7185" stroke="#fda4af" stroke-width="1.5"/><polygon points="7,3 17,3 12,9" fill="#ffffff" opacity="0.4"/></svg>` },
-            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.14, daily: 14.00, bg: "linear-gradient(135deg, #2563eb, #1e3a8a)", svg: `<svg viewBox="0 0 24 24"><polygon points="12,2 21,7 19,20 5,20 3,7" fill="#60a5fa" stroke="#93c5fd" stroke-width="1.5"/><polygon points="12,2 21,7 12,13 3,7" fill="#ffffff" opacity="0.4"/></svg>` },
-            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.16, daily: 80.00, bg: "linear-gradient(135deg, #059669, #064e3b)", svg: `<svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="3" transform="rotate(45 12 12)" fill="#34d399" stroke="#6ee7b7" stroke-width="1.5"/></svg>` },
-            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, bg: "linear-gradient(135deg, #7e22ce, #581c87)", svg: `<svg viewBox="0 0 24 24"><path d="M12 2L2 9l10 13L22 9 12 2z" fill="#c084fc" stroke="#e9d5ff" stroke-width="1.5"/><line x1="2" y1="9" x2="22" y2="9" stroke="#e9d5ff" stroke-width="1"/></svg>` }
+            { 
+                level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.06, daily: 0.06, 
+                bg: "linear-gradient(135deg, #475569, #1e293b)", 
+                svg: `<svg viewBox="0 0 32 32"><path d="M16 4 L28 12 L24 26 L8 26 L4 12 Z" fill="#94a3b8" stroke="#cbd5e1" stroke-width="1.5"/><path d="M16 4 L16 26 M4 12 L16 16 L28 12" stroke="#e2e8f0" stroke-width="1" fill="none"/></svg>` 
+            },
+            { 
+                level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, 
+                bg: "linear-gradient(135deg, #64748b, #334155)", 
+                svg: `<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2"/><circle cx="16" cy="16" r="7" fill="#475569"/><path d="M16 10 L18 14 L22 15 L19 18 L20 22 L16 20 L12 22 L13 18 L10 15 L14 14 Z" fill="#f8fafc"/></svg>` 
+            },
+            { 
+                level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.08, daily: 0.80, 
+                bg: "linear-gradient(135deg, #d97706, #92400e)", 
+                svg: `<svg viewBox="0 0 32 32"><path d="M4 10 L16 4 L28 10 L24 26 L8 26 Z" fill="#fbbf24" stroke="#fef08a" stroke-width="1.5"/><path d="M10 14 L16 8 L22 14 L16 22 Z" fill="#f59e0b"/><circle cx="16" cy="15" r="3" fill="#ffffff"/></svg>` 
+            },
+            { 
+                level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.10, daily: 2.00, 
+                bg: "linear-gradient(135deg, #0284c7, #0369a1)", 
+                svg: `<svg viewBox="0 0 32 32"><polygon points="16,2 30,16 16,30 2,16" fill="#38bdf8" stroke="#bae6fd" stroke-width="1.5"/><polygon points="16,8 24,16 16,24 8,16" fill="#0284c7"/><circle cx="16" cy="16" r="4" fill="#ffffff"/></svg>` 
+            },
+            { 
+                level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.12, daily: 6.00, 
+                bg: "linear-gradient(135deg, #e11d48, #881337)", 
+                svg: `<svg viewBox="0 0 32 32"><polygon points="9,6 23,6 29,14 16,28 3,14" fill="#fb7185" stroke="#fda4af" stroke-width="1.5"/><polygon points="9,6 23,6 16,16" fill="#f43f5e"/><circle cx="16" cy="13" r="3.5" fill="#ffffff"/></svg>` 
+            },
+            { 
+                level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.14, daily: 14.00, 
+                bg: "linear-gradient(135deg, #2563eb, #1e3a8a)", 
+                svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L28 8 L26 24 L16 30 L6 24 L4 8 Z" fill="#3b82f6" stroke="#93c5fd" stroke-width="1.5"/><circle cx="16" cy="16" r="6" fill="#1d4ed8" stroke="#60a5fa" stroke-width="1.5"/><polygon points="16,11 18,15 22,16 18,17 16,21 14,17 10,16 14,15" fill="#ffffff"/></svg>` 
+            },
+            { 
+                level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.16, daily: 80.00, 
+                bg: "linear-gradient(135deg, #059669, #064e3b)", 
+                svg: `<svg viewBox="0 0 32 32"><rect x="7" y="7" width="18" height="18" rx="4" transform="rotate(45 16 16)" fill="#34d399" stroke="#6ee7b7" stroke-width="1.5"/><circle cx="16" cy="16" r="5" fill="#047857"/><polygon points="16,12 18,15 21,16 18,17 16,20 14,17 11,16 14,15" fill="#ffffff"/></svg>` 
+            },
+            { 
+                level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, 
+                bg: "linear-gradient(135deg, #7e22ce, #581c87)", 
+                svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L30 12 L16 30 L2 12 Z" fill="#c084fc" stroke="#e9d5ff" stroke-width="1.5"/><polygon points="16,6 25,12 16,26 7,12" fill="#9333ea"/><circle cx="16" cy="14" r="4.5" fill="#ffffff" filter="drop-shadow(0 0 4px #ffffff)"/></svg>` 
+            }
         ];
 
         try {
@@ -876,7 +866,7 @@
                     id: 'req_' + Date.now() + Math.floor(Math.random()*1000),
                     userId: telegramId,
                     userName: userName,
-                    type: type, // 'Deposit' or 'Withdrawal'
+                    type: type,
                     amount: amount,
                     network: network,
                     status: 'pending',
@@ -945,7 +935,7 @@
                         if (action === 'approve') {
                             historyLog.unshift("Withdrawal Approved: -$" + req.amount.toFixed(2) + " (" + req.network + ")");
                         } else {
-                            balance += req.amount; // Refund balance if withdrawal cancelled
+                            balance += req.amount;
                             historyLog.unshift("Withdrawal Cancelled & Refunded: +$" + req.amount.toFixed(2) + " (" + req.network + ")");
                         }
                     }
@@ -986,7 +976,7 @@
                     const isCurr = vipLevel === t.level && activeInvestment > 0;
                     const ratePct = (t.rate * 100).toFixed(0);
                     return '<div class="vip-card-item">' +
-                        '<div style="display:flex; align-items:center; gap:10px; text-align:left;">' +
+                        '<div style="display:flex; align-items:center; gap:12px; text-align:left;">' +
                             '<div class="vip-badge-3d" style="background:' + t.bg + '">' + t.svg + '</div>' +
                             '<div><b style="font-size:13px;">' + t.name + '</b><br><span style="font-size:11px; color:var(--text-muted)">$' + t.price + ' | Daily: $' + t.daily.toFixed(2) + ' (' + ratePct + '%)</span></div>' +
                         '</div>' +
