@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mineral Mining Pro</title>
     <!-- Telegram WebApp & Supabase SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -21,6 +21,10 @@
             --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
             --border: 1px solid #cbd5e1;
         }
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
         body {
             background: var(--bg-gradient);
             color: var(--text-main);
@@ -30,6 +34,7 @@
             text-align: center;
             min-height: 100vh;
             user-select: none;
+            touch-action: manipulation;
         }
         .app-container { max-width: 420px; margin: 0 auto; }
         
@@ -89,7 +94,7 @@
             transition: color 0.2s;
         }
         .nav-item.active { color: var(--accent-blue); }
-        .nav-icon svg { width: 24px; height: 24px; fill: currentColor; }
+        .nav-icon svg { width: 24px; height: 24px; fill: currentColor; pointer-events: none; }
 
         /* Tab Content Sections */
         .tab-pane { display: none; }
@@ -164,7 +169,7 @@
                 <button class="btn-success" onclick="triggerHaptic(); claimMining()" style="width: 100%;">Claim Mined Income</button>
             </div>
 
-            <!-- Action Buttons (No numbers/minimum texts) -->
+            <!-- Action Buttons -->
             <div class="btn-grid">
                 <button onclick="triggerHaptic(); openModal('depositModal')">Deposit</button>
                 <button class="btn-warning" onclick="triggerHaptic(); openModal('withdrawModal')">Withdraw</button>
@@ -220,7 +225,7 @@
             </div>
         </div>
 
-        <!-- ================= BOTTOM NAVIGATION BAR (SVG Icons, No Emojis) ================= -->
+        <!-- ================= BOTTOM NAVIGATION BAR ================= -->
         <div class="bottom-nav">
             <button class="nav-item active" onclick="triggerHaptic(); switchTab('homeTab', this)">
                 <span class="nav-icon">
