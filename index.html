@@ -569,7 +569,7 @@
             } catch (err) {}
         }
 
-        // Background Sync (Local-First Priority to protect user VIP and balance data)
+        // Background Sync (Force loads from Supabase if user reinstalled, cleared cache, or restored phone)
         async function loadUserData() {
             try {
                 if (window.supabase) {
@@ -579,13 +579,16 @@
                     
                     const { data } = await supabase.from('users').select('*').eq('telegram_id', telegramId).single();
                     if (data) {
-                        if (data.active_investment > activeInvestment) {
-                            activeInvestment = data.active_investment;
-                            balance = data.balance;
-                            vipLevel = data.vip_level;
-                            minedAccumulated = data.mined_accumulated;
-                            referralCount = data.referral_count;
+                        // ስልኩ ሪስቶር ተደርጎ ሎካል ስቶሬጅ ባዶ ከሆነ ወይም ሰርቨር ላይ ያለው መረጃ የሚበልጥ ከሆነ በኃይል እናዘምነዋለን
+                        if (!localData || data.balance > balance || data.active_investment >= activeInvestment) {
+                            balance = data.balance ?? balance;
+                            activeInvestment = data.active_investment ?? activeInvestment;
+                            vipLevel = data.vip_level ?? vipLevel;
+                            minedAccumulated = data.mined_accumulated ?? minedAccumulated;
+                            referralCount = data.referral_count ?? referralCount;
                             historyLog = data.history || historyLog;
+                            
+                            saveUserData();
                             updateUI();
                             renderVipTiers();
                         }
@@ -698,7 +701,6 @@
                     let percent = Math.min(100, (minedAccumulated / dailyReturn) * 100);
                     document.getElementById('miningProgressBar').style.width = percent + '%';
                     
-                    // Periodically persist state locally to keep offline tracking accurate
                     saveUserData();
                 } catch(e) {}
             }, 1000);
@@ -826,7 +828,6 @@
                 const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
                 
                 // SHA-256 hash for password 'Bini2160'
-                // This keeps your password fully encrypted/hidden from source code inspection
                 const expectedHash = '997034c56e2978aa9efdf5745e69e4f4fb76b88b78afbc1a05151590e8082662';
 
                 if (hashHex === expectedHash) {
