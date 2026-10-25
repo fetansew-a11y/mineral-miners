@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mineral Mining Pro</title>
-    <!-- Telegram WebApp & Supabase SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- QR Code Generator Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Telegram WebApp & Supabase SDK (Async to never block UI) -->
+    <script src="https://telegram.org/js/telegram-web-app.js" async></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" async></script>
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
@@ -347,6 +346,7 @@
 
     <!-- ================= JAVASCRIPT LOGIC ================= -->
     <script>
+        // UI functions execute instantly without waiting for network/CDNs
         function switchTab(tabId, element) {
             try {
                 document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('active'));
@@ -355,9 +355,7 @@
                 const target = document.getElementById(tabId);
                 if (target) target.classList.add('active');
                 if (element) element.classList.add('active');
-            } catch (e) {
-                console.error("Tab switch error:", e);
-            }
+            } catch (e) {}
         }
 
         function openModal(id) {
@@ -381,7 +379,6 @@
             TON: 'UQAgaG68J6uVa8kysPJVkVVJ-DM9GvZJnaOc8NbkrGv9KzDU'
         };
 
-        // Initialize Telegram ID safely and parse Referrals
         let telegramId = 'user_' + Math.floor(Math.random() * 900000 + 100000);
         let referrerId = null;
 
@@ -392,7 +389,6 @@
                 if (Telegram.WebApp.initDataUnsafe?.user?.id) {
                     telegramId = String(Telegram.WebApp.initDataUnsafe.user.id);
                 }
-                // Check Telegram start_param for referral
                 if (Telegram.WebApp.initDataUnsafe?.start_param) {
                     const sp = Telegram.WebApp.initDataUnsafe.start_param;
                     if (sp.startsWith('ref_')) {
@@ -402,7 +398,6 @@
             }
         } catch(e) {}
 
-        // Fallback check URL parameters if opened in standard browser
         const urlParams = new URLSearchParams(window.location.search);
         const urlRef = urlParams.get('ref') || urlParams.get('start');
         if (urlRef) {
@@ -462,6 +457,14 @@
             } catch (e) {}
         }
 
+        // Initialize UI immediately so the app never freezes or looks like a static photo
+        renderVipTiers();
+        updateUI();
+        updateDepositAddress();
+        startLiveMiningTicker();
+        startPayoutBannerTicker();
+
+        // Load database data safely in background without blocking UI
         async function loadUserData() {
             try {
                 if (window.supabase) {
@@ -479,13 +482,11 @@
                         lastClaimTime = data.last_claim_time ?? 0;
                         historyLog = data.history || historyLog;
                     } else {
-                        // New user registration
                         await supabase.from('users').insert([{ 
                             telegram_id: telegramId, balance: 1.00, active_investment: 0.00,
                             vip_level: 0, mined_accumulated: 0.00, referral_count: 0, last_claim_time: 0, history: historyLog 
                         }]);
 
-                        // Handle referral bonus if valid referrer exists and not self-referral
                         if (referrerId && referrerId !== telegramId) {
                             try {
                                 const { data: refUser } = await supabase.from('users').select('*').eq('telegram_id', referrerId).single();
@@ -503,14 +504,10 @@
                             } catch(err) {}
                         }
                     }
+                    updateUI();
+                    renderVipTiers();
                 }
             } catch (err) {}
-
-            renderVipTiers();
-            updateUI();
-            updateDepositAddress();
-            startLiveMiningTicker();
-            startPayoutBannerTicker();
         }
 
         async function saveUserData() {
@@ -767,10 +764,8 @@
             } catch(e) {}
         }
 
-        // Initialize when window loads
-        window.addEventListener('load', function() {
-            loadUserData();
-        });
+        // Trigger background sync safely
+        setTimeout(loadUserData, 500);
     </script>
 </body>
 </html>
