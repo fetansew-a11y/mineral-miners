@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mineral Mining Pro</title>
-    <!-- Telegram WebApp & Supabase SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Telegram WebApp & Supabase SDK (Async to prevent blocking) -->
+    <script src="https://telegram.org/js/telegram-web-app.js" async></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async></script>
     <!-- QR Code Generator Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" async></script>
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
@@ -346,14 +346,6 @@
 
     <!-- ================= JAVASCRIPT LOGIC ================= -->
     <script>
-        // Force Telegram WebApp Immediate Initialization
-        try {
-            if (window.Telegram && Telegram.WebApp) {
-                Telegram.WebApp.ready();
-                Telegram.WebApp.expand();
-            }
-        } catch (e) {}
-
         function switchTab(tabId, element) {
             try {
                 document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('active'));
@@ -382,14 +374,6 @@
         }
 
         let supabase = null;
-        try {
-            const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
-            const SUPABASE_ANON_KEY = 'sb_publishable_UKuSiII0z9gAVhjosJEG1w__5H5z7b2';
-            if (window.supabase) {
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            }
-        } catch (e) {}
-
         const wallets = {
             BEP20: '0x91D139567d96E18159f4d59BDfe1269cF4bB1Eb3',
             ERC20: '0x3A23D577010BFF61620BC232a4fd95Fe895416bF',
@@ -397,12 +381,6 @@
         };
 
         let telegramId = 'user_demo_1234';
-        try {
-            if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe?.user?.id) {
-                telegramId = String(Telegram.WebApp.initDataUnsafe.user.id);
-            }
-        } catch(e) {}
-
         const botUsername = 'MineralMiningBot';
 
         let balance = 1.00;
@@ -454,7 +432,21 @@
 
         async function loadUserData() {
             try {
-                if (supabase) {
+                if (window.Telegram && Telegram.WebApp) {
+                    Telegram.WebApp.ready();
+                    Telegram.WebApp.expand();
+                    if (Telegram.WebApp.initDataUnsafe?.user?.id) {
+                        telegramId = String(Telegram.WebApp.initDataUnsafe.user.id);
+                    }
+                }
+            } catch(e) {}
+
+            try {
+                if (window.supabase) {
+                    const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
+                    const SUPABASE_ANON_KEY = 'sb_publishable_UKuSiII0z9gAVhjosJEG1w__5H5z7b2';
+                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    
                     const { data } = await supabase.from('users').select('*').eq('telegram_id', telegramId).single();
                     if (data) {
                         balance = data.balance ?? 1.00;
@@ -472,6 +464,7 @@
                     }
                 }
             } catch (err) {}
+
             renderVipTiers();
             updateUI();
             updateDepositAddress();
@@ -730,8 +723,8 @@
             } catch(e) {}
         }
 
-        // Initialize immediately on DOM load
-        document.addEventListener('DOMContentLoaded', function() {
+        // Run as soon as window loads completely, bypassing sync CDN locks
+        window.addEventListener('load', function() {
             loadUserData();
         });
     </script>
