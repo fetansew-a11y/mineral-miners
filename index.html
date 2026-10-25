@@ -382,8 +382,52 @@
 
     <!-- ================= JAVASCRIPT LOGIC ================= -->
     <script>
+        // Web Audio API Sound Effects Synthesizer (No external files needed)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            try {
+                if (!audioCtx) return;
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.exponentialRampToValueAtTime(200, now + 0.04);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
+                    osc.start(now);
+                    osc.stop(now + 0.04);
+                } else if (type === 'success') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.08);
+                    osc.frequency.setValueAtTime(783.99, now + 0.16);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                } else if (type === 'claim') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(350, now);
+                    osc.frequency.exponentialRampToValueAtTime(850, now + 0.18);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
+                    osc.start(now);
+                    osc.stop(now + 0.18);
+                }
+            } catch(e) {}
+        }
+
         function switchTab(tabId, element) {
             try {
+                playSound('click');
                 document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('active'));
                 document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
                 
@@ -395,6 +439,7 @@
 
         function openModal(id) {
             try {
+                playSound('click');
                 const modal = document.getElementById(id);
                 if (modal) modal.style.display = 'flex';
             } catch(e) {}
@@ -402,6 +447,7 @@
 
         function closeModal(id) {
             try {
+                playSound('click');
                 const modal = document.getElementById(id);
                 if (modal) modal.style.display = 'none';
             } catch(e) {}
@@ -445,11 +491,14 @@
 
         const botUsername = 'MineralMiningBot';
 
-        // Local-First State Loading with Timestamp-based Offline Mining Calculation
+        // Local-First State Loading with Safe JSON Parsing
         let localData = null;
         try {
-            localData = JSON.parse(localStorage.getItem('mineral_user_' + telegramId));
-        } catch(e) {}
+            const rawData = localStorage.getItem('mineral_user_' + telegramId);
+            if (rawData) localData = JSON.parse(rawData);
+        } catch(e) {
+            localStorage.removeItem('mineral_user_' + telegramId);
+        }
 
         let balance = localData?.balance ?? 1.00;
         let activeInvestment = localData?.active_investment ?? 0.00;
@@ -462,11 +511,11 @@
         let tapCount = 0;
         let tapTimer = null;
 
-        // Calculate offline elapsed time and accumulate mining immediately
+        // Calculate offline elapsed time safely
         if (activeInvestment > 0) {
             const now = Date.now();
             const elapsedSeconds = (now - lastUpdateTime) / 1000;
-            if (elapsedSeconds > 0) {
+            if (elapsedSeconds > 0 && elapsedSeconds < 604800) {
                 const dailyReturn = activeInvestment * 0.10;
                 const perSecondRate = dailyReturn / 86400;
                 minedAccumulated += elapsedSeconds * perSecondRate;
@@ -474,7 +523,6 @@
             lastUpdateTime = now;
         }
 
-        // Realistic 3D Metallic & Gemstone SVG Icons for VIP Tiers
         const vipTiersData = [
             { 
                 level: 0, name: "VIP 0 (Quartz)", price: 1.00, daily: 0.10, 
@@ -544,14 +592,16 @@
             } catch (e) {}
         }
 
-        // Render UI instantly using LocalStorage state
-        renderVipTiers();
-        updateUI();
-        updateDepositAddress();
-        startLiveMiningTicker();
-        startPayoutBannerTicker();
+        // Run everything safely when DOM is fully loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            renderVipTiers();
+            updateUI();
+            updateDepositAddress();
+            startLiveMiningTicker();
+            startPayoutBannerTicker();
+            setTimeout(loadUserData, 300);
+        });
 
-        // Save state instantly to LocalStorage & Supabase
         async function saveUserData() {
             try {
                 lastUpdateTime = Date.now();
@@ -569,7 +619,6 @@
             } catch (err) {}
         }
 
-        // Background Sync (Force loads from Supabase if user reinstalled, cleared cache, or restored phone)
         async function loadUserData() {
             try {
                 if (window.supabase) {
@@ -579,7 +628,6 @@
                     
                     const { data } = await supabase.from('users').select('*').eq('telegram_id', telegramId).single();
                     if (data) {
-                        // ስልኩ ሪስቶር ተደርጎ ሎካል ስቶሬጅ ባዶ ከሆነ ወይም ሰርቨር ላይ ያለው መረጃ የሚበልጥ ከሆነ በኃይል እናዘምነዋለን
                         if (!localData || data.balance > balance || data.active_investment >= activeInvestment) {
                             balance = data.balance ?? balance;
                             activeInvestment = data.active_investment ?? activeInvestment;
@@ -663,6 +711,7 @@
         }
 
         async function buyVipTier(level) {
+            playSound('success');
             const tier = vipTiersData[level];
             if (balance < tier.price) {
                 alert(`Insufficient balance! You need $${tier.price.toFixed(2)} to activate ${tier.name}.`);
@@ -686,8 +735,10 @@
             setInterval(() => {
                 try {
                     if (activeInvestment <= 0) {
-                        document.getElementById('liveTickerVal').innerText = `+ $0.0000 (Buy VIP)`;
-                        document.getElementById('miningProgressBar').style.width = '0%';
+                        const elVal = document.getElementById('liveTickerVal');
+                        const elBar = document.getElementById('miningProgressBar');
+                        if (elVal) elVal.innerText = `+ $0.0000 (Buy VIP)`;
+                        if (elBar) elBar.style.width = '0%';
                         return;
                     }
 
@@ -696,10 +747,13 @@
 
                     minedAccumulated += perSecondRate;
                     lastUpdateTime = Date.now();
-                    document.getElementById('liveTickerVal').innerText = `+ $${minedAccumulated.toFixed(4)}`;
+                    
+                    const elVal = document.getElementById('liveTickerVal');
+                    if (elVal) elVal.innerText = `+ $${minedAccumulated.toFixed(4)}`;
                     
                     let percent = Math.min(100, (minedAccumulated / dailyReturn) * 100);
-                    document.getElementById('miningProgressBar').style.width = percent + '%';
+                    const elBar = document.getElementById('miningProgressBar');
+                    if (elBar) elBar.style.width = percent + '%';
                     
                     saveUserData();
                 } catch(e) {}
@@ -708,6 +762,7 @@
 
         function copyWalletAddress() {
             try {
+                playSound('click');
                 navigator.clipboard.writeText(document.getElementById('walletAddressDisplay').innerText);
                 alert('Deposit address copied!');
             } catch(e) {}
@@ -715,6 +770,7 @@
 
         function copyRefLink() {
             try {
+                playSound('click');
                 const link = document.getElementById('refLinkInput');
                 link.select();
                 navigator.clipboard.writeText(link.value);
@@ -724,13 +780,17 @@
 
         function updateDepositAddress() {
             try {
-                const net = document.getElementById('depositNetwork').value;
+                const netEl = document.getElementById('depositNetwork');
+                if (!netEl) return;
+                const net = netEl.value;
                 const address = wallets[net];
                 document.getElementById('walletAddressDisplay').innerText = address;
                 const qr = document.getElementById('qrcode');
-                qr.innerHTML = '';
-                if (window.QRCode) {
-                    new QRCode(qr, { text: address, width: 110, height: 110 });
+                if (qr) {
+                    qr.innerHTML = '';
+                    if (window.QRCode) {
+                        new QRCode(qr, { text: address, width: 110, height: 110 });
+                    }
                 }
             } catch(e) {}
         }
@@ -746,6 +806,7 @@
                 return;
             }
 
+            playSound('claim');
             const claimAmount = minedAccumulated;
             balance += claimAmount;
             minedAccumulated = 0.00;
@@ -763,6 +824,7 @@
                 const net = document.getElementById('depositNetwork').value;
                 if (isNaN(amt) || amt < 5) { alert('Minimum deposit is $5'); return; }
 
+                playSound('success');
                 const bonus = amt * 0.10;
                 historyLog.unshift(`Deposit Request: $${amt.toFixed(2)} via ${net}`);
                 if (supabase) {
@@ -785,6 +847,7 @@
 
                 if (amt > balance) { alert('Insufficient balance'); return; }
 
+                playSound('success');
                 balance -= amt;
                 historyLog.unshift(`Withdrawal Request: -$${amt.toFixed(2)} (${net})`);
                 if (supabase) {
@@ -798,6 +861,7 @@
         }
 
         async function dailyCheckIn() {
+            playSound('success');
             balance += 0.02;
             historyLog.unshift(`Daily Check-In: +$0.02`);
             updateUI();
@@ -815,7 +879,6 @@
             } else { tapTimer = setTimeout(() => tapCount = 0, 2000); }
         }
 
-        // Secure Cryptographic Hash Verification for Admin Password (Hidden from plain text)
         async function verifyAdminPassword() {
             const pwdInput = document.getElementById('adminPasswordInput');
             if (!pwdInput) return;
@@ -827,10 +890,10 @@
                 const hashArray = Array.from(new Uint8Array(hashBuffer));
                 const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
                 
-                // SHA-256 hash for password 'Bini2160'
                 const expectedHash = '997034c56e2978aa9efdf5745e69e4f4fb76b88b78afbc1a05151590e8082662';
 
                 if (hashHex === expectedHash) {
+                    playSound('success');
                     sessionStorage.setItem('adminAuth', 'true');
                     closeModal('adminAuthModal');
                     openModal('adminPanelModal');
@@ -866,6 +929,7 @@
 
         async function handleAdmin(id, uid, type, amt, action) {
             try {
+                playSound('success');
                 if (supabase) {
                     await supabase.from('pending_requests').update({ status: 'APPROVED' }).eq('id', id);
                     const { data: user } = await supabase.from('users').select('*').eq('telegram_id', uid).single();
@@ -880,9 +944,6 @@
                 loadAdminData();
             } catch(e) {}
         }
-
-        // Sync safely in background
-        setTimeout(loadUserData, 500);
     </script>
 </body>
 </html>
