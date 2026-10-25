@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mineral Crypto Miner Pro - Claim & Check-in</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(234, 179, 8, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(234, 179, 8, 0.8); }
+        }
+        .glow-card { animation: pulse-glow 3s infinite; }
+        .gradient-bg { background: linear-gradient(135deg, #090d16 0%, #111827 50%, #030712 100%); }
+    </style>
+</head>
+<body class="gradient-bg text-white font-sans min-h-screen pb-24 select-none">
+
+    <!-- Top Header -->
+    <header class="p-4 flex justify-between items-center bg-slate-900/90 backdrop-blur-md sticky top-0 z-50 border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+            <div onclick="triggerSecretAdmin()" class="w-9 h-9 rounded-full bg-yellow-500 flex items-center justify-center font-bold text-slate-950 shadow-lg cursor-pointer active:scale-95 transition">
+                <i class="fa-solid fa-gem"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-sm text-yellow-400">Mineral Mining Pro</h1>
+                <p class="text-[10px] text-slate-400">Secure BEP-20 Manual System</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2">
+            <div class="bg-slate-800/90 px-3 py-1.5 rounded-full border border-slate-700 flex items-center space-x-1.5">
+                <i class="fa-brands fa-telegram text-blue-400 text-xs"></i>
+                <span id="userHandle" class="text-xs font-medium text-slate-200">@Miner</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-md mx-auto p-4">
+
+        <!-- HOME TAB -->
+        <div id="tab-home" class="space-y-5">
+            <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-yellow-500/30 rounded-2xl p-5 shadow-2xl glow-card">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs text-slate-400 uppercase tracking-wider">Total Balance</p>
+                        <h2 id="mainBalance" class="text-3xl font-extrabold text-yellow-400 mt-1">$1.00</h2>
+                    </div>
+                    <span class="bg-yellow-500/10 text-yellow-400 text-[11px] font-semibold px-2.5 py-1 rounded-full border border-yellow-500/20">
+                        <i class="fa-solid fa-crown mr-1"></i> <span id="currentVipBadge">VIP 0</span>
+                    </span>
+                </div>
+                
+                <div class="mt-5 grid grid-cols-2 gap-3 pt-4 border-t border-slate-800">
+                    <div>
+                        <p class="text-[11px] text-slate-400">Claimable Mined</p>
+                        <p id="todayEarnings" class="text-sm font-bold text-emerald-400 mt-0.5">$0.0000</p>
+                    </div>
+                    <div>
+                        <p class="text-[11px] text-slate-400">Total Mined</p>
+                        <p id="totalMined" class="text-sm font-bold text-indigo-300 mt-0.5">$0.0000</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Mining & Claim Banner -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 text-center relative overflow-hidden shadow-lg space-y-3">
+                <div class="w-12 h-12 bg-yellow-500/20 text-yellow-400 rounded-full flex items-center justify-center mx-auto text-xl animate-bounce">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3 class="font-bold text-sm text-slate-200">Live Mining Speed</h3>
+                <p class="text-xs text-slate-400">Generating 10% daily ROI. Min claim: $0.01</p>
+                <div class="bg-slate-950/80 py-2 px-4 rounded-xl border border-slate-800 inline-block">
+                    <span id="liveCounter" class="font-mono text-emerald-400 text-sm font-bold">$0.0000000</span>
+                </div>
+                <div>
+                    <button onclick="claimEarnings()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold py-2.5 rounded-xl text-xs transition shadow-md">
+                        <i class="fa-solid fa-hand-holding-dollar mr-1"></i> Claim Mined Balance
+                    </button>
+                </div>
+            </div>
+
+            <!-- Daily Check-In Card -->
+            <div class="bg-slate-900/90 border border-amber-500/30 rounded-2xl p-4 flex items-center justify-between shadow-lg">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 text-xl font-bold border border-amber-500/20">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-amber-400">Daily Check-In</h3>
+                        <p id="checkInRewardText" class="text-xs text-slate-400 mt-0.5">Reward: $0.01 (VIP 0)</p>
+                    </div>
+                </div>
+                <button onclick="claimDailyCheckIn()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition">
+                    Check In
+                </button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="switchTab('deposit')" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold py-3 px-4 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 text-sm">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Deposit</span>
+                </button>
+                <button onclick="switchTab('withdraw')" class="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-semibold py-3 px-4 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 text-sm">
+                    <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                    <span>Withdraw</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- MINERAL TIERS TAB -->
+        <div id="tab-vip" class="space-y-4 hidden">
+            <div class="text-center mb-4">
+                <h2 class="text-lg font-bold text-yellow-400">Mineral Investment Tiers (10% Daily)</h2>
+                <p class="text-xs text-slate-400">Unlock tiers by depositing via BEP-20 (Owner Approval required).</p>
+            </div>
+
+            <!-- VIP 0 -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 flex items-center justify-between shadow-lg">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-yellow-400 text-xl font-bold border border-slate-700">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-white">VIP 0 (Starter)</h3>
+                        <p class="text-xs text-slate-400">Bonus: $1.00 | Check-in: $0.01</p>
+                        <p class="text-xs text-emerald-400 font-semibold mt-0.5">Daily 10%: $0.10</p>
+                    </div>
+                </div>
+                <button id="btnVip0" onclick="buyVip(0, 1.00, 0.10)" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition">
+                    Activate
+                </button>
+            </div>
+
+            <!-- GIT 1: Bronze Ore ($5) -->
+            <div class="bg-slate-900/90 border border-amber-800/40 rounded-2xl p-4 flex items-center justify-between shadow-lg">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-xl bg-amber-900/20 flex items-center justify-center text-amber-600 text-xl font-bold border border-amber-800/30">
+                        <i class="fa-solid fa-cube"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-amber-500">GIT 1: Bronze Ore</h3>
+                        <p class="text-xs text-slate-400">Deposit: $5.00 | Check-in: 2% ($0.10)</p>
+                        <p class="text-xs text-emerald-400 font-semibold mt-0.5">Daily 10%: $0.50</p>
+                    </div>
+                </div>
+                <button onclick="checkTierDeposit(1, 5.00, 0.50)" class="bg-slate-800 hover:bg-slate-700 border border-amber-600/50 text-amber-400 font-bold px-4 py-2 rounded-xl text-xs transition">
+                    Unlock
+                </button>
+            </div>
+
+            <!-- GIT 2: Silver Quartz ($10) -->
+            <div class="bg-slate-900/90 border border-slate-500/40 rounded-2xl p-4 flex items-center justify-between shadow-lg">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-xl bg-slate-500/20 flex items-center justify-center text-slate-300 text-xl font-bold border border-slate-500/30">
+                        <i class="fa-solid fa-gem"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-slate-200">GIT 2: Silver Quartz</h3>
+                        <p class="text-xs text-slate-400">Deposit: $10.00 | Check-in: 2% ($0.20)</p>
+                        <p class="text-xs text-emerald-400 font-semibold mt-0.5">Daily 10%: $1.00</p>
+                    </div>
+                </div>
+                <button onclick="checkTierDeposit(2, 10.00, 1.00)" class="bg-slate-800 hover:bg-slate-700 border border-slate-400/50 text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition">
+                    Unlock
+                </button>
+            </div>
+
+            <!-- GIT 3: Gold Vein ($30) -->
+            <div class="bg-slate-900/90 border border-yellow-500/30 rounded-2xl p-4 flex items-center justify-between shadow-lg">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center text-yellow-400 text-xl font-bold border border-yellow-500/20">
+                        <i class="fa-solid fa-coins"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-yellow-400">GIT 3: Gold Vein</h3>
+                        <p class="text-xs text-slate-400">Deposit: $30.00 | Check-in: 2% ($0.60)</p>
+                        <p class="text-xs text-emerald-400 font-semibold mt-0.5">Daily 10%: $3.00</p>
+                    </div>
+                </div>
+                <button onclick="checkTierDeposit(3, 30.00, 3.00)" class="bg-slate-800 hover:bg-slate-700 border border-yellow-500/50 text-yellow-400 font-bold px-4 py-2 rounded-xl text-xs transition">
+                    Unlock
+                </button>
+            </div>
+
+            <!-- GIT 4: Platinum Core ($50) -->
+            <div class="bg-slate-900/90 border border-cyan-500/30 rounded-2xl p-4 flex items-center justify-between shadow-lg">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 text-xl font-bold border border-cyan-500/20">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-cyan-400">GIT 4: Platinum Core</h3>
+                        <p class="text-xs text-slate-400">Deposit: $50.00 | Check-in: 2% ($1.00)</p>
+                        <p class="text-xs text-emerald-400 font-semibold mt-0.5">Daily 10%: $5.00</p>
+                    </div>
+                </div>
+                <button onclick="checkTierDeposit(4, 50.00, 5.00)" class="bg-slate-800 hover:bg-slate-700 border border-cyan-500/50 text-cyan-400 font-bold px-4 py-2 rounded-xl text-xs transition">
+                    Unlock
+                </button>
+            </div>
+
+            <!-- GIT 5: Diamond Vault ($100) -->
+            <div class="bg-slate-900/90 border border-blue-500/30 rounded-2xl p-4 flex items-center justify-between shadow-lg">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-xl font-bold border border-blue-500/20">
+                        <i class="fa-solid fa-gem"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-blue-400">GIT 5: Diamond Vault</h3>
+                        <p class="text-xs text-slate-400">Deposit: $100.00 | Check-in: 2% ($2.00)</p>
+                        <p class="text-xs text-emerald-400 font-semibold mt-0.5">Daily 10%: $10.00</p>
+                    </div>
+                </div>
+                <button onclick="checkTierDeposit(5, 100.00, 10.00)" class="bg-slate-800 hover:bg-slate-700 border border-blue-500/50 text-blue-400 font-bold px-4 py-2 rounded-xl text-xs transition">
+                    Unlock
+                </button>
+            </div>
+
+            <!-- GIT 6: Emerald Matrix ($500) -->
+            <div class="bg-slate-900/90 border border-emerald-500/30 rounded-2xl p-4 flex items-center justify-between shadow-lg">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-xl font-bold border border-emerald-500/20">
+                        <i class="fa-solid fa-ring"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-emerald-400">GIT 6: Emerald Matrix</h3>
+                        <p class="text-xs text-slate-400">Deposit: $500.00 | Check-in: 2% ($10.00)</p>
+                        <p class="text-xs text-emerald-400 font-semibold mt-0.5">Daily 10%: $50.00</p>
+                    </div>
+                </div>
+                <button onclick="checkTierDeposit(6, 500.00, 50.00)" class="bg-slate-800 hover:bg-slate-700 border border-emerald-500/50 text-emerald-400 font-bold px-4 py-2 rounded-xl text-xs transition">
+                    Unlock
+                </button>
+            </div>
+
+            <!-- GIT 7: Titanium Crown ($1000) -->
+            <div class="bg-slate-900/90 border border-rose-500/30 rounded-2xl p-4 flex items-center justify-between shadow-lg">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-400 text-xl font-bold border border-rose-500/20">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-rose-400">GIT 7: Titanium Crown</h3>
+                        <p class="text-xs text-slate-400">Deposit: $1000.00 | Check-in: 2% ($20.00)</p>
+                        <p class="text-xs text-emerald-400 font-semibold mt-0.5">Daily 10%: $100.00</p>
+                    </div>
+                </div>
+                <button onclick="checkTierDeposit(7, 1000.00, 100.00)" class="bg-slate-800 hover:bg-slate-700 border border-rose-500/50 text-rose-400 font-bold px-4 py-2 rounded-xl text-xs transition">
+                    Unlock
+                </button>
+            </div>
+        </div>
+
+        <!-- DEPOSIT TAB (BEP-20 Manual Approval with $5 Min validation) -->
+        <div id="tab-deposit" class="space-y-4 hidden">
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-3">
+                <h2 class="text-base font-bold text-yellow-400">Deposit (USDT BEP-20 Manual Approval)</h2>
+                <p class="text-xs text-slate-400">Minimum deposit is $5.00. Send funds to your designated BSC address and submit TXID for Owner approval.</p>
+
+                <div class="bg-slate-950 p-4 rounded-2xl text-center border border-slate-800">
+                    <div class="bg-white p-2 rounded-xl inline-block mb-3 shadow-md">
+                        <div id="qrcode"></div>
+                    </div>
+                    <div class="flex items-center justify-between bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                        <span id="activeDepositAddr" class="text-[11px] font-mono text-slate-300 truncate mr-2">0x91D139567d96E18159f4d59BDfe1269cF4bB1Eb3</span>
+                        <button onclick="copyDepositAddress()" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 text-xs font-bold px-3 py-1 rounded-lg transition shrink-0">Copy</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs text-slate-300 block mb-1">Deposit Amount ($ Min $5.00)</label>
+                    <input type="number" id="depositAmountInput" placeholder="Enter amount (Min $5)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-yellow-500">
+                </div>
+
+                <div>
+                    <label class="text-xs text-slate-300 block mb-1">Transaction TXID / Hash</label>
+                    <input type="text" id="depositTxId" placeholder="Enter transfer hash" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-yellow-500">
+                </div>
+
+                <button onclick="submitDepositRequest()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold py-3 rounded-xl text-xs transition shadow-lg">
+                    Submit Deposit for Owner Approval
+                </button>
+            </div>
+        </div>
+
+        <!-- ADMIN PANEL TAB (Secured with bini123) -->
+        <div id="tab-admin" class="space-y-4 hidden">
+            <div class="bg-slate-900/90 border border-red-500/40 rounded-2xl p-5 shadow-lg space-y-5">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-user-shield text-red-400 text-lg"></i>
+                        <h2 class="text-base font-bold text-red-400">Owner Admin Panel</h2>
+                    </div>
+                    <button onclick="switchTab('home')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg">Exit Admin</button>
+                </div>
+
+                <!-- Pending Deposits Section -->
+                <div>
+                    <h3 class="text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Pending Deposits Approval</h3>
+                    <div id="pendingDepositsList" class="space-y-3">
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center text-xs text-slate-500">
+                            No pending deposit requests.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Withdrawals Section -->
+                <div class="pt-3 border-t border-slate-800">
+                    <h3 class="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2">Pending Withdrawals Approval</h3>
+                    <div id="pendingWithdrawalsList" class="space-y-3">
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center text-xs text-slate-500">
+                            No pending withdrawal requests.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REFERRAL TAB -->
+        <div id="tab-referral" class="space-y-4 hidden">
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-lg text-center">
+                <div class="w-12 h-12 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center mx-auto mb-2 text-xl">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <h2 class="text-base font-bold text-white">Referral Program</h2>
+                <p class="text-xs text-slate-400 mt-1">Earn <span class="text-yellow-400 font-bold">$0.02 USDT</span> per invite + <span class="text-emerald-400 font-bold">10% commission</span> on every deposit!</p>
+
+                <div class="mt-4 bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+                    <span id="refLink" class="text-xs font-mono text-slate-300 truncate mr-2">https://t.me/MineralMinerBot?start=ref99201</span>
+                    <button onclick="copyRefLink()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition shrink-0">
+                        <i class="fa-solid fa-copy mr-1"></i> Share
+                    </button>
+                </div>
+
+                <button onclick="simulateNewReferral()" class="w-full mt-3 bg-slate-800 hover:bg-slate-700 border border-blue-500/40 text-blue-400 font-semibold py-2.5 rounded-xl text-xs transition">
+                    + Simulate New Referral ($0.02 Bonus)
+                </button>
+
+                <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-slate-800">
+                    <div class="bg-slate-950/60 p-3 rounded-xl">
+                        <p class="text-[11px] text-slate-400">Total Referred Users</p>
+                        <p id="totalReferrals" class="text-base font-bold text-white mt-1">0</p>
+                    </div>
+                    <div class="bg-slate-950/60 p-3 rounded-xl">
+                        <p class="text-[11px] text-slate-400">Referral Earnings</p>
+                        <p id="refEarnings" class="text-base font-bold text-emerald-400 mt-1">$0.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WITHDRAW TAB ($5 Min validation inside) -->
+        <div id="tab-withdraw" class="space-y-4 hidden">
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-3">
+                <h2 class="text-base font-bold text-white">Withdraw Funds</h2>
+                <p class="text-xs text-slate-400">Minimum withdrawal is $5.00. Requires owner admin approval.</p>
+
+                <div>
+                    <label class="text-xs text-slate-300 block mb-1">Your BEP-20 Wallet Address</label>
+                    <input type="text" id="withdrawAddress" placeholder="0x... wallet address" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-yellow-500">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-300 block mb-1">Amount ($ Min $5.00)</label>
+                    <input type="number" id="withdrawAmount" placeholder="Min $5.00" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-yellow-500">
+                </div>
+                <button onclick="requestWithdraw()" class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-slate-950 font-bold py-3 rounded-xl text-xs transition shadow-lg mt-2">
+                    Submit Withdrawal Request
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 p-2 z-50">
+        <div class="max-w-md mx-auto flex justify-around">
+            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center text-yellow-400 transition py-1 px-3">
+                <i class="fa-solid fa-house text-base"></i>
+                <span class="text-[10px] mt-1">Home</span>
+            </button>
+            <button onclick="switchTab('vip')" id="nav-vip" class="flex flex-col items-center text-slate-400 hover:text-yellow-400 transition py-1 px-3">
+                <i class="fa-solid fa-gem text-base"></i>
+                <span class="text-[10px] mt-1">Tiers</span>
+            </button>
+            <button onclick="switchTab('deposit')" id="nav-deposit" class="flex flex-col items-center text-slate-400 hover:text-yellow-400 transition py-1 px-3">
+                <i class="fa-solid fa-wallet text-base"></i>
+                <span class="text-[10px] mt-1">Deposit</span>
+            </button>
+            <button onclick="switchTab('referral')" id="nav-referral" class="flex flex-col items-center text-slate-400 hover:text-yellow-400 transition py-1 px-3">
+                <i class="fa-solid fa-users text-base"></i>
+                <span class="text-[10px] mt-1">Referral</span>
+            </button>
+            <button onclick="switchTab('withdraw')" id="nav-withdraw" class="flex flex-col items-center text-slate-400 hover:text-yellow-400 transition py-1 px-3">
+                <i class="fa-solid fa-arrow-up-from-bracket text-base"></i>
+                <span class="text-[10px] mt-1">Withdraw</span>
+            </button>
+        </div>
+    </nav>
+
+    <script>
+        let state = {
+            balance: 1.00,
+            todayEarnings: 0.00,
+            totalMined: 0.00,
+            activeVip: null,
+            dailyRate: 0.00,
+            lastDepositAmount: 0,
+            referrals: 0,
+            refEarnings: 0.00,
+            pendingDeposits: [],
+            pendingWithdrawals: [],
+            lastCheckInDate: null
+        };
+
+        const bep20Address = "0x91D139567d96E18159f4d59BDfe1269cF4bB1Eb3";
+
+        window.onload = function() {
+            new QRCode(document.getElementById("qrcode"), {
+                text: bep20Address,
+                width: 140,
+                height: 140,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            updateUI();
+            
+            // Live 10% Daily Mining Loop
+            setInterval(() => {
+                if (state.dailyRate > 0) {
+                    let perSecondInc = state.dailyRate / 86400;
+                    state.todayEarnings += perSecondInc;
+                    updateUI();
+                }
+            }, 1000);
+        };
+
+        function switchTab(tabName) {
+            ['home', 'vip', 'deposit', 'admin', 'referral', 'withdraw'].forEach(t => {
+                const el = document.getElementById('tab-' + t);
+                if (el) el.classList.add('hidden');
+                const navEl = document.getElementById('nav-' + t);
+                if (navEl) navEl.className = "flex flex-col items-center text-slate-400 hover:text-yellow-400 transition py-1 px-3";
+            });
+            const targetTab = document.getElementById('tab-' + tabName);
+            if (targetTab) targetTab.classList.remove('hidden');
+            const targetNav = document.getElementById('nav-' + tabName);
+            if (targetNav) targetNav.className = "flex flex-col items-center text-yellow-400 transition py-1 px-3";
+        }
+
+        let logoClicks = 0;
+        function triggerSecretAdmin() {
+            logoClicks++;
+            if (logoClicks >= 3) {
+                logoClicks = 0;
+                let pass = prompt("Enter Owner Admin Password:");
+                if (pass === "bini123") {
+                    switchTab('admin');
+                    renderAdminLists();
+                    alert("Welcome back, Owner Admin!");
+                } else if (pass !== null) {
+                    alert("Incorrect Password!");
+                }
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('mainBalance').innerText = '$' + state.balance.toFixed(4);
+            document.getElementById('todayEarnings').innerText = '$' + state.todayEarnings.toFixed(4);
+            document.getElementById('totalMined').innerText = '$' + state.totalMined.toFixed(4);
+            document.getElementById('liveCounter').innerText = '$' + state.todayEarnings.toFixed(7);
+            document.getElementById('currentVipBadge').innerText = state.activeVip !== null ? (state.activeVip === 0 ? 'VIP 0' : 'GIT ' + state.activeVip) : 'No VIP';
+            document.getElementById('totalReferrals').innerText = state.referrals;
+            document.getElementById('refEarnings').innerText = '$' + state.refEarnings.toFixed(4);
+
+            // Update Check-in reward text display
+            let checkInText = "Reward: $0.01 (VIP 0)";
+            if (state.activeVip !== null && state.activeVip > 0) {
+                let checkInReward = state.lastDepositAmount * 0.02;
+                checkInText = "Reward: 2% ($" + checkInReward.toFixed(2) + ")";
+            }
+            document.getElementById('checkInRewardText').innerText = checkInText;
+        }
+
+        // --- CLAIM MINED EARNINGS (Min $0.01) ---
+        function claimEarnings() {
+            if (state.todayEarnings < 0.01) {
+                alert("Minimum claim amount is $0.01! Please wait until your mined balance reaches $0.01.");
+                return;
+            }
+            let claimedAmount = state.todayEarnings;
+            state.balance += claimedAmount;
+            state.totalMined += claimedAmount;
+            state.todayEarnings = 0.00;
+            updateUI();
+            alert("Successfully claimed $" + claimedAmount.toFixed(4) + " to your main balance!");
+        }
+
+        // --- DAILY CHECK-IN LOGIC ---
+        function claimDailyCheckIn() {
+            let today = new Date().toDateString();
+            if (state.lastCheckInDate === today) {
+                alert("You have already claimed your daily check-in today! Come back tomorrow.");
+                return;
+            }
+
+            let reward = 0.01; // VIP 0 reward
+            if (state.activeVip !== null && state.activeVip > 0) {
+                reward = state.lastDepositAmount * 0.02; // 2% of deposit amount
+            }
+
+            state.balance += reward;
+            state.lastCheckInDate = today;
+            updateUI();
+            alert("Daily check-in successful! +$" + reward.toFixed(4) + " added to your balance.");
+        }
+
+        function simulateNewReferral() {
+            state.referrals += 1;
+            state.refEarnings += 0.02;
+            state.balance += 0.02;
+            updateUI();
+            alert("New referral joined! +$0.02 USDT added to your balance.");
+        }
+
+        function buyVip(level, price, daily) {
+            if (state.activeVip !== null) {
+                alert("You already have an active level!");
+                return;
+            }
+            if (state.balance < price) {
+                alert("Insufficient balance! You need $" + price);
+                return;
+            }
+            state.balance -= price;
+            state.activeVip = level;
+            state.dailyRate = daily;
+            state.lastDepositAmount = price;
+            document.getElementById('btnVip0').innerText = "Active";
+            document.getElementById('btnVip0').className = "bg-emerald-500 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs";
+            updateUI();
+            alert("VIP 0 successfully activated! 10% daily mining started.");
+        }
+
+        function checkTierDeposit(level, price, daily) {
+            alert("To unlock GIT " + level + " ($" + price + "), please deposit $" + price + " via BEP-20 and submit TXID for Owner approval.");
+            switchTab('deposit');
+            document.getElementById('depositAmountInput').value = price;
+        }
+
+        function submitDepositRequest() {
+            let amount = parseFloat(document.getElementById('depositAmountInput').value);
+            let txId = document.getElementById('depositTxId').value.trim();
+
+            if (isNaN(amount) || amount < 5.00) {
+                alert("Minimum deposit amount is $5.00!");
+                return;
+            }
+            if (!txId) {
+                alert("Please enter transaction hash/TXID.");
+                return;
+            }
+
+            state.pendingDeposits.push({
+                id: Date.now(),
+                amount: amount,
+                network: "BEP-20",
+                txId: txId,
+                date: new Date().toLocaleTimeString()
+            });
+
+            alert("Deposit request submitted successfully! Waiting for Owner Admin approval.");
+            document.getElementById('depositAmountInput').value = '';
+            document.getElementById('depositTxId').value = '';
+            switchTab('home');
+        }
+
+        function requestWithdraw() {
+            let amount = parseFloat(document.getElementById('withdrawAmount').value);
+            let addr = document.getElementById('withdrawAddress').value.trim();
+
+            if (isNaN(amount) || amount < 5.00) {
+                alert("Minimum withdrawal amount is $5.00!");
+                return;
+            }
+            if (!addr.startsWith('0x')) {
+                alert("Please enter a valid BEP-20 address starting with 0x");
+                return;
+            }
+            if (amount > state.balance) {
+                alert("Insufficient balance!");
+                return;
+            }
+
+            state.pendingWithdrawals.push({
+                id: Date.now(),
+                amount: amount,
+                address: addr,
+                date: new Date().toLocaleTimeString()
+            });
+
+            alert("Withdrawal request of $" + amount.toFixed(2) + " submitted! Pending Owner approval.");
+            document.getElementById('withdrawAmount').value = '';
+            document.getElementById('withdrawAddress').value = '';
+            switchTab('home');
+        }
+
+        function renderAdminLists() {
+            let depContainer = document.getElementById('pendingDepositsList');
+            if (state.pendingDeposits.length === 0) {
+                depContainer.innerHTML = `<div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center text-xs text-slate-500">No pending deposit requests.</div>`;
+            } else {
+                let html = '';
+                state.pendingDeposits.forEach((dep, index) => {
+                    html += `
+                        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-yellow-400">$${dep.amount.toFixed(2)} (BEP-20)</p>
+                                <p class="text-[10px] text-slate-400 truncate max-w-[170px]">TX: ${dep.txId}</p>
+                                <p class="text-[9px] text-slate-500">${dep.date}</p>
+                            </div>
+                            <button onclick="approveDeposit(${index})" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-lg transition shrink-0">
+                                Approve
+                            </button>
+                        </div>
+                    `;
+                });
+                depContainer.innerHTML = html;
+            }
+
+            let witContainer = document.getElementById('pendingWithdrawalsList');
+            if (state.pendingWithdrawals.length === 0) {
+                witContainer.innerHTML = `<div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center text-xs text-slate-500">No pending withdrawal requests.</div>`;
+            } else {
+                let html = '';
+                state.pendingWithdrawals.forEach((wit, index) => {
+                    html += `
+                        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-indigo-400">Withdraw: $${wit.amount.toFixed(2)}</p>
+                                <p class="text-[10px] text-slate-400 truncate max-w-[170px]">To: ${wit.address}</p>
+                                <p class="text-[9px] text-slate-500">${wit.date}</p>
+                            </div>
+                            <button onclick="approveWithdrawal(${index})" class="bg-indigo-500 hover:bg-indigo-400 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-lg transition shrink-0">
+                                Approve
+                            </button>
+                        </div>
+                    `;
+                });
+                witContainer.innerHTML = html;
+            }
+        }
+
+        function approveDeposit(index) {
+            let dep = state.pendingDeposits[index];
+            state.balance += dep.amount;
+            
+            let tierLevel = 1;
+            if (dep.amount >= 1000) tierLevel = 7;
+            else if (dep.amount >= 500) tierLevel = 6;
+            else if (dep.amount >= 100) tierLevel = 5;
+            else if (dep.amount >= 50) tierLevel = 4;
+            else if (dep.amount >= 30) tierLevel = 3;
+            else if (dep.amount >= 10) tierLevel = 2;
+            
+            state.activeVip = tierLevel;
+            state.dailyRate = dep.amount * 0.10;
+            state.lastDepositAmount = dep.amount;
+
+            let refCommission = dep.amount * 0.10;
+            state.refEarnings += refCommission;
+            state.balance += refCommission;
+
+            state.pendingDeposits.splice(index, 1);
+            renderAdminLists();
+            updateUI();
+            alert("Deposit of $" + dep.amount.toFixed(2) + " approved! GIT " + tierLevel + " activated. 10% commission credited.");
+        }
+
+        function approveWithdrawal(index) {
+            let wit = state.pendingWithdrawals[index];
+            if (wit.amount > state.balance) {
+                alert("User balance is lower than withdrawal amount!");
+                return;
+            }
+            state.balance -= wit.amount;
+            state.pendingWithdrawals.splice(index, 1);
+            renderAdminLists();
+            updateUI();
+            alert("Withdrawal of $" + wit.amount.toFixed(2) + " approved and sent!");
+        }
+
+        function copyDepositAddress() {
+            navigator.clipboard.writeText(bep20Address);
+            alert("BEP-20 deposit address copied to clipboard!");
+        }
+
+        function copyRefLink() {
+            navigator.clipboard.writeText(document.getElementById('refLink').innerText);
+            alert("Referral link copied!");
+        }
+    </script>
+</body>
+</html>
