@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mineral Mining Pro</title>
-    <!-- Telegram WebApp & Supabase SDK (Async to prevent blocking) -->
-    <script src="https://telegram.org/js/telegram-web-app.js" async></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async></script>
+    <!-- Telegram WebApp & Supabase SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- QR Code Generator Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" async></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
@@ -123,7 +123,7 @@
             border: 2px solid #e2e8f0; text-align: left; font-weight: 600;
         }
         .history-item { padding: 8px 0; border-bottom: 1px solid #e2e8f0; }
-        .vip-card-item { background: #f8fafc; padding: 14px; border-radius: 12px; margin-bottom: 12px; border: 2px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center; }
+        .vip-card-item { background: #f8fafc; padding: 14px; border-radius: 12px; margin-bottom: 12px; border: 2px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
         .admin-item { background: #ffffff; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: var(--border); }
         #qrcode { display: flex; justify-content: center; margin: 12px 0; background: white; padding: 12px; border-radius: 12px; width: fit-content; margin: 10px auto; border: var(--border); }
         .wallet-box { background: #f8fafc; padding: 12px; border-radius: 12px; font-size: 12px; word-break: break-all; margin: 10px 0; border: 2px dashed #64748b; color: var(--text-main); font-weight: 600; }
@@ -141,12 +141,12 @@
         <div id="homeTab" class="tab-pane active">
             <!-- Header -->
             <div class="header">
-                <div>VIP Level: <span id="vipDisplay" style="color:#2563eb; font-weight:900;">VIP 0 (Quartz)</span></div>
+                <div>VIP Level: <span id="vipDisplay" style="color:#2563eb; font-weight:900;">💎 VIP 0 (Quartz)</span></div>
                 <button onclick="triggerHaptic(); openModal('historyModal')" style="padding: 8px 14px; font-size: 13px; width:auto;">History</button>
             </div>
 
             <!-- Secret Trigger Title (Tap 5 times for Admin) -->
-            <h1 class="app-title" onclick="triggerHaptic(); handleTitleTap()">Mineral Mining Pro</h1>
+            <h1 class="app-title" onclick="triggerHaptic(); handleTitleTap()">🪨 Mineral Mining Pro</h1>
             <p style="color: var(--text-muted); font-size: 14px; font-weight: 700; margin-top: -5px;">$1 Welcome Bonus Active</p>
 
             <!-- Main Balance Card with Live Mining Ticker -->
@@ -166,23 +166,23 @@
                     </div>
                 </div>
 
-                <button class="btn-success" onclick="triggerHaptic(); claimMining()" style="width: 100%;">Claim Mined Income</button>
+                <button class="btn-success" onclick="triggerHaptic(); claimMining()" style="width: 100%;">✨ Claim Mined Income</button>
             </div>
 
             <!-- Action Buttons -->
             <div class="btn-grid">
-                <button onclick="triggerHaptic(); openModal('depositModal')">Deposit</button>
-                <button class="btn-warning" onclick="triggerHaptic(); openModal('withdrawModal')">Withdraw</button>
+                <button onclick="triggerHaptic(); openModal('depositModal')">📥 Deposit</button>
+                <button class="btn-warning" onclick="triggerHaptic(); openModal('withdrawModal')">📤 Withdraw</button>
             </div>
             
             <div style="margin-top: 15px;">
-                <button class="btn-warning" onclick="triggerHaptic(); dailyCheckIn()" style="width: 100%;">Daily Check-In (+0.02$)</button>
+                <button class="btn-warning" onclick="triggerHaptic(); dailyCheckIn()" style="width: 100%;">🎁 Daily Check-In (+0.02$)</button>
             </div>
         </div>
 
         <!-- ================= TAB 2: VIP TIERS ================= -->
         <div id="vipTab" class="tab-pane">
-            <h2 style="color: var(--text-main); margin-top: 10px; font-weight: 900;">Mineral VIP Tiers</h2>
+            <h2 style="color: var(--text-main); margin-top: 10px; font-weight: 900;">👑 Mineral VIP Tiers</h2>
             <p style="font-size: 14px; color: var(--text-muted); font-weight: 600;">Buy a VIP package to start 10% daily mining speed.</p>
             
             <div class="card" style="padding: 15px;">
@@ -194,24 +194,25 @@
 
         <!-- ================= TAB 3: REFERRAL ================= -->
         <div id="refTab" class="tab-pane">
-            <h2 style="color: var(--text-main); margin-top: 10px; font-weight: 900;">Referral System</h2>
+            <h2 style="color: var(--text-main); margin-top: 10px; font-weight: 900;">👥 Referral System</h2>
             <div class="card">
                 <p style="font-size: 14px; color: var(--text-muted); font-weight: 600;">Invite friends & earn rewards instantly!</p>
-                <div style="font-size: 15px; margin: 15px 0; text-align: left; font-weight: 700;">
-                    <p>• Per Referral: <b style="color:#059669;">+$0.04</b></p>
+                <div style="font-size: 14px; margin: 15px 0; text-align: left; font-weight: 700; line-height: 1.6;">
+                    <p>• Per Referral Reward: <b style="color:#059669;">+$0.04</b></p>
+                    <p>• Deposit Commission: <b style="color:#d97706;">10% of Friend's Deposit</b></p>
                     <p>• Total Referrals Invited: <b id="refCountDisplay" style="color:#2563eb;">0</b></p>
                 </div>
                 <div style="margin: 15px 0; text-align: left;">
                     <label style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Your Referral Link:</label>
                     <input type="text" id="refLinkInput" readonly style="font-size: 12px; font-weight: 700;">
                 </div>
-                <button class="btn-success" onclick="triggerHaptic(); copyRefLink()" style="width: 100%;">Copy Referral Link</button>
+                <button class="btn-success" onclick="triggerHaptic(); copyRefLink()" style="width: 100%;">🔗 Copy Referral Link</button>
             </div>
         </div>
 
         <!-- ================= TAB 4: PROFILE & HISTORY ================= -->
         <div id="profileTab" class="tab-pane">
-            <h2 style="color: var(--text-main); margin-top: 10px; font-weight: 900;">Profile Center</h2>
+            <h2 style="color: var(--text-main); margin-top: 10px; font-weight: 900;">👤 Profile Center</h2>
             <div class="card" style="text-align: left; font-weight: 700;">
                 <p style="margin: 8px 0;"><b>Telegram ID:</b> <span id="profileIdDisplay" style="color: var(--text-muted);">Loading...</span></p>
                 <p style="margin: 8px 0;"><b>Current VIP:</b> <span id="profileVipDisplay" style="color: var(--accent-blue);">VIP 0</span></p>
@@ -220,7 +221,7 @@
             </div>
 
             <div class="card" style="text-align: left;">
-                <h3 style="margin-top:0; font-size:16px; font-weight:900;">Recent Activities</h3>
+                <h3 style="margin-top:0; font-size:16px; font-weight:900;">📜 Recent Activities</h3>
                 <div id="profileHistoryList" class="history-list" style="max-height: 180px;">No history available.</div>
             </div>
         </div>
@@ -380,7 +381,38 @@
             TON: 'UQAgaG68J6uVa8kysPJVkVVJ-DM9GvZJnaOc8NbkrGv9KzDU'
         };
 
-        let telegramId = 'user_demo_1234';
+        // Initialize Telegram ID safely and parse Referrals
+        let telegramId = 'user_' + Math.floor(Math.random() * 900000 + 100000);
+        let referrerId = null;
+
+        try {
+            if (window.Telegram && Telegram.WebApp) {
+                Telegram.WebApp.ready();
+                Telegram.WebApp.expand();
+                if (Telegram.WebApp.initDataUnsafe?.user?.id) {
+                    telegramId = String(Telegram.WebApp.initDataUnsafe.user.id);
+                }
+                // Check Telegram start_param for referral
+                if (Telegram.WebApp.initDataUnsafe?.start_param) {
+                    const sp = Telegram.WebApp.initDataUnsafe.start_param;
+                    if (sp.startsWith('ref_')) {
+                        referrerId = sp.replace('ref_', '');
+                    }
+                }
+            }
+        } catch(e) {}
+
+        // Fallback check URL parameters if opened in standard browser
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlRef = urlParams.get('ref') || urlParams.get('start');
+        if (urlRef) {
+            if (urlRef.startsWith('ref_')) {
+                referrerId = urlRef.replace('ref_', '');
+            } else {
+                referrerId = urlRef;
+            }
+        }
+
         const botUsername = 'MineralMiningBot';
 
         let balance = 1.00;
@@ -394,14 +426,14 @@
         let tapTimer = null;
 
         const vipTiersData = [
-            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, daily: 0.10 },
-            { level: 1, name: "VIP 1 (Silver)", price: 5.00, daily: 0.50 },
-            { level: 2, name: "VIP 2 (Gold)", price: 10.00, daily: 1.00 },
-            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, daily: 2.00 },
-            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, daily: 5.00 },
-            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, daily: 10.00 },
-            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, daily: 50.00 },
-            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, daily: 100.00 }
+            { level: 0, icon: "💎", name: "VIP 0 (Quartz)", price: 1.00, daily: 0.10 },
+            { level: 1, icon: "🥈", name: "VIP 1 (Silver)", price: 5.00, daily: 0.50 },
+            { level: 2, icon: "🥇", name: "VIP 2 (Gold)", price: 10.00, daily: 1.00 },
+            { level: 3, icon: "💠", name: "VIP 3 (Platinum)", price: 20.00, daily: 2.00 },
+            { level: 4, icon: "🔴", name: "VIP 4 (Ruby)", price: 50.00, daily: 5.00 },
+            { level: 5, icon: "🔵", name: "VIP 5 (Sapphire)", price: 100.00, daily: 10.00 },
+            { level: 6, icon: "🟢", name: "VIP 6 (Emerald)", price: 500.00, daily: 50.00 },
+            { level: 7, icon: "👑", name: "VIP 7 (Diamond)", price: 1000.00, daily: 100.00 }
         ];
 
         const randomNames = ["Alex", "Michael", "David", "Sarah", "Jessica", "Daniel", "Robert", "Emily", "Chris", "William"];
@@ -432,16 +464,6 @@
 
         async function loadUserData() {
             try {
-                if (window.Telegram && Telegram.WebApp) {
-                    Telegram.WebApp.ready();
-                    Telegram.WebApp.expand();
-                    if (Telegram.WebApp.initDataUnsafe?.user?.id) {
-                        telegramId = String(Telegram.WebApp.initDataUnsafe.user.id);
-                    }
-                }
-            } catch(e) {}
-
-            try {
                 if (window.supabase) {
                     const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
                     const SUPABASE_ANON_KEY = 'sb_publishable_UKuSiII0z9gAVhjosJEG1w__5H5z7b2';
@@ -457,10 +479,29 @@
                         lastClaimTime = data.last_claim_time ?? 0;
                         historyLog = data.history || historyLog;
                     } else {
+                        // New user registration
                         await supabase.from('users').insert([{ 
                             telegram_id: telegramId, balance: 1.00, active_investment: 0.00,
                             vip_level: 0, mined_accumulated: 0.00, referral_count: 0, last_claim_time: 0, history: historyLog 
                         }]);
+
+                        // Handle referral bonus if valid referrer exists and not self-referral
+                        if (referrerId && referrerId !== telegramId) {
+                            try {
+                                const { data: refUser } = await supabase.from('users').select('*').eq('telegram_id', referrerId).single();
+                                if (refUser) {
+                                    let newRefCnt = (refUser.referral_count || 0) + 1;
+                                    let newRefBal = (refUser.balance || 0) + 0.04;
+                                    let refHist = refUser.history || [];
+                                    refHist.unshift(`Referral Bonus (+1 Friend): +$0.04`);
+                                    await supabase.from('users').update({ 
+                                        referral_count: newRefCnt, 
+                                        balance: newRefBal, 
+                                        history: refHist 
+                                    }).eq('telegram_id', referrerId);
+                                }
+                            } catch(err) {}
+                        }
                     }
                 }
             } catch (err) {}
@@ -490,10 +531,10 @@
                 document.getElementById('balanceDisplay').innerText = Number(balance).toFixed(2);
                 document.getElementById('activeInvDisplay').innerText = Number(activeInvestment).toFixed(2);
                 document.getElementById('profileInvDisplay').innerText = Number(activeInvestment).toFixed(2);
-                document.getElementById('vipDisplay').innerText = vipTiersData[vipLevel].name;
+                document.getElementById('vipDisplay').innerText = `${vipTiersData[vipLevel].icon} ${vipTiersData[vipLevel].name}`;
                 document.getElementById('refCountDisplay').innerText = referralCount;
                 document.getElementById('profileIdDisplay').innerText = telegramId;
-                document.getElementById('profileVipDisplay').innerText = vipTiersData[vipLevel].name;
+                document.getElementById('profileVipDisplay').innerText = `${vipTiersData[vipLevel].icon} ${vipTiersData[vipLevel].name}`;
                 document.getElementById('profileRefDisplay').innerText = referralCount;
                 document.getElementById('refLinkInput').value = `https://t.me/${botUsername}?start=ref_${telegramId}`;
 
@@ -511,9 +552,12 @@
                     const isCurrent = vipLevel === tier.level && activeInvestment > 0;
                     return `
                         <div class="vip-card-item">
-                            <div style="text-align: left;">
-                                <b style="font-size:15px;">${tier.name}</b><br>
-                                <span style="font-size: 12px; color: var(--text-muted); font-weight:700;">Cost: $${tier.price.toFixed(2)} | Daily: $${tier.daily.toFixed(2)} (10%)</span>
+                            <div style="text-align: left; display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 26px;">${tier.icon}</span>
+                                <div>
+                                    <b style="font-size:15px;">${tier.name}</b><br>
+                                    <span style="font-size: 12px; color: var(--text-muted); font-weight:700;">Cost: $${tier.price.toFixed(2)} | Daily: $${tier.daily.toFixed(2)} (10%)</span>
+                                </div>
                             </div>
                             <div>
                                 ${isCurrent ? '<span style="color:#059669; font-size:13px; font-weight:900;">Active</span>' : 
@@ -723,7 +767,7 @@
             } catch(e) {}
         }
 
-        // Run as soon as window loads completely, bypassing sync CDN locks
+        // Initialize when window loads
         window.addEventListener('load', function() {
             loadUserData();
         });
