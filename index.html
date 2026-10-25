@@ -95,48 +95,26 @@
 
         .sub-balance { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; }
         
-        /* 🌟 Ultra Realistic Miner Animation Container */
+        /* 🌟 Photo Character Animation Styling */
         .mining-core-animation {
-            width: 130px; height: 130px; margin: 10px auto;
+            width: 140px; height: 140px; margin: 10px auto;
             position: relative;
+            animation: photoFloat 3s ease-in-out infinite;
         }
-        .mining-core-animation svg { width: 100%; height: 100%; }
-
-        /* Coordinated Miner Body & Pickaxe Swing */
-        .miner-body-group {
-            animation: minerBodyBounce 1s ease-in-out infinite;
-            transform-origin: 60px 80px;
+        @keyframes photoFloat {
+            0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 15px rgba(52, 211, 153, 0.4)); }
+            50% { transform: translateY(-5px); filter: drop-shadow(0 0 25px rgba(52, 211, 153, 0.7)); }
         }
-        @keyframes minerBodyBounce {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(2px) rotate(-2deg); }
+        
+        .photo-miner-img {
+            width: 100%; height: 100%; object-fit: contain;
+            border-radius: 50%;
+            animation: photoSwing 1.2s ease-in-out infinite;
+            transform-origin: center bottom;
         }
-
-        .miner-pickaxe-group {
-            transform-origin: 65px 72px;
-            animation: swingPickaxePrecise 1s ease-in-out infinite;
-        }
-        @keyframes swingPickaxePrecise {
-            0%, 100% { transform: rotate(-18deg); }
-            50% { transform: rotate(38deg); }
-        }
-
-        /* Glowing Headlamp Animation */
-        .miner-headlamp {
-            animation: lampGlowPulse 1.2s ease-in-out infinite;
-        }
-        @keyframes lampGlowPulse {
-            0%, 100% { opacity: 0.7; filter: drop-shadow(0 0 5px #fbbf24); }
-            50% { opacity: 1; filter: drop-shadow(0 0 16px #f59e0b); }
-        }
-
-        /* Spark Effect */
-        .mining-spark {
-            animation: sparkFlash 0.5s ease-in-out infinite;
-        }
-        @keyframes sparkFlash {
-            0%, 100% { opacity: 0.2; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.4); }
+        @keyframes photoSwing {
+            0%, 100% { transform: rotate(-4deg) scale(1); }
+            50% { transform: rotate(6deg) scale(1.04); }
         }
 
         .live-mining-box { background: var(--input-bg); padding: 14px; border-radius: 16px; margin: 14px 0; border: 2px dashed rgba(148, 163, 184, 0.3); }
@@ -313,99 +291,11 @@
 
                 <div class="sub-balance">Active Mining: $<span id="activeInvDisplay">0.00</span> (<span id="activeRateDisplay">6%</span> Daily)</div>
                 
-                <!-- 🌟 Ultra Realistic Miner Animation with Two-Handed Pickaxe Grip & Coordinated Swing -->
+                <!-- 🌟 User's 3D Miner Photo with Lively Animation -->
                 <div class="mining-core-animation">
-                    <svg viewBox="0 0 130 130">
-                        <defs>
-                            <linearGradient id="suitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#2563eb"/>
-                                <stop offset="100%" stop-color="#1e40af"/>
-                            </linearGradient>
-                            <linearGradient id="hatGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#f59e0b"/>
-                                <stop offset="100%" stop-color="#b45309"/>
-                            </linearGradient>
-                            <linearGradient id="woodHandle" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#d97706"/>
-                                <stop offset="100%" stop-color="#78350f"/>
-                            </linearGradient>
-                            <linearGradient id="metalBlade" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#f1f5f9"/>
-                                <stop offset="50%" stop-color="#94a3b8"/>
-                                <stop offset="100%" stop-color="#475569"/>
-                            </linearGradient>
-                            <linearGradient id="skinTone" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#fde68a"/>
-                                <stop offset="100%" stop-color="#f59e0b"/>
-                            </linearGradient>
-                        </defs>
-
-                        <!-- Ground Rock & Glowing Minerals with Sparkles -->
-                        <path d="M 10 112 Q 65 98 120 112 L 128 125 C 100 128 30 128 2 125 Z" fill="#0f172a" stroke="#334155" stroke-width="2"/>
-                        <polygon points="45,108 54,98 63,110 54,118" fill="#34d399" filter="drop-shadow(0 0 8px #10b981)"/>
-                        <polygon points="76,112 85,102 94,114 85,122" fill="#38bdf8" filter="drop-shadow(0 0 8px #0284c7)"/>
-                        
-                        <!-- Dynamic Sparks at Mining Contact Point -->
-                        <circle cx="68" cy="102" r="3.5" fill="#fef08a" class="mining-spark"/>
-                        <circle cx="64" cy="98" r="2" fill="#ffffff" class="mining-spark"/>
-
-                        <!-- Miner Body Group (Bouncing & Swinging Together) -->
-                        <g class="miner-body-group">
-                            <!-- Torso & Suit -->
-                            <path d="M 42 76 C 42 62 82 62 82 76 L 88 106 C 88 111 82 113 78 113 L 46 113 C 42 113 36 111 36 106 Z" fill="url(#suitGrad)" stroke="#60a5fa" stroke-width="1.5"/>
-                            <!-- Safety Vest High-Vis Stripes -->
-                            <path d="M 50 66 L 48 113 M 74 66 L 76 113" stroke="#fbbf24" stroke-width="5" stroke-linecap="round"/>
-
-                            <!-- Detailed Face & Head -->
-                            <!-- Ears -->
-                            <circle cx="44" cy="50" r="3.5" fill="#d97706"/>
-                            <circle cx="80" cy="50" r="3.5" fill="#d97706"/>
-                            <!-- Head Skin -->
-                            <ellipse cx="62" cy="50" rx="16" ry="17" fill="url(#skinTone)" stroke="#d97706" stroke-width="1.5"/>
-                            <!-- Eyes -->
-                            <ellipse cx="56" cy="48" rx="2.5" ry="3" fill="#ffffff"/>
-                            <circle cx="56" cy="48" r="1.2" fill="#0f172a"/>
-                            <ellipse cx="68" cy="48" rx="2.5" ry="3" fill="#ffffff"/>
-                            <circle cx="68" cy="48" r="1.2" fill="#0f172a"/>
-                            <!-- Nose -->
-                            <path d="M 62 50 L 60 56 L 63 56 Z" fill="#d97706" stroke="#b45309" stroke-width="0.8"/>
-                            <!-- Mouth -->
-                            <path d="M 58 60 Q 62 64 66 60" stroke="#b45309" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-
-                            <!-- Hard Hat -->
-                            <path d="M 44 44 C 44 26 80 26 80 44 Z" fill="url(#hatGrad)" stroke="#fde047" stroke-width="1.5"/>
-                            <path d="M 38 43 Q 62 37 86 43 L 88 46 C 62 40 36 46 38 43 Z" fill="#d97706"/>
-                            <!-- Glowing Headlamp -->
-                            <ellipse cx="62" cy="34" rx="5" ry="4" fill="#ffffff" class="miner-headlamp"/>
-                            <path d="M 62 30 L 53 10 L 71 10 Z" fill="#fef08a" opacity="0.35" class="miner-headlamp"/>
-
-                            <!-- 🌟 Coordinated Swinging Right Arm & Double-Sided Pickaxe -->
-                            <g class="miner-pickaxe-group">
-                                <!-- Upper & Lower Arm holding pickaxe -->
-                                <path d="M 76 72 L 88 88 L 78 96" fill="none" stroke="#2563eb" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-                                <circle cx="78" cy="96" r="4.2" fill="#fcd34d"/>
-
-                                <!-- Wooden Pickaxe Handle (Firmly gripped in hands) -->
-                                <line x1="60" y1="52" x2="98" y2="108" stroke="url(#woodHandle)" stroke-width="5.5" stroke-linecap="round"/>
-
-                                <!-- Double-Sided Metal Pickaxe Head -->
-                                <g transform="translate(98, 108) rotate(45)">
-                                    <!-- Center Joint -->
-                                    <rect x="-6" y="-6" width="12" height="12" fill="#334155" rx="2"/>
-                                    <!-- Left Blade (Pointing towards ore) -->
-                                    <path d="M -6 0 L -30 -8 C -38 -12 -34 -4 -24 3 Z" fill="url(#metalBlade)" stroke="#ffffff" stroke-width="1"/>
-                                    <!-- Right Blade -->
-                                    <path d="M 6 0 L 30 -8 C 38 -12 34 -4 24 3 Z" fill="url(#metalBlade)" stroke="#ffffff" stroke-width="1"/>
-                                </g>
-                            </g>
-
-                            <!-- Left Arm (Supporting Grip) -->
-                            <path d="M 48 72 L 68 86 L 76 96" fill="none" stroke="#2563eb" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-                            <circle cx="76" cy="96" r="4.2" fill="#fcd34d"/>
-                        </g>
-                    </svg>
+                    <img src="https://i.ibb.co/6803207/9989-3.jpg" alt="3D Miner Character" class="photo-miner-img">
                 </div>
-                <p style="font-size: 12px; font-weight: 800; color: #10b981; margin: 4px 0 10px 0;">Active Miner At Work</p>
+                <p style="font-size: 12px; font-weight: 800; color: #10b981; margin: 4px 0 10px 0;">3D Animated Miner Active</p>
 
                 <div class="live-mining-box">
                     <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 800;">
