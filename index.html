@@ -346,6 +346,14 @@
 
     <!-- ================= JAVASCRIPT LOGIC ================= -->
     <script>
+        // Force Telegram WebApp Immediate Initialization
+        try {
+            if (window.Telegram && Telegram.WebApp) {
+                Telegram.WebApp.ready();
+                Telegram.WebApp.expand();
+            }
+        } catch (e) {}
+
         function switchTab(tabId, element) {
             try {
                 document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('active'));
@@ -722,9 +730,10 @@
             } catch(e) {}
         }
 
-        window.onload = function() {
+        // Initialize immediately on DOM load
+        document.addEventListener('DOMContentLoaded', function() {
             loadUserData();
-        };
+        });
     </script>
 </body>
 </html>
