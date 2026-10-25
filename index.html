@@ -41,7 +41,15 @@
         .payout-banner {
             background: rgba(59, 130, 246, 0.15); color: #93c5fd; padding: 10px 14px; border-radius: 14px;
             font-size: 13px; font-weight: 700; margin-bottom: 15px; border: 1px solid rgba(147, 197, 253, 0.3);
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+            overflow: hidden; white-space: nowrap; position: relative;
+        }
+        .payout-ticker-text {
+            display: inline-block;
+            animation: slideTicker 0.4s ease-out;
+        }
+        @keyframes slideTicker {
+            0% { transform: translateX(60px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
         }
 
         .card {
@@ -53,11 +61,10 @@
             background: var(--card-bg); padding: 12px 18px; border-radius: 18px;
             border: var(--border); margin-bottom: 14px; font-weight: 700;
         }
-        .app-title { font-size: 24px; color: var(--text-main); margin: 8px 0 4px 0; font-weight: 900; }
+        .app-title { font-size: 24px; color: var(--text-main); margin: 8px 0 4px 0; font-weight: 900; cursor: pointer; }
         .balance-box { font-size: 38px; font-weight: 900; color: #10b981; margin: 5px 0; text-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
         .sub-balance { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; }
         
-        /* 🌟 NEW REALISTIC 3D MINING CORE ANIMATION */
         .mining-core-animation {
             width: 75px; height: 75px; margin: 10px auto;
             animation: pulseCore 3s ease-in-out infinite;
@@ -80,21 +87,53 @@
         .progress-bar-container { width: 100%; background: var(--border); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 8px; }
         .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #059669, #34d399); }
 
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+        
+        /* 🌟 Ultra 3D Sleek Buttons Style */
         button {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 14px; font-size: 15px;
-            font-weight: 800; border-radius: 16px; cursor: pointer; width: 100%;
-            display: flex; align-items: center; justify-content: center; gap: 6px;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 15px; font-size: 15px;
+            font-weight: 800; border-radius: 18px; cursor: pointer; width: 100%;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.25), inset 0 -3px 4px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
         }
-        .btn-success { background: linear-gradient(135deg, #059669, #047857); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3); }
-        .btn-warning { background: linear-gradient(135deg, #d97706, #b45309); box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3); }
-        .btn-danger { background: linear-gradient(135deg, #dc2626, #991b1b); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3); }
-        .btn-sm { padding: 10px; font-size: 12px; margin-top: 8px; width: auto; }
+        button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-3d-success {
+            background: linear-gradient(135deg, #34d399 0%, #059669 50%, #047857 100%);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.35), inset 0 -3px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .btn-3d-warning {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 50%, #b45309 100%);
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.35), inset 0 -3px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .btn-3d-purple {
+            background: linear-gradient(135deg, #a855f7 0%, #7e22ce 50%, #581c87 100%);
+            box-shadow: 0 6px 20px rgba(126, 34, 206, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.35), inset 0 -3px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .btn-sm { padding: 11px; font-size: 13px; margin-top: 8px; width: auto; }
+        .btn-disabled { background: linear-gradient(135deg, #64748b, #334155) !important; opacity: 0.6; cursor: not-allowed; box-shadow: none !important; }
+
+        .btn-icon svg { width: 20px; height: 20px; fill: currentColor; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); }
 
         .theme-toggle-btn {
             background: var(--border); color: var(--text-main); border: none; width: 38px; height: 38px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px;
+        }
+
+        .support-float-btn {
+            position: fixed; bottom: 75px; right: 15px; z-index: 998;
+            background: linear-gradient(135deg, #60a5fa, #2563eb, #1d4ed8); color: white;
+            border: none; border-radius: 50px; padding: 11px 18px; font-size: 13px;
+            font-weight: 800; box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5), inset 0 2px 4px rgba(255,255,255,0.3);
+            display: flex; align-items: center; gap: 7px; cursor: pointer;
         }
 
         .bottom-nav {
@@ -106,7 +145,7 @@
         .nav-item {
             background: none; border: none; color: var(--text-muted); font-size: 11px;
             display: flex; flex-direction: column; align-items: center; gap: 3px;
-            cursor: pointer; font-weight: 700; width: 25%; padding: 0;
+            cursor: pointer; font-weight: 700; width: 25%; padding: 0; box-shadow: none;
         }
         .nav-item.active { color: #3b82f6; }
         .nav-icon svg { width: 22px; height: 22px; fill: currentColor; }
@@ -128,7 +167,7 @@
             width: 100%; padding: 12px; margin: 6px 0 12px 0; background: var(--input-bg);
             border: 1px solid var(--border); border-radius: 12px; color: var(--text-main); font-size: 14px; font-weight: 600;
         }
-        .close-btn { background: #475569; width: 100%; margin-top: 10px; }
+        .close-btn { background: #475569; width: 100%; margin-top: 10px; box-shadow: none; }
         
         .history-list, .vip-list, .admin-list {
             max-height: 220px; overflow-y: auto; font-size: 12px; background: var(--input-bg);
@@ -153,8 +192,13 @@
     <div class="app-container">
         
         <div class="payout-banner">
-            <span id="payoutTickerText">Alex successfully withdrawn $50.00 (BEP20)</span>
+            <span id="payoutTickerText" class="payout-ticker-text">John Smith (USA) successfully withdrawn $10.00 (BEP20)</span>
         </div>
+
+        <!-- Floating Customer Support Button -->
+        <button class="support-float-btn" onclick="openModal('supportModal')">
+            <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0-2-.9-2-2V4c0-1.1-.9-2-2-2z"/></svg></span> Support
+        </button>
 
         <!-- HOME TAB -->
         <div id="homeTab" class="tab-pane active">
@@ -166,7 +210,8 @@
                 </div>
             </div>
 
-            <h1 class="app-title">⛏️ Mineral Mining Pro</h1>
+            <!-- Secret Title Tap for Admin Panel Access -->
+            <h1 class="app-title" onclick="handleTitleTap()">⛏️ Mineral Mining Pro</h1>
             <p style="color: var(--text-muted); font-size: 13px; font-weight: 700;">$1 Welcome Bonus Active</p>
 
             <div class="card">
@@ -174,7 +219,6 @@
                 <div class="balance-box"><span id="balanceDisplay">1.00</span> $</div>
                 <div class="sub-balance">Active Mining: $<span id="activeInvDisplay">0.00</span> (10% Daily)</div>
                 
-                <!-- 🌟 PROFESSIONAL 3D MINING CORE ANIMATION -->
                 <div class="mining-core-animation">
                     <svg viewBox="0 0 100 100">
                         <defs>
@@ -193,7 +237,7 @@
 
                 <div class="live-mining-box">
                     <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 800;">
-                        <span style="color: #10b981;">Mined (Min $0.10)</span>
+                        <span style="color: #10b981;">Mined Balance</span>
                         <span id="liveTickerVal" style="color: var(--text-main);">+$0.0000</span>
                     </div>
                     <div class="progress-bar-container">
@@ -201,16 +245,24 @@
                     </div>
                 </div>
 
-                <button class="btn-success" onclick="claimMining()">✨ Claim Mined Income</button>
+                <button class="btn-3d-success" onclick="claimMining()">✨ Claim Mined Income</button>
             </div>
 
+            <!-- 🌟 Ultra 3D Deposit & Withdraw Buttons with Enhanced Icons -->
             <div class="btn-grid">
-                <button onclick="openModal('depositModal')">📥 Deposit</button>
-                <button class="btn-warning" onclick="openModal('withdrawModal')">📤 Withdraw</button>
+                <button class="btn-3d-success" onclick="openModal('depositModal')">
+                    <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></span> Deposit
+                </button>
+                <button class="btn-3d-warning" onclick="openModal('withdrawModal')">
+                    <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M5 15h4v6h6v-6h4l-7-7-7 7zM19 3H5v2h14V3z"/></svg></span> Withdraw
+                </button>
             </div>
             
+            <!-- 🌟 Ultra 3D Daily Check-In Button -->
             <div style="margin-top: 12px;">
-                <button class="btn-warning" onclick="dailyCheckIn()">🎁 Daily Check-In (+0.02$)</button>
+                <button class="btn-3d-purple" onclick="dailyCheckIn()">
+                    <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.33l1.5 1.17L12 8l3.5 3.5 1.5-1.17L14.92 8H20v6z"/></svg></span> Daily Check-In (+0.02$)
+                </button>
             </div>
         </div>
 
@@ -227,10 +279,42 @@
             <h2 style="color: var(--text-main); font-size: 20px; font-weight: 900;">👥 Referral System</h2>
             <div class="card" style="text-align: left;">
                 <p style="font-size: 13px; color: var(--text-muted);">Invite friends & earn rewards!</p>
-                <p style="font-size: 13px;">• Per Referral: <b style="color:#10b981;">+$0.04</b></p>
-                <p style="font-size: 13px;">• Total Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
+                <div style="font-size: 13px; margin: 12px 0; line-height: 1.6;">
+                    <p style="margin: 4px 0;">• Per Referral Reward: <b style="color:#10b981;">+$0.04</b></p>
+                    <p style="margin: 4px 0;">• Deposit Commission: <b style="color:#f59e0b;">10% of Friend's Deposit</b></p>
+                    <p style="margin: 4px 0;">• Total Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
+                </div>
                 <input type="text" id="refLinkInput" readonly style="font-size: 11px;">
-                <button class="btn-success btn-sm" onclick="copyRefLink()">🔗 Copy Link</button>
+                <button class="btn-3d-success btn-sm" onclick="copyRefLink()">🔗 Copy Link</button>
+
+                <!-- Milestone Bonus Section -->
+                <div style="margin-top: 18px; border-top: var(--border); padding-top: 12px;">
+                    <h3 style="font-size: 14px; margin: 0 0 10px 0; font-weight: 900; color: #f59e0b;">🏆 Referral Milestone Bonuses</h3>
+                    
+                    <!-- 30 Referrals -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 10px; border-radius: 12px; margin-bottom: 8px; border: var(--border);">
+                        <div style="font-size: 12px; text-align: left;">
+                            <b>30 Referrals</b><br><span style="color:#10b981;">Reward: $2.00</span>
+                        </div>
+                        <button id="claimBtn30" class="btn-3d-success btn-sm btn-disabled" onclick="claimMilestone(30, 2.00)" disabled>Claim</button>
+                    </div>
+
+                    <!-- 50 Referrals -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 10px; border-radius: 12px; margin-bottom: 8px; border: var(--border);">
+                        <div style="font-size: 12px; text-align: left;">
+                            <b>50 Referrals</b><br><span style="color:#10b981;">Reward: $3.00</span>
+                        </div>
+                        <button id="claimBtn50" class="btn-3d-success btn-sm btn-disabled" onclick="claimMilestone(50, 3.00)" disabled>Claim</button>
+                    </div>
+
+                    <!-- 100 Referrals -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 10px; border-radius: 12px; border: var(--border);">
+                        <div style="font-size: 12px; text-align: left;">
+                            <b>100 Referrals</b><br><span style="color:#10b981;">Reward: $7.00</span>
+                        </div>
+                        <button id="claimBtn100" class="btn-3d-success btn-sm btn-disabled" onclick="claimMilestone(100, 7.00)" disabled>Claim</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -246,10 +330,6 @@
             <div class="card" style="text-align: left;">
                 <h3 style="margin-top:0; font-size:14px; font-weight:900;">📜 History</h3>
                 <div id="profileHistoryList" class="history-list" style="max-height: 120px;">No history.</div>
-            </div>
-
-            <div style="margin-top: 10px;">
-                <button class="btn-danger btn-sm" onclick="openAdminPortal()">🔐 Admin Portal</button>
             </div>
         </div>
 
@@ -285,9 +365,9 @@
             </select>
             <div id="qrcode"></div>
             <div class="wallet-box"><span id="walletAddressDisplay"></span></div>
-            <button class="btn-success btn-sm" onclick="copyWalletAddress()">Copy Address</button>
+            <button class="btn-3d-success btn-sm" onclick="copyWalletAddress()">Copy Address</button>
             <input type="number" id="depositAmountInput" placeholder="Amount ($ min 5)" min="5">
-            <button class="btn-success" onclick="processDeposit()">Submit</button>
+            <button class="btn-3d-success" onclick="processDeposit()">Submit</button>
             <button class="close-btn btn-sm" onclick="closeModal('depositModal')">Close</button>
         </div>
     </div>
@@ -302,7 +382,7 @@
             </select>
             <input type="text" id="withdrawWalletInput" placeholder="Wallet address">
             <input type="number" id="withdrawAmountInput" placeholder="Amount ($ min 5)" min="5">
-            <button class="btn-warning" onclick="processWithdraw()">Request</button>
+            <button class="btn-3d-warning" onclick="processWithdraw()">Request</button>
             <button class="close-btn btn-sm" onclick="closeModal('withdrawModal')">Close</button>
         </div>
     </div>
@@ -315,11 +395,23 @@
         </div>
     </div>
 
+    <div id="supportModal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-top:0; color:#3b82f6;">💬 Customer Support</h3>
+            <div id="supportChatHistory" class="history-list" style="height: 150px; background: var(--input-bg); padding: 10px; border-radius: 12px; margin-bottom: 10px; overflow-y: auto; text-align: left;">
+                <div style="color: var(--text-muted); font-size: 11px; margin-bottom: 6px;"><b>Support Bot:</b> Hello! How can we help you today?</div>
+            </div>
+            <input type="text" id="supportMsgInput" placeholder="Type your message...">
+            <button class="btn-3d-success btn-sm" onclick="sendSupportMessage()">Send Message</button>
+            <button class="close-btn btn-sm" onclick="closeModal('supportModal')">Close</button>
+        </div>
+    </div>
+
     <div id="adminAuthModal" class="modal">
         <div class="modal-content">
             <h3 style="margin-top:0;">Admin Login</h3>
             <input type="password" id="adminPasswordInput" placeholder="Password">
-            <button class="btn-success" onclick="verifyAdminPassword()">Login</button>
+            <button class="btn-3d-success" onclick="verifyAdminPassword()">Login</button>
             <button class="close-btn btn-sm" onclick="closeModal('adminAuthModal')">Cancel</button>
         </div>
     </div>
@@ -410,6 +502,9 @@
         let minedAccumulated = 0.00;
         let referralCount = 0;
         let historyLog = ["Welcome Bonus: +$1.00"];
+        let claimed30 = false;
+        let claimed50 = false;
+        let claimed100 = false;
 
         try {
             const raw = localStorage.getItem('m_user_' + telegramId);
@@ -421,10 +516,22 @@
                 minedAccumulated = d.mined_accumulated ?? minedAccumulated;
                 referralCount = d.referral_count ?? referralCount;
                 historyLog = d.history ?? historyLog;
+                claimed30 = d.claimed30 ?? claimed30;
+                claimed50 = d.claimed50 ?? claimed50;
+                claimed100 = d.claimed100 ?? claimed100;
+                
+                const savedTime = d.last_timestamp || Date.now();
+                const now = Date.now();
+                if (activeInvestment > 0) {
+                    const elapsedSeconds = (now - savedTime) / 1000;
+                    if (elapsedSeconds > 0) {
+                        const rate = (activeInvestment * 0.10) / 86400;
+                        minedAccumulated += elapsedSeconds * rate;
+                    }
+                }
             }
         } catch(e) {}
 
-        // 🌟 REALISTIC 3D MINERAL & GEMSTONE SVGs FOR VIP TIERS
         const vipTiersData = [
             { level: 0, name: "VIP 0 (Quartz)", price: 1.00, daily: 0.10, bg: "linear-gradient(135deg, #64748b, #334155)", svg: `<svg viewBox="0 0 24 24"><polygon points="12,2 20,8 18,20 6,20 4,8" fill="#cbd5e1" stroke="#f8fafc" stroke-width="1.5"/><polygon points="12,2 20,8 12,14 4,8" fill="#ffffff" opacity="0.5"/></svg>` },
             { level: 1, name: "VIP 1 (Silver)", price: 5.00, daily: 0.50, bg: "linear-gradient(135deg, #94a3b8, #475569)", svg: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2"/><path d="M7 12h10M12 7v10" stroke="#475569" stroke-width="2"/></svg>` },
@@ -442,16 +549,49 @@
                 updateUI();
                 updateDepositAddress();
                 setInterval(liveTicker, 1000);
-                setInterval(bannerTicker, 5000);
+                setInterval(bannerTicker, 2500);
             } catch(e) {}
         });
 
         function bannerTicker() {
             try {
-                const names = ["Alex", "Michael", "David", "Sarah", "Daniel"];
-                const n = names[Math.floor(Math.random() * names.length)];
+                const users = [
+                    { name: "John Smith", country: "USA" },
+                    { name: "Aarav Sharma", country: "India" },
+                    { name: "Emma Watson", country: "UK" },
+                    { name: "Lucas Müller", country: "Germany" },
+                    { name: "Eko Prasetyo", country: "Indonesia" },
+                    { name: "Liam Johnson", country: "USA" },
+                    { name: "Priya Patel", country: "India" },
+                    { name: "Marco Rossi", country: "Italy" },
+                    { name: "Siti Rahma", country: "Indonesia" },
+                    { name: "Noah Williams", country: "Canada" },
+                    { name: "Rahul Verma", country: "India" },
+                    { name: "Sophie Dubois", country: "France" },
+                    { name: "Putu Wijaya", country: "Indonesia" },
+                    { name: "Ethan Brown", country: "USA" },
+                    { name: "Ananya Gupta", country: "India" },
+                    { name: "Hendrik Van Dijk", country: "Netherlands" },
+                    { name: "Dewi Lestari", country: "Indonesia" },
+                    { name: "Mason Davis", country: "USA" },
+                    { name: "Vikram Singh", country: "India" },
+                    { name: "Klaus Weber", country: "Germany" }
+                ];
+
+                const amounts = [5.00, 10.00, 15.00, 20.00, 25.00, 50.00, 75.00, 100.00, 150.00, 200.00];
+                const networks = ["BEP20", "TON", "ERC20"];
+                
+                const randomUser = users[Math.floor(Math.random() * users.length)];
+                const amt = amounts[Math.floor(Math.random() * amounts.length)];
+                const net = networks[Math.floor(Math.random() * networks.length)];
+                
                 const el = document.getElementById('payoutTickerText');
-                if (el) el.innerText = n + " successfully withdrawn $50.00 (BEP20)";
+                if (el) {
+                    el.style.animation = 'none';
+                    el.offsetHeight; 
+                    el.style.animation = 'slideTicker 0.4s ease-out';
+                    el.innerText = randomUser.name + " (" + randomUser.country + ") successfully withdrawn $" + amt.toFixed(2) + " (" + net + ")";
+                }
             } catch(e) {}
         }
 
@@ -465,6 +605,58 @@
                 document.getElementById('profileIdDisplay').innerText = telegramId;
                 document.getElementById('profileVipDisplay').innerText = vipTiersData[vipLevel].name;
                 
+                const btn30 = document.getElementById('claimBtn30');
+                const btn50 = document.getElementById('claimBtn50');
+                const btn100 = document.getElementById('claimBtn100');
+
+                if (btn30) {
+                    if (claimed30) {
+                        btn30.innerText = "Claimed";
+                        btn30.className = "btn-3d-success btn-sm btn-disabled";
+                        btn30.disabled = true;
+                    } else if (referralCount >= 30) {
+                        btn30.innerText = "Claim";
+                        btn30.className = "btn-3d-success btn-sm";
+                        btn30.disabled = false;
+                    } else {
+                        btn30.innerText = "Locked (" + referralCount + "/30)";
+                        btn30.className = "btn-3d-success btn-sm btn-disabled";
+                        btn30.disabled = true;
+                    }
+                }
+
+                if (btn50) {
+                    if (claimed50) {
+                        btn50.innerText = "Claimed";
+                        btn50.className = "btn-3d-success btn-sm btn-disabled";
+                        btn50.disabled = true;
+                    } else if (referralCount >= 50) {
+                        btn50.innerText = "Claim";
+                        btn50.className = "btn-3d-success btn-sm";
+                        btn50.disabled = false;
+                    } else {
+                        btn50.innerText = "Locked (" + referralCount + "/50)";
+                        btn50.className = "btn-3d-success btn-sm btn-disabled";
+                        btn50.disabled = true;
+                    }
+                }
+
+                if (btn100) {
+                    if (claimed100) {
+                        btn100.innerText = "Claimed";
+                        btn100.className = "btn-3d-success btn-sm btn-disabled";
+                        btn100.disabled = true;
+                    } else if (referralCount >= 100) {
+                        btn100.innerText = "Claim";
+                        btn100.className = "btn-3d-success btn-sm";
+                        btn100.disabled = false;
+                    } else {
+                        btn100.innerText = "Locked (" + referralCount + "/100)";
+                        btn100.className = "btn-3d-success btn-sm btn-disabled";
+                        btn100.disabled = true;
+                    }
+                }
+
                 const refInput = document.getElementById('refLinkInput');
                 if (refInput) refInput.value = "https://t.me/MineralMiningBot?start=ref_" + telegramId;
 
@@ -475,8 +667,28 @@
                 if (pHList) pHList.innerHTML = histHtml;
 
                 localStorage.setItem('m_user_' + telegramId, JSON.stringify({
-                    balance, active_investment: activeInvestment, vip_level: vipLevel, mined_accumulated: minedAccumulated, referral_count: referralCount, history: historyLog
+                    balance, active_investment: activeInvestment, vip_level: vipLevel, mined_accumulated: minedAccumulated, referral_count: referralCount, history: historyLog, last_timestamp: Date.now(), claimed30, claimed50, claimed100
                 }));
+            } catch(e) {}
+        }
+
+        function claimMilestone(targetCount, rewardAmt) {
+            try {
+                triggerHaptic();
+                if (referralCount < targetCount) return;
+                
+                if (targetCount === 30 && claimed30) return;
+                if (targetCount === 50 && claimed50) return;
+                if (targetCount === 100 && claimed100) return;
+
+                if (targetCount === 30) claimed30 = true;
+                if (targetCount === 50) claimed50 = true;
+                if (targetCount === 100) claimed100 = true;
+
+                balance += rewardAmt;
+                historyLog.unshift("Referral Milestone (" + targetCount + " Users): +$" + rewardAmt.toFixed(2));
+                updateUI();
+                alert("Successfully claimed $" + rewardAmt.toFixed(2) + " bonus!");
             } catch(e) {}
         }
 
@@ -491,7 +703,7 @@
                             '<div class="vip-badge-3d" style="background:' + t.bg + '">' + t.svg + '</div>' +
                             '<div><b style="font-size:13px;">' + t.name + '</b><br><span style="font-size:11px; color:var(--text-muted)">$' + t.price + ' | Daily: $' + t.daily + '</span></div>' +
                         '</div>' +
-                        '<div>' + (isCurr ? '<span style="color:#10b981; font-size:12px; font-weight:900;">Active</span>' : '<button class="btn-success btn-sm" onclick="buyVip(' + t.level + ')">Buy</button>') + '</div>' +
+                        '<div>' + (isCurr ? '<span style="color:#10b981; font-size:12px; font-weight:900;">Active</span>' : '<button class="btn-3d-success btn-sm" onclick="buyVip(' + t.level + ')">Buy</button>') + '</div>' +
                     '</div>';
                 }).join('');
             } catch(e) {}
@@ -522,8 +734,12 @@
                 const pct = Math.min(100, (minedAccumulated / daily) * 100);
                 const valEl = document.getElementById('liveTickerVal');
                 const barEl = document.getElementById('miningProgressBar');
-                if (valEl) valEl.innerText = "+ $" + minedAccumulated.toFixed(4);
+                if (valEl) valEl.innerText = "+ $" + minedAccumulated.toFixed(5);
                 if (barEl) barEl.style.width = pct + '%';
+                
+                localStorage.setItem('m_user_' + telegramId, JSON.stringify({
+                    balance, active_investment: activeInvestment, vip_level: vipLevel, mined_accumulated: minedAccumulated, referral_count: referralCount, history: historyLog, last_timestamp: Date.now(), claimed30, claimed50, claimed100
+                }));
             } catch(e) {}
         }
 
@@ -616,9 +832,33 @@
             } catch(e) {}
         }
 
-        function openAdminPortal() {
+        function sendSupportMessage() {
             try {
                 triggerHaptic();
+                const input = document.getElementById('supportMsgInput');
+                const chatHistory = document.getElementById('supportChatHistory');
+                if (!input || !input.value.trim()) return;
+                
+                const userText = input.value.trim();
+                chatHistory.innerHTML += '<div style="color: var(--text-main); font-size: 12px; margin: 4px 0; text-align: right;"><b>You:</b> ' + userText + '</div>';
+                input.value = '';
+                
+                setTimeout(() => {
+                    chatHistory.innerHTML += '<div style="color: #34d399; font-size: 12px; margin: 4px 0; text-align: left;"><b>Support:</b> Your message has been received. Our support team will get back to you shortly.</div>';
+                    chatHistory.scrollTop = chatHistory.scrollHeight;
+                }, 800);
+                
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            } catch(e) {}
+        }
+
+        let tapCount = 0;
+        let tapTimer = null;
+        function handleTitleTap() {
+            tapCount++;
+            clearTimeout(tapTimer);
+            if (tapCount >= 5) {
+                tapCount = 0;
                 if (sessionStorage.getItem('adminAuth') === 'true') {
                     openModal('adminPanelModal');
                     const aList = document.getElementById('adminList');
@@ -626,7 +866,9 @@
                 } else {
                     openModal('adminAuthModal');
                 }
-            } catch(e) {}
+            } else {
+                tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
+            }
         }
 
         function verifyAdminPassword() {
@@ -634,7 +876,8 @@
                 triggerHaptic();
                 const pwdInput = document.getElementById('adminPasswordInput');
                 const pwd = pwdInput ? pwdInput.value : '';
-                if (pwd === 'admin123' || pwd === '997034c56e2978aa9efdf5745e69e4f4fb76b88b78afbc1a05151590e8082662') {
+                
+                if (pwd === 'Bini@2160') {
                     sessionStorage.setItem('adminAuth', 'true');
                     closeModal('adminAuthModal');
                     openModal('adminPanelModal');
