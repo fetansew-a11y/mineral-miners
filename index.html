@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -10,93 +10,107 @@
     <!-- QR Code Generator Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            --card-bg: rgba(30, 41, 59, 0.7);
+        :root[data-theme="dark"] {
+            --bg-gradient: linear-gradient(135deg, #090d16 0%, #131c31 100%);
+            --card-bg: rgba(20, 30, 50, 0.8);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --accent-green: #10b981;
-            --accent-blue: #3b82f6;
-            --accent-warning: #f59e0b;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-            --border: 1px solid rgba(255, 255, 255, 0.1);
+            --border: 1px solid rgba(255, 255, 255, 0.12);
+            --shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            --modal-bg: #131c31;
+            --input-bg: #090d16;
         }
-        * {
-            -webkit-tap-highlight-color: transparent;
-            box-sizing: border-box;
+        :root[data-theme="light"] {
+            --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: 1px solid rgba(0, 0, 0, 0.08);
+            --shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            --modal-bg: #ffffff;
+            --input-bg: #f8fafc;
         }
+
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; transition: background 0.3s, color 0.3s; }
         body {
-            background: var(--bg-gradient);
-            color: var(--text-main);
+            background: var(--bg-gradient); color: var(--text-main);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 15px 15px 95px 15px;
-            text-align: center;
-            min-height: 100vh;
-            user-select: none;
-            touch-action: manipulation;
+            margin: 0; padding: 15px 15px 95px 15px; text-align: center;
+            min-height: 100vh; user-select: none; touch-action: manipulation;
         }
         .app-container { max-width: 420px; margin: 0 auto; }
         
         .payout-banner {
-            background: rgba(59, 130, 246, 0.15); color: #93c5fd; padding: 10px 14px; border-radius: 12px;
+            background: rgba(59, 130, 246, 0.15); color: #93c5fd; padding: 10px 14px; border-radius: 14px;
             font-size: 13px; font-weight: 700; margin-bottom: 15px; border: 1px solid rgba(147, 197, 253, 0.3);
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .card {
-            background: var(--card-bg); backdrop-filter: blur(10px); border-radius: 20px; padding: 22px;
+            background: var(--card-bg); backdrop-filter: blur(12px); border-radius: 24px; padding: 22px;
             margin: 15px 0; border: var(--border); box-shadow: var(--shadow);
         }
         .header {
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--card-bg); backdrop-filter: blur(10px); padding: 14px 18px; border-radius: 16px;
-            border: var(--border); box-shadow: var(--shadow); margin-bottom: 15px;
-            font-weight: 700;
+            background: var(--card-bg); backdrop-filter: blur(12px); padding: 14px 18px; border-radius: 18px;
+            border: var(--border); box-shadow: var(--shadow); margin-bottom: 15px; font-weight: 700;
         }
         .app-title {
-            font-size: 26px; color: #ffffff; margin: 10px 0 5px 0;
-            cursor: pointer; font-weight: 900; letter-spacing: -0.5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            font-size: 26px; color: var(--text-main); margin: 10px 0 5px 0;
+            font-weight: 900; letter-spacing: -0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        .balance-box { font-size: 38px; font-weight: 900; color: #34d399; margin: 5px 0; text-shadow: 0 0 15px rgba(52, 211, 153, 0.3); }
+        .balance-box { font-size: 38px; font-weight: 900; color: #10b981; margin: 5px 0; text-shadow: 0 0 15px rgba(16, 185, 129, 0.25); }
         .sub-balance { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; }
         
         .mining-animation-container {
             display: flex; align-items: center; justify-content: center; gap: 10px; margin: 10px 0;
         }
-        .mining-gear {
-            font-size: 28px; animation: spinGear 3s linear infinite;
-        }
-        @keyframes spinGear {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        .mining-gear { font-size: 28px; animation: spinGear 3s linear infinite; }
+        @keyframes spinGear { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .live-mining-box { background: rgba(15, 23, 42, 0.6); padding: 14px; border-radius: 14px; margin: 15px 0; border: 2px dashed rgba(148, 163, 184, 0.3); }
-        .progress-bar-container { width: 100%; background: #334155; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 10px; }
+        .live-mining-box { background: var(--input-bg); padding: 14px; border-radius: 16px; margin: 15px 0; border: 2px dashed rgba(148, 163, 184, 0.3); }
+        .progress-bar-container { width: 100%; background: var(--border); height: 10px; border-radius: 5px; overflow: hidden; margin-top: 10px; }
         .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #059669, #34d399); transition: width 0.3s ease; }
 
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+        
         button {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
             color: white; border: none; padding: 15px 16px; font-size: 16px;
-            font-weight: 700; border-radius: 14px; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+            font-weight: 800; border-radius: 16px; cursor: pointer;
+            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            transition: transform 0.1s ease;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
         }
-        button:active { transform: scale(0.96); }
-        .btn-success { background: linear-gradient(135deg, #059669 0%, #047857 100%); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4); }
-        .btn-warning { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4); }
-        .btn-sm { padding: 10px 14px; font-size: 13px; border-radius: 10px; width: 100%; margin-top: 10px; font-weight: 700; }
+        button:active { transform: scale(0.96); box-shadow: 0 2px 5px rgba(37, 99, 235, 0.2); }
+        
+        .btn-success { 
+            background: linear-gradient(135deg, #10b981 0%, #047857 100%); 
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+        }
+        .btn-warning { 
+            background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%); 
+            box-shadow: 0 6px 15px rgba(245, 158, 11, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%);
+            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        .btn-sm { padding: 10px 14px; font-size: 13px; border-radius: 12px; width: 100%; margin-top: 10px; font-weight: 700; }
+
+        .theme-toggle-btn {
+            background: var(--border); color: var(--text-main); border: none; width: 38px; height: 38px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
+            font-size: 16px; box-shadow: var(--shadow); padding: 0;
+        }
 
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around;
-            padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 999;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
+            background: var(--card-bg); backdrop-filter: blur(12px); display: flex; justify-content: space-around;
+            padding: 10px 0; border-top: var(--border); z-index: 999;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
         }
         .nav-item {
             background: none; border: none; color: var(--text-muted); font-size: 12px;
@@ -104,7 +118,7 @@
             cursor: pointer; font-weight: 700; box-shadow: none; padding: 0; width: 25%;
             transition: color 0.2s;
         }
-        .nav-item.active { color: #60a5fa; }
+        .nav-item.active { color: #3b82f6; }
         .nav-icon svg { width: 24px; height: 24px; fill: currentColor; pointer-events: none; }
 
         .tab-pane { display: none; }
@@ -112,45 +126,44 @@
 
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(5px);
+            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(6px);
             justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;
         }
         .modal-content {
-            background: #1e293b; padding: 24px; border-radius: 20px; width: 100%;
+            background: var(--modal-bg); padding: 24px; border-radius: 24px; width: 100%;
             max-width: 360px; border: var(--border); text-align: left;
-            max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);
-            color: #f8fafc;
+            max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 30px -10px rgba(0,0,0,0.5); color: var(--text-main);
         }
         input, select {
-            width: 100%; padding: 14px; margin: 8px 0 16px 0; background: #0f172a;
-            border: 2px solid #334155; border-radius: 12px; color: #fff; box-sizing: border-box; font-size: 15px; font-weight: 600;
+            width: 100%; padding: 14px; margin: 8px 0 16px 0; background: var(--input-bg);
+            border: 2px solid var(--border); border-radius: 14px; color: var(--text-main); box-sizing: border-box; font-size: 15px; font-weight: 600;
         }
-        .close-btn { background: linear-gradient(135deg, #475569 100%, #334155 100%); width: 100%; margin-top: 12px; box-shadow: none; font-weight: 700; }
+        .close-btn { background: linear-gradient(135deg, #64748b 100%, #475569 100%); width: 100%; margin-top: 12px; box-shadow: none; font-weight: 700; }
         
         .history-list, .vip-list, .admin-list {
-            max-height: 250px; overflow-y: auto; font-size: 13px; background: rgba(15, 23, 42, 0.5);
-            padding: 12px; border-radius: 12px; margin-top: 10px; color: var(--text-muted);
-            border: 1px solid rgba(255,255,255,0.05); text-align: left; font-weight: 600;
+            max-height: 250px; overflow-y: auto; font-size: 13px; background: var(--input-bg);
+            padding: 12px; border-radius: 14px; margin-top: 10px; color: var(--text-muted);
+            border: var(--border); text-align: left; font-weight: 600;
         }
-        .history-item { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .history-item { padding: 8px 0; border-bottom: 1px solid var(--border); }
         
         .vip-card-item { 
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%); 
-            padding: 16px; border-radius: 16px; margin-bottom: 14px; 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+            background: var(--card-bg); 
+            padding: 16px; border-radius: 18px; margin-bottom: 14px; 
+            border: var(--border); 
+            box-shadow: var(--shadow);
             display: flex; justify-content: space-between; align-items: center; gap: 10px; 
         }
         .vip-badge-3d {
-            width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.4), inset 0 2px 5px rgba(255,255,255,0.4);
-            flex-shrink: 0; padding: 8px;
+            width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3), inset 0 2px 6px rgba(255,255,255,0.4);
+            flex-shrink: 0; padding: 6px;
         }
-        .vip-badge-3d svg { width: 100%; height: 100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+        .vip-badge-3d svg { width: 100%; height: 100%; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3)); }
         
-        .admin-item { background: #0f172a; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: var(--border); }
-        #qrcode { display: flex; justify-content: center; margin: 12px 0; background: white; padding: 12px; border-radius: 12px; width: fit-content; margin: 10px auto; border: var(--border); }
-        .wallet-box { background: #0f172a; padding: 12px; border-radius: 12px; font-size: 12px; word-break: break-all; margin: 10px 0; border: 2px dashed #475569; color: #f8fafc; font-weight: 600; }
+        .admin-item { background: var(--input-bg); padding: 12px; margin-bottom: 10px; border-radius: 12px; border: var(--border); }
+        #qrcode { display: flex; justify-content: center; margin: 12px 0; background: white; padding: 12px; border-radius: 14px; width: fit-content; margin: 10px auto; border: var(--border); }
+        .wallet-box { background: var(--input-bg); padding: 12px; border-radius: 12px; font-size: 12px; word-break: break-all; margin: 10px 0; border: 2px dashed #64748b; color: var(--text-main); font-weight: 600; }
     </style>
 </head>
 <body>
@@ -164,11 +177,14 @@
         <!-- ================= TAB 1: HOME ================= -->
         <div id="homeTab" class="tab-pane active">
             <div class="header">
-                <div>VIP Level: <span id="vipDisplay" style="color:#60a5fa; font-weight:900;">💎 VIP 0 (Quartz)</span></div>
-                <button onclick="safeAction(function() { openModal('historyModal'); })" style="padding: 8px 14px; font-size: 13px; width:auto;">History</button>
+                <div>VIP Level: <span id="vipDisplay" style="color:#3b82f6; font-weight:900;">💎 VIP 0 (Quartz)</span></div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeIconBtn" title="Toggle Theme">🌙</button>
+                    <button onclick="switchTabSafe('profileTab', document.querySelectorAll('.nav-item')[3]); openModal('historyModal')" style="padding: 8px 12px; font-size: 12px; width:auto; border-radius: 12px;">History</button>
+                </div>
             </div>
 
-            <h1 class="app-title" onclick="safeAction(handleTitleTap)">⛏️ Mineral Mining Pro</h1>
+            <h1 class="app-title">⛏️ Mineral Mining Pro</h1>
             <p style="color: var(--text-muted); font-size: 14px; font-weight: 700; margin-top: -5px;">$1 Welcome Bonus Active</p>
 
             <div class="card">
@@ -178,35 +194,35 @@
                 
                 <div class="mining-animation-container">
                     <span class="mining-gear">⚙️</span>
-                    <span style="font-size: 14px; font-weight: 800; color: #34d399;">Active Extraction in Progress</span>
+                    <span style="font-size: 14px; font-weight: 800; color: #10b981;">Active Extraction in Progress</span>
                 </div>
 
                 <div class="live-mining-box">
                     <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 800;">
-                        <span style="color: #34d399;">Mined Balance (Min $0.10)</span>
-                        <span id="liveTickerVal" style="color: #f8fafc;">+$0.0000</span>
+                        <span style="color: #10b981;">Mined Balance (Min $0.10)</span>
+                        <span id="liveTickerVal" style="color: var(--text-main);">+$0.0000</span>
                     </div>
                     <div class="progress-bar-container">
                         <div id="miningProgressBar" class="progress-bar"></div>
                     </div>
                 </div>
 
-                <button class="btn-success" onclick="safeAction(claimMining)" style="width: 100%;">✨ Claim Mined Income</button>
+                <button class="btn-success" onclick="claimMining()" style="width: 100%;">✨ Claim Mined Income</button>
             </div>
 
             <div class="btn-grid">
-                <button onclick="safeAction(function() { openModal('depositModal'); })">📥 Deposit</button>
-                <button class="btn-warning" onclick="safeAction(function() { openModal('withdrawModal'); })">📤 Withdraw</button>
+                <button onclick="openModal('depositModal')">📥 Deposit</button>
+                <button class="btn-warning" onclick="openModal('withdrawModal')">📤 Withdraw</button>
             </div>
             
             <div style="margin-top: 15px;">
-                <button class="btn-warning" onclick="safeAction(dailyCheckIn)" style="width: 100%;">🎁 Daily Check-In (+0.02$)</button>
+                <button class="btn-warning" onclick="dailyCheckIn()" style="width: 100%;">🎁 Daily Check-In (+0.02$)</button>
             </div>
         </div>
 
         <!-- ================= TAB 2: VIP TIERS ================= -->
         <div id="vipTab" class="tab-pane">
-            <h2 style="color: #f8fafc; margin-top: 10px; font-weight: 900;">👑 Mineral VIP Tiers</h2>
+            <h2 style="color: var(--text-main); margin-top: 10px; font-weight: 900;">👑 Mineral VIP Tiers</h2>
             <p style="font-size: 14px; color: var(--text-muted); font-weight: 600;">Buy a VIP package to start 10% daily mining speed.</p>
             
             <div class="card" style="padding: 15px;">
@@ -216,53 +232,58 @@
 
         <!-- ================= TAB 3: REFERRAL ================= -->
         <div id="refTab" class="tab-pane">
-            <h2 style="color: #f8fafc; margin-top: 10px; font-weight: 900;">👥 Referral System</h2>
+            <h2 style="color: var(--text-main); margin-top: 10px; font-weight: 900;">👥 Referral System</h2>
             <div class="card">
                 <p style="font-size: 14px; color: var(--text-muted); font-weight: 600;">Invite friends & earn rewards instantly!</p>
                 <div style="font-size: 14px; margin: 15px 0; text-align: left; font-weight: 700; line-height: 1.6;">
-                    <p>• Per Referral Reward: <b style="color:#34d399;">+$0.04</b></p>
+                    <p>• Per Referral Reward: <b style="color:#10b981;">+$0.04</b></p>
                     <p>• Deposit Commission: <b style="color:#f59e0b;">10% of Friend's Deposit</b></p>
-                    <p>• Total Referrals Invited: <b id="refCountDisplay" style="color:#60a5fa;">0</b></p>
+                    <p>• Total Referrals Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
                 </div>
                 <div style="margin: 15px 0; text-align: left;">
                     <label style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Your Referral Link:</label>
                     <input type="text" id="refLinkInput" readonly style="font-size: 12px; font-weight: 700;">
                 </div>
-                <button class="btn-success" onclick="safeAction(copyRefLink)" style="width: 100%;">🔗 Copy Referral Link</button>
+                <button class="btn-success" onclick="copyRefLink()" style="width: 100%;">🔗 Copy Referral Link</button>
             </div>
         </div>
 
         <!-- ================= TAB 4: PROFILE & HISTORY ================= -->
         <div id="profileTab" class="tab-pane">
-            <h2 style="color: #f8fafc; margin-top: 10px; font-weight: 900;">👤 Profile Center</h2>
+            <h2 style="color: var(--text-main); margin-top: 10px; font-weight: 900;">👤 Profile Center</h2>
             <div class="card" style="text-align: left; font-weight: 700;">
                 <p style="margin: 8px 0;"><b>Telegram ID:</b> <span id="profileIdDisplay" style="color: var(--text-muted);">Loading...</span></p>
-                <p style="margin: 8px 0;"><b>Current VIP:</b> <span id="profileVipDisplay" style="color: #60a5fa;">VIP 0</span></p>
-                <p style="margin: 8px 0;"><b>Active Mining Base:</b> $<span id="profileInvDisplay" style="color: #34d399;">0.00</span></p>
-                <p style="margin: 8px 0;"><b>Total Referrals:</b> <span id="profileRefDisplay" style="color: #60a5fa;">0</span></p>
+                <p style="margin: 8px 0;"><b>Current VIP:</b> <span id="profileVipDisplay" style="color: #3b82f6;">VIP 0</span></p>
+                <p style="margin: 8px 0;"><b>Active Mining Base:</b> $<span id="profileInvDisplay" style="color: #10b981;">0.00</span></p>
+                <p style="margin: 8px 0;"><b>Total Referrals:</b> <span id="profileRefDisplay" style="color: #3b82f6;">0</span></p>
             </div>
 
             <div class="card" style="text-align: left;">
                 <h3 style="margin-top:0; font-size:16px; font-weight:900;">📜 Recent Activities</h3>
-                <div id="profileHistoryList" class="history-list" style="max-height: 180px;">No history available.</div>
+                <div id="profileHistoryList" class="history-list" style="max-height: 150px;">No history available.</div>
+            </div>
+
+            <!-- Professional Admin Portal Button -->
+            <div style="margin-top: 15px;">
+                <button class="btn-danger" onclick="openAdminPortal()" style="width: 100%;">🔐 Admin Portal Access</button>
             </div>
         </div>
 
         <!-- ================= BOTTOM NAVIGATION BAR ================= -->
         <div class="bottom-nav">
-            <button class="nav-item active" onclick="safeAction(function(e) { switchTab('homeTab', this); })">
+            <button class="nav-item active" onclick="switchTabSafe('homeTab', this)">
                 <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span>
                 <span>Home</span>
             </button>
-            <button class="nav-item" onclick="safeAction(function(e) { switchTab('vipTab', this); })">
+            <button class="nav-item" onclick="switchTabSafe('vipTab', this)">
                 <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
                 <span>VIP</span>
             </button>
-            <button class="nav-item" onclick="safeAction(function(e) { switchTab('refTab', this); })">
+            <button class="nav-item" onclick="switchTabSafe('refTab', this)">
                 <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></span>
                 <span>Referral</span>
             </button>
-            <button class="nav-item" onclick="safeAction(function(e) { switchTab('profileTab', this); })">
+            <button class="nav-item" onclick="switchTabSafe('profileTab', this)">
                 <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
                 <span>Profile</span>
             </button>
@@ -272,7 +293,7 @@
     <!-- ================= MODALS ================= -->
     <div id="depositModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; color:#fff; font-weight:900;">Deposit Crypto (Manual)</h3>
+            <h3 style="margin-top:0; font-weight:900;">Deposit Crypto (Manual)</h3>
             <p style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Select network, copy address, send funds and submit request for Admin approval.</p>
             
             <label style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Select Network:</label>
@@ -286,19 +307,19 @@
             <div class="wallet-box">
                 <b>Deposit Address:</b><br><span id="walletAddressDisplay"></span>
             </div>
-            <button class="btn-sm btn-success" onclick="safeAction(copyWalletAddress)">Copy Address</button>
+            <button class="btn-sm btn-success" onclick="copyWalletAddress()">Copy Address</button>
 
             <label style="font-size: 12px; color: var(--text-muted); margin-top:12px; font-weight: 700;">Deposit Amount (USD):</label>
             <input type="number" id="depositAmountInput" placeholder="Minimum $5" min="5">
             
-            <button class="btn-success" onclick="safeAction(processDeposit)" style="width: 100%;">Submit Request</button>
-            <button class="close-btn" onclick="safeAction(function() { closeModal('depositModal'); })">Close</button>
+            <button class="btn-success" onclick="processDeposit()" style="width: 100%;">Submit Request</button>
+            <button class="close-btn" onclick="closeModal('depositModal')">Close</button>
         </div>
     </div>
 
     <div id="withdrawModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; color:#fff; font-weight:900;">Withdraw Funds (Manual)</h3>
+            <h3 style="margin-top:0; font-weight:900;">Withdraw Funds (Manual)</h3>
             <p style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Minimum withdrawal: <b>$5</b>. Request goes to Admin for review.</p>
             
             <label style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Select Network:</label>
@@ -314,25 +335,25 @@
             <label style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Amount ($):</label>
             <input type="number" id="withdrawAmountInput" placeholder="Minimum $5" min="5">
             
-            <button class="btn-warning" onclick="safeAction(processWithdraw)" style="width: 100%;">Request Withdrawal</button>
-            <button class="close-btn" onclick="safeAction(function() { closeModal('withdrawModal'); })">Close</button>
+            <button class="btn-warning" onclick="processWithdraw()" style="width: 100%;">Request Withdrawal</button>
+            <button class="close-btn" onclick="closeModal('withdrawModal')">Close</button>
         </div>
     </div>
 
     <div id="historyModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; color:#fff; font-weight:900;">Recent Transactions</h3>
+            <h3 style="margin-top:0; font-weight:900;">Recent Transactions</h3>
             <div id="historyList" class="history-list">No transactions yet.</div>
-            <button class="close-btn" onclick="safeAction(function() { closeModal('historyModal'); })">Close</button>
+            <button class="close-btn" onclick="closeModal('historyModal')">Close</button>
         </div>
     </div>
 
     <div id="adminAuthModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; color:#fff; font-weight:900;">Secret Admin Login</h3>
+            <h3 style="margin-top:0; font-weight:900;">Secret Admin Login</h3>
             <input type="password" id="adminPasswordInput" placeholder="Enter Admin Password">
-            <button class="btn-success" onclick="safeAction(verifyAdminPassword)" style="width: 100%;">Login</button>
-            <button class="close-btn" onclick="safeAction(function() { closeModal('adminAuthModal'); })">Cancel</button>
+            <button class="btn-success" onclick="verifyAdminPassword()" style="width: 100%;">Login</button>
+            <button class="close-btn" onclick="closeModal('adminAuthModal')">Cancel</button>
         </div>
     </div>
 
@@ -341,26 +362,81 @@
             <h3 style="margin-top:0; color: #f59e0b; font-weight:900;">Admin Control Center</h3>
             <p style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Manage pending requests & view users.</p>
             
-            <h4 style="margin: 10px 0 5px 0; color: #34d399; font-size: 14px; font-weight: 900;">Pending Requests</h4>
+            <h4 style="margin: 10px 0 5px 0; color: #10b981; font-size: 14px; font-weight: 900;">Pending Requests</h4>
             <div id="adminList" class="admin-list">Loading pending requests...</div>
 
-            <h4 style="margin: 15px 0 5px 0; color: #60a5fa; font-size: 14px; font-weight: 900;">Registered Users</h4>
+            <h4 style="margin: 15px 0 5px 0; color: #3b82f6; font-size: 14px; font-weight: 900;">Registered Users</h4>
             <div id="adminUserList" class="admin-list">Loading users list...</div>
 
-            <button class="close-btn" onclick="safeAction(function() { closeModal('adminPanelModal'); })" style="margin-top: 15px;">Close Panel</button>
+            <button class="close-btn" onclick="closeModal('adminPanelModal')" style="margin-top: 15px;">Close Panel</button>
         </div>
     </div>
 
     <!-- ================= JAVASCRIPT LOGIC ================= -->
     <script>
-        // Bulletproof Error Wrapper
-        function safeAction(fn) {
+        // 🔊 Web Audio API Sound Synthesizer (No external sound files required)
+        let audioCtx = null;
+        function playSound(type) {
             try {
-                if (typeof fn === 'function') fn();
-            } catch (err) {
-                console.error("SafeAction caught error:", err);
-            }
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.exponentialRampToValueAtTime(200, now + 0.08);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } else if (type === 'success') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'claim') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.2);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                }
+            } catch (e) {}
         }
+
+        // Theme Toggle Logic
+        function toggleTheme() {
+            playSound('click');
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('mineral_theme', newTheme);
+            document.getElementById('themeIconBtn').innerText = newTheme === 'light' ? '☀️' : '🌙';
+            triggerHaptic();
+        }
+
+        const savedTheme = localStorage.getItem('mineral_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.addEventListener("DOMContentLoaded", () => {
+            const btn = document.getElementById('themeIconBtn');
+            if (btn) btn.innerText = savedTheme === 'light' ? '☀️' : '🌙';
+        });
 
         function triggerHaptic() {
             try {
@@ -370,17 +446,29 @@
             } catch (e) {}
         }
 
-        // Initialize App Safely on DOM Load
-        document.addEventListener("DOMContentLoaded", function() {
-            safeAction(renderVipTiers);
-            safeAction(updateUI);
-            safeAction(updateDepositAddress);
-            safeAction(startLiveMiningTicker);
-            safeAction(startPayoutBannerTicker);
-            setTimeout(function() {
-                safeAction(loadUserData);
-            }, 500);
-        });
+        function switchTabSafe(tabId, element) {
+            playSound('click');
+            triggerHaptic();
+            document.querySelectorAll('.tab-pane').forEach(function(tab) { tab.classList.remove('active'); });
+            document.querySelectorAll('.nav-item').forEach(function(nav) { nav.classList.remove('active'); });
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
+            if (element) element.classList.add('active');
+        }
+
+        function openModal(id) {
+            playSound('click');
+            triggerHaptic();
+            const modal = document.getElementById(id);
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            playSound('click');
+            triggerHaptic();
+            const modal = document.getElementById(id);
+            if (modal) modal.style.display = 'none';
+        }
 
         let supabase = null;
         const wallets = {
@@ -430,8 +518,6 @@
         let lastClaimTime = localData?.last_claim_time ?? 0;
         let lastUpdateTime = localData?.last_update_time ?? Date.now();
         let historyLog = localData?.history || ["Welcome Bonus Claimed: +$1.00"];
-        let tapCount = 0;
-        let tapTimer = null;
 
         if (activeInvestment > 0) {
             const now = Date.now();
@@ -445,14 +531,46 @@
         }
 
         const vipTiersData = [
-            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, daily: 0.10, bg: "linear-gradient(135deg, #64748b, #334155)", svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#e2e8f0" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>` },
-            { level: 1, name: "VIP 1 (Silver)", price: 5.00, daily: 0.50, bg: "linear-gradient(135deg, #94a3b8, #475569)", svg: `<svg viewBox="0 0 24 24" fill="url(#silverGrad)"><defs><linearGradient id="silverGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f1f5f9"/><stop offset="100%" stop-color="#64748b"/></linearGradient></defs><circle cx="12" cy="12" r="10"/><path d="M12 6v12M8 10h8" stroke="#1e293b" stroke-width="2"/></svg>` },
-            { level: 2, name: "VIP 2 (Gold)", price: 10.00, daily: 1.00, bg: "linear-gradient(135deg, #f59e0b, #b45309)", svg: `<svg viewBox="0 0 24 24" fill="url(#goldGrad)"><defs><linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fde047"/><stop offset="100%" stop-color="#d97706"/></linearGradient></defs><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3" fill="#78350f"/></svg>` },
-            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, daily: 2.00, bg: "linear-gradient(135deg, #38bdf8, #0369a1)", svg: `<svg viewBox="0 0 24 24" fill="url(#platGrad)"><defs><linearGradient id="platGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e0f2fe"/><stop offset="100%" stop-color="#0284c7"/></linearGradient></defs><path d="M12 2l7 7-7 7-7-7 7-7z"/></svg>` },
-            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, daily: 5.00, bg: "linear-gradient(135deg, #f43f5e, #9f1239)", svg: `<svg viewBox="0 0 24 24" fill="url(#rubyGrad)"><defs><linearGradient id="rubyGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fb7185"/><stop offset="100%" stop-color="#be123c"/></linearGradient></defs><path d="M6 3h12l4 6-10 12L2 9l4-6z"/></svg>` },
-            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, daily: 10.00, bg: "linear-gradient(135deg, #3b82f6, #1e3a8a)", svg: `<svg viewBox="0 0 24 24" fill="url(#sapGrad)"><defs><linearGradient id="sapGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient></defs><polygon points="12,2 22,8 18,22 6,22 2,8"/></svg>` },
-            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, daily: 50.00, bg: "linear-gradient(135deg, #10b981, #065f46)", svg: `<svg viewBox="0 0 24 24" fill="url(#emGrad)"><defs><linearGradient id="emGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#047857"/></linearGradient></defs><rect x="4" y="4" width="16" height="16" rx="3" transform="rotate(45 12 12)"/></svg>` },
-            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, daily: 100.00, bg: "linear-gradient(135deg, #c084fc, #581c87)", svg: `<svg viewBox="0 0 24 24" fill="url(#diamGrad)"><defs><linearGradient id="diamGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f3e8ff"/><stop offset="50%" stop-color="#c084fc"/><stop offset="100%" stop-color="#7e22ce"/></linearGradient></defs><path d="M12 2L2 9l10 13L22 9 12 2z"/></svg>` }
+            { 
+                level: 0, name: "VIP 0 (Quartz)", price: 1.00, daily: 0.10, 
+                bg: "linear-gradient(135deg, #94a3b8, #475569)", 
+                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="q1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f8fafc"/><stop offset="50%" stop-color="#cbd5e1"/><stop offset="100%" stop-color="#64748b"/></linearGradient><linearGradient id="q2" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#94a3b8"/></linearGradient></defs><polygon points="32,4 48,20 40,56 24,56 16,20" fill="url(#q1)" stroke="#e2e8f0" stroke-width="1.5"/><polygon points="32,4 48,20 32,28" fill="url(#q2)" opacity="0.8"/><polygon points="32,4 16,20 32,28" fill="#ffffff" opacity="0.4"/><line x1="32" y1="28" x2="40" y2="56" stroke="#475569" stroke-width="1.5"/><line x1="32" y1="28" x2="24" y2="56" stroke="#475569" stroke-width="1.5"/></svg>` 
+            },
+            { 
+                level: 1, name: "VIP 1 (Silver)", price: 5.00, daily: 0.50, 
+                bg: "linear-gradient(135deg, #cbd5e1, #334155)", 
+                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="s1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f1f5f9"/><stop offset="100%" stop-color="#475569"/></linearGradient></defs><rect x="12" y="20" width="40" height="24" rx="4" fill="url(#s1)" stroke="#94a3b8" stroke-width="2"/><path d="M16 24h32M16 32h32" stroke="#ffffff" stroke-width="1.5" opacity="0.6"/></svg>` 
+            },
+            { 
+                level: 2, name: "VIP 2 (Gold)", price: 10.00, daily: 1.00, 
+                bg: "linear-gradient(135deg, #f59e0b, #78350f)", 
+                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fde047"/><stop offset="50%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#b45309"/></linearGradient></defs><path d="M14 22l10-8h20l6 8-6 24H20z" fill="url(#g1)" stroke="#fef08a" stroke-width="1.5"/><path d="M24 14l6 36M40 14l-6 36" stroke="#fef08a" stroke-width="1" opacity="0.6"/></svg>` 
+            },
+            { 
+                level: 3, name: "VIP 3 (Platinum)", price: 20.00, daily: 2.00, 
+                bg: "linear-gradient(135deg, #38bdf8, #0369a1)", 
+                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="p1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e0f2fe"/><stop offset="50%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0369a1"/></linearGradient></defs><polygon points="32,6 54,24 44,58 20,58 10,24" fill="url(#p1)" stroke="#bae6fd" stroke-width="1.5"/><polygon points="32,6 54,24 32,36 10,24" fill="#ffffff" opacity="0.5"/></svg>` 
+            },
+            { 
+                level: 4, name: "VIP 4 (Ruby)", price: 50.00, daily: 5.00, 
+                bg: "linear-gradient(135deg, #f43f5e, #881337)", 
+                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="r1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fb7185"/><stop offset="50%" stop-color="#e11d48"/><stop offset="100%" stop-color="#881337"/></linearGradient></defs><polygon points="20,12 44,12 56,28 32,58 8,28" fill="url(#r1)" stroke="#fda4af" stroke-width="1.5"/><polygon points="20,12 44,12 32,28" fill="#ffffff" opacity="0.4"/></svg>` 
+            },
+            { 
+                level: 5, name: "VIP 5 (Sapphire)", price: 100.00, daily: 10.00, 
+                bg: "linear-gradient(135deg, #3b82f6, #1e3a8a)", 
+                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="sap1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#60a5fa"/><stop offset="50%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1e3a8a"/></linearGradient></defs><polygon points="32,8 56,22 48,56 16,56 8,22" fill="url(#sap1)" stroke="#93c5fd" stroke-width="1.5"/><polygon points="32,8 56,22 32,34 8,22" fill="#ffffff" opacity="0.45"/></svg>` 
+            },
+            { 
+                level: 6, name: "VIP 6 (Emerald)", price: 500.00, daily: 50.00, 
+                bg: "linear-gradient(135deg, #10b981, #064e3b)", 
+                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="em1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="50%" stop-color="#059669"/><stop offset="100%" stop-color="#064e3b"/></linearGradient></defs><rect x="14" y="14" width="36" height="36" rx="6" transform="rotate(45 32 32)" fill="url(#em1)" stroke="#6ee7b7" stroke-width="1.5"/><rect x="20" y="20" width="24" height="24" rx="3" transform="rotate(45 32 32)" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.6"/></svg>` 
+            },
+            { 
+                level: 7, name: "VIP 7 (Diamond)", price: 1000.00, daily: 100.00, 
+                bg: "linear-gradient(135deg, #c084fc, #581c87)", 
+                svg: `<svg viewBox="0 0 64 64"><defs><linearGradient id="d1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f3e8ff"/><stop offset="50%" stop-color="#c084fc"/><stop offset="100%" stop-color="#581c87"/></linearGradient></defs><polygon points="32,4 58,22 32,60 6,22" fill="url(#d1)" stroke="#e9d5ff" stroke-width="1.5"/><polygon points="32,4 58,22 32,32 6,22" fill="#ffffff" opacity="0.6"/><line x1="6" y1="22" x2="58" y2="22" stroke="#e9d5ff" stroke-width="1.2"/><line x1="32" y1="32" x2="32" y2="60" stroke="#7e22ce" stroke-width="1.2"/></svg>` 
+            }
         ];
 
         const randomNames = ["Alex", "Michael", "David", "Sarah", "Jessica", "Daniel", "Robert", "Emily", "Chris", "William"];
@@ -473,26 +591,16 @@
             }, 5000);
         }
 
-        function switchTab(tabId, element) {
-            triggerHaptic();
-            document.querySelectorAll('.tab-pane').forEach(function(tab) { tab.classList.remove('active'); });
-            document.querySelectorAll('.nav-item').forEach(function(nav) { nav.classList.remove('active'); });
-            const target = document.getElementById(tabId);
-            if (target) target.classList.add('active');
-            if (element) element.classList.add('active');
-        }
-
-        function openModal(id) {
-            triggerHaptic();
-            const modal = document.getElementById(id);
-            if (modal) modal.style.display = 'flex';
-        }
-
-        function closeModal(id) {
-            triggerHaptic();
-            const modal = document.getElementById(id);
-            if (modal) modal.style.display = 'none';
-        }
+        document.addEventListener("DOMContentLoaded", function() {
+            try {
+                renderVipTiers();
+                updateUI();
+                updateDepositAddress();
+                startLiveMiningTicker();
+                startPayoutBannerTicker();
+                setTimeout(loadUserData, 400);
+            } catch(e) {}
+        });
 
         async function saveUserData() {
             try {
@@ -589,13 +697,13 @@
                         '<div style="text-align: left; display: flex; align-items: center; gap: 12px;">' +
                             '<div class="vip-badge-3d" style="background: ' + tier.bg + ';">' + tier.svg + '</div>' +
                             '<div>' +
-                                '<b style="font-size:15px; color:#fff;">' + tier.name + '</b><br>' +
+                                '<b style="font-size:15px;">' + tier.name + '</b><br>' +
                                 '<span style="font-size: 12px; color: var(--text-muted); font-weight:700;">Cost: $' + tier.price.toFixed(2) + ' | Daily: $' + tier.daily.toFixed(2) + ' (10%)</span>' +
                             '</div>' +
                         '</div>' +
                         '<div>' +
-                            (isCurrent ? '<span style="color:#34d399; font-size:13px; font-weight:900;">Active</span>' : 
-                            '<button class="btn-success" style="padding: 8px 14px; font-size: 13px;" onclick="safeAction(function() { buyVipTier(' + tier.level + '); })">Activate</button>') +
+                            (isCurrent ? '<span style="color:#10b981; font-size:13px; font-weight:900;">Active</span>' : 
+                            '<button class="btn-success" style="padding: 8px 14px; font-size: 13px;" onclick="buyVipTier(' + tier.level + ')">Activate</button>') +
                         '</div>' +
                     '</div>';
                 }).join('');
@@ -603,6 +711,8 @@
         }
 
         async function buyVipTier(level) {
+            playSound('success');
+            triggerHaptic();
             const tier = vipTiersData[level];
             if (balance < tier.price) {
                 alert("Insufficient balance! You need $" + tier.price.toFixed(2) + " to activate " + tier.name + ".");
@@ -650,6 +760,8 @@
         }
 
         function copyWalletAddress() {
+            playSound('click');
+            triggerHaptic();
             try {
                 navigator.clipboard.writeText(document.getElementById('walletAddressDisplay').innerText);
                 alert('Deposit address copied!');
@@ -657,6 +769,8 @@
         }
 
         function copyRefLink() {
+            playSound('click');
+            triggerHaptic();
             try {
                 const link = document.getElementById('refLinkInput');
                 link.select();
@@ -683,6 +797,8 @@
         }
 
         async function claimMining() {
+            playSound('claim');
+            triggerHaptic();
             if (activeInvestment <= 0) {
                 alert('No active package! Go to VIP tab to activate a package.');
                 return;
@@ -705,6 +821,8 @@
         }
 
         async function processDeposit() {
+            playSound('success');
+            triggerHaptic();
             try {
                 const amt = parseFloat(document.getElementById('depositAmountInput').value);
                 const net = document.getElementById('depositNetwork').value;
@@ -723,6 +841,8 @@
         }
 
         async function processWithdraw() {
+            playSound('success');
+            triggerHaptic();
             try {
                 const amt = parseFloat(document.getElementById('withdrawAmountInput').value);
                 const wallet = document.getElementById('withdrawWalletInput').value.trim();
@@ -745,6 +865,8 @@
         }
 
         async function dailyCheckIn() {
+            playSound('success');
+            triggerHaptic();
             balance += 0.02;
             historyLog.unshift("Daily Check-In: +$0.02");
             updateUI();
@@ -752,17 +874,20 @@
             alert('Check-in reward claimed (+$0.02)!');
         }
 
-        function handleTitleTap() {
-            tapCount++;
-            clearTimeout(tapTimer);
-            if (tapCount >= 5) {
-                tapCount = 0;
-                if (sessionStorage.getItem('adminAuth') === 'true') { openModal('adminPanelModal'); loadAdminData(); }
-                else { openModal('adminAuthModal'); }
-            } else { tapTimer = setTimeout(function() { tapCount = 0; }, 2000); }
+        // Clean Professional Admin Portal Trigger
+        function openAdminPortal() {
+            playSound('click');
+            if (sessionStorage.getItem('adminAuth') === 'true') {
+                openModal('adminPanelModal');
+                loadAdminData();
+            } else {
+                openModal('adminAuthModal');
+            }
         }
 
         async function verifyAdminPassword() {
+            playSound('click');
+            triggerHaptic();
             const pwdInput = document.getElementById('adminPasswordInput');
             if (!pwdInput) return;
             
@@ -797,8 +922,8 @@
                     document.getElementById('adminList').innerHTML = pending && pending.length ? pending.map(function(req) {
                         return '<div class="admin-item">' +
                             '<div><b>' + req.type + '</b> | $' + req.amount + ' | ' + req.network + '</div>' +
-                            '<div style="font-size:10px; color:#94a3b8;">User: ' + req.telegram_id + '</div>' +
-                            '<button class="btn-success" onclick="safeAction(function() { handleAdmin(' + req.id + ', \'' + req.telegram_id + '\', \'' + req.type + '\', ' + req.amount + '); })" style="padding:6px; font-size:12px; margin-top:5px; width:100%;">Approve</button>' +
+                            '<div style="font-size:10px; color:var(--text-muted);">User: ' + req.telegram_id + '</div>' +
+                            '<button class="btn-success" onclick="handleAdmin(' + req.id + ', \'' + req.telegram_id + '\', \'' + req.type + '\', ' + req.amount + ')" style="padding:6px; font-size:12px; margin-top:5px; width:100%;">Approve</button>' +
                         '</div>';
                     }).join('') : 'No pending requests.';
 
@@ -814,6 +939,8 @@
         }
 
         async function handleAdmin(id, uid, type, amt) {
+            playSound('success');
+            triggerHaptic();
             try {
                 if (supabase) {
                     await supabase.from('pending_requests').update({ status: 'APPROVED' }).eq('id', id);
