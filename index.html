@@ -95,38 +95,30 @@
 
         .sub-balance { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; }
         
+        /* 🌟 Animated Miner Character Container */
         .mining-core-animation {
-            width: 100px; height: 100px; margin: 14px auto;
-            animation: pulseCoreReactor 2.5s ease-in-out infinite;
+            width: 120px; height: 120px; margin: 10px auto;
+            position: relative;
         }
         .mining-core-animation svg { width: 100%; height: 100%; }
-        .quantum-ring-1 {
-            animation: rotateClockwise 8s linear infinite;
-            transform-origin: 60px 60px;
+
+        /* Miner Pickaxe Swinging Animation */
+        .miner-pickaxe-arm {
+            transform-origin: 55px 55px;
+            animation: swingPickaxe 1.2s ease-in-out infinite;
         }
-        .quantum-ring-2 {
-            animation: rotateCounter 5s linear infinite;
-            transform-origin: 60px 60px;
+        @keyframes swingPickaxe {
+            0%, 100% { transform: rotate(-15deg); }
+            50% { transform: rotate(35deg); }
         }
-        .quantum-core-orb {
-            animation: pulseOrb 2s ease-in-out infinite;
-            transform-origin: 60px 60px;
+
+        /* Headlamp Glow Pulse */
+        .miner-headlamp {
+            animation: lampGlow 1.5s ease-in-out infinite;
         }
-        @keyframes rotateClockwise {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        @keyframes rotateCounter {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(-360deg); }
-        }
-        @keyframes pulseCoreReactor {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.4)); }
-            50% { transform: scale(1.06); filter: drop-shadow(0 0 25px rgba(52, 211, 153, 0.8)); }
-        }
-        @keyframes pulseOrb {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.12); opacity: 1; }
+        @keyframes lampGlow {
+            0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 4px #fbbf24); }
+            50% { opacity: 1; filter: drop-shadow(0 0 12px #f59e0b); }
         }
 
         .live-mining-box { background: var(--input-bg); padding: 14px; border-radius: 16px; margin: 14px 0; border: 2px dashed rgba(148, 163, 184, 0.3); }
@@ -250,7 +242,6 @@
             <span id="payoutTickerText" class="payout-ticker-text">Alex successfully withdrawn $5.00 (BEP20)</span>
         </div>
 
-        <!-- Compact Circular Floating Support Bubble with Female Operator Headset Icon -->
         <button class="support-float-btn" onclick="openModal('supportModal')" title="Customer Support">
             <svg viewBox="0 0 24 24">
                 <path d="M3 11c0-4.97 4.03-9 9-9s9 4.03 9 9v2.5h-2V11c0-3.87-3.13-7-7-7s-7 3.13-7 7v2.5H3V11z"/>
@@ -272,7 +263,6 @@
                 </div>
             </div>
 
-            <!-- Sleek Pro Logo Header -->
             <div class="title-header-box" onclick="handleTitleTap()">
                 <svg class="pro-logo-icon" viewBox="0 0 64 64">
                     <defs>
@@ -305,28 +295,79 @@
 
                 <div class="sub-balance">Active Mining: $<span id="activeInvDisplay">0.00</span> (<span id="activeRateDisplay">6%</span> Daily)</div>
                 
+                <!-- 🌟 Detailed Animated Miner Character with Hard Hat, Headlamp, Colorful Clothes & Double-Sided Pickaxe -->
                 <div class="mining-core-animation">
                     <svg viewBox="0 0 120 120">
                         <defs>
-                            <linearGradient id="quantumGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#34d399"/>
-                                <stop offset="50%" stop-color="#059669"/>
-                                <stop offset="100%" stop-color="#2563eb"/>
+                            <linearGradient id="suitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#3b82f6"/>
+                                <stop offset="100%" stop-color="#1d4ed8"/>
                             </linearGradient>
-                            <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
-                                <feGaussianBlur stdDeviation="5" result="blur" />
-                                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-                            </filter>
+                            <linearGradient id="hatGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#f59e0b"/>
+                                <stop offset="100%" stop-color="#b45309"/>
+                            </linearGradient>
+                            <linearGradient id="woodHandle" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#d97706"/>
+                                <stop offset="100%" stop-color="#78350f"/>
+                            </linearGradient>
+                            <linearGradient id="metalBlade" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#f1f5f9"/>
+                                <stop offset="50%" stop-color="#94a3b8"/>
+                                <stop offset="100%" stop-color="#475569"/>
+                            </linearGradient>
                         </defs>
-                        <circle cx="60" cy="60" r="52" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="14 8" opacity="0.7" class="quantum-ring-1"/>
-                        <g class="quantum-ring-2" transform="translate(60,60)">
-                            <polygon points="0,-38 33,-19 33,19 0,38 -33,19 -33,-19" fill="none" stroke="url(#quantumGrad)" stroke-width="2.5" filter="url(#neonGlow)"/>
+
+                        <!-- Ground Rock & Mineral Ore -->
+                        <path d="M 20 105 Q 60 90 100 105 L 115 118 L 5 118 Z" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+                        <polygon points="45,100 55,92 65,102 55,110" fill="#34d399" filter="drop-shadow(0 0 5px #10b981)"/>
+                        <polygon points="75,104 82,98 90,105 82,112" fill="#38bdf8" filter="drop-shadow(0 0 5px #0284c7)"/>
+
+                        <!-- Miner Torso / Colorful Suit -->
+                        <path d="M 42 75 C 42 62 78 62 78 75 L 84 102 C 84 106 80 108 76 108 L 44 108 C 40 108 36 106 36 102 Z" fill="url(#suitGrad)" stroke="#60a5fa" stroke-width="1.5"/>
+                        <!-- Safety Vest Stripes -->
+                        <path d="M 50 65 L 48 108 M 70 65 L 72 108" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+
+                        <!-- Miner Head & Face -->
+                        <circle cx="60" cy="50" r="14" fill="#fcd34d" stroke="#f59e0b" stroke-width="1.5"/>
+                        <!-- Friendly Eyes & Smile -->
+                        <circle cx="55" cy="48" r="1.5" fill="#1e293b"/>
+                        <circle cx="65" cy="48" r="1.5" fill="#1e293b"/>
+                        <path d="M 57 55 Q 60 58 63 55" stroke="#1e293b" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+                        <!-- Miner Hard Hat (Yellow Construction Helmet) -->
+                        <path d="M 43 45 C 43 32 77 32 77 45 Z" fill="url(#hatGrad)" stroke="#fde047" stroke-width="1.5"/>
+                        <path d="M 39 44 Q 60 40 81 44 L 83 47 Q 60 43 37 47 Z" fill="#d97706"/>
+                        <!-- Glowing Headlamp on Hat -->
+                        <ellipse cx="60" cy="36" rx="4" ry="3" fill="#ffffff" class="miner-headlamp"/>
+                        <path d="M 60 33 L 55 18 L 65 18 Z" fill="#fef08a" opacity="0.3" class="miner-headlamp"/>
+
+                        <!-- Left Arm (Stationary) -->
+                        <path d="M 40 70 L 32 90 L 38 94" fill="none" stroke="#2563eb" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="38" cy="94" r="3.5" fill="#fcd34d"/>
+
+                        <!-- Right Arm & Double-Sided Pickaxe Group (Animated Swinging) -->
+                        <g class="miner-pickaxe-arm" transform="translate(75, 70)">
+                            <!-- Arm -->
+                            <path d="M 0 0 L 14 12 L 20 18" fill="none" stroke="#2563eb" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="20" cy="18" r="3.5" fill="#fcd34d"/>
+                            
+                            <!-- Wooden Pickaxe Handle -->
+                            <line x1="12" y1="12" x2="35" y2="-22" stroke="url(#woodHandle)" stroke-width="4.5" stroke-linecap="round"/>
+                            
+                            <!-- Double-Sided Metal Pickaxe Head -->
+                            <g transform="translate(35, -22) rotate(45)">
+                                <!-- Central Holder -->
+                                <rect x="-4" y="-4" width="8" height="8" fill="#334155" rx="1"/>
+                                <!-- Left Blade -->
+                                <path d="M -4 0 L -24 -6 C -32 -9 -28 -3 -20 2 Z" fill="url(#metalBlade)" stroke="#ffffff" stroke-width="0.8"/>
+                                <!-- Right Blade -->
+                                <path d="M 4 0 L 24 -6 C 32 -9 28 -3 20 2 Z" fill="url(#metalBlade)" stroke="#ffffff" stroke-width="0.8"/>
+                            </g>
                         </g>
-                        <circle cx="60" cy="60" r="16" fill="#34d399" filter="url(#neonGlow)" class="quantum-core-orb"/>
-                        <circle cx="60" cy="60" r="8" fill="#ffffff"/>
                     </svg>
                 </div>
-                <p style="font-size: 12px; font-weight: 800; color: #10b981; margin: 4px 0 10px 0;">Quantum Core Active</p>
+                <p style="font-size: 12px; font-weight: 800; color: #10b981; margin: 4px 0 10px 0;">Active Miner At Work</p>
 
                 <div class="live-mining-box">
                     <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 800;">
@@ -338,7 +379,6 @@
                     </div>
                 </div>
 
-                <!-- 🌟 Professional Crystal Gem Vector Icon for Claim Mined Income -->
                 <button class="btn-3d-success" onclick="claimMining()">
                     <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M6 2h12l4 7-10 13L2 9l4-7z"/></svg></span> Claim Mined Income
                 </button>
@@ -610,6 +650,28 @@
         let claimed100 = false;
         let lastCheckInTime = 0;
 
+        try {
+            const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param || '';
+            if (startParam && startParam.startsWith('ref_')) {
+                const referrerId = startParam.replace('ref_', '');
+                const hasBeenReferred = localStorage.getItem('m_referred_by_' + telegramId);
+                if (referrerId !== telegramId && !hasBeenReferred) {
+                    localStorage.setItem('m_referred_by_' + telegramId, referrerId);
+                    
+                    let referrerDataKey = 'm_user_' + referrerId;
+                    let refRaw = localStorage.getItem(referrerDataKey);
+                    let refObj = refRaw ? JSON.parse(refRaw) : { balance: 1.00, referral_count: 0, history: [] };
+                    
+                    refObj.referral_count = (refObj.referral_count || 0) + 1;
+                    refObj.balance = (refObj.balance || 1.00) + 0.04;
+                    if(!refObj.history) refObj.history = [];
+                    refObj.history.unshift("Referral Reward (+User " + telegramId.slice(-4) + "): +$0.04");
+                    
+                    localStorage.setItem(referrerDataKey, JSON.stringify(refObj));
+                }
+            }
+        } catch(e) {}
+
         const vipTiersData = [
             { 
                 level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.06, daily: 0.06, 
@@ -816,7 +878,9 @@
                 }
 
                 const refInput = document.getElementById('refLinkInput');
-                if (refInput) refInput.value = "https://t.me/MineralMiningBot?start=ref_" + telegramId;
+                if (refInput) {
+                    refInput.value = "https://t.me/MineralMiningBot/app?startapp=ref_" + telegramId;
+                }
 
                 const histHtml = historyLog.map(h => {
                     let icon = '📜';
@@ -824,7 +888,7 @@
                     let textCol = '#60a5fa';
                     if (h.includes('Deposit')) { icon = '📥'; bgCol = 'rgba(5, 150, 105, 0.15)'; textCol = '#34d399'; }
                     else if (h.includes('Withdrawal')) { icon = '📤'; bgCol = 'rgba(217, 119, 6, 0.15)'; textCol = '#fbbf24'; }
-                    else if (h.includes('Claim') || h.includes('Bonus') || h.includes('Check-In')) { icon = '✨'; bgCol = 'rgba(16, 185, 129, 0.15)'; textCol = '#10b981'; }
+                    else if (h.includes('Claim') || h.includes('Bonus') || h.includes('Check-In') || h.includes('Reward')) { icon = '✨'; bgCol = 'rgba(16, 185, 129, 0.15)'; textCol = '#10b981'; }
                     else if (h.includes('Activated') || h.includes('VIP')) { icon = '👑'; bgCol = 'rgba(168, 85, 247, 0.15)'; textCol = '#c084fc'; }
                     else if (h.includes('Milestone')) { icon = '🏆'; bgCol = 'rgba(245, 158, 11, 0.15)'; textCol = '#f59e0b'; }
 
