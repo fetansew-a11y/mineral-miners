@@ -3,321 +3,679 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mineral Mining Mini App</title>
-    <!-- Telegram and Supabase Scripts -->
+    <title>Mineral Mining Pro</title>
+    <!-- Telegram WebApp & Supabase SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- QR Code Generator Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --accent-white: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #090d16 0%, #17153a 100%);
+            --card-bg: rgba(30, 41, 59, 0.85);
+            --text-white: #ffffff;
+            --text-muted: #94a3b8;
             --accent-green: #10b981;
             --accent-blue: #3b82f6;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            --accent-warning: #f59e0b;
+            --shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.6);
+            --glow: 0 0 20px rgba(59, 130, 246, 0.2);
         }
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            color: var(--accent-white);
+            background: var(--bg-gradient);
+            color: var(--text-white);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
+            min-height: 100vh;
+            user-select: none;
         }
+        .app-container { max-width: 420px; margin: 0 auto; }
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--card-bg);
-            padding: 12px 20px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--card-bg); padding: 12px 18px; border-radius: 18px;
+            backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: var(--shadow); margin-bottom: 15px;
         }
         .card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 25px;
-            margin: 15px 0;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: var(--shadow);
-            transform: translateY(0);
-            transition: transform 0.3s ease;
+            background: var(--card-bg); border-radius: 22px; padding: 22px;
+            margin: 15px 0; backdrop-filter: blur(14px);
+            border: 1px solid rgba(59, 130, 246, 0.3); box-shadow: var(--shadow), var(--glow);
         }
-        .card:hover {
-            transform: translateY(-3px);
+        .app-title {
+            font-size: 26px; color: var(--text-white); margin: 10px 0 5px 0;
+            cursor: pointer; text-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
+            font-weight: 800; letter-spacing: 0.5px;
         }
-        h1 {
-            font-size: 24px;
-            color: var(--accent-white);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            margin-bottom: 5px;
-        }
-        .balance-box {
-            font-size: 28px;
-            font-weight: bold;
-            color: #34d399;
-            margin: 10px 0;
-        }
-        .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 15px;
-        }
+        .balance-box { font-size: 38px; font-weight: bold; color: #34d399; margin: 10px 0; text-shadow: 0 2px 10px rgba(52, 211, 153, 0.3); }
+        
+        .live-mining-box { background: rgba(15, 23, 42, 0.7); padding: 12px; border-radius: 14px; margin: 15px 0; border: 1px dashed rgba(52, 211, 153, 0.4); }
+        .progress-bar-container { width: 100%; background: #0f172a; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 8px; }
+        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #10b981, #34d399); transition: width 0.3s ease; }
+
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
         button {
             background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-            color: white;
-            border: none;
-            padding: 12px 18px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            color: white; border: none; padding: 14px 16px; font-size: 15px;
+            font-weight: 600; border-radius: 14px; cursor: pointer;
+            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.1s ease;
         }
-        button:active {
-            transform: scale(0.97);
-        }
-        .btn-success {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-        }
-        .btn-warning {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
-        }
-        /* Modal Styles */
+        button:active { transform: scale(0.96); }
+        .btn-success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4); }
+        .btn-warning { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); box-shadow: 0 6px 15px rgba(245, 158, 11, 0.4); }
+        .btn-danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); box-shadow: 0 6px 15px rgba(239, 68, 68, 0.4); }
+        .btn-sm { padding: 8px 12px; font-size: 12px; border-radius: 10px; width: 100%; margin-top: 8px; }
+
         .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
+            justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;
         }
         .modal-content {
-            background: #1e293b;
-            padding: 25px;
-            border-radius: 20px;
-            width: 85%;
-            max-width: 350px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: var(--shadow);
-            text-align: left;
+            background: #1e293b; padding: 22px; border-radius: 22px; width: 100%;
+            max-width: 360px; border: 1px solid rgba(255, 255, 255, 0.2); text-align: left;
+            max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow);
         }
-        .modal-content h3 {
-            margin-top: 0;
-            color: var(--accent-white);
-            text-align: center;
+        input, select {
+            width: 100%; padding: 12px; margin: 8px 0 14px 0; background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: white; box-sizing: border-box; font-size: 14px;
         }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background: #0f172a;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            color: white;
-            box-sizing: border-box;
-            font-size: 16px;
+        .close-btn { background: linear-gradient(135deg, #64748b 0%, #475569 100%); width: 100%; margin-top: 10px; }
+        .history-list, .vip-list, .admin-list {
+            max-height: 220px; overflow-y: auto; font-size: 13px; background: #0f172a;
+            padding: 12px; border-radius: 14px; margin-top: 10px; color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .close-btn {
-            background: #ef4444;
-            width: 100%;
-            margin-top: 10px;
-        }
-        .history-list {
-            max-height: 150px;
-            overflow-y: auto;
-            font-size: 13px;
-            background: #0f172a;
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
-            text-align: left;
-            color: #94a3b8;
-        }
+        .history-item { padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08); text-align: left; }
+        .vip-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .admin-item { background: #1e293b; padding: 10px; margin-bottom: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
+        #qrcode { display: flex; justify-content: center; margin: 12px 0; background: white; padding: 12px; border-radius: 14px; width: fit-content; margin: 10px auto; }
+        .wallet-box { background: #0f172a; padding: 12px; border-radius: 12px; font-size: 11px; word-break: break-all; margin: 10px 0; border: 1px dashed rgba(59, 130, 246, 0.4); }
     </style>
 </head>
 <body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div>💎 VIP: <span id="vipDisplay" style="color:#38bdf8; font-weight:bold;">VIP 0 (Quartz)</span></div>
+            <button onclick="triggerHaptic(); openModal('historyModal')" style="padding: 6px 12px; font-size: 13px; width:auto;">📜 History</button>
+        </div>
 
-    <!-- Header Section -->
-    <div class="header">
-        <div>👤 VIP: <span id="vipDisplay">0</span></div>
-        <button onclick="openModal('historyModal')" style="padding: 6px 12px; font-size: 14px;">📜 History</button>
-    </div>
+        <!-- Secret Trigger Title (Tap 5 times) -->
+        <h1 class="app-title" onclick="triggerHaptic(); handleTitleTap()">⛏️ Mineral Mining Pro</h1>
+        <p style="color: var(--text-muted); font-size: 13px; margin-top: -5px;">$1 Welcome Bonus Active</p>
 
-    <h1>⛏️ Mineral Mining App</h1>
+        <!-- Main Balance Card with Live Mining Ticker -->
+        <div class="card">
+            <p style="margin: 0; color: var(--text-muted); font-size: 14px;">Available Balance</p>
+            <div class="balance-box"><span id="balanceDisplay">1.00</span> $</div>
+            
+            <!-- Live Ticker Animation Box -->
+            <div class="live-mining-box">
+                <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                    <span style="color: #34d399;">⚡ Live Mining Active</span>
+                    <span id="liveTickerVal" style="color: #fff; font-weight: bold;">+$0.0000</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div id="miningProgressBar" class="progress-bar"></div>
+                </div>
+            </div>
 
-    <div class="card">
-        <p style="margin: 0; color: #94a3b8;">Your Balance ($)</p>
-        <div class="balance-box"><span id="balanceDisplay">0.00</span> $</div>
-        <button class="btn-success" onclick="claimMining()" style="width: 100%;">⛏️ Claim Mining</button>
-    </div>
+            <button class="btn-success" onclick="triggerHaptic(); claimMining()" style="width: 100%;">⛏️ Claim Daily Income</button>
+        </div>
 
-    <div class="btn-grid">
-        <button onclick="openModal('depositModal')">💳 Deposit</button>
-        <button class="btn-warning" onclick="openModal('withdrawModal')">💸 Withdraw</button>
-    </div>
+        <!-- Action Buttons -->
+        <div class="btn-grid">
+            <button onclick="triggerHaptic(); openModal('depositModal')">💳 Deposit ($5 Min)</button>
+            <button class="btn-warning" onclick="triggerHaptic(); openModal('withdrawModal')">💸 Withdraw ($5 Min)</button>
+        </div>
 
-    <div class="btn-grid">
-        <button class="btn-success" onclick="dailyCheckIn()">🎁 Daily Check-In (+0.02)</button>
-        <button class="btn-warning" onclick="openModal('refModal')">👥 Referral</button>
+        <div class="btn-grid">
+            <button class="btn-success" onclick="triggerHaptic(); openModal('vipModal')">👑 VIP Tiers</button>
+            <button class="btn-warning" onclick="triggerHaptic(); openModal('refModal')">👥 Referral</button>
+        </div>
+        
+        <div style="margin-top: 12px;">
+            <button class="btn-warning" onclick="triggerHaptic(); dailyCheckIn()" style="width: 100%;">🎁 Daily Check-In (+0.02$)</button>
+        </div>
     </div>
 
     <!-- Deposit Modal -->
     <div id="depositModal" class="modal">
         <div class="modal-content">
-            <h3>💳 Deposit Funds</h3>
-            <p style="font-size: 13px; color: #cbd5e1;">After completing your payment via the deposit link, enter the amount below (+10% bonus will be added automatically!)</p>
-            <input type="number" id="depositAmountInput" placeholder="Enter amount (USD)">
-            <button class="btn-success" onclick="processDeposit()" style="width: 100%;">Done</button>
-            <button class="close-btn" onclick="closeModal('depositModal')">Close</button>
+            <h3 style="margin-top:0;">💳 Deposit Crypto (Min $5)</h3>
+            <p style="font-size: 12px; color: var(--text-muted);">Select network, copy address or scan QR, send funds and submit. Includes 10% bonus!</p>
+            
+            <label style="font-size: 12px; color: var(--text-muted);">Select Network:</label>
+            <select id="depositNetwork" onchange="updateDepositAddress()">
+                <option value="BEP20">USDT (BEP20 - BSC)</option>
+                <option value="ERC20">USDT (ERC20 - ETH)</option>
+                <option value="TON">USDT (TON Network)</option>
+            </select>
+
+            <div id="qrcode"></div>
+            <div class="wallet-box">
+                <b style="color:#cbd5e1;">Deposit Address:</b><br>
+                <span id="walletAddressDisplay"></span>
+            </div>
+            <button class="btn-sm btn-success" onclick="triggerHaptic(); copyWalletAddress()">📋 Copy Address</button>
+
+            <label style="font-size: 12px; color: var(--text-muted); margin-top:12px;">Deposit Amount (USD):</label>
+            <input type="number" id="depositAmountInput" placeholder="Minimum $5" min="5">
+            
+            <button class="btn-success" onclick="triggerHaptic(); processDeposit()" style="width: 100%;">Done (Submit Request)</button>
+            <button class="close-btn" onclick="triggerHaptic(); closeModal('depositModal')">Close</button>
         </div>
     </div>
 
-    <!-- Withdraw Modal -->
+    <!-- Withdraw Modal (Multi-Network Support) -->
     <div id="withdrawModal" class="modal">
         <div class="modal-content">
-            <h3>💸 Withdraw Funds</h3>
-            <input type="number" id="withdrawAmountInput" placeholder="Enter amount to withdraw">
-            <button class="btn-warning" onclick="processWithdraw()" style="width: 100%;">Send Request</button>
-            <button class="close-btn" onclick="closeModal('withdrawModal')">Close</button>
+            <h3 style="margin-top:0;">💸 Withdraw Funds</h3>
+            <p style="font-size: 12px; color: var(--text-muted);">Minimum withdrawal: <b>$5</b>. Select your preferred network.</p>
+            
+            <label style="font-size: 12px; color: var(--text-muted);">Select Network:</label>
+            <select id="withdrawNetwork">
+                <option value="BEP20">USDT (BEP20 - BSC)</option>
+                <option value="ERC20">USDT (ERC20 - ETH)</option>
+                <option value="TON">USDT (TON Network)</option>
+            </select>
+
+            <label style="font-size: 12px; color: var(--text-muted);">Wallet Address:</label>
+            <input type="text" id="withdrawWalletInput" placeholder="Enter your wallet address">
+            
+            <label style="font-size: 12px; color: var(--text-muted);">Amount ($):</label>
+            <input type="number" id="withdrawAmountInput" placeholder="Minimum $5" min="5">
+            
+            <button class="btn-warning" onclick="triggerHaptic(); processWithdraw()" style="width: 100%;">Request Withdrawal</button>
+            <button class="close-btn" onclick="triggerHaptic(); closeModal('withdrawModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- VIP Tiers Modal -->
+    <div id="vipModal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-top:0;">👑 Mineral VIP Tiers</h3>
+            <div class="vip-list">
+                <div class="vip-item"><span>💎 VIP 0: Quartz ($1)</span><span style="color:#34d399;">$0.10/d</span></div>
+                <div class="vip-item"><span>🥈 VIP 1: Silver ($5)</span><span style="color:#34d399;">$0.50/d</span></div>
+                <div class="vip-item"><span>🥇 VIP 2: Gold ($10)</span><span style="color:#34d399;">$1.00/d</span></div>
+                <div class="vip-item"><span>🪙 VIP 3: Platinum ($20)</span><span style="color:#34d399;">$2.00/d</span></div>
+                <div class="vip-item"><span>🔴 VIP 4: Ruby ($50)</span><span style="color:#34d399;">$5.00/d</span></div>
+                <div class="vip-item"><span>🔵 VIP 5: Sapphire ($100)</span><span style="color:#34d399;">$10.00/d</span></div>
+                <div class="vip-item"><span>🟢 VIP 6: Emerald ($500)</span><span style="color:#34d399;">$50.00/d</span></div>
+                <div class="vip-item"><span>✨ VIP 7: Diamond ($1000)</span><span style="color:#34d399;">$100.00/d</span></div>
+            </div>
+            <button class="close-btn" onclick="triggerHaptic(); closeModal('vipModal')">Close</button>
         </div>
     </div>
 
     <!-- Referral Modal -->
     <div id="refModal" class="modal">
         <div class="modal-content">
-            <h3>👥 Referral Program</h3>
-            <p style="font-size: 13px;">Per referral commission: <b>+0.04 $</b></p>
-            <p style="font-size: 13px;">Milestone Bonuses:<br>• 20 Referrals = <b>$2</b><br>• 50 Referrals = <b>$3</b><br>• 100 Referrals = <b>$7</b></p>
-            <button class="close-btn" onclick="closeModal('refModal')">Close</button>
+            <h3 style="margin-top:0;">👥 Referral System</h3>
+            <p style="font-size: 13px; color: #cbd5e1;">Invite friends & earn rewards!</p>
+            <p style="font-size: 13px;">• Per Referral: <b>+$0.04</b></p>
+            <p style="font-size: 13px;">• Total Referrals: <b id="refCountDisplay" style="color:#38bdf8;">0</b></p>
+            <div style="margin: 10px 0;">
+                <label style="font-size: 11px; color: var(--text-muted);">Your Referral Link:</label>
+                <input type="text" id="refLinkInput" readonly style="font-size: 11px; background: #0f172a; padding: 8px;">
+            </div>
+            <button class="btn-success" onclick="triggerHaptic(); copyRefLink()" style="width: 100%; font-size: 13px; padding: 10px;">📋 Copy Referral Link</button>
+            <button class="close-btn" onclick="triggerHaptic(); closeModal('refModal')">Close</button>
         </div>
     </div>
 
     <!-- History Modal -->
     <div id="historyModal" class="modal">
         <div class="modal-content">
-            <h3>📜 Transaction History</h3>
-            <div id="historyList" class="history-list">No history yet.</div>
-            <button class="close-btn" onclick="closeModal('historyModal')">Close</button>
+            <h3 style="margin-top:0;">📜 Recent Transactions</h3>
+            <p style="font-size: 11px; color: var(--text-muted);">Last 30-40 activities stored permanently.</p>
+            <div id="historyList" class="history-list">No transactions yet.</div>
+            <button class="close-btn" onclick="triggerHaptic(); closeModal('historyModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- Admin Password Prompt Modal -->
+    <div id="adminAuthModal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-top:0;">🔒 Secret Admin Login</h3>
+            <input type="password" id="adminPasswordInput" placeholder="Enter Admin Password">
+            <button class="btn-success" onclick="triggerHaptic(); verifyAdminPassword()" style="width: 100%;">Login</button>
+            <button class="close-btn" onclick="triggerHaptic(); closeModal('adminAuthModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Secret Admin Panel Modal -->
+    <div id="adminPanelModal" class="modal">
+        <div class="modal-content" style="max-width: 380px;">
+            <h3 style="margin-top:0; color: #f59e0b;">👑 Admin Control Center</h3>
+            <p style="font-size: 12px; color: var(--text-muted);">Manage pending requests & view users (Optimized).</p>
+            
+            <h4 style="margin: 10px 0 5px 0; color: #34d399; font-size: 14px;">Pending Requests (Latest 50)</h4>
+            <div id="adminList" class="admin-list">Loading pending requests...</div>
+
+            <h4 style="margin: 15px 0 5px 0; color: #38bdf8; font-size: 14px;">Registered Users (Top 50)</h4>
+            <div id="adminUserList" class="admin-list">Loading users list...</div>
+
+            <button class="close-btn" onclick="triggerHaptic(); closeModal('adminPanelModal')" style="margin-top: 15px;">Close Panel</button>
         </div>
     </div>
 
     <script>
-        // Supabase Connection Keys
+        // Supabase Database Config
         const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_UKuSiII0z9gAVhjosJEG1w__5H5z7b2';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const telegramId = Telegram.WebApp.initDataUnsafe?.user?.id || '123456789';
+        // Crypto Wallets Provided
+        const wallets = {
+            BEP20: '0x91D139567d96E18159f4d59BDfe1269cF4bB1Eb3',
+            ERC20: '0x3A23D577010BFF61620BC232a4fd95Fe895416bF',
+            TON: 'UQAgaG68J6uVa8kysPJVkVVJ-DM9GvZJnaOc8NbkrGv9KzDU'
+        };
 
-        let balance = 0;
+        const telegramId = Telegram.WebApp.initDataUnsafe?.user?.id ? String(Telegram.WebApp.initDataUnsafe.user.id) : 'user_demo_' + Math.floor(Math.random()*10000);
+        const botUsername = Telegram.WebApp.initDataUnsafe?.bot?.username || 'MineralMiningBot';
+
+        let balance = 1.00;
         let vipLevel = 0;
+        let referralCount = 0;
+        let lastClaimTime = 0;
         let historyLog = [];
+        let tapCount = 0;
+        let tapTimer = null;
+        let qrcodeObj = null;
+
+        const vipNames = [
+            "💎 VIP 0 (Quartz)", "🥈 VIP 1 (Silver)", "🥇 VIP 2 (Gold)", "🪙 VIP 3 (Platinum)",
+            "🔴 VIP 4 (Ruby)", "🔵 VIP 5 (Sapphire)", "🟢 VIP 6 (Emerald)", "✨ VIP 7 (Diamond)"
+        ];
+        const dailyRates = [0.10, 0.50, 1.00, 2.00, 5.00, 10.00, 50.00, 100.00];
+
+        // Telegram Haptic Feedback Helper
+        function triggerHaptic() {
+            try {
+                if (window.Telegram && Telegram.WebApp && Telegram.WebApp.HapticFeedback) {
+                    Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+                }
+            } catch (e) {}
+        }
 
         async function loadUserData() {
-            const { data, error } = await supabase
-                .from('users')
-                .select('*')
-                .eq('telegram_id', telegramId)
-                .single();
+            try {
+                const startParam = Telegram.WebApp.initDataUnsafe?.start_param;
 
-            if (data) {
-                balance = data.balance;
-                vipLevel = data.vip_level;
-            } else {
-                await supabase.from('users').insert([
-                    { telegram_id: telegramId, balance: 0, vip_level: 0 }
-                ]);
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('telegram_id', telegramId)
+                    .single();
+
+                if (data) {
+                    balance = data.balance ?? 1.00;
+                    vipLevel = data.vip_level ?? 0;
+                    referralCount = data.referral_count ?? 0;
+                    lastClaimTime = data.last_claim_time ?? 0;
+                    historyLog = data.history || [];
+                } else {
+                    historyLog = [`Welcome Bonus Claimed: +$1.00`];
+                    
+                    if (startParam && startParam.startsWith('ref_')) {
+                        const referrerId = startParam.replace('ref_', '');
+                        if (referrerId !== telegramId) {
+                            const { data: refData } = await supabase.from('users').select('*').eq('telegram_id', referrerId).single();
+                            if (refData) {
+                                let newRefCount = (refData.referral_count || 0) + 1;
+                                let refBonus = 0.04;
+                                
+                                if (newRefCount === 20) refBonus += 2.00;
+                                if (newRefCount === 50) refBonus += 3.00;
+                                if (newRefCount === 100) refBonus += 7.00;
+
+                                let newRefBal = (refData.balance || 0) + refBonus;
+                                let refHist = refData.history || [];
+                                refHist.unshift(`Referral reward (+${refBonus.toFixed(2)}$) from new user`);
+                                
+                                await supabase.from('users').update({
+                                    balance: newRefBal,
+                                    referral_count: newRefCount,
+                                    history: refHist
+                                }).eq('telegram_id', referrerId);
+                            }
+                        }
+                    }
+
+                    await supabase.from('users').insert([
+                        { telegram_id: telegramId, balance: 1.00, vip_level: 0, referral_count: 0, last_claim_time: 0, history: historyLog }
+                    ]);
+                    balance = 1.00;
+                    vipLevel = 0;
+                    referralCount = 0;
+                    lastClaimTime = 0;
+                }
+            } catch (err) {
+                console.log('Database init warning:', err);
             }
             updateUI();
+            updateDepositAddress();
+            startLiveMiningTicker();
         }
 
         async function saveUserData() {
-            await supabase
-                .from('users')
-                .update({ balance: balance, vip_level: vipLevel })
-                .eq('telegram_id', telegramId);
+            if (historyLog.length > 40) historyLog = historyLog.slice(0, 40);
+            try {
+                await supabase
+                    .from('users')
+                    .update({ 
+                        balance: balance, 
+                        vip_level: vipLevel, 
+                        referral_count: referralCount, 
+                        last_claim_time: lastClaimTime,
+                        history: historyLog 
+                    })
+                    .eq('telegram_id', telegramId);
+            } catch (err) {
+                console.error('Save error:', err);
+            }
         }
 
         function updateUI() {
             document.getElementById('balanceDisplay').innerText = Number(balance).toFixed(2);
-            document.getElementById('vipDisplay').innerText = vipLevel;
+            document.getElementById('vipDisplay').innerText = vipNames[vipLevel] || "VIP 0";
+            document.getElementById('refCountDisplay').innerText = referralCount;
             
+            document.getElementById('refLinkInput').value = `https://t.me/${botUsername}?start=ref_${telegramId}`;
+
             const historyContainer = document.getElementById('historyList');
             if (historyLog.length > 0) {
-                historyContainer.innerHTML = historyLog.map(item => `<div>• ${item}</div>`).join('');
+                historyContainer.innerHTML = historyLog.map(item => `<div class="history-item">• ${item}</div>`).join('');
+            } else {
+                historyContainer.innerHTML = 'No transactions recorded yet.';
             }
         }
 
-        function claimMining() {
-            balance += 0.10;
-            historyLog.unshift(`Claimed Mining: +0.10$`);
-            updateUI();
-            saveUserData();
+        // Precise Timestamp-Based Live Mining Ticker Loop
+        function startLiveMiningTicker() {
+            setInterval(() => {
+                const now = Date.now();
+                const cooldownTime = 24 * 60 * 60 * 1000; // 24 Hours
+                const dailyIncome = dailyRates[vipLevel] || 0.10;
+                const perSecondRate = dailyIncome / 86400;
+
+                let elapsed = now - lastClaimTime;
+                if (lastClaimTime === 0) elapsed = cooldownTime;
+
+                let accumulated = (elapsed / 1000) * perSecondRate;
+                if (accumulated > dailyIncome) accumulated = dailyIncome;
+
+                document.getElementById('liveTickerVal').innerText = `+ $${accumulated.toFixed(4)}`;
+
+                let percent = Math.min(100, (elapsed / cooldownTime) * 100);
+                if (lastClaimTime === 0) percent = 100;
+                document.getElementById('miningProgressBar').style.width = percent + '%';
+            }, 1000);
         }
 
-        // Deposit Process (+10% Bonus)
-        function processDeposit() {
+        function copyWalletAddress() {
+            const address = document.getElementById('walletAddressDisplay').innerText;
+            navigator.clipboard.writeText(address);
+            alert('Deposit address copied to clipboard!');
+        }
+
+        function copyRefLink() {
+            const copyText = document.getElementById('refLinkInput');
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+            alert('Referral link copied to clipboard!');
+        }
+
+        function updateDepositAddress() {
+            const net = document.getElementById('depositNetwork').value;
+            const address = wallets[net];
+            document.getElementById('walletAddressDisplay').innerText = address;
+            
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+            qrcodeObj = new QRCode(qrContainer, {
+                text: address,
+                width: 128,
+                height: 128
+            });
+        }
+
+        async function claimMining() {
+            try {
+                const { data: freshUser, error } = await supabase.from('users').select('*').eq('telegram_id', telegramId).single();
+                if (error || !freshUser) {
+                    alert('Network error. Please try again.');
+                    return;
+                }
+                lastClaimTime = freshUser.last_claim_time ?? 0;
+                balance = freshUser.balance ?? balance;
+                vipLevel = freshUser.vip_level ?? vipLevel;
+                historyLog = freshUser.history || historyLog;
+
+                const now = Date.now();
+                const cooldownTime = 24 * 60 * 60 * 1000;
+
+                if (now - lastClaimTime < cooldownTime) {
+                    const remainingHours = Math.ceil((cooldownTime - (now - lastClaimTime)) / (1000 * 60 * 60));
+                    alert(`You can claim your daily income again in about ${remainingHours} hour(s).`);
+                    return;
+                }
+
+                const income = dailyRates[vipLevel] || 0.10;
+                
+                balance += income;
+                lastClaimTime = now;
+                historyLog.unshift(`Claimed Daily Income (${vipNames[vipLevel]}): +$${income.toFixed(2)}`);
+                updateUI();
+                await saveUserData();
+                alert(`Successfully claimed daily mining reward: +$${income.toFixed(2)}!`);
+            } catch (err) {
+                alert('Claim failed. Please check your connection.');
+            }
+        }
+
+        async function processDeposit() {
             const amt = parseFloat(document.getElementById('depositAmountInput').value);
-            if (!amt || amt <= 0) {
-                alert('Please enter a valid amount');
+            const net = document.getElementById('depositNetwork').value;
+            
+            if (isNaN(amt) || amt < 5) {
+                alert('Minimum deposit amount is $5');
                 return;
             }
-            const bonus = amt * 0.10; // 10% Bonus
-            const totalAdded = amt + bonus;
-            balance += totalAdded;
-            historyLog.unshift(`Deposit: +${amt}$ (+${bonus.toFixed(2)}$ Bonus)`);
+
+            const bonus = amt * 0.10;
+            const totalWithBonus = amt + bonus;
+
+            historyLog.unshift(`Deposit Request: $${amt.toFixed(2)} (+10% Bonus: $${bonus.toFixed(2)}) via ${net} - Pending Admin Approval`);
+            
+            await supabase.from('pending_requests').insert([
+                { telegram_id: telegramId, type: 'DEPOSIT', amount: totalWithBonus, network: net, status: 'PENDING' }
+            ]);
+
             updateUI();
-            saveUserData();
+            await saveUserData();
             closeModal('depositModal');
-            alert(`Deposit successful! 10% bonus ($${bonus.toFixed(2)}) added.`);
+            document.getElementById('depositAmountInput').value = '';
+            alert(`Deposit request of $${amt.toFixed(2)} submitted! Status set to Processing/Pending for Admin approval.`);
         }
 
-        // Withdraw Process
-        function processWithdraw() {
+        async function processWithdraw() {
             const amt = parseFloat(document.getElementById('withdrawAmountInput').value);
-            if (!amt || amt <= 0 || amt > balance) {
-                alert('Insufficient balance or invalid amount');
+            const wallet = document.getElementById('withdrawWalletInput').value.trim();
+            const net = document.getElementById('withdrawNetwork').value;
+
+            if (isNaN(amt) || amt < 5) {
+                alert('Minimum withdrawal amount is $5');
                 return;
             }
+            if (!wallet) {
+                alert('Please enter a valid wallet address');
+                return;
+            }
+
+            const { data: freshUser } = await supabase.from('users').select('balance, history').eq('telegram_id', telegramId).single();
+            if (freshUser) {
+                balance = freshUser.balance ?? balance;
+                historyLog = freshUser.history || historyLog;
+            }
+
+            if (amt > balance) {
+                alert('Insufficient account balance');
+                return;
+            }
+
             balance -= amt;
-            historyLog.unshift(`Withdraw Request: -${amt}$`);
+            historyLog.unshift(`Withdrawal Request: -$${amt.toFixed(2)} (${net} to ${wallet.substring(0,6)}...) - Pending Admin Approval`);
+
+            await supabase.from('pending_requests').insert([
+                { telegram_id: telegramId, type: 'WITHDRAWAL', amount: amt, wallet: wallet, network: net, status: 'PENDING' }
+            ]);
+
             updateUI();
-            saveUserData();
+            await saveUserData();
             closeModal('withdrawModal');
-            alert('Withdrawal request sent!');
+            document.getElementById('withdrawAmountInput').value = '';
+            document.getElementById('withdrawWalletInput').value = '';
+            alert('Withdrawal request submitted! Pending Admin approval.');
         }
 
-        // Daily Check-In (+0.02)
-        function dailyCheckIn() {
+        async function dailyCheckIn() {
+            const { data: freshUser } = await supabase.from('users').select('balance, history').eq('telegram_id', telegramId).single();
+            if (freshUser) balance = freshUser.balance ?? balance;
+
             balance += 0.02;
-            historyLog.unshift(`Daily Check-In: +0.02$`);
+            historyLog.unshift(`Daily Check-In Reward: +$0.02`);
             updateUI();
-            saveUserData();
-            alert('You have claimed today\'s Daily Check-In (+0.02$)!');
+            await saveUserData();
+            alert('Daily check-in reward claimed (+$0.02)!');
         }
 
-        function openModal(id) {
-            document.getElementById(id).style.display = 'flex';
+        // Secret 5-Tap Trigger Logic
+        function handleTitleTap() {
+            tapCount++;
+            clearTimeout(tapTimer);
+            if (tapCount >= 5) {
+                tapCount = 0;
+                const lastAdminAuth = sessionStorage.getItem('adminAuthTime');
+                const now = Date.now();
+                if (lastAdminAuth && (now - lastAdminAuth < 15 * 60 * 1000)) {
+                    openModal('adminPanelModal');
+                    loadAdminData();
+                } else {
+                    openModal('adminAuthModal');
+                }
+            } else {
+                tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
+            }
         }
 
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
+        function verifyAdminPassword() {
+            const pwd = document.getElementById('adminPasswordInput').value;
+            if (pwd === 'Bini2160') {
+                sessionStorage.setItem('adminAuthTime', Date.now());
+                closeModal('adminAuthModal');
+                document.getElementById('adminPasswordInput').value = '';
+                openModal('adminPanelModal');
+                loadAdminData();
+            } else {
+                alert('Incorrect Admin Password!');
+            }
         }
+
+        async function loadAdminData() {
+            const adminListContainer = document.getElementById('adminList');
+            const adminUserListContainer = document.getElementById('adminUserList');
+            
+            adminListContainer.innerHTML = 'Loading pending requests...';
+            adminUserListContainer.innerHTML = 'Loading users...';
+            
+            const { data: pendingData } = await supabase
+                .from('pending_requests')
+                .select('*')
+                .eq('status', 'PENDING')
+                .order('id', { ascending: false })
+                .limit(50);
+
+            if (pendingData && pendingData.length > 0) {
+                adminListContainer.innerHTML = pendingData.map(req => `
+                    <div class="admin-item">
+                        <div><b>Type:</b> ${req.type}</div>
+                        <div><b>User ID:</b> ${req.telegram_id}</div>
+                        <div><b>Amount:</b> $${req.amount}</div>
+                        <div><b>Network:</b> ${req.network} ${req.wallet ? '| Wallet: ' + req.wallet : ''}</div>
+                        <div style="display: flex; gap: 6px; margin-top: 8px;">
+                            <button class="btn-success" onclick="triggerHaptic(); handleAdminAction(${req.id}, '${req.telegram_id}', '${req.type}', ${req.amount}, 'APPROVE')" style="flex:1; padding:6px; font-size:12px;">Approve</button>
+                            <button class="btn-danger" onclick="triggerHaptic(); handleAdminAction(${req.id}, '${req.telegram_id}', '${req.type}', ${req.amount}, 'REJECT')" style="flex:1; padding:6px; font-size:12px;">Reject</button>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                adminListContainer.innerHTML = 'No pending requests found.';
+            }
+
+            const { data: usersData } = await supabase
+                .from('users')
+                .select('*')
+                .order('balance', { ascending: false })
+                .limit(50);
+
+            if (usersData && usersData.length > 0) {
+                adminUserListContainer.innerHTML = usersData.map(u => `
+                    <div class="admin-item" style="font-size: 11px;">
+                        <div><b>ID:</b> ${u.telegram_id}</div>
+                        <div><b>Balance:</b> $${Number(u.balance).toFixed(2)} | <b>VIP:</b> ${u.vip_level}</div>
+                        <div><b>Referrals:</b> ${u.referral_count || 0}</div>
+                    </div>
+                `).join('');
+            } else {
+                adminUserListContainer.innerHTML = 'No users registered yet.';
+            }
+        }
+
+        async function handleAdminAction(id, targetUserId, type, amount, action) {
+            const statusVal = action === 'APPROVE' ? 'APPROVED' : 'REJECTED';
+            await supabase.from('pending_requests').update({ status: statusVal }).eq('id', id);
+            
+            const { data: targetUser } = await supabase.from('users').select('*').eq('telegram_id', targetUserId).single();
+            
+            if (targetUser) {
+                let newBal = targetUser.balance || 0;
+                let newHist = targetUser.history || [];
+
+                if (type === 'DEPOSIT') {
+                    if (action === 'APPROVE') {
+                        newBal += amount;
+                        newHist.unshift(`Deposit Approved: +$${amount.toFixed(2)}`);
+                    } else {
+                        newHist.unshift(`Deposit Rejected by Admin ($${amount.toFixed(2)})`);
+                    }
+                } else if (type === 'WITHDRAWAL') {
+                    if (action === 'APPROVE') {
+                        newHist.unshift(`Withdrawal Approved & Sent: -$${amount.toFixed(2)}`);
+                    } else {
+                        newBal += amount;
+                        newHist.unshift(`Withdrawal Rejected: +$${amount.toFixed(2)} refunded to balance`);
+                    }
+                }
+
+                await supabase.from('users').update({ balance: newBal, history: newHist }).eq('telegram_id', targetUserId);
+            }
+
+            alert(`Request #${id} marked as ${statusVal}!`);
+            loadAdminData();
+        }
+
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
         window.onload = loadUserData;
     </script>
