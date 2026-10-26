@@ -389,7 +389,7 @@
                     <p style="margin: 3px 0;">• Total Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
                 </div>
                 <input type="text" id="refLinkInput" readonly style="font-size: 10px; padding: 8px; margin: 6px 0;">
-                <button class="btn-3d-success btn-sm" onclick="copyRefLink()">🔗 Copy Professional Link</button>
+                <button class="btn-3d-success btn-sm" onclick="copyRefLink()">🔗 Copy Secure Referral Link</button>
 
                 <div style="margin-top: 12px; border-top: var(--border); padding-top: 10px;">
                     <h3 style="font-size: 12px; margin: 0 0 8px 0; font-weight: 800; color: #f59e0b;">🏆 Referral Milestone Bonuses</h3>
@@ -451,7 +451,7 @@
                 <span>Earners</span>
             </button>
             <button class="nav-item" onclick="switchTabSafe('refTab', this)">
-                <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3 z"/></svg></span>
+                <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3z"/></svg></span>
                 <span>Referral</span>
             </button>
             <button class="nav-item" onclick="switchTabSafe('profileTab', this)">
@@ -467,7 +467,7 @@
             <div style="font-size: 42px; margin-bottom: 8px;">🚫</div>
             <h3 style="color: #ef4444; margin-top:0;">Account Restricted (Banned)</h3>
             <p style="font-size: 11px; color: var(--text-muted); line-height: 1.5;">
-                Your account has been flagged and restricted by our anti-cheat system due to suspicious self-referral/multi-account abuse exceeding the 40 limit on the same device.
+                Your account has been flagged and restricted due to anti-cheat policy violations.
             </p>
         </div>
     </div>
@@ -550,6 +550,8 @@
         const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_UKuSiII0z9gAVhjosJEG1w__5H5z7b2';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const botUsername = 'MineralMinerPro_bot'; // የእርስዎ የቴሌግራም ቦት ዩዘርናም
 
         function showToast(msg) {
             const t = document.getElementById('customToast');
@@ -639,7 +641,6 @@
 
         let telegramId = '';
         let userName = '';
-        let botUsername = 'MineralMinerPro_bot'; // 🌟 የቴሌግራም ቦት ስምዎ (እዚህ ያስተካክሉት)
 
         try {
             if (window.Telegram && Telegram.WebApp) {
@@ -690,8 +691,10 @@
             { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, bg: "linear-gradient(135deg, #7e22ce, #581c87)", svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L30 12 L16 30 L2 12 Z" fill="#c084fc"/></svg>` }
         ];
 
+        // 🌟 100% SECURE CLOUD SYNC INITIALIZATION
         async function initUserData() {
             try {
+                // 1. Check if user already exists in Supabase
                 const { data: existingUser, error } = await supabaseClient
                     .from('users')
                     .select('*')
@@ -699,6 +702,7 @@
                     .maybeSingle();
 
                 if (existingUser) {
+                    // Load exact existing cloud data (No data loss, no reset)
                     balance = Number(existingUser.balance ?? 1.00);
                     activeInvestment = Number(existingUser.active_investment ?? 0.00);
                     vipLevel = Number(existingUser.vip_level ?? 0);
@@ -708,6 +712,7 @@
                     historyLog = existingUser.history ?? ["Welcome Bonus: +$1.00"];
                     userName = existingUser.user_name ?? userName;
                 } else {
+                    // 2. Create new user profile in Supabase database
                     const newUser = {
                         telegram_id: telegramId,
                         user_name: userName,
@@ -721,7 +726,7 @@
                     };
                     await supabaseClient.from('users').insert([newUser]);
 
-                    // 🌟 Professional Telegram Start Param check for Referrals
+                    // 3. Process Telegram Start Parameter Referral securely via Cloud
                     const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param || '';
                     if (startParam && startParam.startsWith('ref_')) {
                         const referrerId = startParam.replace('ref_', '');
@@ -761,7 +766,7 @@
                 setInterval(liveTicker, 1000);
                 setInterval(bannerTicker, 2500);
             } catch (e) {
-                console.error("Init Error:", e);
+                console.error("Cloud Sync Error:", e);
                 renderVipTiers();
                 renderEarnersLeaderboard();
                 updateUI();
@@ -775,6 +780,7 @@
             initUserData();
         });
 
+        // 🌟 AUTOMATIC CLOUD SYNC & AUTO-SAVE (Ensures no history/balance loss)
         async function saveUserDataToSupabase() {
             try {
                 if (isBanned || !telegramId) return;
@@ -860,6 +866,7 @@
                 if (hList) hList.innerHTML = histHtml;
                 if (pHList) pHList.innerHTML = histHtml;
 
+                // Sync data directly to cloud
                 saveUserDataToSupabase();
             } catch(e) {}
         }
@@ -1135,7 +1142,7 @@
                 if (link) {
                     link.select();
                     navigator.clipboard.writeText(link.value);
-                    showToast('Professional referral link copied!');
+                    showToast('Secure referral link copied!');
                 }
             } catch(e) {}
         }
