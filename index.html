@@ -639,9 +639,10 @@
             { rank: 10, name: "Kirubel_M", vip: "VIP 3 (Platinum)", invested: "$20.00", earned: "$172.40", badge: "✨" }
         ];
 
-        // 🌟 100% FIXED & STABLE USER IDENTIFICATION
+        // 🌟 100% FIXED & STABLE USER IDENTIFICATION & START_PARAM REFERRAL CAPTURE
         let telegramId = '';
         let userName = '';
+        let startParamRef = '';
 
         try {
             if (window.Telegram && Telegram.WebApp) {
@@ -652,6 +653,9 @@
                     if (Telegram.WebApp.initDataUnsafe.user.first_name) {
                         userName = Telegram.WebApp.initDataUnsafe.user.first_name;
                     }
+                }
+                if (Telegram.WebApp.initDataUnsafe?.start_param) {
+                    startParamRef = Telegram.WebApp.initDataUnsafe.start_param;
                 }
             }
         } catch(e) {}
@@ -671,7 +675,7 @@
             localStorage.setItem('mineral_stable_username', userName);
         }
 
-        // App States (Loaded from local storage with maximum timestamp protection)
+        // App States
         let balance = Number(localStorage.getItem('mineral_local_balance_' + telegramId) ?? 1.00);
         let activeInvestment = Number(localStorage.getItem('mineral_local_inv_' + telegramId) ?? 0.00);
         let vipLevel = Number(localStorage.getItem('mineral_local_vip_' + telegramId) ?? 0);
@@ -698,7 +702,7 @@
             { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, bg: "linear-gradient(135deg, #7e22ce, #581c87)", svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L30 12 L16 30 L2 12 Z" fill="#c084fc"/></svg>` }
         ];
 
-        // 🌟 BULLETPROOF CLOUD SYNC WITH STRICT CHECK-IN COOLDOWN PROTECTION
+        // 🌟 BULLETPROOF CLOUD SYNC & REFERRAL PROCESSING
         async function initUserData() {
             try {
                 updateUI();
@@ -717,7 +721,6 @@
                     minedAccumulated = Number(existingUser.mined_accumulated ?? minedAccumulated);
                     referralCount = Number(existingUser.referral_count ?? referralCount);
                     
-                    // Take the maximum of local and cloud check-in timestamp to prevent rollbacks
                     const cloudCheckIn = Number(existingUser.last_check_in ?? 0);
                     if (cloudCheckIn > lastCheckInTime) {
                         lastCheckInTime = cloudCheckIn;
@@ -744,9 +747,9 @@
                     };
                     await supabaseClient.from('users').insert([newUser]);
 
-                    const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param || '';
-                    if (startParam && startParam.startsWith('ref_')) {
-                        const referrerId = startParam.replace('ref_', '');
+                    // Process Referral from start_param (mineral_mining?startapp=ref_xxx)
+                    if (startParamRef && startParamRef.startsWith('ref_')) {
+                        const referrerId = startParamRef.replace('ref_', '');
                         if (referrerId !== telegramId) {
                             const { data: refUser } = await supabaseClient
                                 .from('users')
@@ -870,9 +873,10 @@
                 const rateEl = document.getElementById('activeRateDisplay');
                 if (rateEl) rateEl.innerText = currentRatePct;
 
+                // 🌟 CORRECT BOTFATHER MINI APP SHORT NAME REFERRAL LINK FORMAT (`/mineral_mining?startapp=`)[span_1](start_span)[span_1](end_span)
                 const refInput = document.getElementById('refLinkInput');
                 if (refInput) {
-                    refInput.value = "https://t.me/" + botUsername + "?start=ref_" + telegramId;
+                    refInput.value = "https://t.me/" + botUsername + "/mineral_mining?startapp=ref_" + telegramId;
                 }
 
                 const histHtml = historyLog.map(h => {
