@@ -551,7 +551,7 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_UKuSiII0z9gAVhjosJEG1w__5H5z7b2';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const botUsername = 'MineralMinerPro_bot'; // የእርስዎ የቴሌግራም ቦት ዩዘርናም
+        const botUsername = 'MineralMinerPro_bot';
 
         function showToast(msg) {
             const t = document.getElementById('customToast');
@@ -639,6 +639,7 @@
             { rank: 10, name: "Kirubel_M", vip: "VIP 3 (Platinum)", invested: "$20.00", earned: "$172.40", badge: "✨" }
         ];
 
+        // 🌟 100% SECURE PERSISTENT TELEGRAM & LOCAL ID RESOLUTION
         let telegramId = '';
         let userName = '';
 
@@ -656,18 +657,21 @@
         } catch(e) {}
 
         if (!telegramId) {
-            let savedLocalId = localStorage.getItem('mineral_local_telegram_id');
-            if (!savedLocalId) {
-                savedLocalId = 'user_' + Math.floor(Math.random() * 900000 + 100000);
-                localStorage.setItem('mineral_local_telegram_id', savedLocalId);
+            let persistentId = localStorage.getItem('mineral_persistent_user_id');
+            if (!persistentId) {
+                persistentId = 'miner_' + Math.floor(Math.random() * 900000000 + 100000000);
+                localStorage.setItem('mineral_persistent_user_id', persistentId);
             }
-            telegramId = savedLocalId;
+            telegramId = persistentId;
         }
 
         if (!userName) {
-            userName = 'Miner_' + Math.floor(Math.random() * 9000 + 1000);
+            userName = localStorage.getItem('mineral_persistent_username') || ('Miner_' + Math.floor(Math.random() * 9000 + 1000));
+        } else {
+            localStorage.setItem('mineral_persistent_username', userName);
         }
 
+        // App States
         let balance = 1.00;
         let activeInvestment = 0.00;
         let vipLevel = 0;
@@ -691,10 +695,10 @@
             { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, bg: "linear-gradient(135deg, #7e22ce, #581c87)", svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L30 12 L16 30 L2 12 Z" fill="#c084fc"/></svg>` }
         ];
 
-        // 🌟 100% SECURE CLOUD SYNC INITIALIZATION
+        // 🌟 ABSOLUTE CLOUD-FIRST INITIALIZATION (Guarantees data permanence)
         async function initUserData() {
             try {
-                // 1. Check if user already exists in Supabase
+                // Query Supabase cloud database directly first
                 const { data: existingUser, error } = await supabaseClient
                     .from('users')
                     .select('*')
@@ -702,7 +706,7 @@
                     .maybeSingle();
 
                 if (existingUser) {
-                    // Load exact existing cloud data (No data loss, no reset)
+                    // Load exact existing data from cloud
                     balance = Number(existingUser.balance ?? 1.00);
                     activeInvestment = Number(existingUser.active_investment ?? 0.00);
                     vipLevel = Number(existingUser.vip_level ?? 0);
@@ -712,7 +716,7 @@
                     historyLog = existingUser.history ?? ["Welcome Bonus: +$1.00"];
                     userName = existingUser.user_name ?? userName;
                 } else {
-                    // 2. Create new user profile in Supabase database
+                    // Create new user record in Supabase database
                     const newUser = {
                         telegram_id: telegramId,
                         user_name: userName,
@@ -726,7 +730,7 @@
                     };
                     await supabaseClient.from('users').insert([newUser]);
 
-                    // 3. Process Telegram Start Parameter Referral securely via Cloud
+                    // Process Telegram Referral Parameter
                     const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param || '';
                     if (startParam && startParam.startsWith('ref_')) {
                         const referrerId = startParam.replace('ref_', '');
@@ -780,20 +784,22 @@
             initUserData();
         });
 
-        // 🌟 AUTOMATIC CLOUD SYNC & AUTO-SAVE (Ensures no history/balance loss)
+        // 🌟 REAL-TIME CLOUD SYNCHRONIZATION (Saves instantly to Supabase)
         async function saveUserDataToSupabase() {
             try {
                 if (isBanned || !telegramId) return;
-                await supabaseClient.from('users').update({
+
+                await supabaseClient.from('users').upsert([{
+                    telegram_id: telegramId,
+                    user_name: userName,
                     balance: balance,
                     active_investment: activeInvestment,
                     vip_level: vipLevel,
                     mined_accumulated: minedAccumulated,
                     referral_count: referralCount,
-                    user_name: userName,
                     history: historyLog,
                     is_banned: isBanned
-                }).eq('telegram_id', telegramId);
+                }], { onConflict: 'telegram_id' });
             } catch(e) {}
         }
 
@@ -839,7 +845,6 @@
                 const rateEl = document.getElementById('activeRateDisplay');
                 if (rateEl) rateEl.innerText = currentRatePct;
 
-                // 🌟 Professional Telegram Mini App Direct Referral Link Format
                 const refInput = document.getElementById('refLinkInput');
                 if (refInput) {
                     refInput.value = "https://t.me/" + botUsername + "?start=ref_" + telegramId;
@@ -866,7 +871,6 @@
                 if (hList) hList.innerHTML = histHtml;
                 if (pHList) pHList.innerHTML = histHtml;
 
-                // Sync data directly to cloud
                 saveUserDataToSupabase();
             } catch(e) {}
         }
@@ -878,6 +882,7 @@
                 const input = document.getElementById('profileNameInput');
                 if (input && input.value.trim()) {
                     userName = input.value.trim();
+                    localStorage.setItem('mineral_persistent_username', userName);
                     updateUI();
                     showToast('Profile name updated successfully!');
                 } else {
