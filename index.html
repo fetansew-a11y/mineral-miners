@@ -223,10 +223,15 @@
         }
         .close-btn { background: #475569; width: 100%; margin-top: 8px; box-shadow: none; }
         
-        .history-list, .vip-list, .admin-list, .earner-list {
+        .history-list, .admin-list {
             max-height: 330px; overflow-y: auto; background: var(--input-bg);
             padding: 10px; border-radius: 14px; margin-top: 8px; border: var(--border);
         }
+        /* 🌟 Unconstrained Lists to prevent cropping and allow smooth full scrolling */
+        .vip-list, .earner-list {
+            background: transparent; border: none; padding: 0; width: 100%;
+        }
+
         .history-card-item {
             display: flex; align-items: center; gap: 10px;
             background: var(--card-bg); padding: 10px 12px; border-radius: 12px;
@@ -367,18 +372,14 @@
         <!-- VIP TAB -->
         <div id="vipTab" class="tab-pane">
             <h2 style="color: var(--text-main); font-size: 18px; font-weight: 800; margin: 5px 0 10px 0;">👑 Mineral VIP Tiers</h2>
-            <div class="card" style="padding: 8px;">
-                <div id="vipCardsContainer" class="vip-list" style="max-height: 380px; background: transparent; border: none; padding: 0;"></div>
-            </div>
+            <div id="vipCardsContainer" class="vip-list"></div>
         </div>
 
-        <!-- EARNERS LEADERBOARD TAB (🌟 NEW) -->
+        <!-- EARNERS LEADERBOARD TAB -->
         <div id="earnersTab" class="tab-pane">
             <h2 style="color: var(--text-main); font-size: 18px; font-weight: 800; margin: 5px 0 5px 0;">🏆 Top Investors & Earners</h2>
             <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 10px 0;">Global top miners with highest investment returns.</p>
-            <div class="card" style="padding: 8px;">
-                <div id="earnersContainer" class="earner-list" style="max-height: 380px; background: transparent; border: none; padding: 0;"></div>
-            </div>
+            <div id="earnersContainer" class="earner-list"></div>
         </div>
 
         <!-- REFERRAL TAB -->
@@ -439,7 +440,7 @@
             </div>
         </div>
 
-        <!-- BOTTOM NAV (🌟 5 Tabs) -->
+        <!-- BOTTOM NAV -->
         <div class="bottom-nav">
             <button class="nav-item active" onclick="switchTabSafe('homeTab', this)">
                 <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span>
@@ -549,7 +550,7 @@
     </div>
 
     <script>
-        // 🌟 SUPABASE CONFIGURATION (Updated with your credentials)
+        // 🌟 SUPABASE CONFIGURATION
         const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_UKuSiII0z9gAVhjosJEG1w__5H5z7b2';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -601,6 +602,7 @@
                 const target = document.getElementById(tabId);
                 if (target) target.classList.add('active');
                 if (element) element.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch(e) {}
         }
 
@@ -626,7 +628,6 @@
             TON: 'UQAgaG68J6uVa8kysPJVkVVJ-DM9GvZJnaOc8NbkrGv9KzDU'
         };
 
-        // 🌟 Top Investors & Earners Mock Leaderboard Data
         const topEarnersData = [
             { rank: 1, name: "Alex_Crypto 🚀", vip: "VIP 7 (Diamond)", invested: "$1,000.00", earned: "$4,850.20", badge: "🥇" },
             { rank: 2, name: "Elena_V 💎", vip: "VIP 7 (Diamond)", invested: "$1,000.00", earned: "$4,620.00", badge: "🥈" },
