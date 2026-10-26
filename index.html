@@ -415,6 +415,20 @@
         </div>
     </div>
 
+    <!-- BAN MODAL FOR MULTI-ACCOUNT ABUSERS -->
+    <div id="banModal" class="modal" style="display: none; background: rgba(15, 23, 42, 0.95); z-index: 9999;">
+        <div class="modal-content" style="text-align: center; border: 2px solid #ef4444;">
+            <div style="font-size: 48px; margin-bottom: 10px;">🚫</div>
+            <h3 style="color: #ef4444; margin-top:0;">Account Restricted (Banned)</h3>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+                Your account has been flagged and restricted by our anti-cheat system due to suspicious multi-account or fake referral activities exceeding policy limits. Access to mining and withdrawals is disabled.
+            </p>
+            <div style="background: var(--input-bg); padding: 10px; border-radius: 10px; font-size: 12px; color: #f87171; margin: 15px 0;">
+                Reason: Multi-Account Abuse / Automated Referrals Detected.
+            </div>
+        </div>
+    </div>
+
     <!-- MODALS -->
     <div id="depositModal" class="modal">
         <div class="modal-content">
@@ -572,30 +586,42 @@
         let vipLevel = 0;
         let minedAccumulated = 0.00;
         let referralCount = 0;
+        let isBanned = false;
         let historyLog = ["Welcome Bonus: +$1.00"];
         let claimed30 = false;
         let claimed50 = false;
         let claimed100 = false;
         let lastCheckInTime = 0;
 
+        // 🌟 Anti-Cheat & Multi-Account Detection System (> 40 Referrals triggers Ban)
         try {
             const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param || '';
             if (startParam && startParam.startsWith('ref_')) {
                 const referrerId = startParam.replace('ref_', '');
-                const hasBeenReferred = localStorage.getItem('m_referred_by_' + telegramId);
-                if (referrerId !== telegramId && !hasBeenReferred) {
-                    localStorage.setItem('m_referred_by_' + telegramId, referrerId);
+                const referralRecordKey = 'm_ref_recorded_' + telegramId;
+                const hasBeenReferredBefore = localStorage.getItem(referralRecordKey);
+
+                if (referrerId !== telegramId && !hasBeenReferredBefore) {
+                    localStorage.setItem(referralRecordKey, 'true');
                     
                     let referrerDataKey = 'm_user_' + referrerId;
                     let refRaw = localStorage.getItem(referrerDataKey);
-                    let refObj = refRaw ? JSON.parse(refRaw) : { balance: 1.00, referral_count: 0, history: [] };
+                    let refObj = refRaw ? JSON.parse(refRaw) : { balance: 1.00, referral_count: 0, history: [], is_banned: false };
                     
-                    refObj.referral_count = (refObj.referral_count || 0) + 1;
-                    refObj.balance = (refObj.balance || 1.00) + 0.04;
-                    if(!refObj.history) refObj.history = [];
-                    refObj.history.unshift("Referral Reward (+User " + telegramId.slice(-4) + "): +$0.04");
-                    
-                    localStorage.setItem(referrerDataKey, JSON.stringify(refObj));
+                    if (!refObj.is_banned) {
+                        refObj.referral_count = (refObj.referral_count || 0) + 1;
+                        
+                        // If they exceed 40 referrals, trigger anti-cheat multi-account ban!
+                        if (refObj.referral_count > 40) {
+                            refObj.is_banned = true;
+                            refObj.history.unshift("System Ban: Multi-account / Fake referral abuse detected (>40).");
+                        } else {
+                            refObj.balance = (refObj.balance || 1.00) + 0.04;
+                            if(!refObj.history) refObj.history = [];
+                            refObj.history.unshift("Referral Reward (User ID: " + telegramId + "): +$0.04");
+                        }
+                        localStorage.setItem(referrerDataKey, JSON.stringify(refObj));
+                    }
                 }
             }
         } catch(e) {}
@@ -652,6 +678,7 @@
                 vipLevel = d.vip_level ?? vipLevel;
                 minedAccumulated = d.mined_accumulated ?? minedAccumulated;
                 referralCount = d.referral_count ?? referralCount;
+                isBanned = d.is_banned ?? isBanned;
                 historyLog = d.history ?? historyLog;
                 claimed30 = d.claimed30 ?? claimed30;
                 claimed50 = d.claimed50 ?? claimed50;
@@ -661,7 +688,7 @@
                 
                 const savedTime = d.last_timestamp || Date.now();
                 const now = Date.now();
-                if (activeInvestment > 0) {
+                if (activeInvestment > 0 && !isBanned) {
                     const elapsedSeconds = (now - savedTime) / 1000;
                     if (elapsedSeconds > 0) {
                         const currentRate = vipTiersData[vipLevel]?.rate || 0.06;
@@ -674,6 +701,11 @@
 
         window.addEventListener("DOMContentLoaded", function() {
             try {
+                if (isBanned) {
+                    const banModal = document.getElementById('banModal');
+                    if (banModal) banModal.style.display = 'flex';
+                    return;
+                }
                 renderVipTiers();
                 updateUI();
                 updateDepositAddress();
@@ -684,6 +716,7 @@
 
         function bannerTicker() {
             try {
+                if (isBanned) return;
                 const names = [
                     "💎 David_BTC", "Alex 🚀", "CryptoKing", "Michael_99", 
                     "Emma Watson", "Kirubel", "Lucas_M", "Liya 🌟", 
@@ -718,6 +751,12 @@
 
         function updateUI() {
             try {
+                if (isBanned) {
+                    const banModal = document.getElementById('banModal');
+                    if (banModal) banModal.style.display = 'flex';
+                    return;
+                }
+
                 document.getElementById('balanceDisplay').innerText = balance.toFixed(2);
                 document.getElementById('activeInvDisplay').innerText = activeInvestment.toFixed(2);
                 document.getElementById('profileInvDisplay').innerText = activeInvestment.toFixed(2);
@@ -819,6 +858,7 @@
                     else if (h.includes('Claim') || h.includes('Bonus') || h.includes('Check-In') || h.includes('Reward')) { icon = '✨'; bgCol = 'rgba(16, 185, 129, 0.15)'; textCol = '#10b981'; }
                     else if (h.includes('Activated') || h.includes('VIP')) { icon = '👑'; bgCol = 'rgba(168, 85, 247, 0.15)'; textCol = '#c084fc'; }
                     else if (h.includes('Milestone')) { icon = '🏆'; bgCol = 'rgba(245, 158, 11, 0.15)'; textCol = '#f59e0b'; }
+                    else if (h.includes('Ban')) { icon = '🚫'; bgCol = 'rgba(239, 68, 68, 0.15)'; textCol = '#ef4444'; }
 
                     return `<div class="history-card-item">
                         <div class="history-icon-box" style="background: ${bgCol}; color: ${textCol};">${icon}</div>
@@ -832,13 +872,14 @@
                 if (pHList) pHList.innerHTML = histHtml;
 
                 localStorage.setItem('m_user_' + telegramId, JSON.stringify({
-                    balance, active_investment: activeInvestment, vip_level: vipLevel, mined_accumulated: minedAccumulated, referral_count: referralCount, history: historyLog, last_timestamp: Date.now(), claimed30, claimed50, claimed100, last_check_in_time: lastCheckInTime, user_name: userName
+                    balance, active_investment: activeInvestment, vip_level: vipLevel, mined_accumulated: minedAccumulated, referral_count: referralCount, is_banned: isBanned, history: historyLog, last_timestamp: Date.now(), claimed30, claimed50, claimed100, last_check_in_time: lastCheckInTime, user_name: userName
                 }));
             } catch(e) {}
         }
 
         function saveProfileName() {
             try {
+                if (isBanned) return;
                 triggerHaptic();
                 const input = document.getElementById('profileNameInput');
                 if (input && input.value.trim()) {
@@ -942,6 +983,7 @@
 
         function claimMilestone(targetCount, rewardAmt) {
             try {
+                if (isBanned) return;
                 triggerHaptic();
                 if (referralCount < targetCount) return;
                 
@@ -980,6 +1022,7 @@
 
         function buyVip(lvl) {
             try {
+                if (isBanned) return;
                 triggerHaptic();
                 const t = vipTiersData[lvl];
                 if (balance < t.price) { alert('Insufficient balance!'); return; }
@@ -996,6 +1039,7 @@
 
         function liveTicker() {
             try {
+                if (isBanned) return;
                 const valEl = document.getElementById('liveTickerVal');
                 const barEl = document.getElementById('miningProgressBar');
                 const pctEl = document.getElementById('miningPctDisplay');
@@ -1018,13 +1062,14 @@
                 if (pctEl) pctEl.innerText = pct.toFixed(2) + '%';
                 
                 localStorage.setItem('m_user_' + telegramId, JSON.stringify({
-                    balance, active_investment: activeInvestment, vip_level: vipLevel, mined_accumulated: minedAccumulated, referral_count: referralCount, history: historyLog, last_timestamp: Date.now(), claimed30, claimed50, claimed100, last_check_in_time: lastCheckInTime, user_name: userName
+                    balance, active_investment: activeInvestment, vip_level: vipLevel, mined_accumulated: minedAccumulated, referral_count: referralCount, is_banned: isBanned, history: historyLog, last_timestamp: Date.now(), claimed30, claimed50, claimed100, last_check_in_time: lastCheckInTime, user_name: userName
                 }));
             } catch(e) {}
         }
 
         function claimMining() {
             try {
+                if (isBanned) return;
                 triggerHaptic();
                 if (minedAccumulated < 0.10) { alert('Minimum claim is $0.10'); return; }
                 balance += minedAccumulated;
@@ -1037,6 +1082,7 @@
 
         function dailyCheckIn() {
             try {
+                if (isBanned) return;
                 triggerHaptic();
                 const now = Date.now();
                 const twentyFourHours = 24 * 60 * 60 * 1000;
@@ -1072,6 +1118,7 @@
 
         function copyWalletAddress() {
             try {
+                if (isBanned) return;
                 triggerHaptic();
                 const wDisplay = document.getElementById('walletAddressDisplay');
                 if (wDisplay) {
@@ -1083,6 +1130,7 @@
 
         function copyRefLink() {
             try {
+                if (isBanned) return;
                 triggerHaptic();
                 const link = document.getElementById('refLinkInput');
                 if (link) {
@@ -1095,6 +1143,7 @@
 
         function processDeposit() {
             try {
+                if (isBanned) return;
                 triggerHaptic();
                 const amtInput = document.getElementById('depositAmountInput');
                 const netEl = document.getElementById('depositNetwork');
@@ -1113,6 +1162,7 @@
 
         function processWithdraw() {
             try {
+                if (isBanned) return;
                 triggerHaptic();
                 const amtInput = document.getElementById('withdrawAmountInput');
                 const netEl = document.getElementById('withdrawNetwork');
@@ -1133,7 +1183,6 @@
 
         function sendSupportMessage() {
             try {
-                triggerHaptic();
                 const input = document.getElementById('supportMsgInput');
                 const chatHistory = document.getElementById('supportChatHistory');
                 if (!input || !input.value.trim()) return;
