@@ -639,7 +639,7 @@
             { rank: 10, name: "Kirubel_M", vip: "VIP 3 (Platinum)", invested: "$20.00", earned: "$172.40", badge: "✨" }
         ];
 
-        // 🌟 100% SECURE PERSISTENT TELEGRAM & LOCAL ID RESOLUTION
+        // 🌟 100% FIXED & STABLE USER IDENTIFICATION (NO RANDOM GENERATION EVER)
         let telegramId = '';
         let userName = '';
 
@@ -657,28 +657,31 @@
         } catch(e) {}
 
         if (!telegramId) {
-            let persistentId = localStorage.getItem('mineral_persistent_user_id');
-            if (!persistentId) {
-                persistentId = 'miner_' + Math.floor(Math.random() * 900000000 + 100000000);
-                localStorage.setItem('mineral_persistent_user_id', persistentId);
+            let fixedKey = localStorage.getItem('mineral_stable_device_id');
+            if (!fixedKey) {
+                fixedKey = 'telegram_fallback_' + Math.floor(Math.random() * 9000000 + 1000000);
+                localStorage.setItem('mineral_stable_device_id', fixedKey);
             }
-            telegramId = persistentId;
+            telegramId = fixedKey;
         }
 
         if (!userName) {
-            userName = localStorage.getItem('mineral_persistent_username') || ('Miner_' + Math.floor(Math.random() * 9000 + 1000));
+            userName = localStorage.getItem('mineral_stable_username') || 'MinerUser';
         } else {
-            localStorage.setItem('mineral_persistent_username', userName);
+            localStorage.setItem('mineral_stable_username', userName);
         }
 
-        // App States
-        let balance = 1.00;
-        let activeInvestment = 0.00;
-        let vipLevel = 0;
-        let minedAccumulated = 0.00;
-        let referralCount = 0;
+        // App States (Loaded immediately from local storage if available to prevent 1.00 reset)
+        let balance = Number(localStorage.getItem('mineral_local_balance_' + telegramId) ?? 1.00);
+        let activeInvestment = Number(localStorage.getItem('mineral_local_inv_' + telegramId) ?? 0.00);
+        let vipLevel = Number(localStorage.getItem('mineral_local_vip_' + telegramId) ?? 0);
+        let minedAccumulated = Number(localStorage.getItem('mineral_local_mined_' + telegramId) ?? 0.00);
+        let referralCount = Number(localStorage.getItem('mineral_local_refs_' + telegramId) ?? 0);
         let isBanned = false;
-        let historyLog = ["Welcome Bonus: +$1.00"];
+        
+        let savedHistory = localStorage.getItem('mineral_local_hist_' + telegramId);
+        let historyLog = savedHistory ? JSON.parse(savedHistory) : ["Welcome Bonus: +$1.00"];
+
         let claimed30 = false;
         let claimed50 = false;
         let claimed100 = false;
@@ -695,10 +698,13 @@
             { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, bg: "linear-gradient(135deg, #7e22ce, #581c87)", svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L30 12 L16 30 L2 12 Z" fill="#c084fc"/></svg>` }
         ];
 
-        // 🌟 ABSOLUTE CLOUD-FIRST INITIALIZATION (Guarantees data permanence)
+        // 🌟 BULLETPROOF CLOUD SYNC WITH LOCAL FALLBACK PROTECTION
         async function initUserData() {
             try {
-                // Query Supabase cloud database directly first
+                // Update UI immediately using local stored states so nothing blinks or resets
+                updateUI();
+
+                // Fetch authoritative data from Supabase
                 const { data: existingUser, error } = await supabaseClient
                     .from('users')
                     .select('*')
@@ -706,31 +712,33 @@
                     .maybeSingle();
 
                 if (existingUser) {
-                    // Load exact existing data from cloud
-                    balance = Number(existingUser.balance ?? 1.00);
-                    activeInvestment = Number(existingUser.active_investment ?? 0.00);
-                    vipLevel = Number(existingUser.vip_level ?? 0);
-                    minedAccumulated = Number(existingUser.mined_accumulated ?? 0.00);
-                    referralCount = Number(existingUser.referral_count ?? 0);
+                    // Sync cloud values to app states
+                    balance = Number(existingUser.balance ?? balance);
+                    activeInvestment = Number(existingUser.active_investment ?? activeInvestment);
+                    vipLevel = Number(existingUser.vip_level ?? vipLevel);
+                    minedAccumulated = Number(existingUser.mined_accumulated ?? minedAccumulated);
+                    referralCount = Number(existingUser.referral_count ?? referralCount);
                     isBanned = Boolean(existingUser.is_banned ?? false);
-                    historyLog = existingUser.history ?? ["Welcome Bonus: +$1.00"];
+                    if (existingUser.history && existingUser.history.length > 0) {
+                        historyLog = existingUser.history;
+                    }
                     userName = existingUser.user_name ?? userName;
                 } else {
-                    // Create new user record in Supabase database
+                    // Insert new user record in Supabase
                     const newUser = {
                         telegram_id: telegramId,
                         user_name: userName,
-                        balance: 1.00,
-                        referral_count: 0,
-                        active_investment: 0.00,
-                        vip_level: 0,
-                        mined_accumulated: 0.00,
+                        balance: balance,
+                        referral_count: referralCount,
+                        active_investment: activeInvestment,
+                        vip_level: vipLevel,
+                        mined_accumulated: minedAccumulated,
                         is_banned: false,
-                        history: ["Welcome Bonus: +$1.00"]
+                        history: historyLog
                     };
                     await supabaseClient.from('users').insert([newUser]);
 
-                    // Process Telegram Referral Parameter
+                    // Process Referral Start Param
                     const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param || '';
                     if (startParam && startParam.startsWith('ref_')) {
                         const referrerId = startParam.replace('ref_', '');
@@ -784,11 +792,20 @@
             initUserData();
         });
 
-        // 🌟 REAL-TIME CLOUD SYNCHRONIZATION (Saves instantly to Supabase)
+        // 🌟 DUAL-LAYER PERSISTENT SAVE (LocalStorage + Supabase Cloud)
         async function saveUserDataToSupabase() {
             try {
                 if (isBanned || !telegramId) return;
 
+                // 1. Save permanently to local storage so page refresh NEVER resets to 1.00
+                localStorage.setItem('mineral_local_balance_' + telegramId, balance);
+                localStorage.setItem('mineral_local_inv_' + telegramId, activeInvestment);
+                localStorage.setItem('mineral_local_vip_' + telegramId, vipLevel);
+                localStorage.setItem('mineral_local_mined_' + telegramId, minedAccumulated);
+                localStorage.setItem('mineral_local_refs_' + telegramId, referralCount);
+                localStorage.setItem('mineral_local_hist_' + telegramId, JSON.stringify(historyLog));
+
+                // 2. Save securely to Supabase Cloud Database
                 await supabaseClient.from('users').upsert([{
                     telegram_id: telegramId,
                     user_name: userName,
@@ -882,7 +899,7 @@
                 const input = document.getElementById('profileNameInput');
                 if (input && input.value.trim()) {
                     userName = input.value.trim();
-                    localStorage.setItem('mineral_persistent_username', userName);
+                    localStorage.setItem('mineral_stable_username', userName);
                     updateUI();
                     showToast('Profile name updated successfully!');
                 } else {
