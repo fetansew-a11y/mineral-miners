@@ -95,7 +95,6 @@
 
         .sub-balance { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; }
         
-        /* 🌟 Modern Spinning Settings Gear Animation */
         .mining-core-animation {
             width: 130px; height: 130px; margin: 15px auto;
             display: flex; align-items: center; justify-content: center;
@@ -289,7 +288,6 @@
 
                 <div class="sub-balance">Active Mining: $<span id="activeInvDisplay">0.00</span> (<span id="activeRateDisplay">6%</span> Daily)</div>
                 
-                <!-- 🌟 Modern Spinning Settings Gear Animation Component -->
                 <div class="mining-core-animation">
                     <svg class="spinning-gear-svg" viewBox="0 0 24 24">
                         <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.53,5.05 19.27,4.97 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.97 4.47,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.47,18.95 4.73,19.03 4.95,18.95L7.44,17.95C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.95L19.05,18.95C19.27,19.03 19.53,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/>
@@ -415,17 +413,14 @@
         </div>
     </div>
 
-    <!-- BAN MODAL FOR MULTI-ACCOUNT ABUSERS -->
+    <!-- BAN MODAL -->
     <div id="banModal" class="modal" style="display: none; background: rgba(15, 23, 42, 0.95); z-index: 9999;">
         <div class="modal-content" style="text-align: center; border: 2px solid #ef4444;">
             <div style="font-size: 48px; margin-bottom: 10px;">🚫</div>
             <h3 style="color: #ef4444; margin-top:0;">Account Restricted (Banned)</h3>
             <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
-                Your account has been flagged and restricted by our anti-cheat system due to suspicious multi-account or fake referral activities exceeding policy limits. Access to mining and withdrawals is disabled.
+                Your account has been flagged and restricted by our anti-cheat system due to suspicious self-referral/multi-account abuse exceeding the 40 limit on the same device.
             </p>
-            <div style="background: var(--input-bg); padding: 10px; border-radius: 10px; font-size: 12px; color: #f87171; margin: 15px 0;">
-                Reason: Multi-Account Abuse / Automated Referrals Detected.
-            </div>
         </div>
     </div>
 
@@ -503,6 +498,11 @@
     </div>
 
     <script>
+        // 🌟 SUPABASE CONFIGURATION
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         function toggleTheme() {
             try {
                 const html = document.documentElement;
@@ -593,146 +593,136 @@
         let claimed100 = false;
         let lastCheckInTime = 0;
 
-        // 🌟 Anti-Cheat & Multi-Account Detection System (> 40 Referrals triggers Ban)
-        try {
-            const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param || '';
-            if (startParam && startParam.startsWith('ref_')) {
-                const referrerId = startParam.replace('ref_', '');
-                const referralRecordKey = 'm_ref_recorded_' + telegramId;
-                const hasBeenReferredBefore = localStorage.getItem(referralRecordKey);
-
-                if (referrerId !== telegramId && !hasBeenReferredBefore) {
-                    localStorage.setItem(referralRecordKey, 'true');
-                    
-                    let referrerDataKey = 'm_user_' + referrerId;
-                    let refRaw = localStorage.getItem(referrerDataKey);
-                    let refObj = refRaw ? JSON.parse(refRaw) : { balance: 1.00, referral_count: 0, history: [], is_banned: false };
-                    
-                    if (!refObj.is_banned) {
-                        refObj.referral_count = (refObj.referral_count || 0) + 1;
-                        
-                        // If they exceed 40 referrals, trigger anti-cheat multi-account ban!
-                        if (refObj.referral_count > 40) {
-                            refObj.is_banned = true;
-                            refObj.history.unshift("System Ban: Multi-account / Fake referral abuse detected (>40).");
-                        } else {
-                            refObj.balance = (refObj.balance || 1.00) + 0.04;
-                            if(!refObj.history) refObj.history = [];
-                            refObj.history.unshift("Referral Reward (User ID: " + telegramId + "): +$0.04");
-                        }
-                        localStorage.setItem(referrerDataKey, JSON.stringify(refObj));
-                    }
-                }
-            }
-        } catch(e) {}
-
         const vipTiersData = [
-            { 
-                level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.06, daily: 0.06, 
-                bg: "linear-gradient(135deg, #475569, #1e293b)", 
-                svg: `<svg viewBox="0 0 32 32"><path d="M16 4 L28 12 L24 26 L8 26 L4 12 Z" fill="#94a3b8" stroke="#cbd5e1" stroke-width="1.5"/><path d="M16 4 L16 26 M4 12 L16 16 L28 12" stroke="#e2e8f0" stroke-width="1" fill="none"/></svg>` 
-            },
-            { 
-                level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, 
-                bg: "linear-gradient(135deg, #64748b, #334155)", 
-                svg: `<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2"/><circle cx="16" cy="16" r="7" fill="#475569"/><path d="M16 10 L18 14 L22 15 L19 18 L20 22 L16 20 L12 22 L13 18 L10 15 L14 14 Z" fill="#f8fafc"/></svg>` 
-            },
-            { 
-                level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.08, daily: 0.80, 
-                bg: "linear-gradient(135deg, #d97706, #92400e)", 
-                svg: `<svg viewBox="0 0 32 32"><path d="M4 10 L16 4 L28 10 L24 26 L8 26 Z" fill="#fbbf24" stroke="#fef08a" stroke-width="1.5"/><path d="M10 14 L16 8 L22 14 L16 22 Z" fill="#f59e0b"/><circle cx="16" cy="15" r="3" fill="#ffffff"/></svg>` 
-            },
-            { 
-                level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.10, daily: 2.00, 
-                bg: "linear-gradient(135deg, #0284c7, #0369a1)", 
-                svg: `<svg viewBox="0 0 32 32"><polygon points="16,2 30,16 16,30 2,16" fill="#38bdf8" stroke="#bae6fd" stroke-width="1.5"/><polygon points="16,8 24,16 16,24 8,16" fill="#0284c7"/><circle cx="16" cy="16" r="4" fill="#ffffff"/></svg>` 
-            },
-            { 
-                level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.12, daily: 6.00, 
-                bg: "linear-gradient(135deg, #e11d48, #881337)", 
-                svg: `<svg viewBox="0 0 32 32"><polygon points="9,6 23,6 29,14 16,28 3,14" fill="#fb7185" stroke="#fda4af" stroke-width="1.5"/><polygon points="9,6 23,6 16,16" fill="#f43f5e"/><circle cx="16" cy="13" r="3.5" fill="#ffffff"/></svg>` 
-            },
-            { 
-                level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.14, daily: 14.00, 
-                bg: "linear-gradient(135deg, #2563eb, #1e3a8a)", 
-                svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L28 8 L26 24 L16 30 L6 24 L4 8 Z" fill="#3b82f6" stroke="#93c5fd" stroke-width="1.5"/><circle cx="16" cy="16" r="6" fill="#1d4ed8" stroke="#60a5fa" stroke-width="1.5"/><polygon points="16,11 18,15 22,16 18,17 16,21 14,17 10,16 14,15" fill="#ffffff"/></svg>` 
-            },
-            { 
-                level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.16, daily: 80.00, 
-                bg: "linear-gradient(135deg, #059669, #064e3b)", 
-                svg: `<svg viewBox="0 0 32 32"><rect x="7" y="7" width="18" height="18" rx="4" transform="rotate(45 16 16)" fill="#34d399" stroke="#6ee7b7" stroke-width="1.5"/><circle cx="16" cy="16" r="5" fill="#047857"/><polygon points="16,12 18,15 21,16 18,17 16,20 14,17 11,16 14,15" fill="#ffffff"/></svg>` 
-            },
-            { 
-                level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, 
-                bg: "linear-gradient(135deg, #7e22ce, #581c87)", 
-                svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L30 12 L16 30 L2 12 Z" fill="#c084fc" stroke="#e9d5ff" stroke-width="1.5"/><polygon points="16,6 25,12 16,26 7,12" fill="#9333ea"/><circle cx="16" cy="14" r="4.5" fill="#ffffff" filter="drop-shadow(0 0 4px #ffffff)"/></svg>` 
-            }
+            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.06, daily: 0.06, bg: "linear-gradient(135deg, #475569, #1e293b)", svg: `<svg viewBox="0 0 32 32"><path d="M16 4 L28 12 L24 26 L8 26 L4 12 Z" fill="#94a3b8" stroke="#cbd5e1" stroke-width="1.5"/></svg>` },
+            { level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, bg: "linear-gradient(135deg, #64748b, #334155)", svg: `<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="#cbd5e1"/></svg>` },
+            { level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.08, daily: 0.80, bg: "linear-gradient(135deg, #d97706, #92400e)", svg: `<svg viewBox="0 0 32 32"><path d="M4 10 L16 4 L28 10 L24 26 L8 26 Z" fill="#fbbf24"/></svg>` },
+            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.10, daily: 2.00, bg: "linear-gradient(135deg, #0284c7, #0369a1)", svg: `<svg viewBox="0 0 32 32"><polygon points="16,2 30,16 16,30 2,16" fill="#38bdf8"/></svg>` },
+            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.12, daily: 6.00, bg: "linear-gradient(135deg, #e11d48, #881337)", svg: `<svg viewBox="0 0 32 32"><polygon points="9,6 23,6 29,14 16,28 3,14" fill="#fb7185"/></svg>` },
+            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.14, daily: 14.00, bg: "linear-gradient(135deg, #2563eb, #1e3a8a)", svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L28 8 L26 24 L16 30 L6 24 L4 8 Z" fill="#3b82f6"/></svg>` },
+            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.16, daily: 80.00, bg: "linear-gradient(135deg, #059669, #064e3b)", svg: `<svg viewBox="0 0 32 32"><rect x="7" y="7" width="18" height="18" rx="4" transform="rotate(45 16 16)" fill="#34d399"/></svg>` },
+            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, bg: "linear-gradient(135deg, #7e22ce, #581c87)", svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L30 12 L16 30 L2 12 Z" fill="#c084fc"/></svg>` }
         ];
 
-        try {
-            const raw = localStorage.getItem('m_user_' + telegramId);
-            if (raw) {
-                const d = JSON.parse(raw);
-                balance = d.balance ?? balance;
-                activeInvestment = d.active_investment ?? activeInvestment;
-                vipLevel = d.vip_level ?? vipLevel;
-                minedAccumulated = d.mined_accumulated ?? minedAccumulated;
-                referralCount = d.referral_count ?? referralCount;
-                isBanned = d.is_banned ?? isBanned;
-                historyLog = d.history ?? historyLog;
-                claimed30 = d.claimed30 ?? claimed30;
-                claimed50 = d.claimed50 ?? claimed50;
-                claimed100 = d.claimed100 ?? claimed100;
-                lastCheckInTime = d.last_check_in_time ?? 0;
-                userName = d.user_name ?? userName;
-                
-                const savedTime = d.last_timestamp || Date.now();
-                const now = Date.now();
-                if (activeInvestment > 0 && !isBanned) {
-                    const elapsedSeconds = (now - savedTime) / 1000;
-                    if (elapsedSeconds > 0) {
-                        const currentRate = vipTiersData[vipLevel]?.rate || 0.06;
-                        const rate = (activeInvestment * currentRate) / 86400;
-                        minedAccumulated += elapsedSeconds * rate;
+        async function initUserData() {
+            try {
+                const { data: existingUser } = await supabaseClient
+                    .from('users')
+                    .select('*')
+                    .eq('telegram_id', telegramId)
+                    .single();
+
+                if (existingUser) {
+                    balance = existingUser.balance ?? 1.00;
+                    activeInvestment = existingUser.active_investment ?? 0.00;
+                    vipLevel = existingUser.vip_level ?? 0;
+                    minedAccumulated = existingUser.mined_accumulated ?? 0.00;
+                    referralCount = existingUser.referral_count ?? 0;
+                    isBanned = existingUser.is_banned ?? false;
+                    historyLog = existingUser.history ?? ["Welcome Bonus: +$1.00"];
+                    userName = existingUser.user_name ?? userName;
+                } else {
+                    const newUser = {
+                        telegram_id: telegramId,
+                        user_name: userName,
+                        balance: 1.00,
+                        referral_count: 0,
+                        active_investment: 0.00,
+                        vip_level: 0,
+                        mined_accumulated: 0.00,
+                        is_banned: false,
+                        history: ["Welcome Bonus: +$1.00"]
+                    };
+                    await supabaseClient.from('users').insert([newUser]);
+
+                    const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param || '';
+                    if (startParam && startParam.startsWith('ref_')) {
+                        const referrerId = startParam.replace('ref_', '');
+                        if (referrerId !== telegramId) {
+                            const { data: refUser } = await supabaseClient
+                                .from('users')
+                                .select('*')
+                                .eq('telegram_id', referrerId)
+                                .single();
+
+                            if (refUser && !refUser.is_banned) {
+                                // 🌟 Device Fingerprint Anti-Cheat: Detects Same-Device Self Referral Abuse (>40)
+                                let deviceSetKey = 'm_device_refs_' + referrerId;
+                                let deviceList = JSON.parse(localStorage.getItem(deviceSetKey) || '[]');
+                                
+                                const userDeviceToken = navigator.userAgent + screen.width;
+                                const isSameDeviceAbuse = deviceList.length >= 40 && !deviceList.includes(userDeviceToken);
+
+                                if (!deviceList.includes(userDeviceToken)) {
+                                    deviceList.push(userDeviceToken);
+                                    localStorage.setItem(deviceSetKey, JSON.stringify(deviceList));
+                                }
+
+                                let newRefCnt = (refUser.referral_count || 0) + 1;
+                                let bannedFlag = false;
+                                let updatedHist = refUser.history || [];
+
+                                // Ban only if same device self-referral abuse exceeds 40 accounts
+                                if (isSameDeviceAbuse || newRefCnt > 150) {
+                                    bannedFlag = true;
+                                    updatedHist.unshift("System Ban: Same-device self-referral abuse detected (>40).");
+                                } else {
+                                    refUser.balance = (refUser.balance || 1.00) + 0.04;
+                                    updatedHist.unshift("Referral Reward (User ID: " + telegramId + "): +$0.04");
+                                }
+
+                                await supabaseClient.from('users').update({
+                                    referral_count: newRefCnt,
+                                    balance: refUser.balance,
+                                    is_banned: bannedFlag,
+                                    history: updatedHist
+                                }).eq('telegram_id', referrerId);
+                            }
+                        }
                     }
                 }
-            }
-        } catch(e) {}
 
-        window.addEventListener("DOMContentLoaded", function() {
-            try {
                 if (isBanned) {
                     const banModal = document.getElementById('banModal');
                     if (banModal) banModal.style.display = 'flex';
                     return;
                 }
+
                 renderVipTiers();
                 updateUI();
                 updateDepositAddress();
                 setInterval(liveTicker, 1000);
                 setInterval(bannerTicker, 2500);
-            } catch(e) {}
+            } catch (e) {
+                console.error("Init Error:", e);
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            initUserData();
         });
+
+        async function saveUserDataToSupabase() {
+            try {
+                if (isBanned) return;
+                await supabaseClient.from('users').update({
+                    balance: balance,
+                    active_investment: activeInvestment,
+                    vip_level: vipLevel,
+                    mined_accumulated: minedAccumulated,
+                    referral_count: referralCount,
+                    user_name: userName,
+                    history: historyLog,
+                    is_banned: isBanned
+                }).eq('telegram_id', telegramId);
+            } catch(e) {}
+        }
 
         function bannerTicker() {
             try {
                 if (isBanned) return;
-                const names = [
-                    "💎 David_BTC", "Alex 🚀", "CryptoKing", "Michael_99", 
-                    "Emma Watson", "Kirubel", "Lucas_M", "Liya 🌟", 
-                    "Eko_Crypto", "Samuel", "Priya Patel", "Fasil", 
-                    "Marco_Boss", "Soliana", "Liam_Johnson", "Betelhem", 
-                    "Noah_X", "Yohannes", "Rahul_V", "Kidus", 
-                    "Aron_Mining", "Marta", "Nathaniel", "Shadow_Trader",
-                    "👑 Sarah", "John_Smith", "Dawit", "Crypto_Boss_99",
-                    "Elena 💫", "Daniel_K", "Pavel_D", "CryptoNinja",
-                    "⭐ Jessica", "Marcus_99", "Abebe", "Zelalem 💎"
-                ];
-
-                const amounts = [
-                    5.00, 5.00, 7.00, 8.00, 5.00, 10.00, 12.00, 14.00, 5.00, 
-                    16.00, 20.00, 22.00, 26.00, 5.00, 31.00, 35.00, 40.00, 5.00, 11.00, 19.00
-                ];
+                const names = ["💎 David_BTC", "Alex 🚀", "CryptoKing", "Michael_99", "Emma Watson", "Kirubel", "Liya 🌟", "Samuel", "Fasil", "Soliana", "Betelhem", "Yohannes", "Kidus", "Abebe", "Zelalem 💎"];
+                const amounts = [5.00, 7.00, 8.00, 10.00, 12.00, 15.00, 20.00, 25.00, 30.00];
                 const networks = ["BEP20", "TON", "ERC20"];
                 
                 const randomName = names[Math.floor(Math.random() * names.length)];
@@ -751,11 +741,7 @@
 
         function updateUI() {
             try {
-                if (isBanned) {
-                    const banModal = document.getElementById('banModal');
-                    if (banModal) banModal.style.display = 'flex';
-                    return;
-                }
+                if (isBanned) return;
 
                 document.getElementById('balanceDisplay').innerText = balance.toFixed(2);
                 document.getElementById('activeInvDisplay').innerText = activeInvestment.toFixed(2);
@@ -774,76 +760,6 @@
                 const rateEl = document.getElementById('activeRateDisplay');
                 if (rateEl) rateEl.innerText = currentRatePct;
 
-                const dailyBtn = document.getElementById('dailyCheckInBtn');
-                if (dailyBtn) {
-                    const now = Date.now();
-                    const twentyFourHours = 24 * 60 * 60 * 1000;
-                    if (lastCheckInTime && (now - lastCheckInTime < twentyFourHours)) {
-                        const remainingTime = twentyFourHours - (now - lastCheckInTime);
-                        const hoursLeft = Math.floor(remainingTime / (1000 * 60 * 60));
-                        const minutesLeft = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-                        dailyBtn.innerText = `Check-In (Available in ${hoursLeft}h ${minutesLeft}m)`;
-                        dailyBtn.className = "btn-3d-purple btn-disabled";
-                        dailyBtn.disabled = true;
-                    } else {
-                        dailyBtn.innerHTML = '<span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.33l1.5 1.17L12 8l3.5 3.5 1.5-1.17L14.92 8H20v6z"/></svg></span> Daily Check-In (+0.02$)';
-                        dailyBtn.className = "btn-3d-purple";
-                        dailyBtn.disabled = false;
-                    }
-                }
-
-                const btn30 = document.getElementById('claimBtn30');
-                const btn50 = document.getElementById('claimBtn50');
-                const btn100 = document.getElementById('claimBtn100');
-
-                if (btn30) {
-                    if (claimed30) {
-                        btn30.innerText = "Claimed";
-                        btn30.className = "btn-3d-success btn-sm btn-disabled";
-                        btn30.disabled = true;
-                    } else if (referralCount >= 30) {
-                        btn30.innerText = "Claim";
-                        btn30.className = "btn-3d-success btn-sm";
-                        btn30.disabled = false;
-                    } else {
-                        btn30.innerText = "Locked (" + referralCount + "/30)";
-                        btn30.className = "btn-3d-success btn-sm btn-disabled";
-                        btn30.disabled = true;
-                    }
-                }
-
-                if (btn50) {
-                    if (claimed50) {
-                        btn50.innerText = "Claimed";
-                        btn50.className = "btn-3d-success btn-sm btn-disabled";
-                        btn50.disabled = true;
-                    } else if (referralCount >= 50) {
-                        btn50.innerText = "Claim";
-                        btn50.className = "btn-3d-success btn-sm";
-                        btn50.disabled = false;
-                    } else {
-                        btn50.innerText = "Locked (" + referralCount + "/50)";
-                        btn50.className = "btn-3d-success btn-sm btn-disabled";
-                        btn50.disabled = true;
-                    }
-                }
-
-                if (btn100) {
-                    if (claimed100) {
-                        btn100.innerText = "Claimed";
-                        btn100.className = "btn-3d-success btn-sm btn-disabled";
-                        btn100.disabled = true;
-                    } else if (referralCount >= 100) {
-                        btn100.innerText = "Claim";
-                        btn100.className = "btn-3d-success btn-sm";
-                        btn100.disabled = false;
-                    } else {
-                        btn100.innerText = "Locked (" + referralCount + "/100)";
-                        btn100.className = "btn-3d-success btn-sm btn-disabled";
-                        btn100.disabled = true;
-                    }
-                }
-
                 const refInput = document.getElementById('refLinkInput');
                 if (refInput) {
                     refInput.value = "https://t.me/MineralMinerPro_bot/app?startapp=ref_" + telegramId;
@@ -858,7 +774,6 @@
                     else if (h.includes('Claim') || h.includes('Bonus') || h.includes('Check-In') || h.includes('Reward')) { icon = '✨'; bgCol = 'rgba(16, 185, 129, 0.15)'; textCol = '#10b981'; }
                     else if (h.includes('Activated') || h.includes('VIP')) { icon = '👑'; bgCol = 'rgba(168, 85, 247, 0.15)'; textCol = '#c084fc'; }
                     else if (h.includes('Milestone')) { icon = '🏆'; bgCol = 'rgba(245, 158, 11, 0.15)'; textCol = '#f59e0b'; }
-                    else if (h.includes('Ban')) { icon = '🚫'; bgCol = 'rgba(239, 68, 68, 0.15)'; textCol = '#ef4444'; }
 
                     return `<div class="history-card-item">
                         <div class="history-icon-box" style="background: ${bgCol}; color: ${textCol};">${icon}</div>
@@ -871,9 +786,7 @@
                 if (hList) hList.innerHTML = histHtml;
                 if (pHList) pHList.innerHTML = histHtml;
 
-                localStorage.setItem('m_user_' + telegramId, JSON.stringify({
-                    balance, active_investment: activeInvestment, vip_level: vipLevel, mined_accumulated: minedAccumulated, referral_count: referralCount, is_banned: isBanned, history: historyLog, last_timestamp: Date.now(), claimed30, claimed50, claimed100, last_check_in_time: lastCheckInTime, user_name: userName
-                }));
+                saveUserDataToSupabase();
             } catch(e) {}
         }
 
@@ -939,7 +852,7 @@
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <button class="btn-3d-success btn-sm" style="padding: 10px; font-size: 12px;" onclick="handleAdminAction('${r.id}', 'approve')">✅ Approve</button>
-                            <button class="btn-3d-warning btn-sm" style="background: linear-gradient(135deg, #ef4444, #b91c1c); padding: 10px; font-size: 12px; box-shadow: 0 4px 12px rgba(239,68,68,0.4);" onclick="handleAdminAction('${r.id}', 'cancel')">❌ Cancel</button>
+                            <button class="btn-3d-warning btn-sm" style="background: linear-gradient(135deg, #ef4444, #b91c1c); padding: 10px; font-size: 12px;" onclick="handleAdminAction('${r.id}', 'cancel')">❌ Cancel</button>
                         </div>
                     </div>`;
                 }).join('');
@@ -957,20 +870,12 @@
                 req.status = action === 'approve' ? 'approved' : 'cancelled';
                 
                 if (req.userId === telegramId) {
-                    if (req.type === 'Deposit') {
-                        if (action === 'approve') {
-                            balance += req.amount;
-                            historyLog.unshift("Deposit Approved: +$" + req.amount.toFixed(2) + " (" + req.network + ")");
-                        } else {
-                            historyLog.unshift("Deposit Cancelled: $" + req.amount.toFixed(2) + " (" + req.network + ")");
-                        }
-                    } else if (req.type === 'Withdrawal') {
-                        if (action === 'approve') {
-                            historyLog.unshift("Withdrawal Approved: -$" + req.amount.toFixed(2) + " (" + req.network + ")");
-                        } else {
-                            balance += req.amount;
-                            historyLog.unshift("Withdrawal Cancelled & Refunded: +$" + req.amount.toFixed(2) + " (" + req.network + ")");
-                        }
+                    if (req.type === 'Deposit' && action === 'approve') {
+                        balance += req.amount;
+                        historyLog.unshift("Deposit Approved: +$" + req.amount.toFixed(2) + " (" + req.network + ")");
+                    } else if (req.type === 'Withdrawal' && action === 'cancel') {
+                        balance += req.amount;
+                        historyLog.unshift("Withdrawal Cancelled & Refunded: +$" + req.amount.toFixed(2) + " (" + req.network + ")");
                     }
                     updateUI();
                 }
@@ -1060,10 +965,6 @@
                 if (valEl) valEl.innerText = "+ $" + minedAccumulated.toFixed(5);
                 if (barEl) barEl.style.width = pct + '%';
                 if (pctEl) pctEl.innerText = pct.toFixed(2) + '%';
-                
-                localStorage.setItem('m_user_' + telegramId, JSON.stringify({
-                    balance, active_investment: activeInvestment, vip_level: vipLevel, mined_accumulated: minedAccumulated, referral_count: referralCount, is_banned: isBanned, history: historyLog, last_timestamp: Date.now(), claimed30, claimed50, claimed100, last_check_in_time: lastCheckInTime, user_name: userName
-                }));
             } catch(e) {}
         }
 
@@ -1195,8 +1096,6 @@
                     chatHistory.innerHTML += '<div style="color: #34d399; font-size: 12px; margin: 4px 0; text-align: left;"><b>Support:</b> Your message has been received. Our support team will get back to you shortly.</div>';
                     chatHistory.scrollTop = chatHistory.scrollHeight;
                 }, 800);
-                
-                chatHistory.scrollTop = chatHistory.scrollHeight;
             } catch(e) {}
         }
 
