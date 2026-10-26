@@ -639,7 +639,7 @@
             { rank: 10, name: "Kirubel_M", vip: "VIP 3 (Platinum)", invested: "$20.00", earned: "$172.40", badge: "✨" }
         ];
 
-        // 🌟 100% FIXED & STABLE USER IDENTIFICATION (NO RANDOM GENERATION EVER)
+        // 🌟 100% FIXED & STABLE USER IDENTIFICATION
         let telegramId = '';
         let userName = '';
 
@@ -671,12 +671,13 @@
             localStorage.setItem('mineral_stable_username', userName);
         }
 
-        // App States (Loaded immediately from local storage if available to prevent 1.00 reset)
+        // App States (Loaded immediately from local storage with Daily Check-In Timestamp protection)
         let balance = Number(localStorage.getItem('mineral_local_balance_' + telegramId) ?? 1.00);
         let activeInvestment = Number(localStorage.getItem('mineral_local_inv_' + telegramId) ?? 0.00);
         let vipLevel = Number(localStorage.getItem('mineral_local_vip_' + telegramId) ?? 0);
         let minedAccumulated = Number(localStorage.getItem('mineral_local_mined_' + telegramId) ?? 0.00);
         let referralCount = Number(localStorage.getItem('mineral_local_refs_' + telegramId) ?? 0);
+        let lastCheckInTime = Number(localStorage.getItem('mineral_local_checkin_' + telegramId) ?? 0);
         let isBanned = false;
         
         let savedHistory = localStorage.getItem('mineral_local_hist_' + telegramId);
@@ -685,7 +686,6 @@
         let claimed30 = false;
         let claimed50 = false;
         let claimed100 = false;
-        let lastCheckInTime = 0;
 
         const vipTiersData = [
             { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.06, daily: 0.06, bg: "linear-gradient(135deg, #475569, #1e293b)", svg: `<svg viewBox="0 0 32 32"><path d="M16 4 L28 12 L24 26 L8 26 L4 12 Z" fill="#94a3b8" stroke="#cbd5e1" stroke-width="1.5"/></svg>` },
@@ -698,13 +698,11 @@
             { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, bg: "linear-gradient(135deg, #7e22ce, #581c87)", svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L30 12 L16 30 L2 12 Z" fill="#c084fc"/></svg>` }
         ];
 
-        // 🌟 BULLETPROOF CLOUD SYNC WITH LOCAL FALLBACK PROTECTION
+        // 🌟 BULLETPROOF CLOUD SYNC WITH CHECK-IN PROTECTION
         async function initUserData() {
             try {
-                // Update UI immediately using local stored states so nothing blinks or resets
                 updateUI();
 
-                // Fetch authoritative data from Supabase
                 const { data: existingUser, error } = await supabaseClient
                     .from('users')
                     .select('*')
@@ -712,19 +710,18 @@
                     .maybeSingle();
 
                 if (existingUser) {
-                    // Sync cloud values to app states
                     balance = Number(existingUser.balance ?? balance);
                     activeInvestment = Number(existingUser.active_investment ?? activeInvestment);
                     vipLevel = Number(existingUser.vip_level ?? vipLevel);
                     minedAccumulated = Number(existingUser.mined_accumulated ?? minedAccumulated);
                     referralCount = Number(existingUser.referral_count ?? referralCount);
+                    lastCheckInTime = Number(existingUser.last_check_in ?? lastCheckInTime);
                     isBanned = Boolean(existingUser.is_banned ?? false);
                     if (existingUser.history && existingUser.history.length > 0) {
                         historyLog = existingUser.history;
                     }
                     userName = existingUser.user_name ?? userName;
                 } else {
-                    // Insert new user record in Supabase
                     const newUser = {
                         telegram_id: telegramId,
                         user_name: userName,
@@ -733,12 +730,12 @@
                         active_investment: activeInvestment,
                         vip_level: vipLevel,
                         mined_accumulated: minedAccumulated,
+                        last_check_in: lastCheckInTime,
                         is_banned: false,
                         history: historyLog
                     };
                     await supabaseClient.from('users').insert([newUser]);
 
-                    // Process Referral Start Param
                     const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param || '';
                     if (startParam && startParam.startsWith('ref_')) {
                         const referrerId = startParam.replace('ref_', '');
@@ -792,20 +789,19 @@
             initUserData();
         });
 
-        // 🌟 DUAL-LAYER PERSISTENT SAVE (LocalStorage + Supabase Cloud)
+        // 🌟 DUAL-LAYER PERSISTENT SAVE (Includes Daily Check-In Cooldown)
         async function saveUserDataToSupabase() {
             try {
                 if (isBanned || !telegramId) return;
 
-                // 1. Save permanently to local storage so page refresh NEVER resets to 1.00
                 localStorage.setItem('mineral_local_balance_' + telegramId, balance);
                 localStorage.setItem('mineral_local_inv_' + telegramId, activeInvestment);
                 localStorage.setItem('mineral_local_vip_' + telegramId, vipLevel);
                 localStorage.setItem('mineral_local_mined_' + telegramId, minedAccumulated);
                 localStorage.setItem('mineral_local_refs_' + telegramId, referralCount);
+                localStorage.setItem('mineral_local_checkin_' + telegramId, lastCheckInTime);
                 localStorage.setItem('mineral_local_hist_' + telegramId, JSON.stringify(historyLog));
 
-                // 2. Save securely to Supabase Cloud Database
                 await supabaseClient.from('users').upsert([{
                     telegram_id: telegramId,
                     user_name: userName,
@@ -814,6 +810,7 @@
                     vip_level: vipLevel,
                     mined_accumulated: minedAccumulated,
                     referral_count: referralCount,
+                    last_check_in: lastCheckInTime,
                     history: historyLog,
                     is_banned: isBanned
                 }], { onConflict: 'telegram_id' });
@@ -1119,6 +1116,7 @@
                 }
 
                 lastCheckInTime = now;
+                localStorage.setItem('mineral_local_checkin_' + telegramId, lastCheckInTime);
                 balance += 0.02;
                 historyLog.unshift("Daily Check-In: +$0.02");
                 updateUI();
