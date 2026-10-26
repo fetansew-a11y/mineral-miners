@@ -7,41 +7,44 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root[data-theme="dark"] {
-            --bg-gradient: linear-gradient(135deg, #070a14 0%, #0f172a 100%);
-            --card-bg: rgba(15, 23, 42, 0.85);
+            --bg-gradient: linear-gradient(135deg, #050811 0%, #0b1329 100%);
+            --card-bg: rgba(15, 23, 42, 0.78);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border: 1px solid rgba(255, 255, 255, 0.1);
-            --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+            --border: 1px solid rgba(255, 255, 255, 0.08);
+            --shadow: 0 12px 35px -5px rgba(0, 0, 0, 0.6);
             --modal-bg: #0f172a;
-            --input-bg: #020617;
+            --input-bg: rgba(2, 6, 23, 0.75);
+            --accent-glow: 0 0 25px rgba(16, 185, 129, 0.25);
         }
         :root[data-theme="light"] {
-            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            --card-bg: rgba(255, 255, 255, 0.9);
+            --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            --card-bg: rgba(255, 255, 255, 0.88);
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --border: 1px solid rgba(0, 0, 0, 0.08);
-            --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+            --border: 1px solid rgba(0, 0, 0, 0.06);
+            --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
             --modal-bg: #ffffff;
-            --input-bg: #f1f5f9;
+            --input-bg: #f8fafc;
+            --accent-glow: 0 0 20px rgba(16, 185, 129, 0.15);
         }
 
         * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         body {
             background: var(--bg-gradient); color: var(--text-main);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0; padding: 15px 15px 95px 15px; text-align: center;
+            font-family: 'Poppins', sans-serif;
+            margin: 0; padding: 10px 12px 85px 12px; text-align: center;
             min-height: 100vh; user-select: none;
         }
         .app-container { max-width: 420px; margin: 0 auto; }
         
         .payout-banner {
-            background: rgba(59, 130, 246, 0.15); color: #93c5fd; padding: 10px 14px; border-radius: 14px;
-            font-size: 13px; font-weight: 700; margin-bottom: 15px; border: 1px solid rgba(147, 197, 253, 0.3);
-            overflow: hidden; white-space: nowrap; position: relative;
+            background: rgba(59, 130, 246, 0.12); color: #93c5fd; padding: 8px 12px; border-radius: 14px;
+            font-size: 11px; font-weight: 600; margin-bottom: 10px; border: 1px solid rgba(147, 197, 253, 0.2);
+            overflow: hidden; white-space: nowrap; position: relative; backdrop-filter: blur(8px);
         }
         .payout-ticker-text {
             display: inline-block;
@@ -53,39 +56,42 @@
         }
 
         .card {
-            background: var(--card-bg); border-radius: 24px; padding: 22px;
-            margin: 14px 0; border: var(--border); box-shadow: var(--shadow);
+            background: var(--card-bg); border-radius: 22px; padding: 14px 16px;
+            margin: 10px 0; border: var(--border); box-shadow: var(--shadow);
+            backdrop-filter: blur(12px);
         }
         .header {
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--card-bg); padding: 12px 18px; border-radius: 18px;
-            border: var(--border); margin-bottom: 14px; font-weight: 700;
+            background: var(--card-bg); padding: 10px 14px; border-radius: 16px;
+            border: var(--border); margin-bottom: 10px; font-weight: 600;
+            backdrop-filter: blur(10px);
         }
         
         .title-header-box {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            margin: 8px 0 4px 0; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            margin: 4px 0; cursor: pointer;
         }
-        .app-title { font-size: 22px; color: var(--text-main); font-weight: 900; margin: 0; }
+        .app-title { font-size: 19px; color: var(--text-main); font-weight: 800; margin: 0; letter-spacing: -0.3px; }
         
         .pro-logo-icon {
-            width: 42px; height: 42px; flex-shrink: 0;
-            filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.5));
+            width: 34px; height: 34px; flex-shrink: 0;
+            filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.6));
             animation: proLogoPulse 3s ease-in-out infinite;
         }
         @keyframes proLogoPulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.06); }
         }
 
         .balance-box { 
-            font-size: 38px; font-weight: 900; color: #10b981; margin: 5px 0; 
-            text-shadow: 0 0 20px rgba(16, 185, 129, 0.3); 
-            display: flex; align-items: center; justify-content: center; gap: 8px; 
+            font-size: 30px; font-weight: 900; color: #10b981; margin: 2px 0; 
+            text-shadow: var(--accent-glow); 
+            display: flex; align-items: center; justify-content: center; gap: 6px; 
+            letter-spacing: -0.5px;
         }
         .balance-wallet-icon {
-            width: 34px; height: 34px; fill: #10b981; 
-            filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.5));
+            width: 26px; height: 26px; fill: #10b981; 
+            filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.5));
             animation: pulseWallet 3s ease-in-out infinite;
         }
         @keyframes pulseWallet {
@@ -93,142 +99,174 @@
             50% { transform: scale(1.06); }
         }
 
-        .sub-balance { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; }
+        .sub-balance { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; font-weight: 500; }
         
-        .mining-core-animation {
-            width: 130px; height: 130px; margin: 15px auto;
+        .mining-core-container {
+            width: 90px; height: 90px; margin: 8px auto; position: relative;
             display: flex; align-items: center; justify-content: center;
-            background: rgba(59, 130, 246, 0.08); border-radius: 50%;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
         }
-        
-        .spinning-gear-svg {
-            width: 75px; height: 75px;
-            fill: #3b82f6;
-            filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.6));
-            animation: spinGear 6s linear infinite;
+        .mining-core-ring {
+            position: absolute; width: 100%; height: 100%; border-radius: 50%;
+            border: 2px dashed rgba(59, 130, 246, 0.4);
+            animation: spinCoreRing 10s linear infinite;
         }
-        @keyframes spinGear {
+        @keyframes spinCoreRing {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .mining-core-glow {
+            width: 70px; height: 70px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(16,185,129,0.25) 100%);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
+            animation: pulseCoreGlow 3s ease-in-out infinite;
+        }
+        @keyframes pulseCoreGlow {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(59,130,246,0.3); }
+            50% { transform: scale(1.08); box-shadow: 0 0 30px rgba(16,185,129,0.5); }
+        }
+        .mining-core-gem {
+            width: 36px; height: 36px; fill: #34d399;
+            filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.8));
+            animation: floatGem 3s ease-in-out infinite;
+        }
+        @keyframes floatGem {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
 
-        .live-mining-box { background: var(--input-bg); padding: 14px; border-radius: 16px; margin: 14px 0; border: 2px dashed rgba(148, 163, 184, 0.3); }
-        .progress-bar-container { width: 100%; background: var(--border); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 8px; }
-        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #059669, #34d399); }
+        .live-mining-box { background: var(--input-bg); padding: 10px; border-radius: 12px; margin: 8px 0; border: 1.5px dashed rgba(148, 163, 184, 0.25); }
+        .progress-bar-container { width: 100%; background: var(--border); height: 6px; border-radius: 3px; overflow: hidden; margin-top: 6px; }
+        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #059669, #34d399); border-radius: 3px; }
 
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
         
         button {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 15px; font-size: 15px;
-            font-weight: 800; border-radius: 18px; cursor: pointer; width: 100%;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.25), inset 0 -3px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 12px; font-size: 13px;
+            font-weight: 700; border-radius: 14px; cursor: pointer; width: 100%;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35), inset 0 2px 3px rgba(255, 255, 255, 0.25), inset 0 -2px 3px rgba(0, 0, 0, 0.3);
             transition: all 0.2s ease;
         }
         button:active {
             transform: translateY(2px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.2);
         }
 
         .btn-3d-success {
             background: linear-gradient(135deg, #34d399 0%, #059669 50%, #047857 100%);
-            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.35), inset 0 -3px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4), inset 0 2px 3px rgba(255, 255, 255, 0.35), inset 0 -2px 3px rgba(0, 0, 0, 0.3);
             text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
         .btn-3d-warning {
             background: linear-gradient(135deg, #fbbf24 0%, #d97706 50%, #b45309 100%);
-            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.35), inset 0 -3px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4), inset 0 2px 3px rgba(255, 255, 255, 0.35), inset 0 -2px 3px rgba(0, 0, 0, 0.3);
             text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
         .btn-3d-purple {
             background: linear-gradient(135deg, #a855f7 0%, #7e22ce 50%, #581c87 100%);
-            box-shadow: 0 6px 20px rgba(126, 34, 206, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.35), inset 0 -3px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 20px rgba(126, 34, 206, 0.4), inset 0 2px 3px rgba(255, 255, 255, 0.35), inset 0 -2px 3px rgba(0, 0, 0, 0.3);
             text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
 
-        .btn-sm { padding: 11px; font-size: 13px; margin-top: 8px; width: auto; }
+        .btn-sm { padding: 9px; font-size: 11px; margin-top: 6px; width: auto; }
         .btn-disabled { background: linear-gradient(135deg, #64748b, #334155) !important; opacity: 0.6; cursor: not-allowed; box-shadow: none !important; }
 
-        .btn-icon svg { width: 20px; height: 20px; fill: currentColor; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); }
+        .btn-icon svg { width: 18px; height: 18px; fill: currentColor; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); }
 
         .theme-toggle-btn {
-            background: var(--border); color: var(--text-main); border: none; width: 38px; height: 38px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px;
+            background: var(--border); color: var(--text-main); border: none; width: 34px; height: 34px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px;
         }
 
         .support-float-btn {
-            position: fixed; bottom: 75px; left: 15px; z-index: 998;
+            position: fixed; bottom: 70px; left: 12px; z-index: 998;
             background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white;
-            border: none; width: 50px; height: 50px; border-radius: 50%;
+            border: none; width: 44px; height: 44px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5), inset 0 2px 4px rgba(255,255,255,0.4);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5), inset 0 2px 3px rgba(255,255,255,0.4);
             cursor: pointer; transition: transform 0.2s ease;
         }
         .support-float-btn:active { transform: scale(0.92); }
-        .support-float-btn svg { width: 26px; height: 26px; fill: currentColor; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4)); }
+        .support-float-btn svg { width: 22px; height: 22px; fill: currentColor; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4)); }
 
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: var(--card-bg); display: flex; justify-content: space-around;
-            padding: 10px 0; border-top: var(--border); z-index: 999;
-            backdrop-filter: blur(10px);
+            padding: 8px 0; border-top: var(--border); z-index: 999;
+            backdrop-filter: blur(15px);
         }
         .nav-item {
-            background: none; border: none; color: var(--text-muted); font-size: 11px;
-            display: flex; flex-direction: column; align-items: center; gap: 3px;
-            cursor: pointer; font-weight: 700; width: 25%; padding: 0; box-shadow: none;
+            background: none; border: none; color: var(--text-muted); font-size: 9.5px;
+            display: flex; flex-direction: column; align-items: center; gap: 2px;
+            cursor: pointer; font-weight: 600; width: 20%; padding: 0; box-shadow: none;
         }
         .nav-item.active { color: #3b82f6; }
-        .nav-icon svg { width: 22px; height: 22px; fill: currentColor; }
+        .nav-icon svg { width: 18px; height: 18px; fill: currentColor; }
 
         .tab-pane { display: none; }
         .tab-pane.active { display: block; }
 
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.75); justify-content: center; align-items: center; z-index: 1000; padding: 15px;
-            backdrop-filter: blur(5px);
+            background: rgba(5, 8, 17, 0.8); justify-content: center; align-items: center; z-index: 1000; padding: 15px;
+            backdrop-filter: blur(8px);
         }
         .modal-content {
-            background: var(--modal-bg); padding: 22px; border-radius: 24px; width: 100%;
+            background: var(--modal-bg); padding: 20px; border-radius: 22px; width: 100%;
             max-width: 380px; border: var(--border); text-align: left; max-height: 85vh; overflow-y: auto; color: var(--text-main);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
         }
         input, select {
-            width: 100%; padding: 12px; margin: 6px 0 12px 0; background: var(--input-bg);
-            border: 1px solid var(--border); border-radius: 12px; color: var(--text-main); font-size: 14px; font-weight: 600;
+            width: 100%; padding: 10px 12px; margin: 4px 0 10px 0; background: var(--input-bg);
+            border: 1px solid var(--border); border-radius: 12px; color: var(--text-main); font-size: 12px; font-weight: 500;
         }
-        .close-btn { background: #475569; width: 100%; margin-top: 10px; box-shadow: none; }
+        .close-btn { background: #475569; width: 100%; margin-top: 8px; box-shadow: none; }
         
-        .history-list, .vip-list, .admin-list {
-            max-height: 340px; overflow-y: auto; background: var(--input-bg);
-            padding: 12px; border-radius: 18px; margin-top: 10px; border: var(--border);
+        .history-list, .vip-list, .admin-list, .earner-list {
+            max-height: 330px; overflow-y: auto; background: var(--input-bg);
+            padding: 10px; border-radius: 14px; margin-top: 8px; border: var(--border);
         }
         .history-card-item {
-            display: flex; align-items: center; gap: 12px;
-            background: var(--card-bg); padding: 12px 14px; border-radius: 14px;
-            margin-bottom: 10px; border: var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex; align-items: center; gap: 10px;
+            background: var(--card-bg); padding: 10px 12px; border-radius: 12px;
+            margin-bottom: 8px; border: var(--border); box-shadow: 0 3px 10px rgba(0,0,0,0.15);
         }
         .history-icon-box {
-            width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center;
-            justify-content: center; font-size: 18px; flex-shrink: 0; box-shadow: inset 0 2px 4px rgba(255,255,255,0.2);
+            width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center;
+            justify-content: center; font-size: 15px; flex-shrink: 0; box-shadow: inset 0 2px 3px rgba(255,255,255,0.2);
         }
         
         .vip-card-item { 
-            background: var(--card-bg); padding: 14px; border-radius: 16px; margin-bottom: 12px; 
-            border: var(--border); display: flex; justify-content: space-between; align-items: center; gap: 10px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: var(--card-bg); padding: 12px; border-radius: 14px; margin-bottom: 10px; 
+            border: var(--border); display: flex; justify-content: space-between; align-items: center; gap: 8px; 
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
-        .vip-badge-3d { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 6px; box-shadow: inset 0 3px 6px rgba(255,255,255,0.35), 0 6px 12px rgba(0,0,0,0.3); }
-        .vip-badge-3d svg { width: 100%; height: 100%; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.4)); }
+        .vip-badge-3d { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 5px; box-shadow: inset 0 2px 5px rgba(255,255,255,0.35), 0 4px 10px rgba(0,0,0,0.3); }
+        .vip-badge-3d svg { width: 100%; height: 100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); }
+
+        .earner-card-item {
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--card-bg); padding: 10px 12px; border-radius: 12px;
+            margin-bottom: 8px; border: var(--border); box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
         
-        #qrcode { display: flex; justify-content: center; margin: 10px auto; background: white; padding: 10px; border-radius: 12px; width: fit-content; }
-        .wallet-box { background: var(--input-bg); padding: 10px; border-radius: 10px; font-size: 11px; word-break: break-all; margin: 8px 0; border: 1px dashed #64748b; color: var(--text-main); }
+        #qrcode { display: flex; justify-content: center; margin: 8px auto; background: white; padding: 8px; border-radius: 10px; width: fit-content; }
+        .wallet-box { background: var(--input-bg); padding: 8px; border-radius: 8px; font-size: 11px; word-break: break-all; margin: 6px 0; border: 1px dashed #64748b; color: var(--text-main); }
+
+        #customToast {
+            position: fixed; top: 15px; left: 50%; transform: translateX(-50%) translateY(-100px);
+            background: linear-gradient(135deg, #0f172a, #1e293b); color: #f8fafc; padding: 10px 18px;
+            border-radius: 14px; font-size: 12px; font-weight: 600; border: 1px solid rgba(16, 185, 129, 0.4);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 99999; transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0; display: flex; align-items: center; gap: 8px; pointer-events: none;
+        }
+        #customToast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
     </style>
 </head>
 <body>
+    <div id="customToast">✨ <span id="toastMsg">Success</span></div>
+
     <div class="app-container">
         
         <div class="payout-banner">
@@ -249,10 +287,10 @@
         <!-- HOME TAB -->
         <div id="homeTab" class="tab-pane active">
             <div class="header">
-                <div>VIP: <span id="vipDisplay" style="color:#3b82f6; font-weight:900;">VIP 0</span></div>
+                <div>VIP: <span id="vipDisplay" style="color:#3b82f6; font-weight:800;">VIP 0</span></div>
                 <div style="display: flex; gap: 6px; align-items: center;">
                     <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeIconBtn">🌙</button>
-                    <button class="btn-sm" onclick="switchTabSafe('profileTab', document.querySelectorAll('.nav-item')[3]); openModal('historyModal')">History</button>
+                    <button class="btn-sm" onclick="switchTabSafe('profileTab', document.querySelectorAll('.nav-item')[4]); openModal('historyModal')">History</button>
                 </div>
             </div>
 
@@ -274,10 +312,8 @@
                 <h1 class="app-title">Mineral Mining Pro</h1>
             </div>
 
-            <p style="color: var(--text-muted); font-size: 13px; font-weight: 700; margin-top: 2px;">$1 Welcome Bonus Active</p>
-
-            <div class="card">
-                <p style="margin: 0; color: var(--text-muted); font-size: 13px; font-weight: 700;">Available Balance</p>
+            <div class="card" style="padding: 10px 14px; margin: 6px 0;">
+                <p style="margin: 0; color: var(--text-muted); font-size: 11px; font-weight: 600;">Available Balance</p>
                 
                 <div class="balance-box">
                     <svg class="balance-wallet-icon" viewBox="0 0 24 24">
@@ -288,16 +324,18 @@
 
                 <div class="sub-balance">Active Mining: $<span id="activeInvDisplay">0.00</span> (<span id="activeRateDisplay">6%</span> Daily)</div>
                 
-                <div class="mining-core-animation">
-                    <svg class="spinning-gear-svg" viewBox="0 0 24 24">
-                        <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.53,5.05 19.27,4.97 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.97 4.47,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.47,18.95 4.73,19.03 4.95,18.95L7.44,17.95C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.95L19.05,18.95C19.27,19.03 19.53,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/>
-                    </svg>
+                <div class="mining-core-container">
+                    <div class="mining-core-ring"></div>
+                    <div class="mining-core-glow">
+                        <svg class="mining-core-gem" viewBox="0 0 24 24">
+                            <path d="M12,2L2,12L12,22L22,12L12,2M12,4.84L19.16,12L12,19.16L4.84,12L12,4.84Z"/>
+                        </svg>
+                    </div>
                 </div>
-                <p style="font-size: 12px; font-weight: 800; color: #3b82f6; margin: 4px 0 10px 0;">System Mining Core Active</p>
 
                 <div class="live-mining-box">
-                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 800;">
-                        <span style="color: #10b981;">Mined Balance (<span id="miningPctDisplay">0.00%</span>)</span>
+                    <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700;">
+                        <span style="color: #10b981;">Mined (<span id="miningPctDisplay">0.00%</span>)</span>
                         <span id="liveTickerVal" style="color: var(--text-main);">+$0.0000</span>
                     </div>
                     <div class="progress-bar-container">
@@ -305,22 +343,22 @@
                     </div>
                 </div>
 
-                <button class="btn-3d-success" onclick="claimMining()">
+                <button class="btn-3d-success" style="padding: 10px; font-size: 12px;" onclick="claimMining()">
                     <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M6 2h12l4 7-10 13L2 9l4-7z"/></svg></span> Claim Mined Income
                 </button>
             </div>
 
-            <div class="btn-grid">
-                <button class="btn-3d-success" onclick="openModal('depositModal')">
+            <div class="btn-grid" style="margin-top: 8px;">
+                <button class="btn-3d-success" style="padding: 11px; font-size: 12px;" onclick="openModal('depositModal')">
                     <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></span> Deposit
                 </button>
-                <button class="btn-3d-warning" onclick="openModal('withdrawModal')">
+                <button class="btn-3d-warning" style="padding: 11px; font-size: 12px;" onclick="openModal('withdrawModal')">
                     <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M5 15h4v6h6v-6h4l-7-7-7 7zM19 3H5v2h14V3z"/></svg></span> Withdraw
                 </button>
             </div>
             
-            <div style="margin-top: 12px;">
-                <button id="dailyCheckInBtn" class="btn-3d-purple" onclick="dailyCheckIn()">
+            <div style="margin-top: 8px;">
+                <button id="dailyCheckInBtn" class="btn-3d-purple" style="padding: 11px; font-size: 12px;" onclick="dailyCheckIn()">
                     <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.33l1.5 1.17L12 8l3.5 3.5 1.5-1.17L14.92 8H20v6z"/></svg></span> Daily Check-In (+0.02$)
                 </button>
             </div>
@@ -328,47 +366,56 @@
 
         <!-- VIP TAB -->
         <div id="vipTab" class="tab-pane">
-            <h2 style="color: var(--text-main); font-size: 20px; font-weight: 900;">👑 Mineral VIP Tiers</h2>
-            <div class="card" style="padding: 10px;">
+            <h2 style="color: var(--text-main); font-size: 18px; font-weight: 800; margin: 5px 0 10px 0;">👑 Mineral VIP Tiers</h2>
+            <div class="card" style="padding: 8px;">
                 <div id="vipCardsContainer" class="vip-list" style="max-height: 380px; background: transparent; border: none; padding: 0;"></div>
+            </div>
+        </div>
+
+        <!-- EARNERS LEADERBOARD TAB (🌟 NEW) -->
+        <div id="earnersTab" class="tab-pane">
+            <h2 style="color: var(--text-main); font-size: 18px; font-weight: 800; margin: 5px 0 5px 0;">🏆 Top Investors & Earners</h2>
+            <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 10px 0;">Global top miners with highest investment returns.</p>
+            <div class="card" style="padding: 8px;">
+                <div id="earnersContainer" class="earner-list" style="max-height: 380px; background: transparent; border: none; padding: 0;"></div>
             </div>
         </div>
 
         <!-- REFERRAL TAB -->
         <div id="refTab" class="tab-pane">
-            <h2 style="color: var(--text-main); font-size: 20px; font-weight: 900;">👥 Referral System</h2>
-            <div class="card" style="text-align: left;">
-                <p style="font-size: 13px; color: var(--text-muted);">Invite friends & earn rewards!</p>
-                <div style="font-size: 13px; margin: 12px 0; line-height: 1.6;">
-                    <p style="margin: 4px 0;">• Per Referral Reward: <b style="color:#10b981;">+$0.04</b></p>
-                    <p style="margin: 4px 0;">• Deposit Commission: <b style="color:#f59e0b;">10% of Friend's Deposit</b></p>
-                    <p style="margin: 4px 0;">• Total Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
+            <h2 style="color: var(--text-main); font-size: 18px; font-weight: 800; margin: 5px 0 10px 0;">👥 Referral System</h2>
+            <div class="card" style="text-align: left; padding: 14px;">
+                <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 8px 0;">Invite friends & earn rewards!</p>
+                <div style="font-size: 11px; margin: 8px 0; line-height: 1.5;">
+                    <p style="margin: 3px 0;">• Per Referral Reward: <b style="color:#10b981;">+$0.04</b></p>
+                    <p style="margin: 3px 0;">• Deposit Commission: <b style="color:#f59e0b;">10% of Friend's Deposit</b></p>
+                    <p style="margin: 3px 0;">• Total Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
                 </div>
-                <input type="text" id="refLinkInput" readonly style="font-size: 11px;">
+                <input type="text" id="refLinkInput" readonly style="font-size: 10px; padding: 8px; margin: 6px 0;">
                 <button class="btn-3d-success btn-sm" onclick="copyRefLink()">🔗 Copy Link</button>
 
-                <div style="margin-top: 18px; border-top: var(--border); padding-top: 12px;">
-                    <h3 style="font-size: 14px; margin: 0 0 10px 0; font-weight: 900; color: #f59e0b;">🏆 Referral Milestone Bonuses</h3>
+                <div style="margin-top: 12px; border-top: var(--border); padding-top: 10px;">
+                    <h3 style="font-size: 12px; margin: 0 0 8px 0; font-weight: 800; color: #f59e0b;">🏆 Referral Milestone Bonuses</h3>
                     
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 10px; border-radius: 12px; margin-bottom: 8px; border: var(--border);">
-                        <div style="font-size: 12px; text-align: left;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 8px 10px; border-radius: 10px; margin-bottom: 6px; border: var(--border);">
+                        <div style="font-size: 11px; text-align: left;">
                             <b>30 Referrals</b><br><span style="color:#10b981;">Reward: $1.00</span>
                         </div>
-                        <button id="claimBtn30" class="btn-3d-success btn-sm btn-disabled" onclick="claimMilestone(30, 1.00)" disabled>Claim</button>
+                        <button id="claimBtn30" class="btn-3d-success btn-sm btn-disabled" style="padding: 6px 12px; font-size: 10px; margin:0;" onclick="claimMilestone(30, 1.00)" disabled>Claim</button>
                     </div>
 
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 10px; border-radius: 12px; margin-bottom: 8px; border: var(--border);">
-                        <div style="font-size: 12px; text-align: left;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 8px 10px; border-radius: 10px; margin-bottom: 6px; border: var(--border);">
+                        <div style="font-size: 11px; text-align: left;">
                             <b>50 Referrals</b><br><span style="color:#10b981;">Reward: $2.00</span>
                         </div>
-                        <button id="claimBtn50" class="btn-3d-success btn-sm btn-disabled" onclick="claimMilestone(50, 2.00)" disabled>Claim</button>
+                        <button id="claimBtn50" class="btn-3d-success btn-sm btn-disabled" style="padding: 6px 12px; font-size: 10px; margin:0;" onclick="claimMilestone(50, 2.00)" disabled>Claim</button>
                     </div>
 
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 10px; border-radius: 12px; border: var(--border);">
-                        <div style="font-size: 12px; text-align: left;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 8px 10px; border-radius: 10px; border: var(--border);">
+                        <div style="font-size: 11px; text-align: left;">
                             <b>100 Referrals</b><br><span style="color:#10b981;">Reward: $5.00</span>
                         </div>
-                        <button id="claimBtn100" class="btn-3d-success btn-sm btn-disabled" onclick="claimMilestone(100, 5.00)" disabled>Claim</button>
+                        <button id="claimBtn100" class="btn-3d-success btn-sm btn-disabled" style="padding: 6px 12px; font-size: 10px; margin:0;" onclick="claimMilestone(100, 5.00)" disabled>Claim</button>
                     </div>
                 </div>
             </div>
@@ -376,23 +423,23 @@
 
         <!-- PROFILE TAB -->
         <div id="profileTab" class="tab-pane">
-            <h2 style="color: var(--text-main); font-size: 20px; font-weight: 900;">👤 Profile</h2>
-            <div class="card" style="text-align: left; font-size: 13px;">
-                <p><b>Name:</b></p>
+            <h2 style="color: var(--text-main); font-size: 18px; font-weight: 800; margin: 5px 0 10px 0;">👤 Profile</h2>
+            <div class="card" style="text-align: left; font-size: 11px; padding: 14px;">
+                <p style="margin: 0 0 4px 0;"><b>Name:</b></p>
                 <input type="text" id="profileNameInput" placeholder="Enter your name">
                 <button class="btn-3d-success btn-sm" onclick="saveProfileName()">💾 Save Name</button>
-                <p style="margin-top: 12px;"><b>ID:</b> <span id="profileIdDisplay" style="color: var(--text-muted);">Loading...</span></p>
-                <p><b>VIP:</b> <span id="profileVipDisplay" style="color: #3b82f6;">VIP 0</span></p>
-                <p><b>Active Mining:</b> $<span id="profileInvDisplay" style="color: #10b981;">0.00</span></p>
+                <p style="margin: 10px 0 4px 0;"><b>ID:</b> <span id="profileIdDisplay" style="color: var(--text-muted);">Loading...</span></p>
+                <p style="margin: 4px 0;"><b>VIP:</b> <span id="profileVipDisplay" style="color: #3b82f6;">VIP 0</span></p>
+                <p style="margin: 4px 0;"><b>Active Mining:</b> $<span id="profileInvDisplay" style="color: #10b981;">0.00</span></p>
             </div>
 
-            <div class="card" style="text-align: left;">
-                <h3 style="margin-top:0; font-size:14px; font-weight:900;">📜 History</h3>
-                <div id="profileHistoryList" class="history-list" style="max-height: 185px;">No history.</div>
+            <div class="card" style="text-align: left; padding: 14px;">
+                <h3 style="margin:0 0 6px 0; font-size:12px; font-weight:800;">📜 History</h3>
+                <div id="profileHistoryList" class="history-list" style="max-height: 150px;">No history.</div>
             </div>
         </div>
 
-        <!-- BOTTOM NAV -->
+        <!-- BOTTOM NAV (🌟 5 Tabs) -->
         <div class="bottom-nav">
             <button class="nav-item active" onclick="switchTabSafe('homeTab', this)">
                 <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span>
@@ -401,6 +448,10 @@
             <button class="nav-item" onclick="switchTabSafe('vipTab', this)">
                 <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
                 <span>VIP</span>
+            </button>
+            <button class="nav-item" onclick="switchTabSafe('earnersTab', this)">
+                <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg></span>
+                <span>Earners</span>
             </button>
             <button class="nav-item" onclick="switchTabSafe('refTab', this)">
                 <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3z"/></svg></span>
@@ -414,11 +465,11 @@
     </div>
 
     <!-- BAN MODAL -->
-    <div id="banModal" class="modal" style="display: none; background: rgba(15, 23, 42, 0.95); z-index: 9999;">
+    <div id="banModal" class="modal" style="display: none; background: rgba(5, 8, 17, 0.95); z-index: 9999;">
         <div class="modal-content" style="text-align: center; border: 2px solid #ef4444;">
-            <div style="font-size: 48px; margin-bottom: 10px;">🚫</div>
+            <div style="font-size: 42px; margin-bottom: 8px;">🚫</div>
             <h3 style="color: #ef4444; margin-top:0;">Account Restricted (Banned)</h3>
-            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+            <p style="font-size: 11px; color: var(--text-muted); line-height: 1.5;">
                 Your account has been flagged and restricted by our anti-cheat system due to suspicious self-referral/multi-account abuse exceeding the 40 limit on the same device.
             </p>
         </div>
@@ -427,7 +478,7 @@
     <!-- MODALS -->
     <div id="depositModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0;">Deposit Crypto</h3>
+            <h3 style="margin-top:0; font-size:16px; font-weight:800;">Deposit Crypto</h3>
             <select id="depositNetwork" onchange="updateDepositAddress()">
                 <option value="BEP20">USDT (BEP20)</option>
                 <option value="ERC20">USDT (ERC20)</option>
@@ -444,7 +495,7 @@
 
     <div id="withdrawModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0;">Withdraw Funds</h3>
+            <h3 style="margin-top:0; font-size:16px; font-weight:800;">Withdraw Funds</h3>
             <select id="withdrawNetwork">
                 <option value="BEP20">USDT (BEP20)</option>
                 <option value="ERC20">USDT (ERC20)</option>
@@ -459,7 +510,7 @@
 
     <div id="historyModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0;">📜 History Records</h3>
+            <h3 style="margin-top:0; font-size:16px; font-weight:800;">📜 History Records</h3>
             <div id="historyList" class="history-list">No history.</div>
             <button class="close-btn btn-sm" onclick="closeModal('historyModal')">Close</button>
         </div>
@@ -467,9 +518,9 @@
 
     <div id="supportModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; color:#3b82f6;">💬 Customer Support</h3>
-            <div id="supportChatHistory" class="history-list" style="height: 150px; background: var(--input-bg); padding: 10px; border-radius: 12px; margin-bottom: 10px; overflow-y: auto; text-align: left;">
-                <div style="color: var(--text-muted); font-size: 11px; margin-bottom: 6px;"><b>Support Bot:</b> Hello! How can we help you today?</div>
+            <h3 style="margin-top:0; color:#3b82f6; font-size:16px; font-weight:800;">💬 Customer Support</h3>
+            <div id="supportChatHistory" class="history-list" style="height: 140px; background: var(--input-bg); padding: 8px; border-radius: 10px; margin-bottom: 8px; overflow-y: auto; text-align: left;">
+                <div style="color: var(--text-muted); font-size: 10px; margin-bottom: 4px;"><b>Support Bot:</b> Hello! How can we help you today?</div>
             </div>
             <input type="text" id="supportMsgInput" placeholder="Type your message...">
             <button class="btn-3d-success btn-sm" onclick="sendSupportMessage()">Send Message</button>
@@ -479,7 +530,7 @@
 
     <div id="adminAuthModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0;">Admin Login</h3>
+            <h3 style="margin-top:0; font-size:16px; font-weight:800;">Admin Login</h3>
             <input type="password" id="adminPasswordInput" placeholder="Password">
             <button class="btn-3d-success" onclick="verifyAdminPassword()">Login</button>
             <button class="close-btn btn-sm" onclick="closeModal('adminAuthModal')">Cancel</button>
@@ -488,11 +539,11 @@
 
     <div id="adminPanelModal" class="modal">
         <div class="modal-content" style="max-width: 405px;">
-            <h3 style="margin-top:0; color:#f59e0b; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin-top:0; color:#f59e0b; font-size:16px; font-weight:800; display: flex; justify-content: space-between; align-items: center;">
                 <span>🛡️ Admin Panel Dashboard</span>
             </h3>
-            <p style="font-size: 12px; color: var(--text-muted); margin-top: -5px;">Pending Deposit & Withdrawal Requests</p>
-            <div id="adminList" class="admin-list" style="max-height: 380px;">No pending requests.</div>
+            <p style="font-size: 11px; color: var(--text-muted); margin-top: -5px;">Pending Deposit & Withdrawal Requests</p>
+            <div id="adminList" class="admin-list" style="max-height: 300px;">No pending requests.</div>
             <button class="close-btn btn-sm" onclick="closeModal('adminPanelModal')">Close</button>
         </div>
     </div>
@@ -502,6 +553,16 @@
         const SUPABASE_URL = 'YOUR_SUPABASE_URL';
         const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        function showToast(msg) {
+            const t = document.getElementById('customToast');
+            const m = document.getElementById('toastMsg');
+            if(t && m) {
+                m.innerText = msg;
+                t.classList.add('show');
+                setTimeout(() => { t.classList.remove('show'); }, 2500);
+            }
+        }
 
         function toggleTheme() {
             try {
@@ -565,9 +626,23 @@
             TON: 'UQAgaG68J6uVa8kysPJVkVVJ-DM9GvZJnaOc8NbkrGv9KzDU'
         };
 
-        let telegramId = 'user_' + Math.floor(Math.random() * 900000 + 100000);
-        let userName = 'Miner_' + Math.floor(Math.random() * 9000 + 1000);
-        
+        // 🌟 Top Investors & Earners Mock Leaderboard Data (International Nicknames & Tags)
+        const topEarnersData = [
+            { rank: 1, name: "Alex_Crypto 🚀", vip: "VIP 7 (Diamond)", invested: "$1,000.00", earned: "$4,850.20", badge: "🥇" },
+            { rank: 2, name: "Elena_V 💎", vip: "VIP 7 (Diamond)", invested: "$1,000.00", earned: "$4,620.00", badge: "🥈" },
+            { rank: 3, name: "Satoshi_G ⚡", vip: "VIP 6 (Emerald)", invested: "$500.00", earned: "$2,410.50", badge: "🥉" },
+            { rank: 4, name: "CryptoWhale_99", vip: "VIP 6 (Emerald)", invested: "$500.00", earned: "$2,350.80", badge: "👑" },
+            { rank: 5, name: "Michael_T 🔥", vip: "VIP 5 (Sapphire)", invested: "$100.00", earned: "$890.40", badge: "💎" },
+            { rank: 6, name: "Liya_BTC 🌟", vip: "VIP 5 (Sapphire)", invested: "$100.00", earned: "$840.10", badge: "🌟" },
+            { rank: 7, name: "David_Master", vip: "VIP 4 (Ruby)", invested: "$50.00", earned: "$420.30", badge: "⭐" },
+            { rank: 8, name: "SolanaKing_21", vip: "VIP 4 (Ruby)", invested: "$50.00", earned: "$395.00", badge: "⭐" },
+            { rank: 9, name: "Emma_W 💫", vip: "VIP 3 (Platinum)", invested: "$20.00", earned: "$185.60", badge: "✨" },
+            { rank: 10, name: "Kirubel_M", vip: "VIP 3 (Platinum)", invested: "$20.00", earned: "$172.40", badge: "✨" }
+        ];
+
+        let telegramId = '';
+        let userName = '';
+
         try {
             if (window.Telegram && Telegram.WebApp) {
                 Telegram.WebApp.ready();
@@ -580,6 +655,19 @@
                 }
             }
         } catch(e) {}
+
+        if (!telegramId) {
+            let savedLocalId = localStorage.getItem('mineral_local_telegram_id');
+            if (!savedLocalId) {
+                savedLocalId = 'user_' + Math.floor(Math.random() * 900000 + 100000);
+                localStorage.setItem('mineral_local_telegram_id', savedLocalId);
+            }
+            telegramId = savedLocalId;
+        }
+
+        if (!userName) {
+            userName = 'Miner_' + Math.floor(Math.random() * 9000 + 1000);
+        }
 
         let balance = 1.00;
         let activeInvestment = 0.00;
@@ -646,7 +734,6 @@
                                 .single();
 
                             if (refUser && !refUser.is_banned) {
-                                // 🌟 Device Fingerprint Anti-Cheat: Detects Same-Device Self Referral Abuse (>40)
                                 let deviceSetKey = 'm_device_refs_' + referrerId;
                                 let deviceList = JSON.parse(localStorage.getItem(deviceSetKey) || '[]');
                                 
@@ -662,7 +749,6 @@
                                 let bannedFlag = false;
                                 let updatedHist = refUser.history || [];
 
-                                // Ban only if same device self-referral abuse exceeds 40 accounts
                                 if (isSameDeviceAbuse || newRefCnt > 150) {
                                     bannedFlag = true;
                                     updatedHist.unshift("System Ban: Same-device self-referral abuse detected (>40).");
@@ -689,16 +775,23 @@
                 }
 
                 renderVipTiers();
+                renderEarnersLeaderboard();
                 updateUI();
                 updateDepositAddress();
                 setInterval(liveTicker, 1000);
                 setInterval(bannerTicker, 2500);
             } catch (e) {
                 console.error("Init Error:", e);
+                renderVipTiers();
+                renderEarnersLeaderboard();
+                updateUI();
             }
         }
 
         window.addEventListener("DOMContentLoaded", () => {
+            renderVipTiers();
+            renderEarnersLeaderboard();
+            updateUI();
             initUserData();
         });
 
@@ -721,7 +814,7 @@
         function bannerTicker() {
             try {
                 if (isBanned) return;
-                const names = ["💎 David_BTC", "Alex 🚀", "CryptoKing", "Michael_99", "Emma Watson", "Kirubel", "Liya 🌟", "Samuel", "Fasil", "Soliana", "Betelhem", "Yohannes", "Kidus", "Abebe", "Zelalem 💎"];
+                const names = ["💎 Alex_Crypto", "Elena_V 🚀", "CryptoWhale", "Satoshi_99", "Michael_T", "Kirubel", "Liya 🌟", "Samuel", "Fasil", "Soliana", "Betelhem", "Yohannes", "Kidus", "Abebe", "Zelalem 💎"];
                 const amounts = [5.00, 7.00, 8.00, 10.00, 12.00, 15.00, 20.00, 25.00, 30.00];
                 const networks = ["BEP20", "TON", "ERC20"];
                 
@@ -777,7 +870,7 @@
 
                     return `<div class="history-card-item">
                         <div class="history-icon-box" style="background: ${bgCol}; color: ${textCol};">${icon}</div>
-                        <div style="font-size: 13px; font-weight: 700; color: var(--text-main); text-align: left; word-break: break-word;">${h}</div>
+                        <div style="font-size: 11px; font-weight: 600; color: var(--text-main); text-align: left; word-break: break-word;">${h}</div>
                     </div>`;
                 }).join('');
 
@@ -798,9 +891,9 @@
                 if (input && input.value.trim()) {
                     userName = input.value.trim();
                     updateUI();
-                    alert('Profile name successfully updated to: ' + userName);
+                    showToast('Profile name updated successfully!');
                 } else {
-                    alert('Please enter a valid name!');
+                    showToast('Please enter a valid name!');
                 }
             } catch(e) {}
         }
@@ -831,7 +924,7 @@
                 const pendingRequests = requests.filter(r => r.status === 'pending');
                 
                 if (pendingRequests.length === 0) {
-                    aList.innerHTML = '<div style="text-align:center; padding: 25px; color: var(--text-muted); font-size: 13px;">No pending deposit or withdrawal requests.</div>';
+                    aList.innerHTML = '<div style="text-align:center; padding: 20px; color: var(--text-muted); font-size: 11px;">No pending deposit or withdrawal requests.</div>';
                     return;
                 }
 
@@ -840,19 +933,19 @@
                     const icon = isDeposit ? '📥' : '📤';
                     const badgeColor = isDeposit ? '#34d399' : '#fbbf24';
                     
-                    return `<div style="background: var(--card-bg); border: var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; text-align: left; box-shadow: 0 4px 12px rgba(0,0,0,0.25);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <span style="background: rgba(59,130,246,0.15); color: #60a5fa; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800;">${icon} ${r.type}</span>
-                            <span style="font-size: 15px; font-weight: 900; color: ${badgeColor};">$${r.amount.toFixed(2)} (${r.network})</span>
+                    return `<div style="background: var(--card-bg); border: var(--border); border-radius: 12px; padding: 12px; margin-bottom: 10px; text-align: left; box-shadow: 0 3px 10px rgba(0,0,0,0.25);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <span style="background: rgba(59,130,246,0.15); color: #60a5fa; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 700;">${icon} ${r.type}</span>
+                            <span style="font-size: 13px; font-weight: 800; color: ${badgeColor};">$${r.amount.toFixed(2)} (${r.network})</span>
                         </div>
-                        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5;">
+                        <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4;">
                             <div><b>User:</b> <span style="color:var(--text-main);">${r.userName}</span></div>
-                            <div><b>User ID:</b> <code style="color: #38bdf8; background: var(--input-bg); padding: 2px 6px; border-radius: 4px;">${r.userId}</code></div>
+                            <div><b>User ID:</b> <code style="color: #38bdf8; background: var(--input-bg); padding: 2px 4px; border-radius: 4px;">${r.userId}</code></div>
                             <div><b>Time:</b> ${new Date(r.timestamp).toLocaleString()}</div>
                         </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                            <button class="btn-3d-success btn-sm" style="padding: 10px; font-size: 12px;" onclick="handleAdminAction('${r.id}', 'approve')">✅ Approve</button>
-                            <button class="btn-3d-warning btn-sm" style="background: linear-gradient(135deg, #ef4444, #b91c1c); padding: 10px; font-size: 12px;" onclick="handleAdminAction('${r.id}', 'cancel')">❌ Cancel</button>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <button class="btn-3d-success btn-sm" style="padding: 8px; font-size: 10px;" onclick="handleAdminAction('${r.id}', 'approve')">✅ Approve</button>
+                            <button class="btn-3d-warning btn-sm" style="background: linear-gradient(135deg, #ef4444, #b91c1c); padding: 8px; font-size: 10px;" onclick="handleAdminAction('${r.id}', 'cancel')">❌ Cancel</button>
                         </div>
                     </div>`;
                 }).join('');
@@ -882,7 +975,7 @@
                 
                 localStorage.setItem('mineral_admin_requests', JSON.stringify(requests));
                 renderAdminPanel();
-                alert(`Request successfully ${req.status}!`);
+                showToast(`Request successfully ${req.status}!`);
             } catch(e) {}
         }
 
@@ -903,7 +996,7 @@
                 balance += rewardAmt;
                 historyLog.unshift("Referral Milestone (" + targetCount + " Users): +$" + rewardAmt.toFixed(2));
                 updateUI();
-                alert("Successfully claimed $" + rewardAmt.toFixed(2) + " bonus!");
+                showToast("Successfully claimed $" + rewardAmt.toFixed(2) + " bonus!");
             } catch(e) {}
         }
 
@@ -915,12 +1008,34 @@
                     const isCurr = vipLevel === t.level && activeInvestment > 0;
                     const ratePct = (t.rate * 100).toFixed(0);
                     return '<div class="vip-card-item">' +
-                        '<div style="display:flex; align-items:center; gap:12px; text-align:left;">' +
+                        '<div style="display:flex; align-items:center; gap:10px; text-align:left;">' +
                             '<div class="vip-badge-3d" style="background:' + t.bg + '">' + t.svg + '</div>' +
-                            '<div><b style="font-size:13px;">' + t.name + '</b><br><span style="font-size:11px; color:var(--text-muted)">$' + t.price + ' | Daily: $' + t.daily.toFixed(2) + ' (' + ratePct + '%)</span></div>' +
+                            '<div><b style="font-size:11px;">' + t.name + '</b><br><span style="font-size:10px; color:var(--text-muted)">$' + t.price + ' | Daily: $' + t.daily.toFixed(2) + ' (' + ratePct + '%)</span></div>' +
                         '</div>' +
-                        '<div>' + (isCurr ? '<span style="color:#10b981; font-size:12px; font-weight:900;">Active</span>' : '<button class="btn-3d-success btn-sm" onclick="buyVip(' + t.level + ')">Buy</button>') + '</div>' +
+                        '<div>' + (isCurr ? '<span style="color:#10b981; font-size:11px; font-weight:800;">Active</span>' : '<button class="btn-3d-success btn-sm" style="padding:6px 12px; font-size:10px;" onclick="buyVip(' + t.level + ')">Buy</button>') + '</div>' +
                     '</div>';
+                }).join('');
+            } catch(e) {}
+        }
+
+        function renderEarnersLeaderboard() {
+            try {
+                const c = document.getElementById('earnersContainer');
+                if (!c) return;
+                c.innerHTML = topEarnersData.map(e => {
+                    return `<div class="earner-card-item">
+                        <div style="display: flex; align-items: center; gap: 10px; text-align: left;">
+                            <div style="font-size: 16px; font-weight: 900; width: 24px; text-align: center; color: #3b82f6;">${e.badge}</div>
+                            <div>
+                                <div style="font-size: 11px; font-weight: 800; color: var(--text-main);">${e.name}</div>
+                                <div style="font-size: 9.5px; color: var(--text-muted);">${e.vip} • Invested: <b>${e.invested}</b></div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 11px; font-weight: 900; color: #10b981;">+${e.earned}</div>
+                            <div style="font-size: 9px; color: #f59e0b; font-weight: 600;">Net Profit</div>
+                        </div>
+                    </div>`;
                 }).join('');
             } catch(e) {}
         }
@@ -930,7 +1045,7 @@
                 if (isBanned) return;
                 triggerHaptic();
                 const t = vipTiersData[lvl];
-                if (balance < t.price) { alert('Insufficient balance!'); return; }
+                if (balance < t.price) { showToast('Insufficient balance!'); return; }
                 balance -= t.price;
                 activeInvestment = t.price;
                 vipLevel = t.level;
@@ -938,7 +1053,7 @@
                 historyLog.unshift("Activated " + t.name);
                 updateUI();
                 renderVipTiers();
-                alert('Successfully activated ' + t.name);
+                showToast('Successfully activated ' + t.name);
             } catch(e) {}
         }
 
@@ -972,12 +1087,12 @@
             try {
                 if (isBanned) return;
                 triggerHaptic();
-                if (minedAccumulated < 0.10) { alert('Minimum claim is $0.10'); return; }
+                if (minedAccumulated < 0.10) { showToast('Minimum claim is $0.10'); return; }
                 balance += minedAccumulated;
                 historyLog.unshift("Claimed: +$" + minedAccumulated.toFixed(2));
                 minedAccumulated = 0;
                 updateUI();
-                alert('Claimed successfully!');
+                showToast('Claimed successfully!');
             } catch(e) {}
         }
 
@@ -989,7 +1104,7 @@
                 const twentyFourHours = 24 * 60 * 60 * 1000;
                 
                 if (lastCheckInTime && (now - lastCheckInTime < twentyFourHours)) {
-                    alert('You have already claimed your Daily Check-In. Please wait 24 hours between claims.');
+                    showToast('Already claimed! Wait 24h.');
                     return;
                 }
 
@@ -997,8 +1112,10 @@
                 balance += 0.02;
                 historyLog.unshift("Daily Check-In: +$0.02");
                 updateUI();
-                alert('Daily Check-In bonus added (+$0.02)!');
-            } catch(e) {}
+                showToast('Daily Check-In bonus added (+$0.02)!');
+            } catch(e) {
+                showToast('Daily Check-In error occurred.');
+            }
         }
 
         function updateDepositAddress() {
@@ -1012,7 +1129,7 @@
                 const qr = document.getElementById('qrcode');
                 if (qr && window.QRCode) {
                     qr.innerHTML = '';
-                    new QRCode(qr, { text: addr, width: 90, height: 90 });
+                    new QRCode(qr, { text: addr, width: 80, height: 80 });
                 }
             } catch(e) {}
         }
@@ -1024,7 +1141,7 @@
                 const wDisplay = document.getElementById('walletAddressDisplay');
                 if (wDisplay) {
                     navigator.clipboard.writeText(wDisplay.innerText);
-                    alert('Copied!');
+                    showToast('Address copied!');
                 }
             } catch(e) {}
         }
@@ -1037,7 +1154,7 @@
                 if (link) {
                     link.select();
                     navigator.clipboard.writeText(link.value);
-                    alert('Referral link copied!');
+                    showToast('Referral link copied!');
                 }
             } catch(e) {}
         }
@@ -1050,14 +1167,14 @@
                 const netEl = document.getElementById('depositNetwork');
                 const amt = parseFloat(amtInput ? amtInput.value : 0);
                 const net = netEl ? netEl.value : 'BEP20';
-                if (isNaN(amt) || amt < 5) { alert('Min $5'); return; }
+                if (isNaN(amt) || amt < 5) { showToast('Min deposit is $5'); return; }
                 
                 saveAdminRequest('Deposit', amt, net);
                 historyLog.unshift("Deposit Request ($" + amt.toFixed(2) + " " + net + "): Pending");
                 updateUI();
                 closeModal('depositModal');
                 if(amtInput) amtInput.value = '';
-                alert('Deposit submitted for admin approval.');
+                showToast('Deposit submitted for admin approval.');
             } catch(e) {}
         }
 
@@ -1069,8 +1186,8 @@
                 const netEl = document.getElementById('withdrawNetwork');
                 const amt = parseFloat(amtInput ? amtInput.value : 0);
                 const net = netEl ? netEl.value : 'BEP20';
-                if (isNaN(amt) || amt < 5) { alert('Min $5'); return; }
-                if (amt > balance) { alert('Insufficient balance'); return; }
+                if (isNaN(amt) || amt < 5) { showToast('Min withdrawal is $5'); return; }
+                if (amt > balance) { showToast('Insufficient balance'); return; }
                 
                 balance -= amt;
                 saveAdminRequest('Withdrawal', amt, net);
@@ -1078,7 +1195,7 @@
                 updateUI();
                 closeModal('withdrawModal');
                 if(amtInput) amtInput.value = '';
-                alert('Withdrawal requested successfully. Waiting for admin approval.');
+                showToast('Withdrawal requested successfully.');
             } catch(e) {}
         }
 
@@ -1089,11 +1206,11 @@
                 if (!input || !input.value.trim()) return;
                 
                 const userText = input.value.trim();
-                chatHistory.innerHTML += '<div style="color: var(--text-main); font-size: 12px; margin: 4px 0; text-align: right;"><b>You:</b> ' + userText + '</div>';
+                chatHistory.innerHTML += '<div style="color: var(--text-main); font-size: 10px; margin: 3px 0; text-align: right;"><b>You:</b> ' + userText + '</div>';
                 input.value = '';
                 
                 setTimeout(() => {
-                    chatHistory.innerHTML += '<div style="color: #34d399; font-size: 12px; margin: 4px 0; text-align: left;"><b>Support:</b> Your message has been received. Our support team will get back to you shortly.</div>';
+                    chatHistory.innerHTML += '<div style="color: #34d399; font-size: 10px; margin: 3px 0; text-align: left;"><b>Support:</b> Your message has been received. Our team will contact you soon.</div>';
                     chatHistory.scrollTop = chatHistory.scrollHeight;
                 }, 800);
             } catch(e) {}
@@ -1130,7 +1247,7 @@
                     if (pwdInput) pwdInput.value = '';
                     renderAdminPanel();
                 } else {
-                    alert('Wrong password!');
+                    showToast('Wrong password!');
                 }
             } catch(e) {}
         }
