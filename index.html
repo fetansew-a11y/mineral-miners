@@ -546,9 +546,9 @@
     </div>
 
     <script>
-        // 🌟 SUPABASE CONFIGURATION
+        // 🌟 SUPABASE CONFIGURATION (UPDATED WITH CORRECT LEGACY ANON KEY)
         const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_UKuSiII0z9gAVhjosJEG1w__5H5z7b2';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnd3FsY3lhemFmZnhqbXJpYW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI5MTMyMzIsImV4cCI6MjEwODQ4OTIzMn0.I4gpUbJcqap7W73YfTzbX_5T10XhhAIWovGZRQ4rnzk';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const botUsername = 'MineralMinerPro_bot';
@@ -873,7 +873,7 @@
                 const rateEl = document.getElementById('activeRateDisplay');
                 if (rateEl) rateEl.innerText = currentRatePct;
 
-                // 🌟 CORRECT BOTFATHER MINI APP SHORT NAME REFERRAL LINK FORMAT (`/mineral_mining?startapp=`)[span_1](start_span)[span_1](end_span)
+                // 🌟 CORRECT BOTFATHER MINI APP SHORT NAME REFERRAL LINK FORMAT (`/mineral_mining?startapp=`)[span_0](start_span)[span_0](end_span)
                 const refInput = document.getElementById('refLinkInput');
                 if (refInput) {
                     refInput.value = "https://t.me/" + botUsername + "/mineral_mining?startapp=ref_" + telegramId;
