@@ -243,6 +243,26 @@
         </div>
     </div>
 
+    <!-- MANDATORY JOIN CHANNELS MODAL -->
+    <div id="joinModal" class="modal" style="display: flex; background: rgba(3, 7, 18, 0.96); z-index: 99999;">
+        <div class="modal-content" style="text-align: center; border: 2px solid rgba(16, 185, 129, 0.4);">
+            <div style="font-size: 42px; margin-bottom: 6px;">📢</div>
+            <h3 style="margin-top:0; font-size: 18px; font-weight: 900; color: #f8fafc;">Join Channels Required</h3>
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;">
+                To use Mineral Mining Pro and claim rewards, you must join our official channels below:
+            </p>
+            <button class="btn-3d-success" style="margin-bottom: 10px;" onclick="window.open('https://t.me/MineralMinerPro', '_blank')">
+                🔗 1. Join Main Channel
+            </button>
+            <button class="btn-3d-purple" style="margin-bottom: 16px;" onclick="window.open('https://t.me/MineralMinerPro_Payment', '_blank')">
+                💸 2. Join Payment Proof Channel
+            </button>
+            <button class="btn-3d-success" onclick="verifyChannelJoin()">
+                ✅ I Have Joined, Continue
+            </button>
+        </div>
+    </div>
+
     <div class="app-container">
         
         <div class="payout-banner">
@@ -429,7 +449,7 @@
             <div style="font-size: 50px; margin-bottom: 10px;">🚫</div>
             <h3 style="color: #ef4444; margin-top:0;">Account Restricted</h3>
             <p style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-                Your account was flagged for anti-cheat policy violations.
+                Your account was flagged for anti-cheat policy violations (Self-referral limit exceeded).
             </p>
         </div>
     </div>
@@ -506,7 +526,7 @@
     </div>
 
     <script>
-        // 🌟 SUPABASE LIVE CLOUD CREDENTIALS
+        // 🌟 SUPABASE CREDENTIALS & LIVE SYNC
         const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnd3FsY3lhemFmZnhqbXJpYW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI5MTMyMzIsImV4cCI6MjEwODQ4OTIzMn0.I4gpUbJcqap7W73YfTzbX_5T10XhhAIWovGZRQ4rnzk';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -569,6 +589,13 @@
         }
         function closeModal(id) { 
             try { triggerHaptic(); const m = document.getElementById(id); if (m) m.style.display = 'none'; } catch(e) {}
+        }
+
+        function verifyChannelJoin() {
+            triggerHaptic();
+            document.getElementById('joinModal').style.display = 'none';
+            localStorage.setItem('channels_joined_verified', 'true');
+            showPushNotification('Channels verified successfully!');
         }
 
         const wallets = {
@@ -646,9 +673,13 @@
             { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, bg: "linear-gradient(135deg, #7e22ce, #581c87)", svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L30 12 L16 30 L2 12 Z" fill="#c084fc"/></svg>` }
         ];
 
-        // 🌟 LOAD & SYNC WITH SUPABASE CLOUD (GUARANTEED PERSISTENCE)
+        // 🌟 CLOUD SYNC WITH ANTI-CHEAT (MAX 40 REFERRALS) & MANDATORY CHANNELS
         async function initSupabaseCloudApp() {
             try {
+                if (localStorage.getItem('channels_joined_verified') === 'true') {
+                    document.getElementById('joinModal').style.display = 'none';
+                }
+
                 const { data: existingUser, error } = await supabaseClient
                     .from('users')
                     .select('*')
@@ -693,15 +724,21 @@
 
                             if (refUser && !refUser.is_banned) {
                                 let newRefs = (refUser.referral_count || 0) + 1;
-                                let newBal = Number(refUser.balance || 1.00) + 0.04;
-                                let hist = refUser.history || [];
-                                hist.unshift(`Referral Bonus (User ID: ${telegramId}): +$0.04`);
+                                
+                                // 🛡️ ANTI-CHEAT: BAN IF REFERRALS EXCEED 40
+                                if (newRefs > 40) {
+                                    await supabaseClient.from('users').update({ is_banned: true }).eq('telegram_id', referrerId);
+                                } else {
+                                    let newBal = Number(refUser.balance || 1.00) + 0.04;
+                                    let hist = refUser.history || [];
+                                    hist.unshift(`Referral Bonus (User ID: ${telegramId}): +$0.04`);
 
-                                await supabaseClient.from('users').update({
-                                    referral_count: newRefs,
-                                    balance: newBal,
-                                    history: hist
-                                }).eq('telegram_id', referrerId);
+                                    await supabaseClient.from('users').update({
+                                        referral_count: newRefs,
+                                        balance: newBal,
+                                        history: hist
+                                    }).eq('telegram_id', referrerId);
+                                }
                             }
                         }
                     }
@@ -714,7 +751,6 @@
                     const ratePerSecond = (activeInvestment * currentRate) / 86400;
                     const offlineMined = elapsedSeconds * ratePerSecond;
                     minedAccumulated += offlineMined;
-                    showPushNotification(`Offline Mined: +$${offlineMined.toFixed(4)} added!`);
                 }
                 lastActiveTimestamp = now;
 
@@ -734,7 +770,6 @@
                 setInterval(updateEarnersDynamicIncome, 3000);
                 setInterval(saveDataToSupabase, 5000);
             } catch (e) {
-                console.error("Cloud error:", e);
                 renderVipTiers();
                 renderEarnersLeaderboard();
                 updateUI();
