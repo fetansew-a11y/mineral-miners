@@ -239,7 +239,7 @@
         <div class="push-icon">⚡</div>
         <div>
             <div style="font-size: 10px; color: #34d399; font-weight: 800; text-transform: uppercase;">Mineral Mining Alert</div>
-            <div id="pushMsgText" style="font-size: 11px; color: #f8fafc; font-weight: 700;">Online Cloud Sync Active!</div>
+            <div id="pushMsgText" style="font-size: 11px; color: #f8fafc; font-weight: 700;">Supabase Cloud Sync Connected!</div>
         </div>
     </div>
 
@@ -506,7 +506,7 @@
     </div>
 
     <script>
-        // 🌟 SUPABASE PRODUCTION CONFIGURATION
+        // 🌟 YOUR EXACT SUPABASE CREDENTIALS INTEGRATED
         const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnd3FsY3lhemFmZnhqbXJpYW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI5MTMyMzIsImV4cCI6MjEwODQ4OTIzMn0.I4gpUbJcqap7W73YfTzbX_5T10XhhAIWovGZRQ4rnzk';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -646,7 +646,7 @@
             { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, bg: "linear-gradient(135deg, #7e22ce, #581c87)", svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L30 12 L16 30 L2 12 Z" fill="#c084fc"/></svg>` }
         ];
 
-        // 🌟 ROBUST SUPABASE CLOUD SYNC & REFERRAL TRACKING
+        // 🌟 CLOUD SYNC & REFERRAL INTEGRATION
         async function initSupabaseCloudApp() {
             try {
                 const { data: existingUser, error } = await supabaseClient
@@ -667,7 +667,6 @@
                     if (existingUser.history && existingUser.history.length > 0) historyLog = existingUser.history;
                     userName = existingUser.user_name ?? userName;
                 } else {
-                    // Create new user profile in Supabase
                     const newUser = {
                         telegram_id: telegramId,
                         user_name: userName,
@@ -683,7 +682,6 @@
                     };
                     await supabaseClient.from('users').insert([newUser]);
 
-                    // Handle Referral via start_param across different devices
                     if (startParamRef && startParamRef.startsWith('ref_')) {
                         const referrerId = startParamRef.replace('ref_', '');
                         if (referrerId !== telegramId) {
@@ -709,7 +707,6 @@
                     }
                 }
 
-                // Accurate Offline Mining Calculation
                 const now = Date.now();
                 const elapsedSeconds = Math.floor((now - lastActiveTimestamp) / 1000);
                 if (elapsedSeconds > 2 && activeInvestment > 0) {
