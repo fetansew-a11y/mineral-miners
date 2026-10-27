@@ -103,39 +103,40 @@
 
         .sub-balance { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; font-weight: 700; }
         
+        /* PREMIUM 3D GEM CORE */
         .mining-core-container {
-            width: 150px; height: 150px; margin: 18px auto; position: relative;
+            width: 160px; height: 160px; margin: 18px auto; position: relative;
             display: flex; align-items: center; justify-content: center;
         }
         .mining-core-ring {
             position: absolute; width: 100%; height: 100%; border-radius: 50%;
             border: 3px dashed rgba(52, 211, 153, 0.8);
             animation: spinCoreRing 10s linear infinite;
-            box-shadow: 0 0 40px rgba(52, 211, 153, 0.6);
+            box-shadow: 0 0 45px rgba(52, 211, 153, 0.6);
         }
         @keyframes spinCoreRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .mining-core-glow {
-            width: 115px; height: 115px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.7) 0%, rgba(59, 130, 246, 0.45) 100%);
+            width: 125px; height: 125px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.75) 0%, rgba(59, 130, 246, 0.5) 100%);
             display: flex; align-items: center; justify-content: center;
-            box-shadow: inset 0 0 30px rgba(255,255,255,0.8), 0 0 70px rgba(52, 211, 153, 0.9);
+            box-shadow: inset 0 0 35px rgba(255,255,255,0.9), 0 0 80px rgba(52, 211, 153, 1);
             animation: pulseCoreGlow 3s ease-in-out infinite;
         }
-        @keyframes pulseCoreGlow { 0%, 100% { transform: scale(1); box-shadow: 0 0 45px rgba(59, 130, 246, 0.6); } 50% { transform: scale(1.09); box-shadow: 0 0 85px rgba(16, 185, 129, 1); } }
+        @keyframes pulseCoreGlow { 0%, 100% { transform: scale(1); box-shadow: 0 0 50px rgba(59, 130, 246, 0.6); } 50% { transform: scale(1.1); box-shadow: 0 0 95px rgba(16, 185, 129, 1); } }
         
         .realistic-crystal-img {
-            width: 84px; height: 84px; object-fit: contain;
-            filter: drop-shadow(0 0 22px rgba(52, 211, 153, 1)) contrast(1.2) brightness(1.2);
-            animation: rotateCrystal3D 5s ease-in-out infinite alternate, floatCrystal 3s ease-in-out infinite;
+            width: 96px; height: 96px; object-fit: contain;
+            filter: drop-shadow(0 0 25px rgba(52, 211, 153, 1)) saturate(1.4) contrast(1.25) brightness(1.2);
+            animation: rotateCrystal3D 4s ease-in-out infinite alternate, floatCrystal 2.5s ease-in-out infinite;
         }
         @keyframes rotateCrystal3D {
-            0% { transform: rotate(-20deg) scale(0.92) perspective(400px) rotateY(-10deg); }
-            100% { transform: rotate(20deg) scale(1.08) perspective(400px) rotateY(10deg); }
+            0% { transform: rotate(-25deg) scale(0.9) perspective(500px) rotateY(-15deg); }
+            100% { transform: rotate(25deg) scale(1.1) perspective(500px) rotateY(15deg); }
         }
         @keyframes floatCrystal { 
             0%, 100% { transform: translateY(0); } 
-            50% { transform: translateY(-9px); } 
+            50% { transform: translateY(-10px); } 
         }
 
         .live-mining-box { 
@@ -252,7 +253,7 @@
             border: 2px solid rgba(52, 211, 153, 0.5); box-shadow: 0 8px 20px rgba(0,0,0,0.6);
             background: #020617; display: flex; align-items: center; justify-content: center;
         }
-        .vip-badge-real img { width: 100%; height: 100%; object-fit: cover; filter: brightness(1.15) contrast(1.1); }
+        .vip-badge-real img { width: 100%; height: 100%; object-fit: cover; filter: brightness(1.2) saturate(1.3); }
 
         .earner-card-item {
             display: flex; align-items: center; justify-content: space-between;
@@ -365,11 +366,11 @@
                     </button>
                 </div>
 
-                <!-- ULTRA-REALISTIC 3D MINERAL CRYSTAL CORE -->
+                <!-- 3D CARTOON ANIMATED GEM CORE -->
                 <div class="mining-core-container">
                     <div class="mining-core-ring"></div>
                     <div class="mining-core-glow">
-                        <img src="https://images.unsplash.com/photo-1599727402630-9b6999a41c2b?w=200&auto=format&fit=crop&q=80" alt="Realistic Emerald Crystal" class="realistic-crystal-img">
+                        <img src="https://images.unsplash.com/photo-1618401471353-b98aedd04e11?w=250&auto=format&fit=crop&q=80" alt="3D Cartoon Gem" class="realistic-crystal-img">
                     </div>
                 </div>
 
@@ -388,10 +389,17 @@
                 </button>
             </div>
 
-            <div style="margin-top: 14px;">
-                <button id="dailyCheckInBtn" class="btn-3d-purple" onclick="dailyCheckIn()">
-                    <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.33l1.5 1.17L12 8l3.5 3.5 1.5-1.17L14.92 8H20v6z"/></svg></span> <span id="dailyCheckInText">Daily Check-In (+0.02$)</span>
-                </button>
+            <!-- PREMIUM DESIGNED DAILY CHECK-IN BUTTON ON HOME SCREEN -->
+            <div class="card" style="padding: 16px; margin-top: 14px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(59, 130, 246, 0.15)); border: 1px solid rgba(168, 85, 247, 0.4);">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                    <div style="text-align: left;">
+                        <div style="font-size: 13px; font-weight: 900; color: #c084fc;">🎁 Daily Check-In Reward</div>
+                        <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">Claim free +$0.02 every 24 hours!</div>
+                    </div>
+                    <button id="dailyCheckInBtn" class="btn-3d-purple btn-sm" style="margin: 0;" onclick="dailyCheckIn()">
+                        <span id="dailyCheckInText">Claim +$0.02</span>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -771,7 +779,7 @@
         }
 
         let balance = 1.00;
-        let activeInvestment = 0.00; // Default VIP 0 until VIP 1 is purchased
+        let activeInvestment = 0.00;
         let vipLevel = 0;
         let minedAccumulated = 0.00;
         let referralCount = 0;
@@ -780,15 +788,16 @@
         let isBanned = false;
         let historyLog = ["Welcome Bonus: +$1.00 starter capital"];
 
+        // HIGH-END 3D MINERAL & GEMSTONE ASSETS
         const vipTiersData = [
-            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.00, daily: 0.00, img: "https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?w=150&auto=format&fit=crop&q=80" },
-            { level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=150&auto=format&fit=crop&q=80" },
-            { level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.08, daily: 0.80, img: "https://images.unsplash.com/photo-1610375461246-83df859d849d?w=150&auto=format&fit=crop&q=80" },
-            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.10, daily: 2.00, img: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=150&auto=format&fit=crop&q=80" },
-            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.12, daily: 6.00, img: "https://images.unsplash.com/photo-1599727402630-9b6999a41c2b?w=150&auto=format&fit=crop&q=80" },
-            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.14, daily: 14.00, img: "https://images.unsplash.com/photo-1618401471353-b98aedd04e11?w=150&auto=format&fit=crop&q=80" },
-            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.16, daily: 80.00, img: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=150&auto=format&fit=crop&q=80" },
-            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, img: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=150&auto=format&fit=crop&q=80" }
+            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.00, daily: 0.00, img: "https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?w=200&auto=format&fit=crop&q=80" },
+            { level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200&auto=format&fit=crop&q=80" },
+            { level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.08, daily: 0.80, img: "https://images.unsplash.com/photo-1610375461246-83df859d849d?w=200&auto=format&fit=crop&q=80" },
+            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.10, daily: 2.00, img: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=200&auto=format&fit=crop&q=80" },
+            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.12, daily: 6.00, img: "https://images.unsplash.com/photo-1599727402630-9b6999a41c2b?w=200&auto=format&fit=crop&q=80" },
+            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.14, daily: 14.00, img: "https://images.unsplash.com/photo-1618401471353-b98aedd04e11?w=200&auto=format&fit=crop&q=80" },
+            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.16, daily: 80.00, img: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=200&auto=format&fit=crop&q=80" },
+            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, img: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=200&auto=format&fit=crop&q=80" }
         ];
 
         async function initSupabaseCloudApp() {
@@ -927,7 +936,6 @@
                 if (isBanned) return;
                 const randomName = globalNamesList[Math.floor(Math.random() * globalNamesList.length)];
                 
-                // 70% probability for $5.00, 30% for mixed larger amounts ($8, $10, $12, $15, $20, $30, $40, $50)
                 let amt = 5.00;
                 const randRoll = Math.random();
                 if (randRoll > 0.7) {
@@ -977,8 +985,10 @@
                     let icon = '📜';
                     let bgCol = 'rgba(59, 130, 246, 0.15)';
                     let textCol = '#60a5fa';
-                    if (h.includes('Deposit')) { icon = '📥'; bgCol = 'rgba(16, 185, 129, 0.15)'; textCol = '#34d399'; }
-                    else if (h.includes('Withdrawal')) { icon = '📤'; bgCol = 'rgba(245, 158, 11, 0.15)'; textCol = '#fbbf24'; }
+                    if (h.includes('Deposit Approved')) { icon = '📥'; bgCol = 'rgba(16, 185, 129, 0.15)'; textCol = '#34d399'; }
+                    else if (h.includes('Deposit Rejected')) { icon = '❌'; bgCol = 'rgba(239, 68, 68, 0.15)'; textCol = '#ef4444'; }
+                    else if (h.includes('Withdrawal Requested')) { icon = '📤'; bgCol = 'rgba(245, 158, 11, 0.15)'; textCol = '#fbbf24'; }
+                    else if (h.includes('Withdrawal Rejected')) { icon = '❌'; bgCol = 'rgba(239, 68, 68, 0.15)'; textCol = '#ef4444'; }
                     else if (h.includes('Claim') || h.includes('Bonus') || h.includes('Check-In') || h.includes('Offline')) { icon = '⚡'; bgCol = 'rgba(16, 185, 129, 0.15)'; textCol = '#34d399'; }
                     else if (h.includes('Activated') || h.includes('VIP')) { icon = '👑'; bgCol = 'rgba(139, 92, 246, 0.15)'; textCol = '#c084fc'; }
 
@@ -1008,11 +1018,11 @@
                     const remainingMins = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
                     btn.classList.add('btn-disabled');
                     btn.disabled = true;
-                    txt.innerText = `Checked-In (Wait ${remainingHours}h ${remainingMins}m)`;
+                    txt.innerText = `Ready in ${remainingHours}h ${remainingMins}m`;
                 } else {
                     btn.classList.remove('btn-disabled');
                     btn.disabled = false;
-                    txt.innerText = 'Daily Check-In (+0.02$)';
+                    txt.innerText = 'Claim +$0.02';
                 }
             } catch(e) {}
         }
@@ -1088,6 +1098,7 @@
             } catch(e) {}
         }
 
+        // MANUAL VIP PURCHASE BY USER FROM AVAILABLE BALANCE
         function buyVip(lvl) {
             try {
                 if (isBanned) return;
@@ -1248,25 +1259,21 @@
                 const amt = parseFloat(amtInput ? amtInput.value : 0);
                 const net = netEl ? netEl.value : 'BEP20';
                 
-                // Rule 1: Minimum withdrawal is $5
                 if (isNaN(amt) || amt < 5) { 
                     showPushNotification('Minimum withdrawal is $5'); 
                     return; 
                 }
 
-                // Rule 2: Balance check
-                if (amt > balance) { 
-                    showPushNotification('Insufficient balance!'); 
-                    return; 
-                }
-
-                // Rule 3: Balance < $5 error check (e.g. $3 trying to withdraw)
                 if (balance < 5) {
                     showPushNotification('ያልዎት ባላንስ ዝቅተኛ ነው (Minimum withdrawal is $5)');
                     return;
                 }
 
-                // Rule 4: Balance >= $5 but VIP level is 0 (User must buy VIP 1 to withdraw)
+                if (amt > balance) { 
+                    showPushNotification('Insufficient balance!'); 
+                    return; 
+                }
+
                 if (vipLevel < 1) {
                     showPushNotification('ዊዝድራው ለማድረግ የግዴታ VIP 1 መግዛት አለብዎት!');
                     return;
@@ -1403,7 +1410,7 @@
                     <div style="font-size:10px; color:var(--text-muted); margin-bottom:10px;">ID: ${tx.telegram_id}</div>
                     <div style="display:flex; gap:10px;">
                         <button class="btn-3d-success btn-sm" style="margin:0; padding:8px 14px;" onclick="approveTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'DEPOSIT')">Approve</button>
-                        <button class="close-btn btn-sm" style="margin:0; padding:8px 14px; background:#ef4444;" onclick="rejectTransaction('${tx.id}')">Reject</button>
+                        <button class="close-btn btn-sm" style="margin:0; padding:8px 14px; background:#ef4444;" onclick="rejectTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'DEPOSIT')">Reject</button>
                     </div>
                 </div>
             `).join('');
@@ -1433,7 +1440,7 @@
                     <div style="font-size:10px; color:var(--text-muted); margin-bottom:10px;">ID: ${tx.telegram_id}</div>
                     <div style="display:flex; gap:10px;">
                         <button class="btn-3d-success btn-sm" style="margin:0; padding:8px 14px;" onclick="approveTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'WITHDRAWAL')">Approve Paid</button>
-                        <button class="close-btn btn-sm" style="margin:0; padding:8px 14px; background:#ef4444;" onclick="rejectTransaction('${tx.id}')">Reject</button>
+                        <button class="close-btn btn-sm" style="margin:0; padding:8px 14px; background:#ef4444;" onclick="rejectTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'WITHDRAWAL')">Reject</button>
                     </div>
                 </div>
             `).join('');
@@ -1467,23 +1474,22 @@
             `).join('');
         }
 
+        // APPROVE TRANSACTION (DEPOSIT ADDS TO BALANCE ONLY / WITHDRAWAL MARKED APPROVED)
         async function approveTransaction(txId, userId, amount, type) {
             try {
                 triggerHaptic();
                 await supabaseClient.from('transactions').update({ status: 'APPROVED' }).eq('id', txId);
 
-                if (type === 'DEPOSIT') {
-                    const { data: targetUser } = await supabaseClient.from('users').select('*').eq('telegram_id', userId).maybeSingle();
-                    if (targetUser) {
+                const { data: targetUser } = await supabaseClient.from('users').select('*').eq('telegram_id', userId).maybeSingle();
+                if (targetUser) {
+                    let hist = targetUser.history || [];
+                    if (type === 'DEPOSIT') {
                         let newBal = Number(targetUser.balance || 0) + amount;
-                        // Note: Deposit is added to balance, but active_investment for VIP requires buying VIP explicitly or via deposit balance.
-                        let hist = targetUser.history || [];
                         hist.unshift(`Deposit Approved: +$${amount.toFixed(2)}`);
-
-                        await supabaseClient.from('users').update({
-                            balance: newBal,
-                            history: hist
-                        }).eq('telegram_id', userId);
+                        await supabaseClient.from('users').update({ balance: newBal, history: hist }).eq('telegram_id', userId);
+                    } else {
+                        hist.unshift(`Withdrawal Approved: -$${amount.toFixed(2)}`);
+                        await supabaseClient.from('users').update({ history: hist }).eq('telegram_id', userId);
                     }
                 }
 
@@ -1493,10 +1499,26 @@
             } catch(e) {}
         }
 
-        async function rejectTransaction(txId) {
+        // REJECT TRANSACTION WITH HISTORY LOG UPDATE FOR USER
+        async function rejectTransaction(txId, userId, amount, type) {
             try {
                 triggerHaptic();
                 await supabaseClient.from('transactions').update({ status: 'REJECTED' }).eq('id', txId);
+
+                const { data: targetUser } = await supabaseClient.from('users').select('*').eq('telegram_id', userId).maybeSingle();
+                if (targetUser) {
+                    let hist = targetUser.history || [];
+                    if (type === 'WITHDRAWAL') {
+                        // Refund balance back to user if withdrawal was rejected
+                        let refundedBal = Number(targetUser.balance || 0) + amount;
+                        hist.unshift(`Withdrawal Rejected & Refunded: +$${amount.toFixed(2)}`);
+                        await supabaseClient.from('users').update({ balance: refundedBal, history: hist }).eq('telegram_id', userId);
+                    } else {
+                        hist.unshift(`Deposit Rejected ($${amount.toFixed(2)})`);
+                        await supabaseClient.from('users').update({ history: hist }).eq('telegram_id', userId);
+                    }
+                }
+
                 showPushNotification('Transaction rejected.');
                 loadAdminDeposits();
                 loadAdminWithdrawals();
