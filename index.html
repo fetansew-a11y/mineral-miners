@@ -79,7 +79,7 @@
             box-shadow: 0 12px 30px rgba(0,0,0,0.4);
         }
         
-        .title-header-box { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 10px 0; cursor: pointer; }
+        .title-header-box { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 10px 0; }
         .app-title {
             font-size: 24px; font-weight: 900; margin: 0; letter-spacing: -0.5px;
             background: linear-gradient(135deg, #f8fafc 0%, #34d399 50%, #60a5fa 100%);
@@ -103,7 +103,6 @@
 
         .sub-balance { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; font-weight: 700; }
         
-        /* PREMIUM 3D GEM CORE */
         .mining-core-container {
             width: 160px; height: 160px; margin: 18px auto; position: relative;
             display: flex; align-items: center; justify-content: center;
@@ -126,17 +125,17 @@
         @keyframes pulseCoreGlow { 0%, 100% { transform: scale(1); box-shadow: 0 0 50px rgba(59, 130, 246, 0.6); } 50% { transform: scale(1.1); box-shadow: 0 0 95px rgba(16, 185, 129, 1); } }
         
         .realistic-crystal-img {
-            width: 96px; height: 96px; object-fit: contain;
-            filter: drop-shadow(0 0 25px rgba(52, 211, 153, 1)) saturate(1.4) contrast(1.25) brightness(1.2);
-            animation: rotateCrystal3D 4s ease-in-out infinite alternate, floatCrystal 2.5s ease-in-out infinite;
+            width: 100px; height: 100px; object-fit: contain; display: block;
+            filter: drop-shadow(0 0 25px rgba(52, 211, 153, 1)) saturate(1.5) contrast(1.3) brightness(1.25);
+            animation: rotateCrystal3D 5s ease-in-out infinite alternate, floatCrystal 3s ease-in-out infinite;
         }
         @keyframes rotateCrystal3D {
-            0% { transform: rotate(-25deg) scale(0.9) perspective(500px) rotateY(-15deg); }
-            100% { transform: rotate(25deg) scale(1.1) perspective(500px) rotateY(15deg); }
+            0% { transform: rotate(-15deg) scale(0.95); }
+            100% { transform: rotate(15deg) scale(1.1); }
         }
         @keyframes floatCrystal { 
             0%, 100% { transform: translateY(0); } 
-            50% { transform: translateY(-10px); } 
+            50% { transform: translateY(-8px); } 
         }
 
         .live-mining-box { 
@@ -170,7 +169,7 @@
             box-shadow: 0 12px 30px rgba(126, 34, 206, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.5), inset 0 -3px 5px rgba(0, 0, 0, 0.5);
         }
 
-        .btn-sm { padding: 10px 16px; font-size: 11px; margin-top: 6px; width: auto; border-radius: 16px; }
+        .btn-sm { padding: 8px 14px; font-size: 11px; margin-top: 0; width: auto; border-radius: 14px; }
         .btn-disabled { background: linear-gradient(135deg, #64748b, #334155) !important; opacity: 0.6; cursor: not-allowed !important; box-shadow: none !important; }
         .btn-icon svg { width: 18px; height: 18px; fill: currentColor; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); }
 
@@ -328,7 +327,7 @@
                 </div>
             </div>
 
-            <div class="title-header-box" onclick="handleTitleTap()">
+            <div class="title-header-box">
                 <svg class="pro-logo-icon" viewBox="0 0 64 64">
                     <defs>
                         <linearGradient id="proLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -342,6 +341,22 @@
                     <polygon points="46,18 52,14 48,22" fill="#ffffff"/>
                 </svg>
                 <h1 class="app-title">Mineral Mining Pro</h1>
+            </div>
+
+            <!-- PREMIUM COMPACT DAILY CHECK-IN BUTTON PLACED AT THE TOP -->
+            <div class="card" style="padding: 12px 16px; margin: 0 0 14px 0; background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(59, 130, 246, 0.18)); border: 1px solid rgba(168, 85, 247, 0.5); box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                    <div style="display: flex; align-items: center; gap: 10px; text-align: left;">
+                        <div style="font-size: 26px; background: rgba(168, 85, 247, 0.2); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 2px 5px rgba(255,255,255,0.3);">🎁</div>
+                        <div>
+                            <div style="font-size: 12px; font-weight: 900; color: #c084fc;">Daily Check-In Reward</div>
+                            <div style="font-size: 10px; color: var(--text-muted); margin-top: 1px;">Claim free +$0.02 every 24 hours</div>
+                        </div>
+                    </div>
+                    <button id="dailyCheckInBtn" class="btn-3d-purple btn-sm" onclick="dailyCheckIn()">
+                        <span id="dailyCheckInText">Claim +$0.02</span>
+                    </button>
+                </div>
             </div>
 
             <div class="card">
@@ -366,11 +381,11 @@
                     </button>
                 </div>
 
-                <!-- 3D CARTOON ANIMATED GEM CORE -->
+                <!-- 3D GEM CORE ANIMATION -->
                 <div class="mining-core-container">
                     <div class="mining-core-ring"></div>
                     <div class="mining-core-glow">
-                        <img src="https://images.unsplash.com/photo-1618401471353-b98aedd04e11?w=250&auto=format&fit=crop&q=80" alt="3D Cartoon Gem" class="realistic-crystal-img">
+                        <img src="https://images.unsplash.com/photo-1599727402630-9b6999a41c2b?w=300&auto=format&fit=crop&q=80" alt="3D Crystal Gem" class="realistic-crystal-img">
                     </div>
                 </div>
 
@@ -387,19 +402,6 @@
                 <button class="btn-3d-success" onclick="claimMining()">
                     <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M6 2h12l4 7-10 13L2 9l4-7z"/></svg></span> Claim Mined Earnings
                 </button>
-            </div>
-
-            <!-- PREMIUM DESIGNED DAILY CHECK-IN BUTTON ON HOME SCREEN -->
-            <div class="card" style="padding: 16px; margin-top: 14px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(59, 130, 246, 0.15)); border: 1px solid rgba(168, 85, 247, 0.4);">
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                    <div style="text-align: left;">
-                        <div style="font-size: 13px; font-weight: 900; color: #c084fc;">🎁 Daily Check-In Reward</div>
-                        <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">Claim free +$0.02 every 24 hours!</div>
-                    </div>
-                    <button id="dailyCheckInBtn" class="btn-3d-purple btn-sm" style="margin: 0;" onclick="dailyCheckIn()">
-                        <span id="dailyCheckInText">Claim +$0.02</span>
-                    </button>
-                </div>
             </div>
         </div>
 
@@ -427,24 +429,24 @@
                     <p style="margin: 4px 0;">• Total Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
                 </div>
                 <input type="text" id="refLinkInput" readonly style="font-size: 11px;">
-                <button class="btn-3d-success btn-sm" onclick="copyRefLink()">🔗 Copy Referral Link</button>
+                <button class="btn-3d-success btn-sm" onclick="copyRefLink()" style="width:100%; margin-top:6px;">🔗 Copy Referral Link</button>
 
                 <div style="margin-top: 18px; border-top: var(--card-border); padding-top: 16px;">
                     <h3 style="font-size: 13px; margin: 0 0 12px 0; font-weight: 900; color: #fbbf24;">🏆 Milestone Bonuses</h3>
                     
                     <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 14px; border-radius: 16px; margin-bottom: 8px;">
                         <div style="font-size: 11px; text-align: left;"><b>30 Friends</b><br><span style="color:#34d399;">Reward: $1.00</span></div>
-                        <button id="claimBtn30" class="btn-3d-success btn-sm btn-disabled" style="margin:0;" onclick="claimMilestone(30, 1.00)" disabled>Claim</button>
+                        <button id="claimBtn30" class="btn-3d-success btn-sm btn-disabled" onclick="claimMilestone(30, 1.00)" disabled>Claim</button>
                     </div>
 
                     <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 14px; border-radius: 16px; margin-bottom: 8px;">
                         <div style="font-size: 11px; text-align: left;"><b>50 Friends</b><br><span style="color:#34d399;">Reward: $2.00</span></div>
-                        <button id="claimBtn50" class="btn-3d-success btn-sm btn-disabled" style="margin:0;" onclick="claimMilestone(50, 2.00)" disabled>Claim</button>
+                        <button id="claimBtn50" class="btn-3d-success btn-sm btn-disabled" onclick="claimMilestone(50, 2.00)" disabled>Claim</button>
                     </div>
 
                     <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 14px; border-radius: 16px;">
                         <div style="font-size: 11px; text-align: left;"><b>100 Friends</b><br><span style="color:#34d399;">Reward: $5.00</span></div>
-                        <button id="claimBtn100" class="btn-3d-success btn-sm btn-disabled" style="margin:0;" onclick="claimMilestone(100, 5.00)" disabled>Claim</button>
+                        <button id="claimBtn100" class="btn-3d-success btn-sm btn-disabled" onclick="claimMilestone(100, 5.00)" disabled>Claim</button>
                     </div>
                 </div>
             </div>
@@ -456,7 +458,7 @@
             <div class="card" style="text-align: left;">
                 <p style="margin: 0 0 4px 0; font-size: 12px;"><b>Display Name:</b></p>
                 <input type="text" id="profileNameInput" placeholder="Enter your name">
-                <button class="btn-3d-success btn-sm" onclick="saveProfileName()">💾 Save Name</button>
+                <button class="btn-3d-success btn-sm" onclick="saveProfileName()" style="width:100%; margin-top:6px;">💾 Save Name</button>
                 <p style="margin: 14px 0 4px 0; font-size: 12px;"><b>Telegram ID:</b> <span id="profileIdDisplay" style="color: var(--text-muted);">Loading...</span></p>
                 <p style="margin: 6px 0; font-size: 12px;"><b>Current Tier:</b> <span id="profileVipDisplay" style="color: #3b82f6;">VIP 0</span></p>
                 <p style="margin: 6px 0; font-size: 12px;"><b>Active Capital:</b> $<span id="profileInvDisplay" style="color: #34d399;">0.00</span></p>
@@ -515,10 +517,10 @@
             </select>
             <div id="qrcode"></div>
             <div class="wallet-box"><span id="walletAddressDisplay"></span></div>
-            <button class="btn-3d-success btn-sm" onclick="copyWalletAddress()">Copy Address</button>
+            <button class="btn-3d-success btn-sm" onclick="copyWalletAddress()" style="width:100%; margin-top:6px;">Copy Address</button>
             <input type="number" id="depositAmountInput" placeholder="Amount ($ min 5)" min="5">
             <button class="btn-3d-success" onclick="processDeposit()">Submit Deposit</button>
-            <button class="close-btn btn-sm" onclick="closeModal('depositModal')">Close</button>
+            <button class="close-btn btn-sm" onclick="closeModal('depositModal')" style="width:100%;">Close</button>
         </div>
     </div>
 
@@ -533,7 +535,7 @@
             <input type="text" id="withdrawWalletInput" placeholder="Your wallet address">
             <input type="number" id="withdrawAmountInput" placeholder="Amount ($ min 5)" min="5">
             <button class="btn-3d-warning" onclick="processWithdraw()">Request Withdrawal</button>
-            <button class="close-btn btn-sm" onclick="closeModal('withdrawModal')">Close</button>
+            <button class="close-btn btn-sm" onclick="closeModal('withdrawModal')" style="width:100%;">Close</button>
         </div>
     </div>
 
@@ -541,7 +543,7 @@
         <div class="modal-content">
             <h3 style="margin-top:0; font-size:18px; font-weight:900;">📜 Activity Records</h3>
             <div id="historyList" class="history-list">No history found.</div>
-            <button class="close-btn btn-sm" onclick="closeModal('historyModal')">Close</button>
+            <button class="close-btn btn-sm" onclick="closeModal('historyModal')" style="width:100%;">Close</button>
         </div>
     </div>
 
@@ -555,7 +557,7 @@
             </div>
             <textarea id="userSupportMsgInput" rows="2" placeholder="Type your message here..."></textarea>
             <button class="btn-3d-success" onclick="sendUserSupportTicket()">Send Message</button>
-            <button class="close-btn btn-sm" onclick="closeModal('supportChatModal')">Close</button>
+            <button class="close-btn btn-sm" onclick="closeModal('supportChatModal')" style="width:100%;">Close</button>
         </div>
     </div>
 
@@ -582,7 +584,7 @@
                 <div id="adminSupportList" class="admin-list">Loading support tickets...</div>
             </div>
 
-            <button class="close-btn btn-sm" onclick="closeModal('adminPanelModal')" style="margin-top: 14px;">Close Dashboard</button>
+            <button class="close-btn btn-sm" onclick="closeModal('adminPanelModal')" style="width:100%; margin-top: 14px;">Close Dashboard</button>
         </div>
     </div>
 
@@ -788,16 +790,15 @@
         let isBanned = false;
         let historyLog = ["Welcome Bonus: +$1.00 starter capital"];
 
-        // HIGH-END 3D MINERAL & GEMSTONE ASSETS
         const vipTiersData = [
-            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.00, daily: 0.00, img: "https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?w=200&auto=format&fit=crop&q=80" },
-            { level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200&auto=format&fit=crop&q=80" },
-            { level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.08, daily: 0.80, img: "https://images.unsplash.com/photo-1610375461246-83df859d849d?w=200&auto=format&fit=crop&q=80" },
-            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.10, daily: 2.00, img: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=200&auto=format&fit=crop&q=80" },
-            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.12, daily: 6.00, img: "https://images.unsplash.com/photo-1599727402630-9b6999a41c2b?w=200&auto=format&fit=crop&q=80" },
-            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.14, daily: 14.00, img: "https://images.unsplash.com/photo-1618401471353-b98aedd04e11?w=200&auto=format&fit=crop&q=80" },
-            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.16, daily: 80.00, img: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=200&auto=format&fit=crop&q=80" },
-            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, img: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=200&auto=format&fit=crop&q=80" }
+            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.00, daily: 0.00, img: "https://images.unsplash.com/photo-1599727402630-9b6999a41c2b?w=300&auto=format&fit=crop&q=80" },
+            { level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&auto=format&fit=crop&q=80" },
+            { level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.08, daily: 0.80, img: "https://images.unsplash.com/photo-1610375461246-83df859d849d?w=300&auto=format&fit=crop&q=80" },
+            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.10, daily: 2.00, img: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=300&auto=format&fit=crop&q=80" },
+            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.12, daily: 6.00, img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=300&auto=format&fit=crop&q=80" },
+            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.14, daily: 14.00, img: "https://images.unsplash.com/photo-1618401471353-b98aedd04e11?w=300&auto=format&fit=crop&q=80" },
+            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.16, daily: 80.00, img: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=300&auto=format&fit=crop&q=80" },
+            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, img: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=300&auto=format&fit=crop&q=80" }
         ];
 
         async function initSupabaseCloudApp() {
@@ -806,7 +807,7 @@
                     document.getElementById('joinModal').style.display = 'none';
                 }
 
-                if (ADMIN_TELEGRAM_ID && telegramId === ADMIN_TELEGRAM_ID) {
+                if (ADMIN_TELEGRAM_ID && String(telegramId) === String(ADMIN_TELEGRAM_ID)) {
                     const navBtn = document.getElementById('adminNavBtn');
                     if (navBtn) navBtn.style.display = 'inline-block';
                 }
@@ -1057,7 +1058,7 @@
                             </div>
                         </div>
                         <div>
-                            ${isCurr ? '<span style="color:#34d399; font-size:11px; font-weight:900;">Active</span>' : `<button class="btn-3d-success btn-sm" style="margin:0;" onclick="buyVip(${t.level})">Buy</button>`}
+                            ${isCurr ? '<span style="color:#34d399; font-size:11px; font-weight:900;">Active</span>' : `<button class="btn-3d-success btn-sm" onclick="buyVip(${t.level})">Buy</button>`}
                         </div>
                     </div>`;
                 }).join('');
@@ -1098,7 +1099,6 @@
             } catch(e) {}
         }
 
-        // MANUAL VIP PURCHASE BY USER FROM AVAILABLE BALANCE
         function buyVip(lvl) {
             try {
                 if (isBanned) return;
@@ -1368,6 +1368,10 @@
         }
 
         function openAdminDashboard() {
+            if (String(telegramId) !== String(ADMIN_TELEGRAM_ID)) {
+                showPushNotification('Access Denied!');
+                return;
+            }
             openModal('adminPanelModal');
             switchAdminTab('depositsPane', document.querySelector('.admin-tab-btn'));
         }
@@ -1409,8 +1413,8 @@
                     <div style="font-size:11px; color:#34d399; font-weight:700;">Deposit: $${tx.amount.toFixed(2)} (${tx.network})</div>
                     <div style="font-size:10px; color:var(--text-muted); margin-bottom:10px;">ID: ${tx.telegram_id}</div>
                     <div style="display:flex; gap:10px;">
-                        <button class="btn-3d-success btn-sm" style="margin:0; padding:8px 14px;" onclick="approveTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'DEPOSIT')">Approve</button>
-                        <button class="close-btn btn-sm" style="margin:0; padding:8px 14px; background:#ef4444;" onclick="rejectTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'DEPOSIT')">Reject</button>
+                        <button class="btn-3d-success btn-sm" onclick="approveTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'DEPOSIT')">Approve</button>
+                        <button class="close-btn btn-sm" style="background:#ef4444;" onclick="rejectTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'DEPOSIT')">Reject</button>
                     </div>
                 </div>
             `).join('');
@@ -1439,8 +1443,8 @@
                     <div style="font-size:11px; color:#fbbf24; font-weight:700;">Withdrawal: $${tx.amount.toFixed(2)} (${tx.network})</div>
                     <div style="font-size:10px; color:var(--text-muted); margin-bottom:10px;">ID: ${tx.telegram_id}</div>
                     <div style="display:flex; gap:10px;">
-                        <button class="btn-3d-success btn-sm" style="margin:0; padding:8px 14px;" onclick="approveTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'WITHDRAWAL')">Approve Paid</button>
-                        <button class="close-btn btn-sm" style="margin:0; padding:8px 14px; background:#ef4444;" onclick="rejectTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'WITHDRAWAL')">Reject</button>
+                        <button class="btn-3d-success btn-sm" onclick="approveTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'WITHDRAWAL')">Approve Paid</button>
+                        <button class="close-btn btn-sm" style="background:#ef4444;" onclick="rejectTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'WITHDRAWAL')">Reject</button>
                     </div>
                 </div>
             `).join('');
@@ -1468,61 +1472,78 @@
                     ${t.admin_reply ? `<div style="font-size:11px; color:#34d399; margin-bottom:8px;"><b>Your Reply:</b> ${t.admin_reply}</div>` : ''}
                     <div style="display:flex; gap:8px; margin-top:10px;">
                         <input type="text" id="replyInput_${t.id}" placeholder="Type reply..." style="margin:0; padding:10px 12px; font-size:11px;">
-                        <button class="btn-3d-success btn-sm" style="margin:0; padding:10px 14px;" onclick="sendAdminReply('${t.id}')">Reply</button>
+                        <button class="btn-3d-success btn-sm" onclick="sendAdminReply('${t.id}')">Reply</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // APPROVE TRANSACTION (DEPOSIT ADDS TO BALANCE ONLY / WITHDRAWAL MARKED APPROVED)
         async function approveTransaction(txId, userId, amount, type) {
             try {
                 triggerHaptic();
                 await supabaseClient.from('transactions').update({ status: 'APPROVED' }).eq('id', txId);
 
-                const { data: targetUser } = await supabaseClient.from('users').select('*').eq('telegram_id', userId).maybeSingle();
+                let targetUser = null;
+                const { data: userStr } = await supabaseClient.from('users').select('*').eq('telegram_id', String(userId)).maybeSingle();
+                if (userStr) {
+                    targetUser = userStr;
+                } else {
+                    const { data: userNum } = await supabaseClient.from('users').select('*').eq('telegram_id', Number(userId)).maybeSingle();
+                    if (userNum) targetUser = userNum;
+                }
+
                 if (targetUser) {
                     let hist = targetUser.history || [];
                     if (type === 'DEPOSIT') {
-                        let newBal = Number(targetUser.balance || 0) + amount;
-                        hist.unshift(`Deposit Approved: +$${amount.toFixed(2)}`);
-                        await supabaseClient.from('users').update({ balance: newBal, history: hist }).eq('telegram_id', userId);
+                        let newBal = Number(targetUser.balance || 0) + Number(amount);
+                        hist.unshift(`Deposit Approved: +$${Number(amount).toFixed(2)}`);
+                        await supabaseClient.from('users').update({ balance: newBal, history: hist }).eq('telegram_id', targetUser.telegram_id);
                     } else {
-                        hist.unshift(`Withdrawal Approved: -$${amount.toFixed(2)}`);
-                        await supabaseClient.from('users').update({ history: hist }).eq('telegram_id', userId);
+                        hist.unshift(`Withdrawal Approved: -$${Number(amount).toFixed(2)}`);
+                        await supabaseClient.from('users').update({ history: hist }).eq('telegram_id', targetUser.telegram_id);
                     }
                 }
 
-                showPushNotification('Transaction approved successfully!');
+                showPushNotification('Transaction approved & balance updated!');
                 loadAdminDeposits();
                 loadAdminWithdrawals();
-            } catch(e) {}
+            } catch(e) {
+                showPushNotification('Error approving transaction.');
+            }
         }
 
-        // REJECT TRANSACTION WITH HISTORY LOG UPDATE FOR USER
         async function rejectTransaction(txId, userId, amount, type) {
             try {
                 triggerHaptic();
                 await supabaseClient.from('transactions').update({ status: 'REJECTED' }).eq('id', txId);
 
-                const { data: targetUser } = await supabaseClient.from('users').select('*').eq('telegram_id', userId).maybeSingle();
+                let targetUser = null;
+                const { data: userStr } = await supabaseClient.from('users').select('*').eq('telegram_id', String(userId)).maybeSingle();
+                if (userStr) {
+                    targetUser = userStr;
+                } else {
+                    const { data: userNum } = await supabaseClient.from('users').select('*').eq('telegram_id', Number(userId)).maybeSingle();
+                    if (userNum) targetUser = userNum;
+                }
+
                 if (targetUser) {
                     let hist = targetUser.history || [];
                     if (type === 'WITHDRAWAL') {
-                        // Refund balance back to user if withdrawal was rejected
-                        let refundedBal = Number(targetUser.balance || 0) + amount;
-                        hist.unshift(`Withdrawal Rejected & Refunded: +$${amount.toFixed(2)}`);
-                        await supabaseClient.from('users').update({ balance: refundedBal, history: hist }).eq('telegram_id', userId);
+                        let refundedBal = Number(targetUser.balance || 0) + Number(amount);
+                        hist.unshift(`Withdrawal Rejected & Refunded: +$${Number(amount).toFixed(2)}`);
+                        await supabaseClient.from('users').update({ balance: refundedBal, history: hist }).eq('telegram_id', targetUser.telegram_id);
                     } else {
-                        hist.unshift(`Deposit Rejected ($${amount.toFixed(2)})`);
-                        await supabaseClient.from('users').update({ history: hist }).eq('telegram_id', userId);
+                        hist.unshift(`Deposit Rejected ($${Number(amount).toFixed(2)})`);
+                        await supabaseClient.from('users').update({ history: hist }).eq('telegram_id', targetUser.telegram_id);
                     }
                 }
 
                 showPushNotification('Transaction rejected.');
                 loadAdminDeposits();
                 loadAdminWithdrawals();
-            } catch(e) {}
+            } catch(e) {
+                showPushNotification('Error rejecting transaction.');
+            }
         }
 
         async function sendAdminReply(ticketId) {
@@ -1541,19 +1562,6 @@
                 loadAdminSupportTickets();
             } catch(e) {
                 showPushNotification('Failed to send reply.');
-            }
-        }
-
-        let tapCount = 0;
-        let tapTimer = null;
-        function handleTitleTap() {
-            tapCount++;
-            clearTimeout(tapTimer);
-            if (tapCount >= 5) {
-                tapCount = 0;
-                openAdminDashboard();
-            } else {
-                tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
             }
         }
     </script>
