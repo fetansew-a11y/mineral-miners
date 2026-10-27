@@ -3,31 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mineral Mining Ultra Pro 2026</title>
+    <title>Mineral Mining Global Pro 2026</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root[data-theme="dark"] {
-            --bg-gradient: radial-gradient(circle at 50% 0%, #0f172a 0%, #020617 100%);
-            --card-bg: rgba(15, 23, 42, 0.75);
-            --card-border: 1px solid rgba(52, 211, 153, 0.2);
+            --bg-gradient: radial-gradient(circle at 50% 0%, #090d16 0%, #020617 100%);
+            --card-bg: rgba(15, 23, 42, 0.85);
+            --card-border: 1px solid rgba(52, 211, 153, 0.3);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --accent-emerald: #10b981;
-            --accent-glow: 0 0 40px rgba(16, 185, 129, 0.5);
-            --modal-bg: #090d16;
-            --input-bg: rgba(2, 6, 23, 0.95);
+            --accent-glow: 0 0 50px rgba(16, 185, 129, 0.6);
+            --modal-bg: #060913;
+            --input-bg: rgba(2, 6, 23, 0.96);
         }
         :root[data-theme="light"] {
-            --bg-gradient: radial-gradient(circle at 50% 0%, #ffffff 0%, #e2e8f0 100%);
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --card-border: 1px solid rgba(5, 150, 105, 0.2);
+            --bg-gradient: radial-gradient(circle at 50% 0%, #ffffff 0%, #cbd5e1 100%);
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --card-border: 1px solid rgba(5, 150, 105, 0.3);
             --text-main: #0f172a;
             --text-muted: #64748b;
             --accent-emerald: #059669;
-            --accent-glow: 0 0 30px rgba(5, 150, 105, 0.3);
+            --accent-glow: 0 0 40px rgba(5, 150, 105, 0.4);
             --modal-bg: #ffffff;
             --input-bg: #f8fafc;
         }
@@ -57,23 +57,23 @@
         .push-icon { width: 38px; height: 38px; border-radius: 14px; background: linear-gradient(135deg, #10b981, #047857); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; box-shadow: 0 6px 15px rgba(16,185,129,0.6); }
 
         .payout-banner {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15)); 
-            border: 1px solid rgba(16, 185, 129, 0.4);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(59, 130, 246, 0.18)); 
+            border: 1px solid rgba(16, 185, 129, 0.5);
             padding: 10px 14px; border-radius: 16px; margin-bottom: 14px; font-size: 11px; font-weight: 800;
             overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #34d399;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3); backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.35); backdrop-filter: blur(12px);
         }
         .payout-ticker-text { display: inline-block; animation: fadeInTicker 0.5s ease; }
         @keyframes fadeInTicker { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
         .card {
-            background: var(--card-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border-radius: 32px; padding: 22px; margin: 14px 0;
-            border: var(--card-border); box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7);
+            background: var(--card-bg); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
+            border-radius: 34px; padding: 22px; margin: 14px 0;
+            border: var(--card-border); box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.8);
         }
         .header {
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--card-bg); backdrop-filter: blur(20px);
+            background: var(--card-bg); backdrop-filter: blur(25px);
             padding: 14px 20px; border-radius: 24px; border: var(--card-border);
             margin-bottom: 14px; font-weight: 800; font-size: 12px;
             box-shadow: 0 12px 30px rgba(0,0,0,0.4);
@@ -84,7 +84,7 @@
             font-size: 24px; font-weight: 900; margin: 0; letter-spacing: -0.5px;
             background: linear-gradient(135deg, #f8fafc 0%, #34d399 50%, #60a5fa 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 10px rgba(52, 211, 153, 0.3));
+            filter: drop-shadow(0 2px 10px rgba(52, 211, 153, 0.4));
         }
         
         .pro-logo-icon {
@@ -101,61 +101,72 @@
         }
         .balance-wallet-icon { width: 36px; height: 36px; fill: var(--accent-emerald); filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.9)); }
 
-        .sub-balance { font-size: 12px; color: var(--text-muted); margin-bottom: 18px; font-weight: 700; }
+        .sub-balance { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; font-weight: 700; }
         
         .mining-core-container {
-            width: 135px; height: 135px; margin: 16px auto; position: relative;
+            width: 150px; height: 150px; margin: 18px auto; position: relative;
             display: flex; align-items: center; justify-content: center;
         }
         .mining-core-ring {
             position: absolute; width: 100%; height: 100%; border-radius: 50%;
-            border: 3px dashed rgba(52, 211, 153, 0.7);
-            animation: spinCoreRing 14s linear infinite;
-            box-shadow: 0 0 30px rgba(52, 211, 153, 0.4);
+            border: 3px dashed rgba(52, 211, 153, 0.8);
+            animation: spinCoreRing 10s linear infinite;
+            box-shadow: 0 0 40px rgba(52, 211, 153, 0.6);
         }
         @keyframes spinCoreRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .mining-core-glow {
-            width: 100px; height: 100px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, rgba(16, 185, 129, 0.4) 100%);
+            width: 115px; height: 115px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.7) 0%, rgba(59, 130, 246, 0.45) 100%);
             display: flex; align-items: center; justify-content: center;
-            box-shadow: inset 0 0 20px rgba(255,255,255,0.6), 0 0 50px rgba(52, 211, 153, 0.7);
+            box-shadow: inset 0 0 30px rgba(255,255,255,0.8), 0 0 70px rgba(52, 211, 153, 0.9);
             animation: pulseCoreGlow 3s ease-in-out infinite;
         }
-        @keyframes pulseCoreGlow { 0%, 100% { transform: scale(1); box-shadow: 0 0 35px rgba(59, 130, 246, 0.5); } 50% { transform: scale(1.1); box-shadow: 0 0 65px rgba(16, 185, 129, 0.9); } }
+        @keyframes pulseCoreGlow { 0%, 100% { transform: scale(1); box-shadow: 0 0 45px rgba(59, 130, 246, 0.6); } 50% { transform: scale(1.09); box-shadow: 0 0 85px rgba(16, 185, 129, 1); } }
         
-        .mining-core-gem { width: 52px; height: 52px; fill: #34d399; filter: drop-shadow(0 0 20px rgba(52, 211, 153, 1)); animation: floatGem 3s ease-in-out infinite; }
-        @keyframes floatGem { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+        .realistic-crystal-img {
+            width: 84px; height: 84px; object-fit: contain;
+            filter: drop-shadow(0 0 22px rgba(52, 211, 153, 1)) contrast(1.2) brightness(1.2);
+            animation: rotateCrystal3D 5s ease-in-out infinite alternate, floatCrystal 3s ease-in-out infinite;
+        }
+        @keyframes rotateCrystal3D {
+            0% { transform: rotate(-20deg) scale(0.92) perspective(400px) rotateY(-10deg); }
+            100% { transform: rotate(20deg) scale(1.08) perspective(400px) rotateY(10deg); }
+        }
+        @keyframes floatCrystal { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-9px); } 
+        }
 
         .live-mining-box { 
-            background: var(--input-bg); padding: 16px; border-radius: 22px; margin: 16px 0; 
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: inset 0 4px 10px rgba(0,0,0,0.7);
+            background: var(--input-bg); padding: 14px; border-radius: 20px; margin: 14px 0; 
+            border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: inset 0 4px 12px rgba(0,0,0,0.8);
         }
-        .progress-bar-container { width: 100%; background: rgba(255, 255, 255, 0.08); height: 12px; border-radius: 8px; overflow: hidden; margin-top: 10px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.7); }
-        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #059669, #34d399, #60a5fa); border-radius: 8px; transition: width 0.3s ease; box-shadow: 0 0 15px rgba(52,211,153,1); }
+        .progress-bar-container { width: 100%; background: rgba(255, 255, 255, 0.08); height: 10px; border-radius: 6px; overflow: hidden; margin-top: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.7); }
+        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #059669, #34d399, #60a5fa); border-radius: 6px; transition: width 0.3s ease; box-shadow: 0 0 15px rgba(52,211,153,1); }
 
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
         
         button {
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none; padding: 15px; font-size: 13px;
-            font-weight: 800; border-radius: 20px; cursor: pointer; width: 100%;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none; padding: 14px; font-size: 13px;
+            font-weight: 800; border-radius: 18px; cursor: pointer; width: 100%;
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.5), inset 0 2px 6px rgba(255, 255, 255, 0.45), inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.5), inset 0 2px 5px rgba(255, 255, 255, 0.45), inset 0 -3px 5px rgba(0, 0, 0, 0.5);
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        button:active { transform: translateY(2px) scale(0.98); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); }
+        button:active { transform: translateY(2px) scale(0.98); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); }
 
         .btn-3d-success {
             background: linear-gradient(135deg, #34d399 0%, #059669 50%, #047857 100%);
-            box-shadow: 0 15px 35px rgba(5, 150, 105, 0.6), inset 0 2px 6px rgba(255, 255, 255, 0.5), inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 12px 30px rgba(5, 150, 105, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.5), inset 0 -3px 5px rgba(0, 0, 0, 0.5);
         }
         .btn-3d-warning {
             background: linear-gradient(135deg, #fbbf24 0%, #d97706 50%, #b45309 100%);
-            box-shadow: 0 15px 35px rgba(217, 119, 6, 0.6), inset 0 2px 6px rgba(255, 255, 255, 0.5), inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 12px 30px rgba(217, 119, 6, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.5), inset 0 -3px 5px rgba(0, 0, 0, 0.5);
         }
         .btn-3d-purple {
             background: linear-gradient(135deg, #a855f7 0%, #7e22ce 50%, #581c87 100%);
-            box-shadow: 0 15px 35px rgba(126, 34, 206, 0.6), inset 0 2px 6px rgba(255, 255, 255, 0.5), inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 12px 30px rgba(126, 34, 206, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.5), inset 0 -3px 5px rgba(0, 0, 0, 0.5);
         }
 
         .btn-sm { padding: 10px 16px; font-size: 11px; margin-top: 6px; width: auto; border-radius: 16px; }
@@ -198,8 +209,8 @@
 
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 6, 23, 0.9); justify-content: center; align-items: center; z-index: 1000; padding: 16px;
-            backdrop-filter: blur(18px);
+            background: rgba(2, 6, 23, 0.92); justify-content: center; align-items: center; z-index: 1000; padding: 16px;
+            backdrop-filter: blur(20px);
         }
         .modal-content {
             background: var(--modal-bg); padding: 28px; border-radius: 36px; width: 100%;
@@ -236,8 +247,12 @@
             border: var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 12px; 
             box-shadow: 0 12px 30px rgba(0,0,0,0.4);
         }
-        .vip-badge-3d { width: 56px; height: 56px; border-radius: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 10px; box-shadow: inset 0 3px 8px rgba(255,255,255,0.5), 0 10px 25px rgba(0,0,0,0.5); }
-        .vip-badge-3d svg { width: 100%; height: 100%; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); }
+        .vip-badge-real { 
+            width: 60px; height: 60px; border-radius: 18px; overflow: hidden; flex-shrink: 0;
+            border: 2px solid rgba(52, 211, 153, 0.5); box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            background: #020617; display: flex; align-items: center; justify-content: center;
+        }
+        .vip-badge-real img { width: 100%; height: 100%; object-fit: cover; filter: brightness(1.15) contrast(1.1); }
 
         .earner-card-item {
             display: flex; align-items: center; justify-content: space-between;
@@ -292,7 +307,7 @@
     <div class="app-container">
         
         <div class="payout-banner">
-            <span id="payoutTickerText" class="payout-ticker-text">🔥 Ermias_Ethio successfully withdrawn $5.00 (BEP20)</span>
+            <span id="payoutTickerText" class="payout-ticker-text">🔥 Alexander Smith successfully withdrawn $5.00 (BEP20)</span>
         </div>
 
         <button class="support-float-btn" onclick="openSupportChatModal()" title="Customer Support">
@@ -340,12 +355,21 @@
 
                 <div class="sub-balance">Active Capital: $<span id="activeInvDisplay">0.00</span> (<span id="activeRateDisplay">6%</span> Daily Rate)</div>
                 
+                <!-- INSTANT QUICK DEPOSIT & WITHDRAW BUTTONS -->
+                <div class="btn-grid" style="margin: 10px 0 14px 0;">
+                    <button class="btn-3d-success" style="padding: 12px; font-size: 12px;" onclick="openModal('depositModal')">
+                        <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></span> Deposit
+                    </button>
+                    <button class="btn-3d-warning" style="padding: 12px; font-size: 12px;" onclick="openModal('withdrawModal')">
+                        <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M5 15h4v6h6v-6h4l-7-7-7 7zM19 3H5v2h14V3z"/></svg></span> Withdraw
+                    </button>
+                </div>
+
+                <!-- ULTRA-REALISTIC 3D MINERAL CRYSTAL CORE -->
                 <div class="mining-core-container">
                     <div class="mining-core-ring"></div>
                     <div class="mining-core-glow">
-                        <svg class="mining-core-gem" viewBox="0 0 24 24">
-                            <path d="M12,2L2,12L12,22L22,12L12,2M12,4.84L19.16,12L12,19.16L4.84,12L12,4.84Z"/>
-                        </svg>
+                        <img src="https://images.unsplash.com/photo-1599727402630-9b6999a41c2b?w=200&auto=format&fit=crop&q=80" alt="Realistic Emerald Crystal" class="realistic-crystal-img">
                     </div>
                 </div>
 
@@ -364,15 +388,6 @@
                 </button>
             </div>
 
-            <div class="btn-grid">
-                <button class="btn-3d-success" onclick="openModal('depositModal')">
-                    <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></span> Deposit
-                </button>
-                <button class="btn-3d-warning" onclick="openModal('withdrawModal')">
-                    <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M5 15h4v6h6v-6h4l-7-7-7 7zM19 3H5v2h14V3z"/></svg></span> Withdraw
-                </button>
-            </div>
-            
             <div style="margin-top: 14px;">
                 <button id="dailyCheckInBtn" class="btn-3d-purple" onclick="dailyCheckIn()">
                     <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.33l1.5 1.17L12 8l3.5 3.5 1.5-1.17L14.92 8H20v6z"/></svg></span> <span id="dailyCheckInText">Daily Check-In (+0.02$)</span>
@@ -694,17 +709,30 @@
             TON: 'UQAgaG68J6uVa8kysPJVkVVJ-DM9GvZJnaOc8NbkrGv9KzDU'
         };
 
+        const globalNamesList = [
+            "Alexander Smith", "Liam Johnson", "Noah Williams", "Oliver Brown", "Elijah Jones",
+            "James Miller", "William Davis", "Benjamin Garcia", "Lucas Rodriguez", "Henry Martinez",
+            "Alexander Hernandez", "Mason Lopez", "Michael Gonzalez", "Ethan Wilson", "Daniel Anderson",
+            "Logan Thomas", "David Taylor", "Jackson Moore", "Sebastian Jackson", "Aiden Martin",
+            "Matthew Lee", "Samuel Perez", "David Thompson", "Lucas White", "Joseph Harris",
+            "Sophia Martinez", "Emma Rodriguez", "Olivia Lopez", "Ava Gonzalez", "Isabella Wilson",
+            "Mia Anderson", "Evelyn Thomas", "Harper Taylor", "Camila Moore", "Gianna Jackson",
+            "Elena Rostova", "Dmitri Volkov", "Hiroshi Tanaka", "Kenji Sato", "Mei Lin",
+            "Wei Zhang", "Carlos Silva", "Mateo Fernandez", "Lucas Santos", "Gabriel Oliveira",
+            "Hans Mueller", "Lukas Weber", "Marco Rossi", "Giulia Romano", "Jean Dupont"
+        ];
+
         const topEarnersData = [
-            { rank: 1, name: "Alex_Crypto ⚡", vip: "VIP 7 (Diamond)", invested: 1000.00, earned: 4850.20, badge: "🥇" },
-            { rank: 2, name: "Satoshi_God 🚀", vip: "VIP 7 (Diamond)", invested: 1000.00, earned: 4620.00, badge: "🥈" },
-            { rank: 3, name: "CryptoWhale_99 🔮", vip: "VIP 6 (Emerald)", invested: 500.00, earned: 2410.50, badge: "🥉" },
-            { rank: 4, name: "Michael_Trade", vip: "VIP 6 (Emerald)", invested: 500.00, earned: 2350.80, badge: "⚙️" },
-            { rank: 5, name: "David_Miner 🔥", vip: "VIP 5 (Sapphire)", invested: 100.00, earned: 890.40, badge: "⚙️" },
-            { rank: 6, name: "SolanaKing_21", vip: "VIP 5 (Sapphire)", invested: 100.00, earned: 840.10, badge: "⚙️" },
-            { rank: 7, name: "Kirubel_Master", vip: "VIP 4 (Ruby)", invested: 50.00, earned: 420.30, badge: "⚙️" },
-            { rank: 8, name: "Samuel_BTC", vip: "VIP 4 (Ruby)", invested: 50.00, earned: 395.00, badge: "⚙️" },
-            { rank: 9, name: "Yohannes_Node", vip: "VIP 3 (Platinum)", invested: 20.00, earned: 185.60, badge: "⚙️" },
-            { rank: 10, name: "Kidus_Pro", vip: "VIP 3 (Platinum)", invested: 20.00, earned: 172.40, badge: "⚙️" }
+            { rank: 1, name: "Alexander Smith", vip: "VIP 7 (Diamond)", invested: 1000.00, earned: 4850.20, badge: "🥇" },
+            { rank: 2, name: "Liam Johnson", vip: "VIP 7 (Diamond)", invested: 1000.00, earned: 4620.00, badge: "🥈" },
+            { rank: 3, name: "Noah Williams", vip: "VIP 6 (Emerald)", invested: 500.00, earned: 2410.50, badge: "🥉" },
+            { rank: 4, name: "Oliver Brown", vip: "VIP 6 (Emerald)", invested: 500.00, earned: 2350.80, badge: "4" },
+            { rank: 5, name: "Elijah Jones", vip: "VIP 5 (Sapphire)", invested: 100.00, earned: 890.40, badge: "5" },
+            { rank: 6, name: "James Miller", vip: "VIP 5 (Sapphire)", invested: 100.00, earned: 840.10, badge: "6" },
+            { rank: 7, name: "William Davis", vip: "VIP 4 (Ruby)", invested: 50.00, earned: 420.30, badge: "7" },
+            { rank: 8, name: "Benjamin Garcia", vip: "VIP 4 (Ruby)", invested: 50.00, earned: 395.00, badge: "8" },
+            { rank: 9, name: "Lucas Rodriguez", vip: "VIP 3 (Platinum)", invested: 20.00, earned: 185.60, badge: "9" },
+            { rank: 10, name: "Henry Martinez", vip: "VIP 3 (Platinum)", invested: 20.00, earned: 172.40, badge: "10" }
         ];
 
         let telegramId = '';
@@ -743,7 +771,7 @@
         }
 
         let balance = 1.00;
-        let activeInvestment = 1.00;
+        let activeInvestment = 0.00; // Default VIP 0 until VIP 1 is purchased
         let vipLevel = 0;
         let minedAccumulated = 0.00;
         let referralCount = 0;
@@ -753,14 +781,14 @@
         let historyLog = ["Welcome Bonus: +$1.00 starter capital"];
 
         const vipTiersData = [
-            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.06, daily: 0.06, bg: "linear-gradient(135deg, #475569, #1e293b)", svg: `<svg viewBox="0 0 32 32"><path d="M16 4 L28 12 L24 26 L8 26 L4 12 Z" fill="#94a3b8" stroke="#cbd5e1" stroke-width="1.5"/></svg>` },
-            { level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, bg: "linear-gradient(135deg, #64748b, #334155)", svg: `<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="#cbd5e1"/></svg>` },
-            { level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.08, daily: 0.80, bg: "linear-gradient(135deg, #d97706, #92400e)", svg: `<svg viewBox="0 0 32 32"><path d="M4 10 L16 4 L28 10 L24 26 L8 26 Z" fill="#fbbf24"/></svg>` },
-            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.10, daily: 2.00, bg: "linear-gradient(135deg, #0284c7, #0369a1)", svg: `<svg viewBox="0 0 32 32"><polygon points="16,2 30,16 16,30 2,16" fill="#38bdf8"/></svg>` },
-            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.12, daily: 6.00, bg: "linear-gradient(135deg, #e11d48, #881337)", svg: `<svg viewBox="0 0 32 32"><polygon points="9,6 23,6 29,14 16,28 3,14" fill="#fb7185"/></svg>` },
-            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.14, daily: 14.00, bg: "linear-gradient(135deg, #2563eb, #1e3a8a)", svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L28 8 L26 24 L16 30 L6 24 L4 8 Z" fill="#3b82f6"/></svg>` },
-            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.16, daily: 80.00, bg: "linear-gradient(135deg, #059669, #064e3b)", svg: `<svg viewBox="0 0 32 32"><rect x="7" y="7" width="18" height="18" rx="4" transform="rotate(45 16 16)" fill="#34d399"/></svg>` },
-            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, bg: "linear-gradient(135deg, #7e22ce, #581c87)", svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L30 12 L16 30 L2 12 Z" fill="#c084fc"/></svg>` }
+            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.00, daily: 0.00, img: "https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?w=150&auto=format&fit=crop&q=80" },
+            { level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=150&auto=format&fit=crop&q=80" },
+            { level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.08, daily: 0.80, img: "https://images.unsplash.com/photo-1610375461246-83df859d849d?w=150&auto=format&fit=crop&q=80" },
+            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.10, daily: 2.00, img: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=150&auto=format&fit=crop&q=80" },
+            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.12, daily: 6.00, img: "https://images.unsplash.com/photo-1599727402630-9b6999a41c2b?w=150&auto=format&fit=crop&q=80" },
+            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.14, daily: 14.00, img: "https://images.unsplash.com/photo-1618401471353-b98aedd04e11?w=150&auto=format&fit=crop&q=80" },
+            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.16, daily: 80.00, img: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=150&auto=format&fit=crop&q=80" },
+            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, img: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=150&auto=format&fit=crop&q=80" }
         ];
 
         async function initSupabaseCloudApp() {
@@ -897,16 +925,17 @@
         function bannerTicker() {
             try {
                 if (isBanned) return;
-                const realisticNames = [
-                    "Ermias_Ethio 🇪🇹", "Meron_Crypto 💎", "Bini_Miner 🚀", "Kidus_BTC 🔥", 
-                    "Kirubel_Pro 👑", "Samuel_Sol 🌟", "Yohannes_Node ⚙️", "Solomon_Eth 🔮",
-                    "Dawit_Crypto ⚡", "Hana_Trader 💫", "Natnael_TON 🚀", "Bethel_Miner 💎"
-                ];
-                const amounts = [5.00, 5.00, 5.00, 5.00, 11.00, 12.00, 14.00, 20.00, 30.00, 40.00, 50.00, 80.00];
-                const networks = ["BEP20", "TON", "ERC20"];
+                const randomName = globalNamesList[Math.floor(Math.random() * globalNamesList.length)];
                 
-                const randomName = realisticNames[Math.floor(Math.random() * realisticNames.length)];
-                const amt = amounts[Math.floor(Math.random() * amounts.length)];
+                // 70% probability for $5.00, 30% for mixed larger amounts ($8, $10, $12, $15, $20, $30, $40, $50)
+                let amt = 5.00;
+                const randRoll = Math.random();
+                if (randRoll > 0.7) {
+                    const mixedAmounts = [8.00, 10.00, 12.00, 15.00, 20.00, 30.00, 40.00, 50.00];
+                    amt = mixedAmounts[Math.floor(Math.random() * mixedAmounts.length)];
+                }
+
+                const networks = ["BEP20", "TON", "ERC20"];
                 const net = networks[Math.floor(Math.random() * networks.length)];
                 
                 const el = document.getElementById('payoutTickerText');
@@ -1011,7 +1040,7 @@
                     const ratePct = (t.rate * 100).toFixed(0);
                     return `<div class="vip-card-item">
                         <div style="display:flex; align-items:center; gap:12px; text-align:left;">
-                            <div class="vip-badge-3d" style="background:${t.bg}">${t.svg}</div>
+                            <div class="vip-badge-real"><img src="${t.img}" alt="${t.name}"></div>
                             <div>
                                 <b style="font-size:12px; color:var(--text-main);">${t.name}</b><br>
                                 <span style="font-size:11px; color:var(--text-muted)">Price: $${t.price} | Daily: $${t.daily.toFixed(2)} (${ratePct}%)</span>
@@ -1032,7 +1061,7 @@
                 c.innerHTML = topEarnersData.map((e, index) => {
                     return `<div class="earner-card-item">
                         <div style="display: flex; align-items: center; gap: 12px; text-align: left;">
-                            <div style="font-size: 16px; font-weight: 900; width: 28px; text-align: center;">${e.badge}</div>
+                            <div style="font-size: 15px; font-weight: 900; width: 28px; text-align: center; color: ${e.badge.length > 2 ? '#34d399' : '#94a3b8'};">${e.badge}</div>
                             <div>
                                 <div style="font-size: 12px; font-weight: 800; color: var(--text-main);">${e.name}</div>
                                 <div style="font-size: 10px; color: var(--text-muted);">${e.vip} • Capital: <b>$${e.invested.toFixed(2)}</b></div>
@@ -1218,8 +1247,30 @@
                 const netEl = document.getElementById('withdrawNetwork');
                 const amt = parseFloat(amtInput ? amtInput.value : 0);
                 const net = netEl ? netEl.value : 'BEP20';
-                if (isNaN(amt) || amt < 5) { showPushNotification('Minimum withdrawal is $5'); return; }
-                if (amt > balance) { showPushNotification('Insufficient balance!'); return; }
+                
+                // Rule 1: Minimum withdrawal is $5
+                if (isNaN(amt) || amt < 5) { 
+                    showPushNotification('Minimum withdrawal is $5'); 
+                    return; 
+                }
+
+                // Rule 2: Balance check
+                if (amt > balance) { 
+                    showPushNotification('Insufficient balance!'); 
+                    return; 
+                }
+
+                // Rule 3: Balance < $5 error check (e.g. $3 trying to withdraw)
+                if (balance < 5) {
+                    showPushNotification('ያልዎት ባላንስ ዝቅተኛ ነው (Minimum withdrawal is $5)');
+                    return;
+                }
+
+                // Rule 4: Balance >= $5 but VIP level is 0 (User must buy VIP 1 to withdraw)
+                if (vipLevel < 1) {
+                    showPushNotification('ዊዝድራው ለማድረግ የግዴታ VIP 1 መግዛት አለብዎት!');
+                    return;
+                }
                 
                 balance -= amt;
 
@@ -1425,24 +1476,12 @@
                     const { data: targetUser } = await supabaseClient.from('users').select('*').eq('telegram_id', userId).maybeSingle();
                     if (targetUser) {
                         let newBal = Number(targetUser.balance || 0) + amount;
-                        let newInv = Number(targetUser.active_investment || 0) + amount;
-                        let newVip = targetUser.vip_level || 0;
-                        
-                        if (newInv >= 1000) newVip = 7;
-                        else if (newInv >= 500) newVip = 6;
-                        else if (newInv >= 100) newVip = 5;
-                        else if (newInv >= 50) newVip = 4;
-                        else if (newInv >= 20) newVip = 3;
-                        else if (newInv >= 10) newVip = 2;
-                        else if (newInv >= 5) newVip = 1;
-
+                        // Note: Deposit is added to balance, but active_investment for VIP requires buying VIP explicitly or via deposit balance.
                         let hist = targetUser.history || [];
                         hist.unshift(`Deposit Approved: +$${amount.toFixed(2)}`);
 
                         await supabaseClient.from('users').update({
                             balance: newBal,
-                            active_investment: newInv,
-                            vip_level: newVip,
                             history: hist
                         }).eq('telegram_id', userId);
                     }
