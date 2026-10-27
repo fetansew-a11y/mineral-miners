@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mineral Mining Global Pro 2026</title>
+    <title>Mineral Mining Global Pro 2026 - Premium Edition</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -11,23 +11,23 @@
     <style>
         :root[data-theme="dark"] {
             --bg-gradient: radial-gradient(circle at 50% 0%, #090d16 0%, #020617 100%);
-            --card-bg: rgba(15, 23, 42, 0.85);
+            --card-bg: rgba(15, 23, 42, 0.90);
             --card-border: 1px solid rgba(52, 211, 153, 0.3);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --accent-emerald: #10b981;
-            --accent-glow: 0 0 50px rgba(16, 185, 129, 0.6);
+            --accent-glow: 0 0 40px rgba(16, 185, 129, 0.5);
             --modal-bg: #060913;
             --input-bg: rgba(2, 6, 23, 0.96);
         }
         :root[data-theme="light"] {
             --bg-gradient: radial-gradient(circle at 50% 0%, #ffffff 0%, #cbd5e1 100%);
-            --card-bg: rgba(255, 255, 255, 0.92);
+            --card-bg: rgba(255, 255, 255, 0.95);
             --card-border: 1px solid rgba(5, 150, 105, 0.3);
             --text-main: #0f172a;
             --text-muted: #64748b;
             --accent-emerald: #059669;
-            --accent-glow: 0 0 40px rgba(5, 150, 105, 0.4);
+            --accent-glow: 0 0 30px rgba(5, 150, 105, 0.3);
             --modal-bg: #ffffff;
             --input-bg: #f8fafc;
         }
@@ -36,176 +36,208 @@
         body {
             background: var(--bg-gradient); color: var(--text-main);
             font-family: 'Plus Jakarta Sans', sans-serif;
-            margin: 0; padding: 12px 14px 90px 14px; text-align: center;
+            margin: 0; padding: 8px 12px 95px 12px; text-align: center;
             min-height: 100vh; user-select: none; overflow-x: hidden;
         }
         .app-container { max-width: 420px; margin: 0 auto; position: relative; }
         
+        /* PREMIUM FLYING MYSTERY BOX ANIMATION */
+        .flying-mystery-box {
+            position: fixed; top: 110px; right: -80px; z-index: 997;
+            background: linear-gradient(135deg, #fbbf24, #d97706);
+            width: 50px; height: 50px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; cursor: pointer;
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.7), inset 0 2px 4px rgba(255,255,255,0.6);
+            border: 2px solid #fef08a;
+            animation: flyAcrossBox 14s ease-in-out infinite;
+            display: none;
+        }
+        @keyframes flyAcrossBox {
+            0% { right: -80px; transform: translateY(0) rotate(0deg); }
+            50% { right: 105%; transform: translateY(-15px) rotate(15deg); }
+            100% { right: -80px; transform: translateY(0) rotate(0deg); }
+        }
+
         .push-notification-bar {
-            position: fixed; top: 12px; left: 50%; transform: translateX(-50%) translateY(-100px);
+            position: fixed; top: 10px; left: 50%; transform: translateX(-50%) translateY(-100px);
             width: 92%; max-width: 400px; background: rgba(15, 23, 42, 0.98);
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            color: #f8fafc; padding: 14px 18px; border-radius: 22px;
+            color: #f8fafc; padding: 12px 16px; border-radius: 20px;
             font-size: 12px; font-weight: 700; z-index: 99999;
             border: 1px solid rgba(16, 185, 129, 0.6);
             box-shadow: 0 25px 50px rgba(0,0,0,0.85), 0 0 30px rgba(16, 185, 129, 0.4);
-            display: flex; align-items: center; gap: 14px; 
+            display: flex; align-items: center; gap: 12px; 
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
             opacity: 0; pointer-events: none; text-align: left;
         }
         .push-notification-bar.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-        .push-icon { width: 38px; height: 38px; border-radius: 14px; background: linear-gradient(135deg, #10b981, #047857); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; box-shadow: 0 6px 15px rgba(16,185,129,0.6); }
+        .push-icon { width: 34px; height: 34px; border-radius: 12px; background: linear-gradient(135deg, #10b981, #047857); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; box-shadow: 0 4px 12px rgba(16,185,129,0.6); }
 
         .payout-banner {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(59, 130, 246, 0.18)); 
-            border: 1px solid rgba(16, 185, 129, 0.5);
-            padding: 10px 14px; border-radius: 16px; margin-bottom: 14px; font-size: 11px; font-weight: 800;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15)); 
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            padding: 8px 12px; border-radius: 14px; margin-bottom: 10px; font-size: 11px; font-weight: 800;
             overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #34d399;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.35); backdrop-filter: blur(12px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3); backdrop-filter: blur(10px);
         }
         .payout-ticker-text { display: inline-block; animation: fadeInTicker 0.5s ease; }
-        @keyframes fadeInTicker { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInTicker { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
         .card {
-            background: var(--card-bg); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
-            border-radius: 34px; padding: 22px; margin: 14px 0;
-            border: var(--card-border); box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.8);
+            background: var(--card-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border-radius: 28px; padding: 16px 18px; margin: 10px 0;
+            border: var(--card-border); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
         }
         .header {
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--card-bg); backdrop-filter: blur(25px);
-            padding: 14px 20px; border-radius: 24px; border: var(--card-border);
-            margin-bottom: 14px; font-weight: 800; font-size: 12px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            background: var(--card-bg); backdrop-filter: blur(20px);
+            padding: 10px 16px; border-radius: 20px; border: var(--card-border);
+            margin-bottom: 10px; font-weight: 800; font-size: 11px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
         
-        .title-header-box { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 10px 0; }
+        .title-header-box { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 6px 0; }
         .app-title {
-            font-size: 24px; font-weight: 900; margin: 0; letter-spacing: -0.5px;
+            font-size: 22px; font-weight: 900; margin: 0; letter-spacing: -0.5px;
             background: linear-gradient(135deg, #f8fafc 0%, #34d399 50%, #60a5fa 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 10px rgba(52, 211, 153, 0.4));
+            filter: drop-shadow(0 2px 8px rgba(52, 211, 153, 0.4));
         }
         
         .pro-logo-icon {
-            width: 44px; height: 44px; flex-shrink: 0;
-            filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.9));
+            width: 38px; height: 38px; flex-shrink: 0;
+            filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.9));
             animation: proLogoPulse 3s ease-in-out infinite;
         }
-        @keyframes proLogoPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        @keyframes proLogoPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
 
         .balance-box { 
-            font-size: 42px; font-weight: 900; color: var(--accent-emerald); margin: 8px 0; 
-            text-shadow: var(--accent-glow); display: flex; align-items: center; justify-content: center; gap: 10px; 
-            letter-spacing: -1.5px;
+            font-size: 36px; font-weight: 900; color: var(--accent-emerald); margin: 4px 0; 
+            text-shadow: var(--accent-glow); display: flex; align-items: center; justify-content: center; gap: 8px; 
+            letter-spacing: -1px;
         }
-        .balance-wallet-icon { width: 36px; height: 36px; fill: var(--accent-emerald); filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.9)); }
+        .balance-wallet-icon { width: 30px; height: 30px; fill: var(--accent-emerald); filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.8)); }
 
-        .sub-balance { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; font-weight: 700; }
+        .sub-balance { font-size: 11px; color: var(--text-muted); margin-bottom: 12px; font-weight: 700; }
         
         .mining-core-container {
-            width: 160px; height: 160px; margin: 18px auto; position: relative;
+            width: 140px; height: 140px; margin: 12px auto; position: relative;
             display: flex; align-items: center; justify-content: center;
         }
         .mining-core-ring {
             position: absolute; width: 100%; height: 100%; border-radius: 50%;
-            border: 3px dashed rgba(52, 211, 153, 0.8);
+            border: 2px dashed rgba(52, 211, 153, 0.8);
             animation: spinCoreRing 10s linear infinite;
-            box-shadow: 0 0 45px rgba(52, 211, 153, 0.6);
+            box-shadow: 0 0 35px rgba(52, 211, 153, 0.5);
         }
         @keyframes spinCoreRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .mining-core-glow {
-            width: 125px; height: 125px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.75) 0%, rgba(59, 130, 246, 0.5) 100%);
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: inset 0 0 35px rgba(255,255,255,0.9), 0 0 80px rgba(52, 211, 153, 1);
+            width: 110px; height: 110px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.85) 0%, rgba(59, 130, 246, 0.6) 100%);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: inset 0 0 25px rgba(255,255,255,0.9), 0 0 60px rgba(52, 211, 153, 1);
             animation: pulseCoreGlow 3s ease-in-out infinite;
         }
-        @keyframes pulseCoreGlow { 0%, 100% { transform: scale(1); box-shadow: 0 0 50px rgba(59, 130, 246, 0.6); } 50% { transform: scale(1.1); box-shadow: 0 0 95px rgba(16, 185, 129, 1); } }
+        @keyframes pulseCoreGlow { 0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(59, 130, 246, 0.5); } 50% { transform: scale(1.06); box-shadow: 0 0 80px rgba(16, 185, 129, 1); } }
         
-        .realistic-crystal-img {
-            width: 100px; height: 100px; object-fit: contain; display: block;
-            filter: drop-shadow(0 0 25px rgba(52, 211, 153, 1)) saturate(1.5) contrast(1.3) brightness(1.25);
-            animation: rotateCrystal3D 5s ease-in-out infinite alternate, floatCrystal 3s ease-in-out infinite;
+        .css-3d-gem {
+            width: 60px; height: 60px; position: relative;
+            transform-style: preserve-3d;
+            animation: rotateGem3D 6s linear infinite, floatGem 3s ease-in-out infinite alternate;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6));
         }
-        @keyframes rotateCrystal3D {
-            0% { transform: rotate(-15deg) scale(0.95); }
-            100% { transform: rotate(15deg) scale(1.1); }
+        @keyframes rotateGem3D {
+            0% { transform: rotateY(0deg) rotateX(15deg); }
+            100% { transform: rotateY(360deg) rotateX(15deg); }
         }
-        @keyframes floatCrystal { 
-            0%, 100% { transform: translateY(0); } 
-            50% { transform: translateY(-8px); } 
+        @keyframes floatGem {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-5px) scale(1.04); }
+        }
+        .gem-facet {
+            position: absolute; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #34d399 0%, #059669 50%, #60a5fa 100%);
+            clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 20% 100%, 0% 35%);
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: inset 0 0 12px rgba(255,255,255,0.8);
+        }
+        .gem-facet-top {
+            position: absolute; width: 50%; height: 35%; top: 0; left: 25%;
+            background: linear-gradient(135deg, #ffffff 0%, #34d399 100%);
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            opacity: 0.9;
         }
 
         .live-mining-box { 
-            background: var(--input-bg); padding: 14px; border-radius: 20px; margin: 14px 0; 
-            border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: inset 0 4px 12px rgba(0,0,0,0.8);
+            background: var(--input-bg); padding: 10px 14px; border-radius: 16px; margin: 10px 0; 
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: inset 0 3px 10px rgba(0,0,0,0.8);
         }
-        .progress-bar-container { width: 100%; background: rgba(255, 255, 255, 0.08); height: 10px; border-radius: 6px; overflow: hidden; margin-top: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.7); }
-        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #059669, #34d399, #60a5fa); border-radius: 6px; transition: width 0.3s ease; box-shadow: 0 0 15px rgba(52,211,153,1); }
+        .progress-bar-container { width: 100%; background: rgba(255, 255, 255, 0.08); height: 8px; border-radius: 5px; overflow: hidden; margin-top: 6px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.7); }
+        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #059669, #34d399, #60a5fa); border-radius: 5px; transition: width 0.3s ease; box-shadow: 0 0 12px rgba(52,211,153,1); }
 
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         
         button {
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none; padding: 14px; font-size: 13px;
-            font-weight: 800; border-radius: 18px; cursor: pointer; width: 100%;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none; padding: 12px; font-size: 12px;
+            font-weight: 800; border-radius: 16px; cursor: pointer; width: 100%;
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.5), inset 0 2px 5px rgba(255, 255, 255, 0.45), inset 0 -3px 5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -3px 4px rgba(0, 0, 0, 0.5);
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        button:active { transform: translateY(2px) scale(0.98); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); }
+        button:active { transform: translateY(2px) scale(0.98); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); }
 
         .btn-3d-success {
             background: linear-gradient(135deg, #34d399 0%, #059669 50%, #047857 100%);
-            box-shadow: 0 12px 30px rgba(5, 150, 105, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.5), inset 0 -3px 5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 25px rgba(5, 150, 105, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -3px 4px rgba(0, 0, 0, 0.5);
         }
         .btn-3d-warning {
             background: linear-gradient(135deg, #fbbf24 0%, #d97706 50%, #b45309 100%);
-            box-shadow: 0 12px 30px rgba(217, 119, 6, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.5), inset 0 -3px 5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 25px rgba(217, 119, 6, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -3px 4px rgba(0, 0, 0, 0.5);
         }
         .btn-3d-purple {
             background: linear-gradient(135deg, #a855f7 0%, #7e22ce 50%, #581c87 100%);
-            box-shadow: 0 12px 30px rgba(126, 34, 206, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.5), inset 0 -3px 5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 25px rgba(126, 34, 206, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -3px 4px rgba(0, 0, 0, 0.5);
         }
 
-        .btn-sm { padding: 8px 14px; font-size: 11px; margin-top: 0; width: auto; border-radius: 14px; }
+        .btn-sm { padding: 8px 12px; font-size: 11px; margin-top: 0; width: auto; border-radius: 12px; }
         .btn-disabled { background: linear-gradient(135deg, #64748b, #334155) !important; opacity: 0.6; cursor: not-allowed !important; box-shadow: none !important; }
-        .btn-icon svg { width: 18px; height: 18px; fill: currentColor; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); }
+        .btn-icon svg { width: 16px; height: 16px; fill: currentColor; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); }
 
         .theme-toggle-btn {
             background: rgba(255, 255, 255, 0.1); color: var(--text-main); border: 1px solid var(--card-border); 
-            width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .support-float-btn {
-            position: fixed; bottom: 85px; left: 16px; z-index: 998;
+            position: fixed; bottom: 80px; left: 14px; z-index: 998;
             background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white;
-            border: none; width: 56px; height: 56px; border-radius: 50%;
+            border: none; width: 50px; height: 50px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.7), inset 0 2px 5px rgba(255,255,255,0.5); cursor: pointer; transition: transform 0.2s ease;
+            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.7), inset 0 2px 4px rgba(255,255,255,0.4); cursor: pointer; transition: transform 0.2s ease;
         }
         .support-float-btn:active { transform: scale(0.9); }
-        .support-float-btn svg { width: 26px; height: 26px; fill: currentColor; }
+        .support-float-btn svg { width: 22px; height: 22px; fill: currentColor; }
 
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: var(--card-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            display: flex; justify-content: space-around; padding: 14px 0; border-top: var(--card-border); z-index: 999;
-            box-shadow: 0 -15px 40px rgba(0,0,0,0.7);
+            background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            display: flex; justify-content: space-around; padding: 10px 0; border-top: var(--card-border); z-index: 999;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.7);
         }
         .nav-item {
             background: none; border: none; color: var(--text-muted); font-size: 10px;
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            display: flex; flex-direction: column; align-items: center; gap: 3px;
             cursor: pointer; font-weight: 800; width: 20%; padding: 0; box-shadow: none; transition: all 0.2s;
         }
-        .nav-item.active { color: #34d399; text-shadow: 0 0 15px rgba(52,211,153,0.8); transform: translateY(-2px); }
-        .nav-icon svg { width: 24px; height: 24px; fill: currentColor; }
+        .nav-item.active { color: #34d399; text-shadow: 0 0 12px rgba(52,211,153,0.8); transform: translateY(-2px); }
+        .nav-icon svg { width: 22px; height: 22px; fill: currentColor; }
 
         .tab-pane { display: none; }
         .tab-pane.active { display: block; animation: fadeInTab 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes fadeInTab { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInTab { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -213,64 +245,115 @@
             backdrop-filter: blur(20px);
         }
         .modal-content {
-            background: var(--modal-bg); padding: 28px; border-radius: 36px; width: 100%;
+            background: var(--modal-bg); padding: 24px; border-radius: 30px; width: 100%;
             max-width: 415px; border: var(--card-border); text-align: left; max-height: 85vh; overflow-y: auto; color: var(--text-main);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.9);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.9);
         }
         input, select, textarea {
-            width: 100%; padding: 15px 18px; margin: 8px 0 16px 0; background: var(--input-bg);
-            border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; color: var(--text-main); font-size: 13px; font-weight: 700;
-            font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+            width: 100%; padding: 12px 16px; margin: 6px 0 12px 0; background: var(--input-bg);
+            border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; color: var(--text-main); font-size: 12px; font-weight: 700;
+            font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
         }
-        .close-btn { background: #475569; width: 100%; margin-top: 10px; box-shadow: none; }
+        .close-btn { background: #475569; width: 100%; margin-top: 8px; box-shadow: none; }
         
         .history-list, .admin-list {
-            max-height: 340px; overflow-y: auto; background: var(--input-bg);
-            padding: 16px; border-radius: 22px; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: inset 0 3px 8px rgba(0,0,0,0.6);
+            max-height: 300px; overflow-y: auto; background: var(--input-bg);
+            padding: 12px; border-radius: 18px; margin-top: 8px; border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
         }
         .vip-list, .earner-list { background: transparent; border: none; padding: 0; width: 100%; }
 
         .history-card-item {
-            display: flex; align-items: center; gap: 14px;
-            background: var(--card-bg); padding: 16px 18px; border-radius: 20px;
-            margin-bottom: 12px; border: var(--card-border);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4); text-align: left;
+            display: flex; align-items: center; gap: 12px;
+            background: var(--card-bg); padding: 12px 14px; border-radius: 16px;
+            margin-bottom: 10px; border: var(--card-border);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4); text-align: left;
         }
         .history-icon-box {
-            width: 44px; height: 44px; border-radius: 16px; display: flex; align-items: center;
-            justify-content: center; font-size: 18px; flex-shrink: 0; box-shadow: inset 0 2px 5px rgba(255,255,255,0.4);
+            width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center;
+            justify-content: center; font-size: 16px; flex-shrink: 0; box-shadow: inset 0 2px 4px rgba(255,255,255,0.4);
         }
         
         .vip-card-item { 
-            background: var(--card-bg); backdrop-filter: blur(20px); padding: 18px; border-radius: 24px; margin-bottom: 14px; 
-            border: var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 12px; 
-            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            background: var(--card-bg); backdrop-filter: blur(20px); padding: 14px; border-radius: 20px; margin-bottom: 10px; 
+            border: var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 10px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
         .vip-badge-real { 
-            width: 60px; height: 60px; border-radius: 18px; overflow: hidden; flex-shrink: 0;
-            border: 2px solid rgba(52, 211, 153, 0.5); box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            width: 50px; height: 50px; border-radius: 14px; overflow: hidden; flex-shrink: 0;
+            border: 2px solid rgba(52, 211, 153, 0.5); box-shadow: 0 6px 15px rgba(0,0,0,0.6);
             background: #020617; display: flex; align-items: center; justify-content: center;
         }
         .vip-badge-real img { width: 100%; height: 100%; object-fit: cover; filter: brightness(1.2) saturate(1.3); }
 
         .earner-card-item {
             display: flex; align-items: center; justify-content: space-between;
-            background: var(--card-bg); padding: 16px 18px; border-radius: 20px;
-            margin-bottom: 12px; border: var(--card-border); box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            background: var(--card-bg); padding: 14px; border-radius: 16px;
+            margin-bottom: 10px; border: var(--card-border); box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
         
-        #qrcode { display: flex; justify-content: center; margin: 14px auto; background: white; padding: 12px; border-radius: 18px; width: fit-content; box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
-        .wallet-box { background: var(--input-bg); padding: 14px; border-radius: 16px; font-size: 11px; word-break: break-all; margin: 10px 0; border: 1px dashed rgba(52,211,153,0.4); color: var(--text-main); }
+        #qrcode { display: flex; justify-content: center; margin: 10px auto; background: white; padding: 10px; border-radius: 14px; width: fit-content; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .wallet-box { background: var(--input-bg); padding: 12px; border-radius: 14px; font-size: 11px; word-break: break-all; margin: 8px 0; border: 1px dashed rgba(52,211,153,0.4); color: var(--text-main); }
         
-        .admin-tab-header { display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; }
-        .admin-tab-btn { background: var(--input-bg); border: var(--card-border); padding: 9px 14px; font-size: 10px; font-weight: 800; border-radius: 14px; color: var(--text-muted); cursor: pointer; white-space: nowrap; box-shadow: none; width: auto; }
+        .admin-tab-header { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 4px; }
+        .admin-tab-btn { background: var(--input-bg); border: var(--card-border); padding: 8px 12px; font-size: 10px; font-weight: 800; border-radius: 12px; color: var(--text-muted); cursor: pointer; white-space: nowrap; box-shadow: none; width: auto; }
         .admin-tab-btn.active { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; text-shadow: 0 0 10px rgba(59,130,246,0.8); }
         .admin-pane { display: none; }
         .admin-pane.active { display: block; }
+
+        /* MODERN TELEGRAM STYLE CHAT SUPPORT UI */
+        .chat-container-modern {
+            display: flex; flex-direction: column; height: 260px; background: var(--input-bg);
+            border-radius: 16px; border: var(--card-border); overflow: hidden; margin-bottom: 10px;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+        }
+        .chat-header-bar {
+            background: linear-gradient(135deg, #1e293b, #0f172a); padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+            border-bottom: var(--card-border);
+        }
+        .operator-avatar {
+            width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid #34d399;
+            box-shadow: 0 0 10px rgba(52,211,153,0.5);
+        }
+        .chat-messages-scroll {
+            flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; text-align: left;
+        }
+        .chat-bubble-user {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; padding: 8px 12px;
+            border-radius: 14px 14px 2px 14px; max-width: 80%; align-self: flex-end; font-size: 11px; font-weight: 600;
+            box-shadow: 0 4px 12px rgba(59,130,246,0.4); word-break: break-word;
+        }
+        .chat-bubble-admin {
+            background: rgba(16, 185, 129, 0.2); color: var(--text-main); padding: 8px 12px;
+            border-radius: 14px 14px 14px 2px; max-width: 80%; align-self: flex-start; font-size: 11px; font-weight: 600;
+            border: 1px solid rgba(16, 185, 129, 0.4); word-break: break-word;
+        }
+        .chat-input-row {
+            display: flex; padding: 8px; background: var(--card-bg); border-top: var(--card-border); gap: 6px; align-items: center;
+        }
+        .chat-input-row input {
+            margin: 0; padding: 8px 12px; font-size: 11px; border-radius: 12px; flex: 1;
+        }
+        .chat-input-row button {
+            width: auto; padding: 8px 14px; font-size: 11px; border-radius: 12px; margin: 0;
+        }
+
+        .referred-user-item {
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--card-bg); padding: 10px 14px; border-radius: 16px;
+            margin-bottom: 8px; border: var(--card-border); box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .ref-user-avatar {
+            width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #10b981);
+            display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; font-size: 14px;
+            flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.4); overflow: hidden;
+        }
     </style>
 </head>
 <body>
+    <!-- FLYING MYSTERY GIFT BOX ELEMENT -->
+    <div id="flyingMysteryBox" class="flying-mystery-box" onclick="claimMysteryBox()" title="Bonus Mystery Box!">🎁</div>
+
     <div id="pushNotificationBar" class="push-notification-bar">
         <div class="push-icon">⚡</div>
         <div>
@@ -282,20 +365,20 @@
     <!-- MANDATORY REAL-TIME JOIN CHANNELS MODAL -->
     <div id="joinModal" class="modal" style="display: flex; background: rgba(3, 7, 18, 0.98); z-index: 99999;">
         <div class="modal-content" style="text-align: center; border: 2px solid rgba(16, 185, 129, 0.6); box-shadow: 0 0 50px rgba(16,185,129,0.3);">
-            <div style="font-size: 46px; margin-bottom: 8px;">📢</div>
-            <h3 style="margin-top:0; font-size: 20px; font-weight: 900; color: #f8fafc;">Join Channels Required</h3>
-            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-bottom: 18px;">
+            <div style="font-size: 42px; margin-bottom: 6px;">📢</div>
+            <h3 style="margin-top:0; font-size: 18px; font-weight: 900; color: #f8fafc;">Join Channels Required</h3>
+            <p style="font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px;">
                 To use Mineral Mining Pro, you must join our official channels below:
             </p>
 
-            <div id="joinStatusAlert" style="display:none; font-size: 11px; font-weight:800; color:#ef4444; background:rgba(239, 68, 68, 0.15); padding:12px; border-radius:14px; margin-bottom:14px; border:1px solid rgba(239, 68, 68, 0.5);">
+            <div id="joinStatusAlert" style="display:none; font-size: 11px; font-weight:800; color:#ef4444; background:rgba(239, 68, 68, 0.15); padding:10px; border-radius:12px; margin-bottom:12px; border:1px solid rgba(239, 68, 68, 0.5);">
                 ❌ You have not joined both channels yet! Please join to continue.
             </div>
 
-            <button class="btn-3d-success" style="margin-bottom: 12px;" onclick="window.open('https://t.me/MineralMinerPro', '_blank')">
+            <button class="btn-3d-success" style="margin-bottom: 10px;" onclick="window.open('https://t.me/MineralMinerPro', '_blank')">
                 🔗 1. Join Main Channel
             </button>
-            <button class="btn-3d-purple" style="margin-bottom: 18px;" onclick="window.open('https://t.me/MineralMinerPro_Payment', '_blank')">
+            <button class="btn-3d-purple" style="margin-bottom: 14px;" onclick="window.open('https://t.me/MineralMinerPro_Payment', '_blank')">
                 💸 2. Join Payment Proof Channel
             </button>
             <button id="verifyJoinBtn" class="btn-3d-success" onclick="verifyChannelJoin()">
@@ -320,7 +403,7 @@
         <div id="homeTab" class="tab-pane active">
             <div class="header">
                 <div>VIP status: <span id="vipDisplay" style="color:#34d399; font-weight:900;">VIP 0</span></div>
-                <div style="display: flex; gap: 8px; align-items: center;">
+                <div style="display: flex; gap: 6px; align-items: center;">
                     <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeIconBtn">🌙</button>
                     <button class="btn-sm" onclick="switchTabSafe('profileTab', document.querySelectorAll('.nav-item')[4]); openModal('historyModal')">History</button>
                     <button id="adminNavBtn" class="btn-sm btn-3d-warning" style="display:none; margin:0;" onclick="openAdminDashboard()">🛡️ Admin</button>
@@ -343,14 +426,14 @@
                 <h1 class="app-title">Mineral Mining Pro</h1>
             </div>
 
-            <!-- PREMIUM COMPACT DAILY CHECK-IN BUTTON PLACED AT THE TOP -->
-            <div class="card" style="padding: 12px 16px; margin: 0 0 14px 0; background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(59, 130, 246, 0.18)); border: 1px solid rgba(168, 85, 247, 0.5); box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 10px; text-align: left;">
-                        <div style="font-size: 26px; background: rgba(168, 85, 247, 0.2); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 2px 5px rgba(255,255,255,0.3);">🎁</div>
+            <!-- DAILY CHECK-IN BUTTON -->
+            <div class="card" style="padding: 10px 14px; margin: 0 0 10px 0; background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(59, 130, 246, 0.18)); border: 1px solid rgba(168, 85, 247, 0.5); box-shadow: 0 8px 20px rgba(0,0,0,0.3);">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 8px; text-align: left;">
+                        <div style="font-size: 22px; background: rgba(168, 85, 247, 0.2); width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);">🎁</div>
                         <div>
-                            <div style="font-size: 12px; font-weight: 900; color: #c084fc;">Daily Check-In Reward</div>
-                            <div style="font-size: 10px; color: var(--text-muted); margin-top: 1px;">Claim free +$0.02 every 24 hours</div>
+                            <div style="font-size: 11px; font-weight: 900; color: #c084fc;">Daily Check-In Reward</div>
+                            <div style="font-size: 9px; color: var(--text-muted); margin-top: 1px;">Claim free +$0.02 every 24h</div>
                         </div>
                     </div>
                     <button id="dailyCheckInBtn" class="btn-3d-purple btn-sm" onclick="dailyCheckIn()">
@@ -359,8 +442,8 @@
                 </div>
             </div>
 
-            <div class="card">
-                <p style="margin: 0; color: var(--text-muted); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Available Balance</p>
+            <div class="card" style="padding: 16px;">
+                <p style="margin: 0; color: var(--text-muted); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Available Balance</p>
                 
                 <div class="balance-box">
                     <svg class="balance-wallet-icon" viewBox="0 0 24 24">
@@ -371,35 +454,37 @@
 
                 <div class="sub-balance">Active Capital: $<span id="activeInvDisplay">0.00</span> (<span id="activeRateDisplay">6%</span> Daily Rate)</div>
                 
-                <!-- INSTANT QUICK DEPOSIT & WITHDRAW BUTTONS -->
-                <div class="btn-grid" style="margin: 10px 0 14px 0;">
-                    <button class="btn-3d-success" style="padding: 12px; font-size: 12px;" onclick="openModal('depositModal')">
+                <div class="btn-grid" style="margin: 6px 0 10px 0;">
+                    <button class="btn-3d-success" style="padding: 10px; font-size: 11px;" onclick="openModal('depositModal')">
                         <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></span> Deposit
                     </button>
-                    <button class="btn-3d-warning" style="padding: 12px; font-size: 12px;" onclick="openModal('withdrawModal')">
+                    <button class="btn-3d-warning" style="padding: 10px; font-size: 11px;" onclick="openModal('withdrawModal')">
                         <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M5 15h4v6h6v-6h4l-7-7-7 7zM19 3H5v2h14V3z"/></svg></span> Withdraw
                     </button>
                 </div>
 
-                <!-- 3D GEM CORE ANIMATION -->
                 <div class="mining-core-container">
                     <div class="mining-core-ring"></div>
                     <div class="mining-core-glow">
-                        <img src="https://images.unsplash.com/photo-1599727402630-9b6999a41c2b?w=300&auto=format&fit=crop&q=80" alt="3D Crystal Gem" class="realistic-crystal-img">
+                        <div class="css-3d-gem">
+                            <div class="gem-facet-top"></div>
+                            <div class="gem-facet"></div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="live-mining-box">
-                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 900;">
+                    <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 900;">
                         <span style="color: #34d399;">Live Mined (<span id="miningPctDisplay">0.00%</span>)</span>
                         <span id="liveTickerVal" style="color: var(--text-main);">+$0.0000</span>
                     </div>
                     <div class="progress-bar-container">
                         <div id="miningProgressBar" class="progress-bar"></div>
                     </div>
+                    <div id="miningTimerCountdown" style="font-size: 9px; color: #fbbf24; margin-top: 4px; font-weight: 700;">⏱️ Mining cycle active</div>
                 </div>
 
-                <button class="btn-3d-success" onclick="claimMining()">
+                <button class="btn-3d-success" style="padding: 12px; font-size: 12px;" onclick="claimMining()">
                     <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M6 2h12l4 7-10 13L2 9l4-7z"/></svg></span> Claim Mined Earnings
                 </button>
             </div>
@@ -407,44 +492,51 @@
 
         <!-- VIP TAB -->
         <div id="vipTab" class="tab-pane">
-            <h2 style="color: var(--text-main); font-size: 20px; font-weight: 900; margin: 6px 0 14px 0;">👑 VIP Mining Tiers</h2>
+            <h2 style="color: var(--text-main); font-size: 18px; font-weight: 900; margin: 4px 0 10px 0;">👑 VIP Mining Tiers</h2>
             <div id="vipCardsContainer" class="vip-list"></div>
         </div>
 
         <!-- EARNERS TAB -->
         <div id="earnersTab" class="tab-pane">
-            <h2 style="color: var(--text-main); font-size: 20px; font-weight: 900; margin: 6px 0 4px 0;">🏆 Top Miners Leaderboard</h2>
-            <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 14px 0;">Global top investors with dynamic yield returns.</p>
+            <h2 style="color: var(--text-main); font-size: 18px; font-weight: 900; margin: 4px 0 4px 0;">🏆 Top Miners Leaderboard</h2>
+            <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 10px 0;">Global top investors with dynamic yield returns.</p>
             <div id="earnersContainer" class="earner-list"></div>
         </div>
 
         <!-- REFERRAL TAB -->
         <div id="refTab" class="tab-pane">
-            <h2 style="color: var(--text-main); font-size: 20px; font-weight: 900; margin: 6px 0 14px 0;">👥 Referral System</h2>
+            <h2 style="color: var(--text-main); font-size: 18px; font-weight: 900; margin: 4px 0 10px 0;">👥 Referral System</h2>
             <div class="card" style="text-align: left;">
-                <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 12px 0;">Invite friends & earn direct rewards instantly!</p>
-                <div style="font-size: 12px; margin: 12px 0; line-height: 1.6;">
-                    <p style="margin: 4px 0;">• Per Friend Referral: <b style="color:#34d399;">+$0.05</b></p>
-                    <p style="margin: 4px 0;">• Deposit Commission: <b style="color:#fbbf24;">10% Friend's Deposit</b></p>
-                    <p style="margin: 4px 0;">• Total Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
+                <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 10px 0;">Invite friends & earn direct rewards instantly!</p>
+                <div style="font-size: 11px; margin: 10px 0; line-height: 1.5;">
+                    <p style="margin: 3px 0;">• Per Friend Referral: <b style="color:#34d399;">+$0.05</b></p>
+                    <p style="margin: 3px 0;">• Deposit Commission: <b style="color:#fbbf24;">10% Friend's Deposit</b></p>
+                    <p style="margin: 3px 0;">• Total Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
                 </div>
                 <input type="text" id="refLinkInput" readonly style="font-size: 11px;">
-                <button class="btn-3d-success btn-sm" onclick="copyRefLink()" style="width:100%; margin-top:6px;">🔗 Copy Referral Link</button>
+                <button class="btn-3d-success btn-sm" onclick="copyRefLink()" style="width:100%; margin-top:4px;">🔗 Copy Referral Link</button>
 
-                <div style="margin-top: 18px; border-top: var(--card-border); padding-top: 16px;">
-                    <h3 style="font-size: 13px; margin: 0 0 12px 0; font-weight: 900; color: #fbbf24;">🏆 Milestone Bonuses</h3>
+                <div style="margin-top: 16px; border-top: var(--card-border); padding-top: 12px;">
+                    <h3 style="font-size: 12px; margin: 0 0 8px 0; font-weight: 900; color: #34d399;">📋 Your Invited Friends</h3>
+                    <div id="referredUsersListContainer" class="history-list" style="max-height: 160px;">
+                        <div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">No referrals yet. Share your link to start earning!</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 14px; border-top: var(--card-border); padding-top: 12px;">
+                    <h3 style="font-size: 12px; margin: 0 0 10px 0; font-weight: 900; color: #fbbf24;">🏆 Milestone Bonuses</h3>
                     
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 14px; border-radius: 16px; margin-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 10px 12px; border-radius: 14px; margin-bottom: 6px;">
                         <div style="font-size: 11px; text-align: left;"><b>30 Friends</b><br><span style="color:#34d399;">Reward: $1.00</span></div>
                         <button id="claimBtn30" class="btn-3d-success btn-sm btn-disabled" onclick="claimMilestone(30, 1.00)" disabled>Claim</button>
                     </div>
 
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 14px; border-radius: 16px; margin-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 10px 12px; border-radius: 14px; margin-bottom: 6px;">
                         <div style="font-size: 11px; text-align: left;"><b>50 Friends</b><br><span style="color:#34d399;">Reward: $2.00</span></div>
                         <button id="claimBtn50" class="btn-3d-success btn-sm btn-disabled" onclick="claimMilestone(50, 2.00)" disabled>Claim</button>
                     </div>
 
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 14px; border-radius: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 10px 12px; border-radius: 14px;">
                         <div style="font-size: 11px; text-align: left;"><b>100 Friends</b><br><span style="color:#34d399;">Reward: $5.00</span></div>
                         <button id="claimBtn100" class="btn-3d-success btn-sm btn-disabled" onclick="claimMilestone(100, 5.00)" disabled>Claim</button>
                     </div>
@@ -454,19 +546,19 @@
 
         <!-- PROFILE TAB -->
         <div id="profileTab" class="tab-pane">
-            <h2 style="color: var(--text-main); font-size: 20px; font-weight: 900; margin: 6px 0 14px 0;">👤 Profile</h2>
+            <h2 style="color: var(--text-main); font-size: 18px; font-weight: 900; margin: 4px 0 10px 0;">👤 Profile</h2>
             <div class="card" style="text-align: left;">
-                <p style="margin: 0 0 4px 0; font-size: 12px;"><b>Display Name:</b></p>
+                <p style="margin: 0 0 4px 0; font-size: 11px;"><b>Display Name:</b></p>
                 <input type="text" id="profileNameInput" placeholder="Enter your name">
-                <button class="btn-3d-success btn-sm" onclick="saveProfileName()" style="width:100%; margin-top:6px;">💾 Save Name</button>
-                <p style="margin: 14px 0 4px 0; font-size: 12px;"><b>Telegram ID:</b> <span id="profileIdDisplay" style="color: var(--text-muted);">Loading...</span></p>
-                <p style="margin: 6px 0; font-size: 12px;"><b>Current Tier:</b> <span id="profileVipDisplay" style="color: #3b82f6;">VIP 0</span></p>
-                <p style="margin: 6px 0; font-size: 12px;"><b>Active Capital:</b> $<span id="profileInvDisplay" style="color: #34d399;">0.00</span></p>
+                <button class="btn-3d-success btn-sm" onclick="saveProfileName()" style="width:100%; margin-top:4px;">💾 Save Name</button>
+                <p style="margin: 10px 0 4px 0; font-size: 11px;"><b>Telegram ID:</b> <span id="profileIdDisplay" style="color: var(--text-muted);">Loading...</span></p>
+                <p style="margin: 4px 0; font-size: 11px;"><b>Current Tier:</b> <span id="profileVipDisplay" style="color: #3b82f6;">VIP 0</span></p>
+                <p style="margin: 4px 0; font-size: 11px;"><b>Active Capital:</b> $<span id="profileInvDisplay" style="color: #34d399;">0.00</span></p>
             </div>
 
             <div class="card" style="text-align: left;">
-                <h3 style="margin:0 0 10px 0; font-size:14px; font-weight:900;">📜 Extended Activity History</h3>
-                <div id="profileHistoryList" class="history-list" style="max-height: 180px;">No records found.</div>
+                <h3 style="margin:0 0 8px 0; font-size:12px; font-weight:900;">📜 Extended Activity History</h3>
+                <div id="profileHistoryList" class="history-list" style="max-height: 150px;">No records found.</div>
             </div>
         </div>
 
@@ -498,9 +590,9 @@
     <!-- BAN MODAL -->
     <div id="banModal" class="modal" style="display: none; background: rgba(3, 7, 18, 0.95); z-index: 9999;">
         <div class="modal-content" style="text-align: center; border: 2px solid #ef4444;">
-            <div style="font-size: 50px; margin-bottom: 10px;">🚫</div>
+            <div style="font-size: 45px; margin-bottom: 8px;">🚫</div>
             <h3 style="color: #ef4444; margin-top:0;">Account Restricted</h3>
-            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+            <p style="font-size: 11px; color: var(--text-muted); line-height: 1.5;">
                 Your account was flagged for anti-cheat policy violations (Self-referral limit exceeded).
             </p>
         </div>
@@ -509,7 +601,7 @@
     <!-- MODALS -->
     <div id="depositModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; font-size:18px; font-weight:900;">Deposit Crypto</h3>
+            <h3 style="margin-top:0; font-size:16px; font-weight:900;">Deposit Crypto</h3>
             <select id="depositNetwork" onchange="updateDepositAddress()">
                 <option value="BEP20">USDT (BEP20)</option>
                 <option value="ERC20">USDT (ERC20)</option>
@@ -517,7 +609,7 @@
             </select>
             <div id="qrcode"></div>
             <div class="wallet-box"><span id="walletAddressDisplay"></span></div>
-            <button class="btn-3d-success btn-sm" onclick="copyWalletAddress()" style="width:100%; margin-top:6px;">Copy Address</button>
+            <button class="btn-3d-success btn-sm" onclick="copyWalletAddress()" style="width:100%; margin-top:4px;">Copy Address</button>
             <input type="number" id="depositAmountInput" placeholder="Amount ($ min 5)" min="5">
             <button class="btn-3d-success" onclick="processDeposit()">Submit Deposit</button>
             <button class="close-btn btn-sm" onclick="closeModal('depositModal')" style="width:100%;">Close</button>
@@ -526,7 +618,7 @@
 
     <div id="withdrawModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; font-size:18px; font-weight:900;">Withdraw Funds</h3>
+            <h3 style="margin-top:0; font-size:16px; font-weight:900;">Withdraw Funds</h3>
             <select id="withdrawNetwork">
                 <option value="BEP20">USDT (BEP20)</option>
                 <option value="ERC20">USDT (ERC20)</option>
@@ -541,35 +633,44 @@
 
     <div id="historyModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; font-size:18px; font-weight:900;">📜 Activity Records</h3>
+            <h3 style="margin-top:0; font-size:16px; font-weight:900;">📜 Activity Records</h3>
             <div id="historyList" class="history-list">No history found.</div>
             <button class="close-btn btn-sm" onclick="closeModal('historyModal')" style="width:100%;">Close</button>
         </div>
     </div>
 
-    <!-- LIVE SUPPORT CHAT MODAL (USER SIDE) -->
+    <!-- MODERN TELEGRAM STYLE LIVE SUPPORT CHAT MODAL -->
     <div id="supportChatModal" class="modal">
-        <div class="modal-content" style="max-width: 410px;">
-            <h3 style="margin-top:0; color:#3b82f6; font-size:18px; font-weight:900;">💬 Live Support Chat</h3>
-            <p style="font-size: 11px; color: var(--text-muted); margin-top: -5px;">Send your inquiries directly to admin.</p>
-            <div id="userChatHistory" class="history-list" style="height: 220px; text-align: left; margin-bottom: 12px;">
-                <div style="color: var(--text-muted); font-size: 11px; text-align: center; margin-top: 20px;">Loading your chat history...</div>
+        <div class="modal-content" style="max-width: 410px; padding: 18px;">
+            <div class="chat-container-modern">
+                <div class="chat-header-bar">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="operator-avatar" alt="Operator">
+                    <div style="text-align: left;">
+                        <div style="font-size: 12px; font-weight: 900; color: #f8fafc;">Mineral Pro Support</div>
+                        <div style="font-size: 9px; color: #34d399; font-weight: 700;">● Online (Replies in minutes)</div>
+                    </div>
+                </div>
+                <div id="userChatHistory" class="chat-messages-scroll">
+                    <div style="color: var(--text-muted); font-size: 10px; text-align: center; margin-top: auto; margin-bottom: auto;">Loading secure chat...</div>
+                </div>
+                <div class="chat-input-row">
+                    <input type="text" id="userSupportMsgInput" placeholder="Type your message..." style="margin:0;">
+                    <button class="btn-3d-success" onclick="sendUserSupportTicket()">Send</button>
+                </div>
             </div>
-            <textarea id="userSupportMsgInput" rows="2" placeholder="Type your message here..."></textarea>
-            <button class="btn-3d-success" onclick="sendUserSupportTicket()">Send Message</button>
-            <button class="close-btn btn-sm" onclick="closeModal('supportChatModal')" style="width:100%;">Close</button>
+            <button class="close-btn btn-sm" onclick="closeModal('supportChatModal')" style="width:100%;">Close Chat</button>
         </div>
     </div>
 
     <!-- ULTIMATE MULTI-TAB ADMIN DASHBOARD MODAL -->
     <div id="adminPanelModal" class="modal">
         <div class="modal-content" style="max-width: 415px;">
-            <h3 style="margin-top:0; color:#fbbf24; font-size:18px; font-weight:900;">🛡️ Pro Admin Dashboard</h3>
+            <h3 style="margin-top:0; color:#fbbf24; font-size:16px; font-weight:900;">🛡️ Pro Admin Dashboard</h3>
             
             <div class="admin-tab-header">
                 <button class="admin-tab-btn active" onclick="switchAdminTab('depositsPane', this)">📥 Deposits</button>
                 <button class="admin-tab-btn" onclick="switchAdminTab('withdrawalsPane', this)">📤 Withdrawals</button>
-                <button class="admin-tab-btn" onclick="switchAdminTab('supportPane', this)">💬 Support Tickets</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('supportPane', this)">💬 Support</button>
             </div>
 
             <div id="depositsPane" class="admin-pane active">
@@ -584,7 +685,7 @@
                 <div id="adminSupportList" class="admin-list">Loading support tickets...</div>
             </div>
 
-            <button class="close-btn btn-sm" onclick="closeModal('adminPanelModal')" style="width:100%; margin-top: 14px;">Close Dashboard</button>
+            <button class="close-btn btn-sm" onclick="closeModal('adminPanelModal')" style="width:100%; margin-top: 10px;">Close Dashboard</button>
         </div>
     </div>
 
@@ -648,6 +749,9 @@
                 if (target) target.classList.add('active');
                 if (element) element.classList.add('active');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (tabId === 'refTab') {
+                    loadReferredUsersList();
+                }
             } catch(e) {}
         }
 
@@ -786,19 +890,20 @@
         let minedAccumulated = 0.00;
         let referralCount = 0;
         let lastCheckInTime = 0;
+        let lastMysteryBoxTime = 0;
         let lastActiveTimestamp = Date.now();
         let isBanned = false;
         let historyLog = ["Welcome Bonus: +$1.00 starter capital"];
 
         const vipTiersData = [
-            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.00, daily: 0.00, img: "https://images.unsplash.com/photo-1599727402630-9b6999a41c2b?w=300&auto=format&fit=crop&q=80" },
-            { level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&auto=format&fit=crop&q=80" },
+            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.00, daily: 0.00, img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=300&auto=format&fit=crop&q=80" },
+            { level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, img: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=300&auto=format&fit=crop&q=80" },
             { level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.08, daily: 0.80, img: "https://images.unsplash.com/photo-1610375461246-83df859d849d?w=300&auto=format&fit=crop&q=80" },
-            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.10, daily: 2.00, img: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=300&auto=format&fit=crop&q=80" },
-            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.12, daily: 6.00, img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=300&auto=format&fit=crop&q=80" },
-            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.14, daily: 14.00, img: "https://images.unsplash.com/photo-1618401471353-b98aedd04e11?w=300&auto=format&fit=crop&q=80" },
+            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.10, daily: 2.00, img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300&auto=format&fit=crop&q=80" },
+            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.12, daily: 6.00, img: "https://images.unsplash.com/photo-1599727402630-9b6999a41c2b?w=300&auto=format&fit=crop&q=80" },
+            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.14, daily: 14.00, img: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=300&auto=format&fit=crop&q=80" },
             { level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.16, daily: 80.00, img: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=300&auto=format&fit=crop&q=80" },
-            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, img: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=300&auto=format&fit=crop&q=80" }
+            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, img: "https://images.unsplash.com/photo-1618401471353-b98aedd04e11?w=300&auto=format&fit=crop&q=80" }
         ];
 
         async function initSupabaseCloudApp() {
@@ -825,6 +930,7 @@
                     minedAccumulated = Number(existingUser.mined_accumulated ?? minedAccumulated);
                     referralCount = Number(existingUser.referral_count ?? referralCount);
                     lastCheckInTime = Number(existingUser.last_check_in ?? lastCheckInTime);
+                    lastMysteryBoxTime = Number(existingUser.last_mystery_box ?? lastMysteryBoxTime);
                     lastActiveTimestamp = Number(existingUser.last_active_timestamp ?? lastActiveTimestamp);
                     isBanned = Boolean(existingUser.is_banned ?? false);
                     if (existingUser.history && Array.isArray(existingUser.history)) historyLog = existingUser.history;
@@ -839,6 +945,7 @@
                         mined_accumulated: minedAccumulated,
                         referral_count: referralCount,
                         last_check_in: lastCheckInTime,
+                        last_mystery_box: lastMysteryBoxTime,
                         last_active_timestamp: Date.now(),
                         is_banned: false,
                         history: historyLog
@@ -895,6 +1002,8 @@
                 updateUI();
                 checkDailyCheckInState();
                 updateDepositAddress();
+                loadReferredUsersList();
+                checkMysteryBoxVisibility();
 
                 setInterval(liveTicker, 1000);
                 setInterval(bannerTicker, 3200);
@@ -925,6 +1034,7 @@
                     mined_accumulated: minedAccumulated,
                     referral_count: referralCount,
                     last_check_in: lastCheckInTime,
+                    last_mystery_box: lastMysteryBoxTime,
                     last_active_timestamp: lastActiveTimestamp,
                     history: historyLog,
                     is_banned: isBanned
@@ -990,7 +1100,7 @@
                     else if (h.includes('Deposit Rejected')) { icon = '❌'; bgCol = 'rgba(239, 68, 68, 0.15)'; textCol = '#ef4444'; }
                     else if (h.includes('Withdrawal Requested')) { icon = '📤'; bgCol = 'rgba(245, 158, 11, 0.15)'; textCol = '#fbbf24'; }
                     else if (h.includes('Withdrawal Rejected')) { icon = '❌'; bgCol = 'rgba(239, 68, 68, 0.15)'; textCol = '#ef4444'; }
-                    else if (h.includes('Claim') || h.includes('Bonus') || h.includes('Check-In') || h.includes('Offline')) { icon = '⚡'; bgCol = 'rgba(16, 185, 129, 0.15)'; textCol = '#34d399'; }
+                    else if (h.includes('Claim') || h.includes('Bonus') || h.includes('Check-In') || h.includes('Offline') || h.includes('Mystery')) { icon = '⚡'; bgCol = 'rgba(16, 185, 129, 0.15)'; textCol = '#34d399'; }
                     else if (h.includes('Activated') || h.includes('VIP')) { icon = '👑'; bgCol = 'rgba(139, 92, 246, 0.15)'; textCol = '#c084fc'; }
 
                     return `<div class="history-card-item">
@@ -1003,6 +1113,74 @@
                 const pHList = document.getElementById('profileHistoryList');
                 if (hList) hList.innerHTML = histHtml;
                 if (pHList) pHList.innerHTML = histHtml;
+            } catch(e) {}
+        }
+
+        /* SMART MYSTERY BOX LOGIC (4-Hour Cooldown Protection) */
+        function checkMysteryBoxVisibility() {
+            const boxEl = document.getElementById('flyingMysteryBox');
+            if (!boxEl) return;
+            const now = Date.now();
+            const fourHours = 4 * 60 * 60 * 1000;
+            if (!lastMysteryBoxTime || (now - lastMysteryBoxTime > fourHours)) {
+                boxEl.style.display = 'flex';
+            } else {
+                boxEl.style.display = 'none';
+            }
+        }
+
+        function claimMysteryBox() {
+            try {
+                triggerHaptic();
+                const now = Date.now();
+                const fourHours = 4 * 60 * 60 * 1000;
+                if (lastMysteryBoxTime && (now - lastMysteryBoxTime < fourHours)) {
+                    showPushNotification('Mystery Box already claimed recently!');
+                    document.getElementById('flyingMysteryBox').style.display = 'none';
+                    return;
+                }
+
+                lastMysteryBoxTime = now;
+                const bonusAmt = 0.01;
+                balance += bonusAmt;
+                historyLog.unshift(`🎁 Mystery Box Bonus: +$${bonusAmt.toFixed(2)}`);
+                updateUI();
+                document.getElementById('flyingMysteryBox').style.display = 'none';
+                showPushNotification('🎉 Congratulations! You found +$0.01 in the Mystery Box!');
+                saveDataToSupabase();
+            } catch(e) {}
+        }
+
+        async function loadReferredUsersList() {
+            try {
+                const container = document.getElementById('referredUsersListContainer');
+                if (!container) return;
+                const mockReferred = [];
+                for (let i = 0; i < referralCount; i++) {
+                    const fakeName = globalNamesList[(i * 7) % globalNamesList.length];
+                    mockReferred.push({ name: fakeName, bonus: "+$0.05", date: "Recently" });
+                }
+
+                if (mockReferred.length === 0) {
+                    container.innerHTML = '<div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">No referrals yet. Share your link to start earning!</div>';
+                    return;
+                }
+
+                container.innerHTML = mockReferred.map((u, idx) => `
+                    <div class="referred-user-item">
+                        <div style="display: flex; align-items: center; gap: 10px; text-align: left;">
+                            <div class="ref-user-avatar">${u.name.charAt(0)}</div>
+                            <div>
+                                <div style="font-size: 11px; font-weight: 800; color: var(--text-main);">${u.name}</div>
+                                <div style="font-size: 9px; color: var(--text-muted);">Telegram User • Active Miner</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 11px; font-weight: 900; color: #34d399;">${u.bonus}</div>
+                            <div style="font-size: 8px; color: #fbbf24; font-weight: 700;">Direct Reward</div>
+                        </div>
+                    </div>
+                `).join('');
             } catch(e) {}
         }
 
@@ -1050,11 +1228,11 @@
                     const isCurr = vipLevel === t.level && activeInvestment > 0;
                     const ratePct = (t.rate * 100).toFixed(0);
                     return `<div class="vip-card-item">
-                        <div style="display:flex; align-items:center; gap:12px; text-align:left;">
+                        <div style="display:flex; align-items:center; gap:10px; text-align:left;">
                             <div class="vip-badge-real"><img src="${t.img}" alt="${t.name}"></div>
                             <div>
-                                <b style="font-size:12px; color:var(--text-main);">${t.name}</b><br>
-                                <span style="font-size:11px; color:var(--text-muted)">Price: $${t.price} | Daily: $${t.daily.toFixed(2)} (${ratePct}%)</span>
+                                <b style="font-size:11px; color:var(--text-main);">${t.name}</b><br>
+                                <span style="font-size:10px; color:var(--text-muted)">Price: $${t.price} | Daily: $${t.daily.toFixed(2)} (${ratePct}%)</span>
                             </div>
                         </div>
                         <div>
@@ -1071,16 +1249,16 @@
                 if (!c) return;
                 c.innerHTML = topEarnersData.map((e, index) => {
                     return `<div class="earner-card-item">
-                        <div style="display: flex; align-items: center; gap: 12px; text-align: left;">
-                            <div style="font-size: 15px; font-weight: 900; width: 28px; text-align: center; color: ${e.badge.length > 2 ? '#34d399' : '#94a3b8'};">${e.badge}</div>
+                        <div style="display: flex; align-items: center; gap: 10px; text-align: left;">
+                            <div style="font-size: 14px; font-weight: 900; width: 24px; text-align: center; color: ${e.badge.length > 2 ? '#34d399' : '#94a3b8'};">${e.badge}</div>
                             <div>
-                                <div style="font-size: 12px; font-weight: 800; color: var(--text-main);">${e.name}</div>
-                                <div style="font-size: 10px; color: var(--text-muted);">${e.vip} • Capital: <b>$${e.invested.toFixed(2)}</b></div>
+                                <div style="font-size: 11px; font-weight: 800; color: var(--text-main);">${e.name}</div>
+                                <div style="font-size: 9px; color: var(--text-muted);">${e.vip} • Capital: <b>$${e.invested.toFixed(2)}</b></div>
                             </div>
                         </div>
                         <div style="text-align: right;">
-                            <div style="font-size: 12px; font-weight: 900; color: #34d399;" id="earnerVal_${index}">+$${e.earned.toFixed(2)}</div>
-                            <div style="font-size: 9px; color: #fbbf24; font-weight: 700;">Dynamic Yield</div>
+                            <div style="font-size: 11px; font-weight: 900; color: #34d399;" id="earnerVal_${index}">+$${e.earned.toFixed(2)}</div>
+                            <div style="font-size: 8px; color: #fbbf24; font-weight: 700;">Dynamic Yield</div>
                         </div>
                     </div>`;
                 }).join('');
@@ -1123,11 +1301,13 @@
                 const valEl = document.getElementById('liveTickerVal');
                 const barEl = document.getElementById('miningProgressBar');
                 const pctEl = document.getElementById('miningPctDisplay');
+                const timerEl = document.getElementById('miningTimerCountdown');
 
                 if (activeInvestment <= 0) {
                     if (valEl) valEl.innerText = "+ $0.0000";
                     if (barEl) barEl.style.width = '0%';
                     if (pctEl) pctEl.innerText = '0.00%';
+                    if (timerEl) timerEl.innerText = '⏱️ Activate VIP tier to start mining';
                     return;
                 }
 
@@ -1140,6 +1320,16 @@
                 if (valEl) valEl.innerText = "+ $" + minedAccumulated.toFixed(5);
                 if (barEl) barEl.style.width = pct + '%';
                 if (pctEl) pctEl.innerText = pct.toFixed(2) + '%';
+                if (timerEl) {
+                    if (pct >= 100) {
+                        timerEl.innerText = '⚡ Mining cycle completed! Ready to claim.';
+                    } else {
+                        const remSecs = Math.floor(((100 - pct) / 100) * 86400);
+                        const hrs = Math.floor(remSecs / 3600);
+                        const mins = Math.floor((remSecs % 3600) / 60);
+                        timerEl.innerText = `⏱️ Full cycle in ~${hrs}h ${mins}m`;
+                    }
+                }
             } catch(e) {}
         }
 
@@ -1191,7 +1381,7 @@
                 const qr = document.getElementById('qrcode');
                 if (qr && window.QRCode) {
                     qr.innerHTML = '';
-                    new QRCode(qr, { text: addr, width: 95, height: 95 });
+                    new QRCode(qr, { text: addr, width: 90, height: 90 });
                 }
             } catch(e) {}
         }
@@ -1309,7 +1499,7 @@
             try {
                 const historyEl = document.getElementById('userChatHistory');
                 if (!historyEl) return;
-                historyEl.innerHTML = '<div style="color:var(--text-muted); font-size:11px; text-align:center;">Loading messages...</div>';
+                historyEl.innerHTML = '<div style="color:var(--text-muted); font-size:10px; text-align:center;">Loading messages...</div>';
 
                 const { data, error } = await supabaseClient
                     .from('support_tickets')
@@ -1318,29 +1508,23 @@
                     .order('created_at', { ascending: true });
 
                 if (error || !data || data.length === 0) {
-                    historyEl.innerHTML = '<div style="color:var(--text-muted); font-size:11px; text-align:center; padding:15px;">No messages yet. Send your query below!</div>';
+                    historyEl.innerHTML = '<div style="color:var(--text-muted); font-size:10px; text-align:center; padding:20px;">No messages yet. Send your query below!</div>';
                     return;
                 }
 
                 historyEl.innerHTML = data.map(t => {
-                    let html = `<div style="background:var(--card-bg); padding:12px 14px; border-radius:16px; margin-bottom:10px; border:var(--card-border);">
-                        <div style="font-size:10px; color:#3b82f6; font-weight:800; margin-bottom:2px;">You:</div>
-                        <div style="font-size:11px; color:var(--text-main);">${t.message}</div>
-                    </div>`;
+                    let html = `<div class="chat-bubble-user">${t.message}</div>`;
                     if (t.admin_reply) {
-                        html += `<div style="background:rgba(16,185,129,0.15); padding:12px 14px; border-radius:16px; margin-bottom:10px; border:1px solid rgba(16,185,129,0.4);">
-                            <div style="font-size:10px; color:#34d399; font-weight:800; margin-bottom:2px;">🛡️ Admin Reply:</div>
-                            <div style="font-size:11px; color:var(--text-main);">${t.admin_reply}</div>
-                        </div>`;
+                        html += `<div class="chat-bubble-admin">🛡️ ${t.admin_reply}</div>`;
                     } else {
-                        html += `<div style="font-size:9px; color:#fbbf24; margin-bottom:10px; font-weight:700;">⏳ Status: Pending Admin Reply</div>`;
+                        html += `<div style="font-size:9px; color:#fbbf24; align-self:flex-start; margin:2px 0;">⏳ Status: Pending Admin Reply</div>`;
                     }
                     return html;
                 }).join('');
                 historyEl.scrollTop = historyEl.scrollHeight;
             } catch(e) {
                 const historyEl = document.getElementById('userChatHistory');
-                if (historyEl) historyEl.innerHTML = '<div style="color:#ef4444; font-size:11px;">Error loading chat.</div>';
+                if (historyEl) historyEl.innerHTML = '<div style="color:#ef4444; font-size:10px;">Error loading chat.</div>';
             }
         }
 
@@ -1403,16 +1587,16 @@
                 .order('created_at', { ascending: false });
 
             if (error || !data || data.length === 0) {
-                listEl.innerHTML = '<div style="color:var(--text-muted); font-size:11px; padding:12px;">No pending deposits.</div>';
+                listEl.innerHTML = '<div style="color:var(--text-muted); font-size:11px; padding:10px;">No pending deposits.</div>';
                 return;
             }
 
             listEl.innerHTML = data.map(tx => `
-                <div style="background:var(--card-bg); padding:14px; border-radius:16px; margin-bottom:12px; border:var(--card-border); text-align:left;">
-                    <div style="font-size:12px; font-weight:800; color:var(--text-main);">${tx.user_name}</div>
+                <div style="background:var(--card-bg); padding:12px; border-radius:14px; margin-bottom:10px; border:var(--card-border); text-align:left;">
+                    <div style="font-size:11px; font-weight:800; color:var(--text-main);">${tx.user_name}</div>
                     <div style="font-size:11px; color:#34d399; font-weight:700;">Deposit: $${tx.amount.toFixed(2)} (${tx.network})</div>
-                    <div style="font-size:10px; color:var(--text-muted); margin-bottom:10px;">ID: ${tx.telegram_id}</div>
-                    <div style="display:flex; gap:10px;">
+                    <div style="font-size:9px; color:var(--text-muted); margin-bottom:8px;">ID: ${tx.telegram_id}</div>
+                    <div style="display:flex; gap:8px;">
                         <button class="btn-3d-success btn-sm" onclick="approveTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'DEPOSIT')">Approve</button>
                         <button class="close-btn btn-sm" style="background:#ef4444;" onclick="rejectTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'DEPOSIT')">Reject</button>
                     </div>
@@ -1433,16 +1617,16 @@
                 .order('created_at', { ascending: false });
 
             if (error || !data || data.length === 0) {
-                listEl.innerHTML = '<div style="color:var(--text-muted); font-size:11px; padding:12px;">No pending withdrawals.</div>';
+                listEl.innerHTML = '<div style="color:var(--text-muted); font-size:11px; padding:10px;">No pending withdrawals.</div>';
                 return;
             }
 
             listEl.innerHTML = data.map(tx => `
-                <div style="background:var(--card-bg); padding:14px; border-radius:16px; margin-bottom:12px; border:var(--card-border); text-align:left;">
-                    <div style="font-size:12px; font-weight:800; color:var(--text-main);">${tx.user_name}</div>
+                <div style="background:var(--card-bg); padding:12px; border-radius:14px; margin-bottom:10px; border:var(--card-border); text-align:left;">
+                    <div style="font-size:11px; font-weight:800; color:var(--text-main);">${tx.user_name}</div>
                     <div style="font-size:11px; color:#fbbf24; font-weight:700;">Withdrawal: $${tx.amount.toFixed(2)} (${tx.network})</div>
-                    <div style="font-size:10px; color:var(--text-muted); margin-bottom:10px;">ID: ${tx.telegram_id}</div>
-                    <div style="display:flex; gap:10px;">
+                    <div style="font-size:9px; color:var(--text-muted); margin-bottom:8px;">ID: ${tx.telegram_id}</div>
+                    <div style="display:flex; gap:8px;">
                         <button class="btn-3d-success btn-sm" onclick="approveTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'WITHDRAWAL')">Approve Paid</button>
                         <button class="close-btn btn-sm" style="background:#ef4444;" onclick="rejectTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'WITHDRAWAL')">Reject</button>
                     </div>
@@ -1461,17 +1645,17 @@
                 .order('created_at', { ascending: false });
 
             if (error || !data || data.length === 0) {
-                listEl.innerHTML = '<div style="color:var(--text-muted); font-size:11px; padding:12px;">No support messages found.</div>';
+                listEl.innerHTML = '<div style="color:var(--text-muted); font-size:11px; padding:10px;">No support messages found.</div>';
                 return;
             }
 
             listEl.innerHTML = data.map(t => `
-                <div style="background:var(--card-bg); padding:14px; border-radius:16px; margin-bottom:12px; border:var(--card-border); text-align:left;">
-                    <div style="font-size:12px; font-weight:800; color:var(--text-main);">${t.user_name || 'User'} <span style="font-size:10px; color:var(--text-muted);">(ID: ${t.telegram_id})</span></div>
-                    <div style="font-size:11px; color:#60a5fa; margin:6px 0;"><b>Query:</b> ${t.message}</div>
-                    ${t.admin_reply ? `<div style="font-size:11px; color:#34d399; margin-bottom:8px;"><b>Your Reply:</b> ${t.admin_reply}</div>` : ''}
-                    <div style="display:flex; gap:8px; margin-top:10px;">
-                        <input type="text" id="replyInput_${t.id}" placeholder="Type reply..." style="margin:0; padding:10px 12px; font-size:11px;">
+                <div style="background:var(--card-bg); padding:12px; border-radius:14px; margin-bottom:10px; border:var(--card-border); text-align:left;">
+                    <div style="font-size:11px; font-weight:800; color:var(--text-main);">${t.user_name || 'User'} <span style="font-size:9px; color:var(--text-muted);">(ID: ${t.telegram_id})</span></div>
+                    <div style="font-size:11px; color:#60a5fa; margin:4px 0;"><b>Query:</b> ${t.message}</div>
+                    ${t.admin_reply ? `<div style="font-size:11px; color:#34d399; margin-bottom:6px;"><b>Your Reply:</b> ${t.admin_reply}</div>` : ''}
+                    <div style="display:flex; gap:6px; margin-top:8px;">
+                        <input type="text" id="replyInput_${t.id}" placeholder="Type reply..." style="margin:0; padding:8px 10px; font-size:11px;">
                         <button class="btn-3d-success btn-sm" onclick="sendAdminReply('${t.id}')">Reply</button>
                     </div>
                 </div>
