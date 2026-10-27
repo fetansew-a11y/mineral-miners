@@ -41,7 +41,7 @@
         }
         .app-container { max-width: 420px; margin: 0 auto; position: relative; }
         
-        /* PREMIUM FLYING MYSTERY BOX ANIMATION */
+        /* SECURE FLYING MYSTERY BOX ANIMATION */
         .flying-mystery-box {
             position: fixed; top: 110px; right: -80px; z-index: 997;
             background: linear-gradient(135deg, #fbbf24, #d97706);
@@ -279,12 +279,24 @@
             border: var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 10px; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
-        .vip-badge-real { 
-            width: 50px; height: 50px; border-radius: 14px; overflow: hidden; flex-shrink: 0;
+
+        /* PURE CSS 3D GEM & MINERAL BADGES (NO EXTERNAL IMAGES) */
+        .vip-badge-3d { 
+            width: 52px; height: 52px; border-radius: 16px; overflow: hidden; flex-shrink: 0;
             border: 2px solid rgba(52, 211, 153, 0.5); box-shadow: 0 6px 15px rgba(0,0,0,0.6);
-            background: #020617; display: flex; align-items: center; justify-content: center;
+            background: radial-gradient(circle, #0f172a 0%, #020617 100%); 
+            display: flex; align-items: center; justify-content: center; position: relative;
         }
-        .vip-badge-real img { width: 100%; height: 100%; object-fit: cover; filter: brightness(1.2) saturate(1.3); }
+        .mini-crystal {
+            width: 28px; height: 28px; position: relative; transform-style: preserve-3d;
+            animation: spinMiniGem 5s linear infinite;
+        }
+        @keyframes spinMiniGem { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
+        .crystal-core {
+            position: absolute; width: 100%; height: 100%;
+            clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 20% 100%, 0% 35%);
+            box-shadow: inset 0 0 8px rgba(255,255,255,0.9);
+        }
 
         .earner-card-item {
             display: flex; align-items: center; justify-content: space-between;
@@ -351,7 +363,7 @@
     </style>
 </head>
 <body>
-    <!-- FLYING MYSTERY GIFT BOX ELEMENT -->
+    <!-- SECURE FLYING MYSTERY GIFT BOX ELEMENT -->
     <div id="flyingMysteryBox" class="flying-mystery-box" onclick="claimMysteryBox()" title="Bonus Mystery Box!">🎁</div>
 
     <div id="pushNotificationBar" class="push-notification-bar">
@@ -896,14 +908,14 @@
         let historyLog = ["Welcome Bonus: +$1.00 starter capital"];
 
         const vipTiersData = [
-            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.00, daily: 0.00, img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=300&auto=format&fit=crop&q=80" },
-            { level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, img: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=300&auto=format&fit=crop&q=80" },
-            { level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.08, daily: 0.80, img: "https://images.unsplash.com/photo-1610375461246-83df859d849d?w=300&auto=format&fit=crop&q=80" },
-            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.10, daily: 2.00, img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300&auto=format&fit=crop&q=80" },
-            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.12, daily: 6.00, img: "https://images.unsplash.com/photo-1599727402630-9b6999a41c2b?w=300&auto=format&fit=crop&q=80" },
-            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.14, daily: 14.00, img: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=300&auto=format&fit=crop&q=80" },
-            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.16, daily: 80.00, img: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=300&auto=format&fit=crop&q=80" },
-            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, img: "https://images.unsplash.com/photo-1618401471353-b98aedd04e11?w=300&auto=format&fit=crop&q=80" }
+            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.00, daily: 0.00, color1: "#94a3b8", color2: "#475569" },
+            { level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, color1: "#cbd5e1", color2: "#64748b" },
+            { level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.08, daily: 0.80, color1: "#fde047", color2: "#ca8a04" },
+            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.10, daily: 2.00, color1: "#38bdf8", color2: "#0284c7" },
+            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.12, daily: 6.00, color1: "#f43f5e", color2: "#be123c" },
+            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.14, daily: 14.00, color1: "#6366f1", color2: "#3730a3" },
+            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.16, daily: 80.00, color1: "#34d399", color2: "#047857" },
+            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, color1: "#a5f3fc", color2: "#0891b2" }
         ];
 
         async function initSupabaseCloudApp() {
@@ -1116,7 +1128,7 @@
             } catch(e) {}
         }
 
-        /* SMART MYSTERY BOX LOGIC (4-Hour Cooldown Protection) */
+        /* 100% SECURE MYSTERY BOX LOGIC (4-Hour Refresh/Reload Proof Cooldown) */
         function checkMysteryBoxVisibility() {
             const boxEl = document.getElementById('flyingMysteryBox');
             if (!boxEl) return;
@@ -1229,7 +1241,11 @@
                     const ratePct = (t.rate * 100).toFixed(0);
                     return `<div class="vip-card-item">
                         <div style="display:flex; align-items:center; gap:10px; text-align:left;">
-                            <div class="vip-badge-real"><img src="${t.img}" alt="${t.name}"></div>
+                            <div class="vip-badge-3d">
+                                <div class="mini-crystal">
+                                    <div class="crystal-core" style="background: linear-gradient(135deg, ${t.color1}, ${t.color2});"></div>
+                                </div>
+                            </div>
                             <div>
                                 <b style="font-size:11px; color:var(--text-main);">${t.name}</b><br>
                                 <span style="font-size:10px; color:var(--text-muted)">Price: $${t.price} | Daily: $${t.daily.toFixed(2)} (${ratePct}%)</span>
