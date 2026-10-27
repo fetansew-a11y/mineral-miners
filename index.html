@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mineral Mining Ultra Pro 2026</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
@@ -18,8 +19,6 @@
             --accent-glow: 0 0 30px rgba(16, 185, 129, 0.4);
             --modal-bg: #090e1a;
             --input-bg: rgba(2, 6, 23, 0.85);
-            --neon-blue: #3b82f6;
-            --neon-purple: #8b5cf6;
         }
         :root[data-theme="light"] {
             --bg-gradient: radial-gradient(circle at 50% 0%, #ffffff 0%, #e2e8f0 100%);
@@ -31,8 +30,6 @@
             --accent-glow: 0 0 25px rgba(5, 150, 105, 0.25);
             --modal-bg: #ffffff;
             --input-bg: #f8fafc;
-            --neon-blue: #2563eb;
-            --neon-purple: #7c3aed;
         }
 
         * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
@@ -242,7 +239,7 @@
         <div class="push-icon">⚡</div>
         <div>
             <div style="font-size: 10px; color: #34d399; font-weight: 800; text-transform: uppercase;">Mineral Mining Alert</div>
-            <div id="pushMsgText" style="font-size: 11px; color: #f8fafc; font-weight: 700;">Offline earnings successfully synchronized!</div>
+            <div id="pushMsgText" style="font-size: 11px; color: #f8fafc; font-weight: 700;">Online Cloud Sync Active!</div>
         </div>
     </div>
 
@@ -509,6 +506,11 @@
     </div>
 
     <script>
+        // 🌟 SUPABASE PRODUCTION CONFIGURATION
+        const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnd3FsY3lhemFmZnhqbXJpYW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI5MTMyMzIsImV4cCI6MjEwODQ4OTIzMn0.I4gpUbJcqap7W73YfTzbX_5T10XhhAIWovGZRQ4rnzk';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         const botUsername = 'MineralMinerPro_bot';
 
         function showPushNotification(msg) {
@@ -623,22 +625,15 @@
             localStorage.setItem('mineral_stable_username', userName);
         }
 
-        // 🌟 PURE LOCAL STORAGE STATE MANAGEMENT (NO SUPABASE)
-        let balance = Number(localStorage.getItem('mineral_local_balance_' + telegramId) ?? 1.00);
-        let activeInvestment = Number(localStorage.getItem('mineral_local_inv_' + telegramId) ?? 1.00);
-        let vipLevel = Number(localStorage.getItem('mineral_local_vip_' + telegramId) ?? 0);
-        let minedAccumulated = Number(localStorage.getItem('mineral_local_mined_' + telegramId) ?? 0.00);
-        let referralCount = Number(localStorage.getItem('mineral_local_refs_' + telegramId) ?? 0);
-        let lastCheckInTime = Number(localStorage.getItem('mineral_local_checkin_' + telegramId) ?? 0);
-        let lastActiveTimestamp = Number(localStorage.getItem('mineral_local_timestamp_' + telegramId) ?? Date.now());
+        let balance = 1.00;
+        let activeInvestment = 1.00;
+        let vipLevel = 0;
+        let minedAccumulated = 0.00;
+        let referralCount = 0;
+        let lastCheckInTime = 0;
+        let lastActiveTimestamp = Date.now();
         let isBanned = false;
-        
-        let savedHistory = localStorage.getItem('mineral_local_hist_' + telegramId);
-        let historyLog = savedHistory ? JSON.parse(savedHistory) : ["Welcome Bonus: +$1.00 starter capital"];
-
-        let claimed30 = false;
-        let claimed50 = false;
-        let claimed100 = false;
+        let historyLog = ["Welcome Bonus: +$1.00 starter capital"];
 
         const vipTiersData = [
             { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.06, daily: 0.06, bg: "linear-gradient(135deg, #475569, #1e293b)", svg: `<svg viewBox="0 0 32 32"><path d="M16 4 L28 12 L24 26 L8 26 L4 12 Z" fill="#94a3b8" stroke="#cbd5e1" stroke-width="1.5"/></svg>` },
@@ -651,62 +646,98 @@
             { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, bg: "linear-gradient(135deg, #7e22ce, #581c87)", svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L30 12 L16 30 L2 12 Z" fill="#c084fc"/></svg>` }
         ];
 
-        // 🌟 LOCAL REFERRAL & OFFLINE MINING SYSTEM (NO EXTERNAL DB)
-        function initLocalStorageApp() {
+        // 🌟 ROBUST SUPABASE CLOUD SYNC & REFERRAL TRACKING
+        async function initSupabaseCloudApp() {
             try {
-                // Check if user was already referred
-                const hasBeenReferred = localStorage.getItem('mineral_referred_' + telegramId);
-                if (startParamRef && startParamRef.startsWith('ref_') && !hasBeenReferred) {
-                    const referrerId = startParamRef.replace('ref_', '');
-                    if (referrerId !== telegramId) {
-                        // Mark as referred so it only counts once
-                        localStorage.setItem('mineral_referred_' + telegramId, 'true');
-                        
-                        // Update Referrer Data locally stored in browser or simulated via localStorage key
-                        let refCountKey = 'mineral_local_refs_' + referrerId;
-                        let refBalKey = 'mineral_local_balance_' + referrerId;
-                        let refHistKey = 'mineral_local_hist_' + referrerId;
+                const { data: existingUser, error } = await supabaseClient
+                    .from('users')
+                    .select('*')
+                    .eq('telegram_id', telegramId)
+                    .maybeSingle();
 
-                        let currentRefs = Number(localStorage.getItem(refCountKey) ?? 0) + 1;
-                        let currentRefBal = Number(localStorage.getItem(refBalKey) ?? 1.00) + 0.04;
-                        
-                        let refHist = JSON.parse(localStorage.getItem(refHistKey) ?? '["Welcome Bonus: +$1.00"]');
-                        refHist.unshift("Referral Reward (User ID: " + telegramId + "): +$0.04");
+                if (existingUser) {
+                    balance = Number(existingUser.balance ?? balance);
+                    activeInvestment = Number(existingUser.active_investment ?? activeInvestment);
+                    vipLevel = Number(existingUser.vip_level ?? vipLevel);
+                    minedAccumulated = Number(existingUser.mined_accumulated ?? minedAccumulated);
+                    referralCount = Number(existingUser.referral_count ?? referralCount);
+                    lastCheckInTime = Number(existingUser.last_check_in ?? lastCheckInTime);
+                    lastActiveTimestamp = Number(existingUser.last_active_timestamp ?? lastActiveTimestamp);
+                    isBanned = Boolean(existingUser.is_banned ?? false);
+                    if (existingUser.history && existingUser.history.length > 0) historyLog = existingUser.history;
+                    userName = existingUser.user_name ?? userName;
+                } else {
+                    // Create new user profile in Supabase
+                    const newUser = {
+                        telegram_id: telegramId,
+                        user_name: userName,
+                        balance: balance,
+                        active_investment: activeInvestment,
+                        vip_level: vipLevel,
+                        mined_accumulated: minedAccumulated,
+                        referral_count: referralCount,
+                        last_check_in: lastCheckInTime,
+                        last_active_timestamp: Date.now(),
+                        is_banned: false,
+                        history: historyLog
+                    };
+                    await supabaseClient.from('users').insert([newUser]);
 
-                        localStorage.setItem(refCountKey, currentRefs);
-                        localStorage.setItem(refBalKey, currentRefBal);
-                        localStorage.setItem(refHistKey, JSON.stringify(refHist));
+                    // Handle Referral via start_param across different devices
+                    if (startParamRef && startParamRef.startsWith('ref_')) {
+                        const referrerId = startParamRef.replace('ref_', '');
+                        if (referrerId !== telegramId) {
+                            const { data: refUser } = await supabaseClient
+                                .from('users')
+                                .select('*')
+                                .eq('telegram_id', referrerId)
+                                .maybeSingle();
 
-                        referralCount = Number(localStorage.getItem('mineral_local_refs_' + telegramId) ?? 0);
+                            if (refUser && !refUser.is_banned) {
+                                let newRefs = (refUser.referral_count || 0) + 1;
+                                let newBal = Number(refUser.balance || 1.00) + 0.04;
+                                let hist = refUser.history || [];
+                                hist.unshift(`Referral Bonus (User ID: ${telegramId}): +$0.04`);
+
+                                await supabaseClient.from('users').update({
+                                    referral_count: newRefs,
+                                    balance: newBal,
+                                    history: hist
+                                }).eq('telegram_id', referrerId);
+                            }
+                        }
                     }
                 }
 
-                // 🌟 ACCURATE OFFLINE MINING CALCULATION
+                // Accurate Offline Mining Calculation
                 const now = Date.now();
                 const elapsedSeconds = Math.floor((now - lastActiveTimestamp) / 1000);
-                
                 if (elapsedSeconds > 2 && activeInvestment > 0) {
                     const currentRate = vipTiersData[vipLevel]?.rate || 0.06;
                     const ratePerSecond = (activeInvestment * currentRate) / 86400;
                     const offlineMined = elapsedSeconds * ratePerSecond;
-                    
                     minedAccumulated += offlineMined;
-                    showPushNotification(`Offline Mined: +$${offlineMined.toFixed(4)} added during absence!`);
+                    showPushNotification(`Offline Mined: +$${offlineMined.toFixed(4)} added!`);
                 }
-                
                 lastActiveTimestamp = now;
+
+                if (isBanned) {
+                    document.getElementById('banModal').style.display = 'flex';
+                    return;
+                }
 
                 renderVipTiers();
                 renderEarnersLeaderboard();
                 updateUI();
                 checkDailyCheckInState();
                 updateDepositAddress();
-                
+
                 setInterval(liveTicker, 1000);
                 setInterval(bannerTicker, 2500);
                 setInterval(updateEarnersDynamicIncome, 3000);
-                setInterval(saveLocalUserData, 5000);
+                setInterval(saveDataToSupabase, 8000);
             } catch (e) {
+                console.error("Cloud sync error:", e);
                 renderVipTiers();
                 renderEarnersLeaderboard();
                 updateUI();
@@ -714,34 +745,27 @@
             }
         }
 
-        window.addEventListener("DOMContentLoaded", () => {
-            initLocalStorageApp();
-        });
+        window.addEventListener("DOMContentLoaded", initSupabaseCloudApp);
+        window.addEventListener('visibilitychange', () => { if (document.hidden) saveDataToSupabase(); });
+        window.addEventListener('beforeunload', saveDataToSupabase);
 
-        window.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                lastActiveTimestamp = Date.now();
-                saveLocalUserData();
-            }
-        });
-        window.addEventListener('beforeunload', () => {
-            lastActiveTimestamp = Date.now();
-            saveLocalUserData();
-        });
-
-        function saveLocalUserData() {
+        async function saveDataToSupabase() {
             try {
                 if (isBanned || !telegramId) return;
                 lastActiveTimestamp = Date.now();
-
-                localStorage.setItem('mineral_local_balance_' + telegramId, balance);
-                localStorage.setItem('mineral_local_inv_' + telegramId, activeInvestment);
-                localStorage.setItem('mineral_local_vip_' + telegramId, vipLevel);
-                localStorage.setItem('mineral_local_mined_' + telegramId, minedAccumulated);
-                localStorage.setItem('mineral_local_refs_' + telegramId, referralCount);
-                localStorage.setItem('mineral_local_checkin_' + telegramId, lastCheckInTime);
-                localStorage.setItem('mineral_local_timestamp_' + telegramId, lastActiveTimestamp);
-                localStorage.setItem('mineral_local_hist_' + telegramId, JSON.stringify(historyLog));
+                await supabaseClient.from('users').upsert([{
+                    telegram_id: telegramId,
+                    user_name: userName,
+                    balance: balance,
+                    active_investment: activeInvestment,
+                    vip_level: vipLevel,
+                    mined_accumulated: minedAccumulated,
+                    referral_count: referralCount,
+                    last_check_in: lastCheckInTime,
+                    last_active_timestamp: lastActiveTimestamp,
+                    history: historyLog,
+                    is_banned: isBanned
+                }], { onConflict: 'telegram_id' });
             } catch(e) {}
         }
 
@@ -751,11 +775,9 @@
                 const names = ["Alex_Crypto ⚡", "Satoshi_God 🚀", "CryptoWhale", "Michael_Trade", "David_Miner", "Kirubel", "Samuel 🌟", "Yohannes", "Kidus", "Solomon"];
                 const amounts = [10.00, 15.00, 20.00, 25.00, 30.00, 50.00, 100.00];
                 const networks = ["BEP20", "TON", "ERC20"];
-                
                 const randomName = names[Math.floor(Math.random() * names.length)];
                 const amt = amounts[Math.floor(Math.random() * amounts.length)];
                 const net = networks[Math.floor(Math.random() * networks.length)];
-                
                 const el = document.getElementById('payoutTickerText');
                 if (el) {
                     el.style.animation = 'none';
@@ -769,7 +791,6 @@
         function updateUI() {
             try {
                 if (isBanned) return;
-
                 document.getElementById('balanceDisplay').innerText = balance.toFixed(2);
                 document.getElementById('activeInvDisplay').innerText = activeInvestment.toFixed(2);
                 document.getElementById('profileInvDisplay').innerText = activeInvestment.toFixed(2);
@@ -819,15 +840,12 @@
                 const btn = document.getElementById('dailyCheckInBtn');
                 const txt = document.getElementById('dailyCheckInText');
                 if (!btn || !txt) return;
-
                 const now = Date.now();
                 const twentyFourHours = 24 * 60 * 60 * 1000;
-
                 if (lastCheckInTime && (now - lastCheckInTime < twentyFourHours)) {
                     const remainingMs = twentyFourHours - (now - lastCheckInTime);
                     const remainingHours = Math.floor(remainingMs / (1000 * 60 * 60));
                     const remainingMins = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
-                    
                     btn.classList.add('btn-disabled');
                     btn.disabled = true;
                     txt.innerText = `Checked-In (Wait ${remainingHours}h ${remainingMins}m)`;
@@ -846,9 +864,9 @@
                 const input = document.getElementById('profileNameInput');
                 if (input && input.value.trim()) {
                     userName = input.value.trim();
-                    localStorage.setItem('mineral_stable_username', userName);
                     updateUI();
                     showPushNotification('Profile name successfully updated!');
+                    saveDataToSupabase();
                 }
             } catch(e) {}
         }
@@ -915,15 +933,16 @@
                 if (isBanned) return;
                 triggerHaptic();
                 const t = vipTiersData[lvl];
-                if (balance < t.price) { showPushNotification('Insufficient balance for this tier!'); return; }
+                if (balance < t.price) { showPushNotification('Insufficient balance!'); return; }
                 balance -= t.price;
                 activeInvestment = t.price;
                 vipLevel = t.level;
                 minedAccumulated = 0;
-                historyLog.unshift("Activated " + t.name + " tier successfully");
+                historyLog.unshift("Activated " + t.name);
                 updateUI();
                 renderVipTiers();
-                showPushNotification('Successfully activated ' + t.name);
+                showPushNotification('Activated ' + t.name);
+                saveDataToSupabase();
             } catch(e) {}
         }
 
@@ -957,12 +976,13 @@
             try {
                 if (isBanned) return;
                 triggerHaptic();
-                if (minedAccumulated < 0.05) { showPushNotification('Minimum claim amount is $0.05'); return; }
+                if (minedAccumulated < 0.05) { showPushNotification('Minimum claim is $0.05'); return; }
                 balance += minedAccumulated;
                 historyLog.unshift("Claimed Mined Income: +$" + minedAccumulated.toFixed(2));
                 minedAccumulated = 0;
                 updateUI();
-                showPushNotification('Mined earnings successfully claimed to balance!');
+                showPushNotification('Mined earnings claimed!');
+                saveDataToSupabase();
             } catch(e) {}
         }
 
@@ -974,18 +994,18 @@
                 const twentyFourHours = 24 * 60 * 60 * 1000;
                 
                 if (lastCheckInTime && (now - lastCheckInTime < twentyFourHours)) {
-                    showPushNotification('Daily reward already claimed today!');
+                    showPushNotification('Already claimed today!');
                     checkDailyCheckInState();
                     return;
                 }
 
                 lastCheckInTime = now;
-                localStorage.setItem('mineral_local_checkin_' + telegramId, lastCheckInTime);
                 balance += 0.02;
-                historyLog.unshift("Daily Check-In Reward: +$0.02 added");
+                historyLog.unshift("Daily Check-In: +$0.02");
                 updateUI();
                 checkDailyCheckInState();
-                showPushNotification('Daily Check-In reward added successfully!');
+                showPushNotification('Daily Check-In reward added!');
+                saveDataToSupabase();
             } catch(e) {}
         }
 
@@ -1012,7 +1032,7 @@
                 const wDisplay = document.getElementById('walletAddressDisplay');
                 if (wDisplay) {
                     navigator.clipboard.writeText(wDisplay.innerText);
-                    showPushNotification('Deposit wallet address copied!');
+                    showPushNotification('Deposit address copied!');
                 }
             } catch(e) {}
         }
@@ -1025,7 +1045,7 @@
                 if (link) {
                     link.select();
                     navigator.clipboard.writeText(link.value);
-                    showPushNotification('Secure referral link copied!');
+                    showPushNotification('Referral link copied!');
                 }
             } catch(e) {}
         }
@@ -1038,13 +1058,14 @@
                 const netEl = document.getElementById('depositNetwork');
                 const amt = parseFloat(amtInput ? amtInput.value : 0);
                 const net = netEl ? netEl.value : 'BEP20';
-                if (isNaN(amt) || amt < 5) { showPushNotification('Minimum deposit amount is $5'); return; }
+                if (isNaN(amt) || amt < 5) { showPushNotification('Minimum deposit is $5'); return; }
                 
-                historyLog.unshift("Deposit Submitted ($" + amt.toFixed(2) + " " + net + ") - Pending Approval");
+                historyLog.unshift("Deposit Submitted ($" + amt.toFixed(2) + " " + net + ")");
                 updateUI();
                 closeModal('depositModal');
                 if(amtInput) amtInput.value = '';
-                showPushNotification('Deposit request submitted for approval.');
+                showPushNotification('Deposit request submitted!');
+                saveDataToSupabase();
             } catch(e) {}
         }
 
@@ -1056,15 +1077,16 @@
                 const netEl = document.getElementById('withdrawNetwork');
                 const amt = parseFloat(amtInput ? amtInput.value : 0);
                 const net = netEl ? netEl.value : 'BEP20';
-                if (isNaN(amt) || amt < 5) { showPushNotification('Minimum withdrawal amount is $5'); return; }
-                if (amt > balance) { showPushNotification('Insufficient available balance!'); return; }
+                if (isNaN(amt) || amt < 5) { showPushNotification('Minimum withdrawal is $5'); return; }
+                if (amt > balance) { showPushNotification('Insufficient balance!'); return; }
                 
                 balance -= amt;
-                historyLog.unshift("Withdrawal Requested ($" + amt.toFixed(2) + " " + net + ") - Processing");
+                historyLog.unshift("Withdrawal Requested ($" + amt.toFixed(2) + " " + net + ")");
                 updateUI();
                 closeModal('withdrawModal');
                 if(amtInput) amtInput.value = '';
-                showPushNotification('Withdrawal request successfully processed.');
+                showPushNotification('Withdrawal requested!');
+                saveDataToSupabase();
             } catch(e) {}
         }
 
@@ -1073,13 +1095,11 @@
                 const input = document.getElementById('supportMsgInput');
                 const chatHistory = document.getElementById('supportChatHistory');
                 if (!input || !input.value.trim()) return;
-                
                 const userText = input.value.trim();
                 chatHistory.innerHTML += '<div style="color: var(--text-main); font-size: 11px; margin: 4px 0; text-align: right;"><b>You:</b> ' + userText + '</div>';
                 input.value = '';
-                
                 setTimeout(() => {
-                    chatHistory.innerHTML += '<div style="color: #34d399; font-size: 11px; margin: 4px 0; text-align: left;"><b>Support Bot:</b> Message received. Our team will review and reply shortly.</div>';
+                    chatHistory.innerHTML += '<div style="color: #34d399; font-size: 11px; margin: 4px 0; text-align: left;"><b>Support Bot:</b> Message received. We will reply shortly.</div>';
                     chatHistory.scrollTop = chatHistory.scrollHeight;
                 }, 800);
             } catch(e) {}
@@ -1107,14 +1127,13 @@
                 triggerHaptic();
                 const pwdInput = document.getElementById('adminPasswordInput');
                 const pwd = pwdInput ? pwdInput.value : '';
-                
                 if (pwd === 'Bini@2160') {
                     sessionStorage.setItem('adminAuth', 'true');
                     closeModal('adminAuthModal');
                     openModal('adminPanelModal');
                     if (pwdInput) pwdInput.value = '';
                 } else {
-                    showPushNotification('Invalid administrator password!');
+                    showPushNotification('Invalid password!');
                 }
             } catch(e) {}
         }
