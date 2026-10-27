@@ -10,24 +10,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root[data-theme="dark"] {
-            --bg-gradient: radial-gradient(circle at 50% 0%, #090d16 0%, #020408 100%);
-            --card-bg: rgba(13, 20, 38, 0.75);
-            --card-border: 1px solid rgba(255, 255, 255, 0.08);
+            --bg-gradient: radial-gradient(circle at 50% 0%, #0f172a 0%, #020617 100%);
+            --card-bg: rgba(15, 23, 42, 0.75);
+            --card-border: 1px solid rgba(52, 211, 153, 0.2);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --accent-emerald: #10b981;
-            --accent-glow: 0 0 30px rgba(16, 185, 129, 0.4);
-            --modal-bg: #090e1a;
-            --input-bg: rgba(2, 6, 23, 0.85);
+            --accent-glow: 0 0 40px rgba(16, 185, 129, 0.5);
+            --modal-bg: #090d16;
+            --input-bg: rgba(2, 6, 23, 0.95);
         }
         :root[data-theme="light"] {
             --bg-gradient: radial-gradient(circle at 50% 0%, #ffffff 0%, #e2e8f0 100%);
             --card-bg: rgba(255, 255, 255, 0.85);
-            --card-border: 1px solid rgba(0, 0, 0, 0.08);
+            --card-border: 1px solid rgba(5, 150, 105, 0.2);
             --text-main: #0f172a;
             --text-muted: #64748b;
             --accent-emerald: #059669;
-            --accent-glow: 0 0 25px rgba(5, 150, 105, 0.25);
+            --accent-glow: 0 0 30px rgba(5, 150, 105, 0.3);
             --modal-bg: #ffffff;
             --input-bg: #f8fafc;
         }
@@ -39,199 +39,220 @@
             margin: 0; padding: 12px 14px 90px 14px; text-align: center;
             min-height: 100vh; user-select: none; overflow-x: hidden;
         }
-        .app-container { max-width: 420px; margin: 0 auto; }
+        .app-container { max-width: 420px; margin: 0 auto; position: relative; }
         
         .push-notification-bar {
-            position: fixed; top: 12px; left: 50%; transform: translateX(-50%) translateY(-80px);
-            width: 92%; max-width: 400px; background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            color: #f8fafc; padding: 12px 16px; border-radius: 20px;
+            position: fixed; top: 12px; left: 50%; transform: translateX(-50%) translateY(-100px);
+            width: 92%; max-width: 400px; background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            color: #f8fafc; padding: 14px 18px; border-radius: 22px;
             font-size: 12px; font-weight: 700; z-index: 99999;
-            border: 1px solid rgba(16, 185, 129, 0.4);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 20px rgba(16, 185, 129, 0.2);
-            display: flex; align-items: center; gap: 12px; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: none; text-align: left;
+            border: 1px solid rgba(16, 185, 129, 0.6);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.85), 0 0 30px rgba(16, 185, 129, 0.4);
+            display: flex; align-items: center; gap: 14px; 
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+            opacity: 0; pointer-events: none; text-align: left;
         }
-        .push-notification-bar.show { transform: translateX(-50%) translateY(0); }
-        .push-icon { width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, #10b981, #047857); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; box-shadow: 0 4px 12px rgba(16,185,129,0.4); }
+        .push-notification-bar.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .push-icon { width: 38px; height: 38px; border-radius: 14px; background: linear-gradient(135deg, #10b981, #047857); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; box-shadow: 0 6px 15px rgba(16,185,129,0.6); }
+
+        .payout-banner {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15)); 
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            padding: 10px 14px; border-radius: 16px; margin-bottom: 14px; font-size: 11px; font-weight: 800;
+            overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #34d399;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3); backdrop-filter: blur(10px);
+        }
+        .payout-ticker-text { display: inline-block; animation: fadeInTicker 0.5s ease; }
+        @keyframes fadeInTicker { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
         .card {
-            background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-radius: 28px; padding: 18px; margin: 12px 0;
-            border: var(--card-border); box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+            background: var(--card-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border-radius: 32px; padding: 22px; margin: 14px 0;
+            border: var(--card-border); box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7);
         }
         .header {
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--card-bg); backdrop-filter: blur(15px);
-            padding: 12px 18px; border-radius: 22px; border: var(--card-border);
-            margin-bottom: 12px; font-weight: 800; font-size: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            background: var(--card-bg); backdrop-filter: blur(20px);
+            padding: 14px 20px; border-radius: 24px; border: var(--card-border);
+            margin-bottom: 14px; font-weight: 800; font-size: 12px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
         }
         
-        .title-header-box { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 6px 0; cursor: pointer; }
+        .title-header-box { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 10px 0; cursor: pointer; }
         .app-title {
-            font-size: 21px; font-weight: 900; margin: 0; letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
+            font-size: 24px; font-weight: 900; margin: 0; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #f8fafc 0%, #34d399 50%, #60a5fa 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 10px rgba(52, 211, 153, 0.3));
         }
         
         .pro-logo-icon {
-            width: 38px; height: 38px; flex-shrink: 0;
-            filter: drop-shadow(0 0 14px rgba(16, 185, 129, 0.7));
+            width: 44px; height: 44px; flex-shrink: 0;
+            filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.9));
             animation: proLogoPulse 3s ease-in-out infinite;
         }
-        @keyframes proLogoPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        @keyframes proLogoPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
 
         .balance-box { 
-            font-size: 36px; font-weight: 900; color: var(--accent-emerald); margin: 6px 0; 
-            text-shadow: var(--accent-glow); display: flex; align-items: center; justify-content: center; gap: 8px; 
-            letter-spacing: -1px;
+            font-size: 42px; font-weight: 900; color: var(--accent-emerald); margin: 8px 0; 
+            text-shadow: var(--accent-glow); display: flex; align-items: center; justify-content: center; gap: 10px; 
+            letter-spacing: -1.5px;
         }
-        .balance-wallet-icon { width: 32px; height: 32px; fill: var(--accent-emerald); filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.7)); }
+        .balance-wallet-icon { width: 36px; height: 36px; fill: var(--accent-emerald); filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.9)); }
 
-        .sub-balance { font-size: 12px; color: var(--text-muted); margin-bottom: 14px; font-weight: 700; }
+        .sub-balance { font-size: 12px; color: var(--text-muted); margin-bottom: 18px; font-weight: 700; }
         
         .mining-core-container {
-            width: 120px; height: 120px; margin: 14px auto; position: relative;
+            width: 135px; height: 135px; margin: 16px auto; position: relative;
             display: flex; align-items: center; justify-content: center;
         }
         .mining-core-ring {
             position: absolute; width: 100%; height: 100%; border-radius: 50%;
-            border: 3px dashed rgba(59, 130, 246, 0.5);
-            animation: spinCoreRing 10s linear infinite;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+            border: 3px dashed rgba(52, 211, 153, 0.7);
+            animation: spinCoreRing 14s linear infinite;
+            box-shadow: 0 0 30px rgba(52, 211, 153, 0.4);
         }
         @keyframes spinCoreRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .mining-core-glow {
-            width: 90px; height: 90px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, rgba(16, 185, 129, 0.3) 100%);
+            width: 100px; height: 100px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, rgba(16, 185, 129, 0.4) 100%);
             display: flex; align-items: center; justify-content: center;
-            box-shadow: inset 0 0 15px rgba(255,255,255,0.4), 0 0 35px rgba(59, 130, 246, 0.5);
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.6), 0 0 50px rgba(52, 211, 153, 0.7);
             animation: pulseCoreGlow 3s ease-in-out infinite;
         }
-        @keyframes pulseCoreGlow { 0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(59, 130, 246, 0.4); } 50% { transform: scale(1.08); box-shadow: 0 0 50px rgba(16, 185, 129, 0.7); } }
+        @keyframes pulseCoreGlow { 0%, 100% { transform: scale(1); box-shadow: 0 0 35px rgba(59, 130, 246, 0.5); } 50% { transform: scale(1.1); box-shadow: 0 0 65px rgba(16, 185, 129, 0.9); } }
         
-        .mining-core-gem { width: 46px; height: 46px; fill: #34d399; filter: drop-shadow(0 0 15px rgba(52, 211, 153, 0.9)); animation: floatGem 3s ease-in-out infinite; }
-        @keyframes floatGem { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        .mining-core-gem { width: 52px; height: 52px; fill: #34d399; filter: drop-shadow(0 0 20px rgba(52, 211, 153, 1)); animation: floatGem 3s ease-in-out infinite; }
+        @keyframes floatGem { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
 
         .live-mining-box { 
-            background: var(--input-bg); padding: 14px; border-radius: 18px; margin: 12px 0; 
-            border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: inset 0 3px 6px rgba(0,0,0,0.5);
+            background: var(--input-bg); padding: 16px; border-radius: 22px; margin: 16px 0; 
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: inset 0 4px 10px rgba(0,0,0,0.7);
         }
-        .progress-bar-container { width: 100%; background: rgba(255, 255, 255, 0.08); height: 9px; border-radius: 5px; overflow: hidden; margin-top: 8px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
-        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #059669, #34d399); border-radius: 5px; transition: width 0.3s ease; box-shadow: 0 0 10px rgba(52,211,153,0.8); }
+        .progress-bar-container { width: 100%; background: rgba(255, 255, 255, 0.08); height: 12px; border-radius: 8px; overflow: hidden; margin-top: 10px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.7); }
+        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #059669, #34d399, #60a5fa); border-radius: 8px; transition: width 0.3s ease; box-shadow: 0 0 15px rgba(52,211,153,1); }
 
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
         
         button {
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none; padding: 14px; font-size: 13px;
-            font-weight: 800; border-radius: 18px; cursor: pointer; width: 100%;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none; padding: 15px; font-size: 13px;
+            font-weight: 800; border-radius: 20px; cursor: pointer; width: 100%;
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.35), inset 0 -3px 4px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.5), inset 0 2px 6px rgba(255, 255, 255, 0.45), inset 0 -3px 6px rgba(0, 0, 0, 0.5);
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        button:active { transform: translateY(2px) scale(0.98); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); }
+        button:active { transform: translateY(2px) scale(0.98); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); }
 
         .btn-3d-success {
             background: linear-gradient(135deg, #34d399 0%, #059669 50%, #047857 100%);
-            box-shadow: 0 10px 25px rgba(5, 150, 105, 0.45), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -3px 4px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 15px 35px rgba(5, 150, 105, 0.6), inset 0 2px 6px rgba(255, 255, 255, 0.5), inset 0 -3px 6px rgba(0, 0, 0, 0.5);
         }
         .btn-3d-warning {
             background: linear-gradient(135deg, #fbbf24 0%, #d97706 50%, #b45309 100%);
-            box-shadow: 0 10px 25px rgba(217, 119, 6, 0.45), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -3px 4px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 15px 35px rgba(217, 119, 6, 0.6), inset 0 2px 6px rgba(255, 255, 255, 0.5), inset 0 -3px 6px rgba(0, 0, 0, 0.5);
         }
         .btn-3d-purple {
             background: linear-gradient(135deg, #a855f7 0%, #7e22ce 50%, #581c87 100%);
-            box-shadow: 0 10px 25px rgba(126, 34, 206, 0.45), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -3px 4px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 15px 35px rgba(126, 34, 206, 0.6), inset 0 2px 6px rgba(255, 255, 255, 0.5), inset 0 -3px 6px rgba(0, 0, 0, 0.5);
         }
 
-        .btn-sm { padding: 10px 14px; font-size: 11px; margin-top: 6px; width: auto; border-radius: 14px; }
+        .btn-sm { padding: 10px 16px; font-size: 11px; margin-top: 6px; width: auto; border-radius: 16px; }
         .btn-disabled { background: linear-gradient(135deg, #64748b, #334155) !important; opacity: 0.6; cursor: not-allowed !important; box-shadow: none !important; }
         .btn-icon svg { width: 18px; height: 18px; fill: currentColor; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); }
 
         .theme-toggle-btn {
-            background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1px solid var(--card-border); 
-            width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px;
+            background: rgba(255, 255, 255, 0.1); color: var(--text-main); border: 1px solid var(--card-border); 
+            width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .support-float-btn {
-            position: fixed; bottom: 80px; left: 16px; z-index: 998;
+            position: fixed; bottom: 85px; left: 16px; z-index: 998;
             background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white;
-            border: none; width: 50px; height: 50px; border-radius: 50%;
+            border: none; width: 56px; height: 56px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6), inset 0 2px 3px rgba(255,255,255,0.4); cursor: pointer; transition: transform 0.2s ease;
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.7), inset 0 2px 5px rgba(255,255,255,0.5); cursor: pointer; transition: transform 0.2s ease;
         }
         .support-float-btn:active { transform: scale(0.9); }
-        .support-float-btn svg { width: 24px; height: 24px; fill: currentColor; }
+        .support-float-btn svg { width: 26px; height: 26px; fill: currentColor; }
 
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            display: flex; justify-content: space-around; padding: 12px 0; border-top: var(--card-border); z-index: 999;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+            background: var(--card-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            display: flex; justify-content: space-around; padding: 14px 0; border-top: var(--card-border); z-index: 999;
+            box-shadow: 0 -15px 40px rgba(0,0,0,0.7);
         }
         .nav-item {
             background: none; border: none; color: var(--text-muted); font-size: 10px;
             display: flex; flex-direction: column; align-items: center; gap: 4px;
-            cursor: pointer; font-weight: 800; width: 20%; padding: 0; box-shadow: none; transition: color 0.2s;
+            cursor: pointer; font-weight: 800; width: 20%; padding: 0; box-shadow: none; transition: all 0.2s;
         }
-        .nav-item.active { color: #3b82f6; text-shadow: 0 0 10px rgba(59,130,246,0.5); }
-        .nav-icon svg { width: 22px; height: 22px; fill: currentColor; }
+        .nav-item.active { color: #34d399; text-shadow: 0 0 15px rgba(52,211,153,0.8); transform: translateY(-2px); }
+        .nav-icon svg { width: 24px; height: 24px; fill: currentColor; }
 
         .tab-pane { display: none; }
         .tab-pane.active { display: block; animation: fadeInTab 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes fadeInTab { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInTab { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 6, 23, 0.88); justify-content: center; align-items: center; z-index: 1000; padding: 16px;
-            backdrop-filter: blur(12px);
+            background: rgba(2, 6, 23, 0.9); justify-content: center; align-items: center; z-index: 1000; padding: 16px;
+            backdrop-filter: blur(18px);
         }
         .modal-content {
-            background: var(--modal-bg); padding: 24px; border-radius: 30px; width: 100%;
-            max-width: 390px; border: var(--card-border); text-align: left; max-height: 85vh; overflow-y: auto; color: var(--text-main);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            background: var(--modal-bg); padding: 28px; border-radius: 36px; width: 100%;
+            max-width: 415px; border: var(--card-border); text-align: left; max-height: 85vh; overflow-y: auto; color: var(--text-main);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.9);
         }
-        input, select {
-            width: 100%; padding: 13px 16px; margin: 6px 0 14px 0; background: var(--input-bg);
-            border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; color: var(--text-main); font-size: 13px; font-weight: 700;
+        input, select, textarea {
+            width: 100%; padding: 15px 18px; margin: 8px 0 16px 0; background: var(--input-bg);
+            border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; color: var(--text-main); font-size: 13px; font-weight: 700;
+            font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
         }
         .close-btn { background: #475569; width: 100%; margin-top: 10px; box-shadow: none; }
         
         .history-list, .admin-list {
             max-height: 340px; overflow-y: auto; background: var(--input-bg);
-            padding: 14px; border-radius: 18px; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 16px; border-radius: 22px; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.6);
         }
         .vip-list, .earner-list { background: transparent; border: none; padding: 0; width: 100%; }
 
         .history-card-item {
             display: flex; align-items: center; gap: 14px;
-            background: var(--card-bg); padding: 14px 16px; border-radius: 18px;
-            margin-bottom: 10px; border: var(--card-border);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.3); text-align: left;
+            background: var(--card-bg); padding: 16px 18px; border-radius: 20px;
+            margin-bottom: 12px; border: var(--card-border);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4); text-align: left;
         }
         .history-icon-box {
-            width: 42px; height: 42px; border-radius: 14px; display: flex; align-items: center;
-            justify-content: center; font-size: 18px; flex-shrink: 0; box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
+            width: 44px; height: 44px; border-radius: 16px; display: flex; align-items: center;
+            justify-content: center; font-size: 18px; flex-shrink: 0; box-shadow: inset 0 2px 5px rgba(255,255,255,0.4);
         }
         
         .vip-card-item { 
-            background: var(--card-bg); backdrop-filter: blur(15px); padding: 16px; border-radius: 22px; margin-bottom: 14px; 
-            border: var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 10px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            background: var(--card-bg); backdrop-filter: blur(20px); padding: 18px; border-radius: 24px; margin-bottom: 14px; 
+            border: var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 12px; 
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
         }
-        .vip-badge-3d { width: 52px; height: 52px; border-radius: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 8px; box-shadow: inset 0 2px 6px rgba(255,255,255,0.4), 0 8px 20px rgba(0,0,0,0.4); }
-        .vip-badge-3d svg { width: 100%; height: 100%; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.5)); }
+        .vip-badge-3d { width: 56px; height: 56px; border-radius: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 10px; box-shadow: inset 0 3px 8px rgba(255,255,255,0.5), 0 10px 25px rgba(0,0,0,0.5); }
+        .vip-badge-3d svg { width: 100%; height: 100%; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); }
 
         .earner-card-item {
             display: flex; align-items: center; justify-content: space-between;
-            background: var(--card-bg); padding: 14px 16px; border-radius: 18px;
-            margin-bottom: 10px; border: var(--card-border); box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            background: var(--card-bg); padding: 16px 18px; border-radius: 20px;
+            margin-bottom: 12px; border: var(--card-border); box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
         
-        #qrcode { display: flex; justify-content: center; margin: 12px auto; background: white; padding: 10px; border-radius: 16px; width: fit-content; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
-        .wallet-box { background: var(--input-bg); padding: 12px; border-radius: 14px; font-size: 11px; word-break: break-all; margin: 8px 0; border: 1px dashed rgba(255,255,255,0.25); color: var(--text-main); }
+        #qrcode { display: flex; justify-content: center; margin: 14px auto; background: white; padding: 12px; border-radius: 18px; width: fit-content; box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
+        .wallet-box { background: var(--input-bg); padding: 14px; border-radius: 16px; font-size: 11px; word-break: break-all; margin: 10px 0; border: 1px dashed rgba(52,211,153,0.4); color: var(--text-main); }
+        
+        .admin-tab-header { display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; }
+        .admin-tab-btn { background: var(--input-bg); border: var(--card-border); padding: 9px 14px; font-size: 10px; font-weight: 800; border-radius: 14px; color: var(--text-muted); cursor: pointer; white-space: nowrap; box-shadow: none; width: auto; }
+        .admin-tab-btn.active { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; text-shadow: 0 0 10px rgba(59,130,246,0.8); }
+        .admin-pane { display: none; }
+        .admin-pane.active { display: block; }
     </style>
 </head>
 <body>
@@ -244,22 +265,22 @@
     </div>
 
     <!-- MANDATORY REAL-TIME JOIN CHANNELS MODAL -->
-    <div id="joinModal" class="modal" style="display: flex; background: rgba(3, 7, 18, 0.96); z-index: 99999;">
-        <div class="modal-content" style="text-align: center; border: 2px solid rgba(16, 185, 129, 0.4);">
-            <div style="font-size: 42px; margin-bottom: 6px;">📢</div>
-            <h3 style="margin-top:0; font-size: 18px; font-weight: 900; color: #f8fafc;">Join Channels Required</h3>
-            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;">
+    <div id="joinModal" class="modal" style="display: flex; background: rgba(3, 7, 18, 0.98); z-index: 99999;">
+        <div class="modal-content" style="text-align: center; border: 2px solid rgba(16, 185, 129, 0.6); box-shadow: 0 0 50px rgba(16,185,129,0.3);">
+            <div style="font-size: 46px; margin-bottom: 8px;">📢</div>
+            <h3 style="margin-top:0; font-size: 20px; font-weight: 900; color: #f8fafc;">Join Channels Required</h3>
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-bottom: 18px;">
                 To use Mineral Mining Pro, you must join our official channels below:
             </p>
 
-            <div id="joinStatusAlert" style="display:none; font-size: 11px; font-weight:800; color:#ef4444; background:rgba(239, 68, 68, 0.15); padding:10px; border-radius:12px; margin-bottom:12px; border:1px solid rgba(239, 68, 68, 0.4);">
+            <div id="joinStatusAlert" style="display:none; font-size: 11px; font-weight:800; color:#ef4444; background:rgba(239, 68, 68, 0.15); padding:12px; border-radius:14px; margin-bottom:14px; border:1px solid rgba(239, 68, 68, 0.5);">
                 ❌ You have not joined both channels yet! Please join to continue.
             </div>
 
-            <button class="btn-3d-success" style="margin-bottom: 10px;" onclick="window.open('https://t.me/MineralMinerPro', '_blank')">
+            <button class="btn-3d-success" style="margin-bottom: 12px;" onclick="window.open('https://t.me/MineralMinerPro', '_blank')">
                 🔗 1. Join Main Channel
             </button>
-            <button class="btn-3d-purple" style="margin-bottom: 16px;" onclick="window.open('https://t.me/MineralMinerPro_Payment', '_blank')">
+            <button class="btn-3d-purple" style="margin-bottom: 18px;" onclick="window.open('https://t.me/MineralMinerPro_Payment', '_blank')">
                 💸 2. Join Payment Proof Channel
             </button>
             <button id="verifyJoinBtn" class="btn-3d-success" onclick="verifyChannelJoin()">
@@ -271,10 +292,10 @@
     <div class="app-container">
         
         <div class="payout-banner">
-            <span id="payoutTickerText" class="payout-ticker-text">🔥 Miner_Boss successfully withdrawn $25.00 (BEP20)</span>
+            <span id="payoutTickerText" class="payout-ticker-text">🔥 Ermias_Ethio successfully withdrawn $5.00 (BEP20)</span>
         </div>
 
-        <button class="support-float-btn" onclick="openModal('supportModal')" title="Customer Support">
+        <button class="support-float-btn" onclick="openSupportChatModal()" title="Customer Support">
             <svg viewBox="0 0 24 24">
                 <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
             </svg>
@@ -283,10 +304,11 @@
         <!-- HOME TAB -->
         <div id="homeTab" class="tab-pane active">
             <div class="header">
-                <div>VIP status: <span id="vipDisplay" style="color:#3b82f6; font-weight:900;">VIP 0</span></div>
+                <div>VIP status: <span id="vipDisplay" style="color:#34d399; font-weight:900;">VIP 0</span></div>
                 <div style="display: flex; gap: 8px; align-items: center;">
                     <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeIconBtn">🌙</button>
                     <button class="btn-sm" onclick="switchTabSafe('profileTab', document.querySelectorAll('.nav-item')[4]); openModal('historyModal')">History</button>
+                    <button id="adminNavBtn" class="btn-sm btn-3d-warning" style="display:none; margin:0;" onclick="openAdminDashboard()">🛡️ Admin</button>
                 </div>
             </div>
 
@@ -329,7 +351,7 @@
 
                 <div class="live-mining-box">
                     <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 900;">
-                        <span style="color: #10b981;">Live Mined (<span id="miningPctDisplay">0.00%</span>)</span>
+                        <span style="color: #34d399;">Live Mined (<span id="miningPctDisplay">0.00%</span>)</span>
                         <span id="liveTickerVal" style="color: var(--text-main);">+$0.0000</span>
                     </div>
                     <div class="progress-bar-container">
@@ -351,7 +373,7 @@
                 </button>
             </div>
             
-            <div style="margin-top: 12px;">
+            <div style="margin-top: 14px;">
                 <button id="dailyCheckInBtn" class="btn-3d-purple" onclick="dailyCheckIn()">
                     <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.33l1.5 1.17L12 8l3.5 3.5 1.5-1.17L14.92 8H20v6z"/></svg></span> <span id="dailyCheckInText">Daily Check-In (+0.02$)</span>
                 </button>
@@ -377,28 +399,28 @@
             <div class="card" style="text-align: left;">
                 <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 12px 0;">Invite friends & earn direct rewards instantly!</p>
                 <div style="font-size: 12px; margin: 12px 0; line-height: 1.6;">
-                    <p style="margin: 4px 0;">• Per Friend Referral: <b style="color:#10b981;">+$0.04</b></p>
-                    <p style="margin: 4px 0;">• Deposit Commission: <b style="color:#f59e0b;">10% Friend's Deposit</b></p>
+                    <p style="margin: 4px 0;">• Per Friend Referral: <b style="color:#34d399;">+$0.05</b></p>
+                    <p style="margin: 4px 0;">• Deposit Commission: <b style="color:#fbbf24;">10% Friend's Deposit</b></p>
                     <p style="margin: 4px 0;">• Total Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
                 </div>
                 <input type="text" id="refLinkInput" readonly style="font-size: 11px;">
                 <button class="btn-3d-success btn-sm" onclick="copyRefLink()">🔗 Copy Referral Link</button>
 
-                <div style="margin-top: 16px; border-top: var(--card-border); padding-top: 14px;">
-                    <h3 style="font-size: 13px; margin: 0 0 10px 0; font-weight: 900; color: #f59e0b;">🏆 Milestone Bonuses</h3>
+                <div style="margin-top: 18px; border-top: var(--card-border); padding-top: 16px;">
+                    <h3 style="font-size: 13px; margin: 0 0 12px 0; font-weight: 900; color: #fbbf24;">🏆 Milestone Bonuses</h3>
                     
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 14px; border-radius: 14px; margin-bottom: 8px;">
-                        <div style="font-size: 11px; text-align: left;"><b>30 Friends</b><br><span style="color:#10b981;">Reward: $1.00</span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 14px; border-radius: 16px; margin-bottom: 8px;">
+                        <div style="font-size: 11px; text-align: left;"><b>30 Friends</b><br><span style="color:#34d399;">Reward: $1.00</span></div>
                         <button id="claimBtn30" class="btn-3d-success btn-sm btn-disabled" style="margin:0;" onclick="claimMilestone(30, 1.00)" disabled>Claim</button>
                     </div>
 
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 14px; border-radius: 14px; margin-bottom: 8px;">
-                        <div style="font-size: 11px; text-align: left;"><b>50 Friends</b><br><span style="color:#10b981;">Reward: $2.00</span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 14px; border-radius: 16px; margin-bottom: 8px;">
+                        <div style="font-size: 11px; text-align: left;"><b>50 Friends</b><br><span style="color:#34d399;">Reward: $2.00</span></div>
                         <button id="claimBtn50" class="btn-3d-success btn-sm btn-disabled" style="margin:0;" onclick="claimMilestone(50, 2.00)" disabled>Claim</button>
                     </div>
 
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 14px; border-radius: 14px;">
-                        <div style="font-size: 11px; text-align: left;"><b>100 Friends</b><br><span style="color:#10b981;">Reward: $5.00</span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 14px; border-radius: 16px;">
+                        <div style="font-size: 11px; text-align: left;"><b>100 Friends</b><br><span style="color:#34d399;">Reward: $5.00</span></div>
                         <button id="claimBtn100" class="btn-3d-success btn-sm btn-disabled" style="margin:0;" onclick="claimMilestone(100, 5.00)" disabled>Claim</button>
                     </div>
                 </div>
@@ -414,7 +436,7 @@
                 <button class="btn-3d-success btn-sm" onclick="saveProfileName()">💾 Save Name</button>
                 <p style="margin: 14px 0 4px 0; font-size: 12px;"><b>Telegram ID:</b> <span id="profileIdDisplay" style="color: var(--text-muted);">Loading...</span></p>
                 <p style="margin: 6px 0; font-size: 12px;"><b>Current Tier:</b> <span id="profileVipDisplay" style="color: #3b82f6;">VIP 0</span></p>
-                <p style="margin: 6px 0; font-size: 12px;"><b>Active Capital:</b> $<span id="profileInvDisplay" style="color: #10b981;">0.00</span></p>
+                <p style="margin: 6px 0; font-size: 12px;"><b>Active Capital:</b> $<span id="profileInvDisplay" style="color: #34d399;">0.00</span></p>
             </div>
 
             <div class="card" style="text-align: left;">
@@ -500,38 +522,48 @@
         </div>
     </div>
 
-    <div id="supportModal" class="modal">
-        <div class="modal-content">
-            <h3 style="margin-top:0; color:#3b82f6; font-size:18px; font-weight:900;">💬 Support Desk</h3>
-            <div id="supportChatHistory" class="history-list" style="height: 160px; text-align: left;">
-                <div style="color: var(--text-muted); font-size: 11px; margin-bottom: 6px;"><b>Support Bot:</b> Welcome! How can we assist your mining today?</div>
-            </div>
-            <input type="text" id="supportMsgInput" placeholder="Type your message...">
-            <button class="btn-3d-success btn-sm" onclick="sendSupportMessage()">Send Message</button>
-            <button class="close-btn btn-sm" onclick="closeModal('supportModal')">Close</button>
-        </div>
-    </div>
-
-    <div id="adminAuthModal" class="modal">
-        <div class="modal-content">
-            <h3 style="margin-top:0; font-size:18px; font-weight:900;">Admin Login</h3>
-            <input type="password" id="adminPasswordInput" placeholder="Password">
-            <button class="btn-3d-success" onclick="verifyAdminPassword()">Login</button>
-            <button class="close-btn btn-sm" onclick="closeModal('adminAuthModal')">Cancel</button>
-        </div>
-    </div>
-
-    <div id="adminPanelModal" class="modal">
+    <!-- LIVE SUPPORT CHAT MODAL (USER SIDE) -->
+    <div id="supportChatModal" class="modal">
         <div class="modal-content" style="max-width: 410px;">
-            <h3 style="margin-top:0; color:#f59e0b; font-size:18px; font-weight:900;">🛡️ Admin Dashboard</h3>
-            <p style="font-size: 11px; color: var(--text-muted); margin-top: -5px;">Pending Deposit & Withdrawal Requests</p>
-            <div id="adminList" class="admin-list">No pending requests.</div>
-            <button class="close-btn btn-sm" onclick="closeModal('adminPanelModal')">Close</button>
+            <h3 style="margin-top:0; color:#3b82f6; font-size:18px; font-weight:900;">💬 Live Support Chat</h3>
+            <p style="font-size: 11px; color: var(--text-muted); margin-top: -5px;">Send your inquiries directly to admin.</p>
+            <div id="userChatHistory" class="history-list" style="height: 220px; text-align: left; margin-bottom: 12px;">
+                <div style="color: var(--text-muted); font-size: 11px; text-align: center; margin-top: 20px;">Loading your chat history...</div>
+            </div>
+            <textarea id="userSupportMsgInput" rows="2" placeholder="Type your message here..."></textarea>
+            <button class="btn-3d-success" onclick="sendUserSupportTicket()">Send Message</button>
+            <button class="close-btn btn-sm" onclick="closeModal('supportChatModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- ULTIMATE MULTI-TAB ADMIN DASHBOARD MODAL -->
+    <div id="adminPanelModal" class="modal">
+        <div class="modal-content" style="max-width: 415px;">
+            <h3 style="margin-top:0; color:#fbbf24; font-size:18px; font-weight:900;">🛡️ Pro Admin Dashboard</h3>
+            
+            <div class="admin-tab-header">
+                <button class="admin-tab-btn active" onclick="switchAdminTab('depositsPane', this)">📥 Deposits</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('withdrawalsPane', this)">📤 Withdrawals</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('supportPane', this)">💬 Support Tickets</button>
+            </div>
+
+            <div id="depositsPane" class="admin-pane active">
+                <div id="adminDepositsList" class="admin-list">Loading pending deposits...</div>
+            </div>
+
+            <div id="withdrawalsPane" class="admin-pane">
+                <div id="adminWithdrawalsList" class="admin-list">Loading pending withdrawals...</div>
+            </div>
+
+            <div id="supportPane" class="admin-pane">
+                <div id="adminSupportList" class="admin-list">Loading support tickets...</div>
+            </div>
+
+            <button class="close-btn btn-sm" onclick="closeModal('adminPanelModal')" style="margin-top: 14px;">Close Dashboard</button>
         </div>
     </div>
 
     <script>
-        // 🌟 SUPABASE CREDENTIALS & BOT TOKEN INTEGRATION
         const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnd3FsY3lhemFmZnhqbXJpYW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI5MTMyMzIsImV4cCI6MjEwODQ4OTIzMn0.I4gpUbJcqap7W73YfTzbX_5T10XhhAIWovGZRQ4rnzk';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -540,6 +572,8 @@
         const botUsername = 'MineralMinerPro_bot';
         const CHANNEL_1 = '@MineralMinerPro';
         const CHANNEL_2 = '@MineralMinerPro_Payment';
+
+        const ADMIN_TELEGRAM_ID = '7038584886'; 
 
         function showPushNotification(msg) {
             const bar = document.getElementById('pushNotificationBar');
@@ -593,13 +627,17 @@
         }
 
         function openModal(id) { 
-            try { triggerHaptic(); const m = document.getElementById(id); if (m) m.style.display = 'flex'; } catch(e) {}
+            try { 
+                triggerHaptic(); 
+                const m = document.getElementById(id); 
+                if (m) m.style.display = 'flex';
+            } catch(e) {}
         }
+
         function closeModal(id) { 
             try { triggerHaptic(); const m = document.getElementById(id); if (m) m.style.display = 'none'; } catch(e) {}
         }
 
-        // 🌟 REAL-TIME TELEGRAM CHANNEL MEMBER CHECK (getChatMember API)
         async function checkChannelMembership(channelUsername, userId) {
             try {
                 const url = `https://api.telegram.org/bot${BOT_TOKEN}/getChatMember?chat_id=${channelUsername}&user_id=${userId}`;
@@ -626,7 +664,6 @@
             }
 
             if (!telegramId || telegramId.startsWith('telegram_fallback_')) {
-                // Testing outside telegram environment
                 document.getElementById('joinModal').style.display = 'none';
                 localStorage.setItem('channels_joined_verified', 'true');
                 showPushNotification('Channels verified successfully!');
@@ -726,11 +763,15 @@
             { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, bg: "linear-gradient(135deg, #7e22ce, #581c87)", svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L30 12 L16 30 L2 12 Z" fill="#c084fc"/></svg>` }
         ];
 
-        // 🌟 CLOUD SYNC WITH ANTI-CHEAT (MAX 40 REFERRALS) & MANDATORY CHANNELS
         async function initSupabaseCloudApp() {
             try {
                 if (localStorage.getItem('channels_joined_verified') === 'true') {
                     document.getElementById('joinModal').style.display = 'none';
+                }
+
+                if (ADMIN_TELEGRAM_ID && telegramId === ADMIN_TELEGRAM_ID) {
+                    const navBtn = document.getElementById('adminNavBtn');
+                    if (navBtn) navBtn.style.display = 'inline-block';
                 }
 
                 const { data: existingUser, error } = await supabaseClient
@@ -778,13 +819,12 @@
                             if (refUser && !refUser.is_banned) {
                                 let newRefs = (refUser.referral_count || 0) + 1;
                                 
-                                // 🛡️ ANTI-CHEAT: BAN IF REFERRALS EXCEED 40
                                 if (newRefs > 40) {
                                     await supabaseClient.from('users').update({ is_banned: true }).eq('telegram_id', referrerId);
                                 } else {
-                                    let newBal = Number(refUser.balance || 1.00) + 0.04;
+                                    let newBal = Number(refUser.balance || 1.00) + 0.05;
                                     let hist = refUser.history || [];
-                                    hist.unshift(`Referral Bonus (User ID: ${telegramId}): +$0.04`);
+                                    hist.unshift(`Referral Bonus (User ID: ${telegramId}): +$0.05`);
 
                                     await supabaseClient.from('users').update({
                                         referral_count: newRefs,
@@ -819,7 +859,7 @@
                 updateDepositAddress();
 
                 setInterval(liveTicker, 1000);
-                setInterval(bannerTicker, 2500);
+                setInterval(bannerTicker, 3200);
                 setInterval(updateEarnersDynamicIncome, 3000);
                 setInterval(saveDataToSupabase, 5000);
             } catch (e) {
@@ -857,17 +897,23 @@
         function bannerTicker() {
             try {
                 if (isBanned) return;
-                const names = ["Alex_Crypto ⚡", "Satoshi_God 🚀", "CryptoWhale", "Michael_Trade", "David_Miner", "Kirubel", "Samuel 🌟", "Yohannes", "Kidus", "Solomon"];
-                const amounts = [10.00, 15.00, 20.00, 25.00, 30.00, 50.00, 100.00];
+                const realisticNames = [
+                    "Ermias_Ethio 🇪🇹", "Meron_Crypto 💎", "Bini_Miner 🚀", "Kidus_BTC 🔥", 
+                    "Kirubel_Pro 👑", "Samuel_Sol 🌟", "Yohannes_Node ⚙️", "Solomon_Eth 🔮",
+                    "Dawit_Crypto ⚡", "Hana_Trader 💫", "Natnael_TON 🚀", "Bethel_Miner 💎"
+                ];
+                const amounts = [5.00, 5.00, 5.00, 5.00, 11.00, 12.00, 14.00, 20.00, 30.00, 40.00, 50.00, 80.00];
                 const networks = ["BEP20", "TON", "ERC20"];
-                const randomName = names[Math.floor(Math.random() * names.length)];
+                
+                const randomName = realisticNames[Math.floor(Math.random() * realisticNames.length)];
                 const amt = amounts[Math.floor(Math.random() * amounts.length)];
                 const net = networks[Math.floor(Math.random() * networks.length)];
+                
                 const el = document.getElementById('payoutTickerText');
                 if (el) {
                     el.style.animation = 'none';
                     el.offsetHeight; 
-                    el.style.animation = 'slideTicker 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+                    el.style.animation = 'fadeInTicker 0.4s ease';
                     el.innerText = "🔥 " + randomName + " successfully withdrawn $" + amt.toFixed(2) + " (" + net + ")";
                 }
             } catch(e) {}
@@ -904,7 +950,7 @@
                     let textCol = '#60a5fa';
                     if (h.includes('Deposit')) { icon = '📥'; bgCol = 'rgba(16, 185, 129, 0.15)'; textCol = '#34d399'; }
                     else if (h.includes('Withdrawal')) { icon = '📤'; bgCol = 'rgba(245, 158, 11, 0.15)'; textCol = '#fbbf24'; }
-                    else if (h.includes('Claim') || h.includes('Bonus') || h.includes('Check-In') || h.includes('Offline')) { icon = '⚡'; bgCol = 'rgba(16, 185, 129, 0.15)'; textCol = '#10b981'; }
+                    else if (h.includes('Claim') || h.includes('Bonus') || h.includes('Check-In') || h.includes('Offline')) { icon = '⚡'; bgCol = 'rgba(16, 185, 129, 0.15)'; textCol = '#34d399'; }
                     else if (h.includes('Activated') || h.includes('VIP')) { icon = '👑'; bgCol = 'rgba(139, 92, 246, 0.15)'; textCol = '#c084fc'; }
 
                     return `<div class="history-card-item">
@@ -972,7 +1018,7 @@
                             </div>
                         </div>
                         <div>
-                            ${isCurr ? '<span style="color:#10b981; font-size:11px; font-weight:900;">Active</span>' : `<button class="btn-3d-success btn-sm" style="margin:0;" onclick="buyVip(${t.level})">Buy</button>`}
+                            ${isCurr ? '<span style="color:#34d399; font-size:11px; font-weight:900;">Active</span>' : `<button class="btn-3d-success btn-sm" style="margin:0;" onclick="buyVip(${t.level})">Buy</button>`}
                         </div>
                     </div>`;
                 }).join('');
@@ -993,8 +1039,8 @@
                             </div>
                         </div>
                         <div style="text-align: right;">
-                            <div style="font-size: 12px; font-weight: 900; color: #10b981;" id="earnerVal_${index}">+$${e.earned.toFixed(2)}</div>
-                            <div style="font-size: 9px; color: #f59e0b; font-weight: 700;">Dynamic Yield</div>
+                            <div style="font-size: 12px; font-weight: 900; color: #34d399;" id="earnerVal_${index}">+$${e.earned.toFixed(2)}</div>
+                            <div style="font-size: 9px; color: #fbbf24; font-weight: 700;">Dynamic Yield</div>
                         </div>
                     </div>`;
                 }).join('');
@@ -1066,7 +1112,7 @@
                 historyLog.unshift("Claimed Mined Income: +$" + minedAccumulated.toFixed(2));
                 minedAccumulated = 0;
                 updateUI();
-                showPushNotification('Mined earnings claimed!');
+                showPushNotification('Mined earnings successfully claimed!');
                 saveDataToSupabase();
             } catch(e) {}
         }
@@ -1135,7 +1181,7 @@
             } catch(e) {}
         }
 
-        function processDeposit() {
+        async function processDeposit() {
             try {
                 if (isBanned) return;
                 triggerHaptic();
@@ -1145,16 +1191,26 @@
                 const net = netEl ? netEl.value : 'BEP20';
                 if (isNaN(amt) || amt < 5) { showPushNotification('Minimum deposit is $5'); return; }
                 
+                await supabaseClient.from('transactions').insert([{
+                    telegram_id: telegramId,
+                    user_name: userName,
+                    type: 'DEPOSIT',
+                    amount: amt,
+                    network: net,
+                    status: 'PENDING',
+                    created_at: new Date().toISOString()
+                }]);
+
                 historyLog.unshift("Deposit Submitted ($" + amt.toFixed(2) + " " + net + ")");
                 updateUI();
                 closeModal('depositModal');
                 if(amtInput) amtInput.value = '';
-                showPushNotification('Deposit request submitted!');
+                showPushNotification('Deposit request submitted to Admin!');
                 saveDataToSupabase();
             } catch(e) {}
         }
 
-        function processWithdraw() {
+        async function processWithdraw() {
             try {
                 if (isBanned) return;
                 triggerHaptic();
@@ -1166,28 +1222,265 @@
                 if (amt > balance) { showPushNotification('Insufficient balance!'); return; }
                 
                 balance -= amt;
+
+                await supabaseClient.from('transactions').insert([{
+                    telegram_id: telegramId,
+                    user_name: userName,
+                    type: 'WITHDRAWAL',
+                    amount: amt,
+                    network: net,
+                    status: 'PENDING',
+                    created_at: new Date().toISOString()
+                }]);
+
                 historyLog.unshift("Withdrawal Requested ($" + amt.toFixed(2) + " " + net + ")");
                 updateUI();
                 closeModal('withdrawModal');
                 if(amtInput) amtInput.value = '';
-                showPushNotification('Withdrawal requested!');
+                showPushNotification('Withdrawal requested to Admin!');
                 saveDataToSupabase();
             } catch(e) {}
         }
 
-        function sendSupportMessage() {
+        async function openSupportChatModal() {
+            openModal('supportChatModal');
+            await loadUserSupportChats();
+        }
+
+        async function loadUserSupportChats() {
             try {
-                const input = document.getElementById('supportMsgInput');
-                const chatHistory = document.getElementById('supportChatHistory');
+                const historyEl = document.getElementById('userChatHistory');
+                if (!historyEl) return;
+                historyEl.innerHTML = '<div style="color:var(--text-muted); font-size:11px; text-align:center;">Loading messages...</div>';
+
+                const { data, error } = await supabaseClient
+                    .from('support_tickets')
+                    .select('*')
+                    .eq('telegram_id', telegramId)
+                    .order('created_at', { ascending: true });
+
+                if (error || !data || data.length === 0) {
+                    historyEl.innerHTML = '<div style="color:var(--text-muted); font-size:11px; text-align:center; padding:15px;">No messages yet. Send your query below!</div>';
+                    return;
+                }
+
+                historyEl.innerHTML = data.map(t => {
+                    let html = `<div style="background:var(--card-bg); padding:12px 14px; border-radius:16px; margin-bottom:10px; border:var(--card-border);">
+                        <div style="font-size:10px; color:#3b82f6; font-weight:800; margin-bottom:2px;">You:</div>
+                        <div style="font-size:11px; color:var(--text-main);">${t.message}</div>
+                    </div>`;
+                    if (t.admin_reply) {
+                        html += `<div style="background:rgba(16,185,129,0.15); padding:12px 14px; border-radius:16px; margin-bottom:10px; border:1px solid rgba(16,185,129,0.4);">
+                            <div style="font-size:10px; color:#34d399; font-weight:800; margin-bottom:2px;">🛡️ Admin Reply:</div>
+                            <div style="font-size:11px; color:var(--text-main);">${t.admin_reply}</div>
+                        </div>`;
+                    } else {
+                        html += `<div style="font-size:9px; color:#fbbf24; margin-bottom:10px; font-weight:700;">⏳ Status: Pending Admin Reply</div>`;
+                    }
+                    return html;
+                }).join('');
+                historyEl.scrollTop = historyEl.scrollHeight;
+            } catch(e) {
+                const historyEl = document.getElementById('userChatHistory');
+                if (historyEl) historyEl.innerHTML = '<div style="color:#ef4444; font-size:11px;">Error loading chat.</div>';
+            }
+        }
+
+        async function sendUserSupportTicket() {
+            try {
+                triggerHaptic();
+                const input = document.getElementById('userSupportMsgInput');
                 if (!input || !input.value.trim()) return;
-                const userText = input.value.trim();
-                chatHistory.innerHTML += '<div style="color: var(--text-main); font-size: 11px; margin: 4px 0; text-align: right;"><b>You:</b> ' + userText + '</div>';
+                const msg = input.value.trim();
+
+                await supabaseClient.from('support_tickets').insert([{
+                    telegram_id: telegramId,
+                    user_name: userName,
+                    message: msg,
+                    status: 'PENDING',
+                    created_at: new Date().toISOString()
+                }]);
+
                 input.value = '';
-                setTimeout(() => {
-                    chatHistory.innerHTML += '<div style="color: #34d399; font-size: 11px; margin: 4px 0; text-align: left;"><b>Support Bot:</b> Message received. We will reply shortly.</div>';
-                    chatHistory.scrollTop = chatHistory.scrollHeight;
-                }, 800);
+                showPushNotification('Message sent to Support successfully!');
+                await loadUserSupportChats();
+            } catch(e) {
+                showPushNotification('Failed to send message.');
+            }
+        }
+
+        function openAdminDashboard() {
+            openModal('adminPanelModal');
+            switchAdminTab('depositsPane', document.querySelector('.admin-tab-btn'));
+        }
+
+        function switchAdminTab(paneId, btnEl) {
+            triggerHaptic();
+            document.querySelectorAll('.admin-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+            
+            const targetPane = document.getElementById(paneId);
+            if (targetPane) targetPane.classList.add('active');
+            if (btnEl) btnEl.classList.add('active');
+
+            if (paneId === 'depositsPane') loadAdminDeposits();
+            else if (paneId === 'withdrawalsPane') loadAdminWithdrawals();
+            else if (paneId === 'supportPane') loadAdminSupportTickets();
+        }
+
+        async function loadAdminDeposits() {
+            const listEl = document.getElementById('adminDepositsList');
+            if (!listEl) return;
+            listEl.innerHTML = 'Loading pending deposits...';
+
+            const { data, error } = await supabaseClient
+                .from('transactions')
+                .select('*')
+                .eq('type', 'DEPOSIT')
+                .eq('status', 'PENDING')
+                .order('created_at', { ascending: false });
+
+            if (error || !data || data.length === 0) {
+                listEl.innerHTML = '<div style="color:var(--text-muted); font-size:11px; padding:12px;">No pending deposits.</div>';
+                return;
+            }
+
+            listEl.innerHTML = data.map(tx => `
+                <div style="background:var(--card-bg); padding:14px; border-radius:16px; margin-bottom:12px; border:var(--card-border); text-align:left;">
+                    <div style="font-size:12px; font-weight:800; color:var(--text-main);">${tx.user_name}</div>
+                    <div style="font-size:11px; color:#34d399; font-weight:700;">Deposit: $${tx.amount.toFixed(2)} (${tx.network})</div>
+                    <div style="font-size:10px; color:var(--text-muted); margin-bottom:10px;">ID: ${tx.telegram_id}</div>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn-3d-success btn-sm" style="margin:0; padding:8px 14px;" onclick="approveTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'DEPOSIT')">Approve</button>
+                        <button class="close-btn btn-sm" style="margin:0; padding:8px 14px; background:#ef4444;" onclick="rejectTransaction('${tx.id}')">Reject</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadAdminWithdrawals() {
+            const listEl = document.getElementById('adminWithdrawalsList');
+            if (!listEl) return;
+            listEl.innerHTML = 'Loading pending withdrawals...';
+
+            const { data, error } = await supabaseClient
+                .from('transactions')
+                .select('*')
+                .eq('type', 'WITHDRAWAL')
+                .eq('status', 'PENDING')
+                .order('created_at', { ascending: false });
+
+            if (error || !data || data.length === 0) {
+                listEl.innerHTML = '<div style="color:var(--text-muted); font-size:11px; padding:12px;">No pending withdrawals.</div>';
+                return;
+            }
+
+            listEl.innerHTML = data.map(tx => `
+                <div style="background:var(--card-bg); padding:14px; border-radius:16px; margin-bottom:12px; border:var(--card-border); text-align:left;">
+                    <div style="font-size:12px; font-weight:800; color:var(--text-main);">${tx.user_name}</div>
+                    <div style="font-size:11px; color:#fbbf24; font-weight:700;">Withdrawal: $${tx.amount.toFixed(2)} (${tx.network})</div>
+                    <div style="font-size:10px; color:var(--text-muted); margin-bottom:10px;">ID: ${tx.telegram_id}</div>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn-3d-success btn-sm" style="margin:0; padding:8px 14px;" onclick="approveTransaction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'WITHDRAWAL')">Approve Paid</button>
+                        <button class="close-btn btn-sm" style="margin:0; padding:8px 14px; background:#ef4444;" onclick="rejectTransaction('${tx.id}')">Reject</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadAdminSupportTickets() {
+            const listEl = document.getElementById('adminSupportList');
+            if (!listEl) return;
+            listEl.innerHTML = 'Loading support messages...';
+
+            const { data, error } = await supabaseClient
+                .from('support_tickets')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error || !data || data.length === 0) {
+                listEl.innerHTML = '<div style="color:var(--text-muted); font-size:11px; padding:12px;">No support messages found.</div>';
+                return;
+            }
+
+            listEl.innerHTML = data.map(t => `
+                <div style="background:var(--card-bg); padding:14px; border-radius:16px; margin-bottom:12px; border:var(--card-border); text-align:left;">
+                    <div style="font-size:12px; font-weight:800; color:var(--text-main);">${t.user_name || 'User'} <span style="font-size:10px; color:var(--text-muted);">(ID: ${t.telegram_id})</span></div>
+                    <div style="font-size:11px; color:#60a5fa; margin:6px 0;"><b>Query:</b> ${t.message}</div>
+                    ${t.admin_reply ? `<div style="font-size:11px; color:#34d399; margin-bottom:8px;"><b>Your Reply:</b> ${t.admin_reply}</div>` : ''}
+                    <div style="display:flex; gap:8px; margin-top:10px;">
+                        <input type="text" id="replyInput_${t.id}" placeholder="Type reply..." style="margin:0; padding:10px 12px; font-size:11px;">
+                        <button class="btn-3d-success btn-sm" style="margin:0; padding:10px 14px;" onclick="sendAdminReply('${t.id}')">Reply</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function approveTransaction(txId, userId, amount, type) {
+            try {
+                triggerHaptic();
+                await supabaseClient.from('transactions').update({ status: 'APPROVED' }).eq('id', txId);
+
+                if (type === 'DEPOSIT') {
+                    const { data: targetUser } = await supabaseClient.from('users').select('*').eq('telegram_id', userId).maybeSingle();
+                    if (targetUser) {
+                        let newBal = Number(targetUser.balance || 0) + amount;
+                        let newInv = Number(targetUser.active_investment || 0) + amount;
+                        let newVip = targetUser.vip_level || 0;
+                        
+                        if (newInv >= 1000) newVip = 7;
+                        else if (newInv >= 500) newVip = 6;
+                        else if (newInv >= 100) newVip = 5;
+                        else if (newInv >= 50) newVip = 4;
+                        else if (newInv >= 20) newVip = 3;
+                        else if (newInv >= 10) newVip = 2;
+                        else if (newInv >= 5) newVip = 1;
+
+                        let hist = targetUser.history || [];
+                        hist.unshift(`Deposit Approved: +$${amount.toFixed(2)}`);
+
+                        await supabaseClient.from('users').update({
+                            balance: newBal,
+                            active_investment: newInv,
+                            vip_level: newVip,
+                            history: hist
+                        }).eq('telegram_id', userId);
+                    }
+                }
+
+                showPushNotification('Transaction approved successfully!');
+                loadAdminDeposits();
+                loadAdminWithdrawals();
             } catch(e) {}
+        }
+
+        async function rejectTransaction(txId) {
+            try {
+                triggerHaptic();
+                await supabaseClient.from('transactions').update({ status: 'REJECTED' }).eq('id', txId);
+                showPushNotification('Transaction rejected.');
+                loadAdminDeposits();
+                loadAdminWithdrawals();
+            } catch(e) {}
+        }
+
+        async function sendAdminReply(ticketId) {
+            try {
+                triggerHaptic();
+                const replyInput = document.getElementById(`replyInput_${ticketId}`);
+                if (!replyInput || !replyInput.value.trim()) return;
+                const replyText = replyInput.value.trim();
+
+                await supabaseClient.from('support_tickets').update({
+                    admin_reply: replyText,
+                    status: 'RESOLVED'
+                }).eq('id', ticketId);
+
+                showPushNotification('Reply sent successfully!');
+                loadAdminSupportTickets();
+            } catch(e) {
+                showPushNotification('Failed to send reply.');
+            }
         }
 
         let tapCount = 0;
@@ -1197,30 +1490,10 @@
             clearTimeout(tapTimer);
             if (tapCount >= 5) {
                 tapCount = 0;
-                if (sessionStorage.getItem('adminAuth') === 'true') {
-                    openModal('adminPanelModal');
-                } else {
-                    openModal('adminAuthModal');
-                }
+                openAdminDashboard();
             } else {
                 tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
             }
-        }
-
-        function verifyAdminPassword() {
-            try {
-                triggerHaptic();
-                const pwdInput = document.getElementById('adminPasswordInput');
-                const pwd = pwdInput ? pwdInput.value : '';
-                if (pwd === 'Bini@2160') {
-                    sessionStorage.setItem('adminAuth', 'true');
-                    closeModal('adminAuthModal');
-                    openModal('adminPanelModal');
-                    if (pwdInput) pwdInput.value = '';
-                } else {
-                    showPushNotification('Invalid password!');
-                }
-            } catch(e) {}
         }
     </script>
 </body>
