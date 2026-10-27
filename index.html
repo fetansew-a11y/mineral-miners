@@ -41,7 +41,7 @@
         }
         .app-container { max-width: 420px; margin: 0 auto; position: relative; }
         
-        /* SECURE FLYING MYSTERY BOX ANIMATION */
+        /* 100% SECURE FLYING MYSTERY BOX ANIMATION (4H COOLDOWN) */
         .flying-mystery-box {
             position: fixed; top: 110px; right: -80px; z-index: 997;
             background: linear-gradient(135deg, #fbbf24, #d97706);
@@ -280,7 +280,6 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
 
-        /* PURE CSS 3D GEM & MINERAL BADGES (NO EXTERNAL IMAGES) */
         .vip-badge-3d { 
             width: 52px; height: 52px; border-radius: 16px; overflow: hidden; flex-shrink: 0;
             border: 2px solid rgba(52, 211, 153, 0.5); box-shadow: 0 6px 15px rgba(0,0,0,0.6);
@@ -313,7 +312,6 @@
         .admin-pane { display: none; }
         .admin-pane.active { display: block; }
 
-        /* MODERN TELEGRAM STYLE CHAT SUPPORT UI */
         .chat-container-modern {
             display: flex; flex-direction: column; height: 260px; background: var(--input-bg);
             border-radius: 16px; border: var(--card-border); overflow: hidden; margin-bottom: 10px;
@@ -363,7 +361,7 @@
     </style>
 </head>
 <body>
-    <!-- SECURE FLYING MYSTERY GIFT BOX ELEMENT -->
+    <!-- SECURE FLYING MYSTERY GIFT BOX ELEMENT ($0.05 + 4H COOLDOWN) -->
     <div id="flyingMysteryBox" class="flying-mystery-box" onclick="claimMysteryBox()" title="Bonus Mystery Box!">🎁</div>
 
     <div id="pushNotificationBar" class="push-notification-bar">
@@ -1128,7 +1126,7 @@
             } catch(e) {}
         }
 
-        /* 100% SECURE MYSTERY BOX LOGIC (4-Hour Refresh/Reload Proof Cooldown) */
+        /* 100% SECURE 4-HOUR MYSTERY BOX LOGIC (+$0.005 REWARD) */
         function checkMysteryBoxVisibility() {
             const boxEl = document.getElementById('flyingMysteryBox');
             if (!boxEl) return;
@@ -1141,25 +1139,25 @@
             }
         }
 
-        function claimMysteryBox() {
+        async function claimMysteryBox() {
             try {
                 triggerHaptic();
                 const now = Date.now();
                 const fourHours = 4 * 60 * 60 * 1000;
                 if (lastMysteryBoxTime && (now - lastMysteryBoxTime < fourHours)) {
-                    showPushNotification('Mystery Box already claimed recently!');
+                    showPushNotification('Mystery Box available after 4 hours cooldown!');
                     document.getElementById('flyingMysteryBox').style.display = 'none';
                     return;
                 }
 
                 lastMysteryBoxTime = now;
-                const bonusAmt = 0.01;
+                const bonusAmt = 0.005;
                 balance += bonusAmt;
-                historyLog.unshift(`🎁 Mystery Box Bonus: +$${bonusAmt.toFixed(2)}`);
+                historyLog.unshift(`🎁 Mystery Box Bonus: +$${bonusAmt.toFixed(3)}`);
                 updateUI();
                 document.getElementById('flyingMysteryBox').style.display = 'none';
-                showPushNotification('🎉 Congratulations! You found +$0.01 in the Mystery Box!');
-                saveDataToSupabase();
+                showPushNotification('🎉 Congratulations! You found +$0.005 in the Mystery Box!');
+                await saveDataToSupabase();
             } catch(e) {}
         }
 
@@ -1293,7 +1291,7 @@
             } catch(e) {}
         }
 
-        function buyVip(lvl) {
+        async function buyVip(lvl) {
             try {
                 if (isBanned) return;
                 triggerHaptic();
@@ -1306,8 +1304,8 @@
                 historyLog.unshift("Activated " + t.name);
                 updateUI();
                 renderVipTiers();
-                showPushNotification('Activated ' + t.name);
-                saveDataToSupabase();
+                showPushNotification('Activated ' + t.name + ' successfully!');
+                await saveDataToSupabase();
             } catch(e) {}
         }
 
@@ -1349,7 +1347,7 @@
             } catch(e) {}
         }
 
-        function claimMining() {
+        async function claimMining() {
             try {
                 if (isBanned) return;
                 triggerHaptic();
@@ -1359,11 +1357,11 @@
                 minedAccumulated = 0;
                 updateUI();
                 showPushNotification('Mined earnings successfully claimed!');
-                saveDataToSupabase();
+                await saveDataToSupabase();
             } catch(e) {}
         }
 
-        function dailyCheckIn() {
+        async function dailyCheckIn() {
             try {
                 if (isBanned) return;
                 triggerHaptic();
@@ -1382,7 +1380,7 @@
                 updateUI();
                 checkDailyCheckInState();
                 showPushNotification('Daily Check-In reward added!');
-                saveDataToSupabase();
+                await saveDataToSupabase();
             } catch(e) {}
         }
 
@@ -1452,7 +1450,7 @@
                 closeModal('depositModal');
                 if(amtInput) amtInput.value = '';
                 showPushNotification('Deposit request submitted to Admin!');
-                saveDataToSupabase();
+                await saveDataToSupabase();
             } catch(e) {}
         }
 
@@ -1502,7 +1500,7 @@
                 closeModal('withdrawModal');
                 if(amtInput) amtInput.value = '';
                 showPushNotification('Withdrawal requested to Admin!');
-                saveDataToSupabase();
+                await saveDataToSupabase();
             } catch(e) {}
         }
 
