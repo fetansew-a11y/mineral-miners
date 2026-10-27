@@ -239,7 +239,7 @@
         <div class="push-icon">⚡</div>
         <div>
             <div style="font-size: 10px; color: #34d399; font-weight: 800; text-transform: uppercase;">Mineral Mining Alert</div>
-            <div id="pushMsgText" style="font-size: 11px; color: #f8fafc; font-weight: 700;">Supabase Cloud Sync Connected!</div>
+            <div id="pushMsgText" style="font-size: 11px; color: #f8fafc; font-weight: 700;">Supabase Live Sync Connected!</div>
         </div>
     </div>
 
@@ -506,7 +506,7 @@
     </div>
 
     <script>
-        // 🌟 YOUR EXACT SUPABASE CREDENTIALS INTEGRATED
+        // 🌟 SUPABASE LIVE CLOUD CREDENTIALS
         const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnd3FsY3lhemFmZnhqbXJpYW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI5MTMyMzIsImV4cCI6MjEwODQ4OTIzMn0.I4gpUbJcqap7W73YfTzbX_5T10XhhAIWovGZRQ4rnzk';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -646,7 +646,7 @@
             { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, bg: "linear-gradient(135deg, #7e22ce, #581c87)", svg: `<svg viewBox="0 0 32 32"><path d="M16 2 L30 12 L16 30 L2 12 Z" fill="#c084fc"/></svg>` }
         ];
 
-        // 🌟 CLOUD SYNC & REFERRAL INTEGRATION
+        // 🌟 LOAD & SYNC WITH SUPABASE CLOUD (GUARANTEED PERSISTENCE)
         async function initSupabaseCloudApp() {
             try {
                 const { data: existingUser, error } = await supabaseClient
@@ -664,7 +664,7 @@
                     lastCheckInTime = Number(existingUser.last_check_in ?? lastCheckInTime);
                     lastActiveTimestamp = Number(existingUser.last_active_timestamp ?? lastActiveTimestamp);
                     isBanned = Boolean(existingUser.is_banned ?? false);
-                    if (existingUser.history && existingUser.history.length > 0) historyLog = existingUser.history;
+                    if (existingUser.history && Array.isArray(existingUser.history)) historyLog = existingUser.history;
                     userName = existingUser.user_name ?? userName;
                 } else {
                     const newUser = {
@@ -732,9 +732,9 @@
                 setInterval(liveTicker, 1000);
                 setInterval(bannerTicker, 2500);
                 setInterval(updateEarnersDynamicIncome, 3000);
-                setInterval(saveDataToSupabase, 8000);
+                setInterval(saveDataToSupabase, 5000);
             } catch (e) {
-                console.error("Cloud sync error:", e);
+                console.error("Cloud error:", e);
                 renderVipTiers();
                 renderEarnersLeaderboard();
                 updateUI();
