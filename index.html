@@ -11,18 +11,18 @@
     <style>
         :root[data-theme="dark"] {
             --bg-gradient: radial-gradient(circle at 50% 0%, #0c1322 0%, #030712 100%);
-            --card-bg: rgba(15, 23, 42, 0.88);
+            --card-bg: rgba(15, 23, 42, 0.90);
             --card-border: 1px solid rgba(52, 211, 153, 0.35);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --accent-emerald: #10b981;
             --accent-glow: 0 0 45px rgba(16, 185, 129, 0.5);
             --modal-bg: #060a17;
-            --input-bg: rgba(2, 6, 23, 0.95);
+            --input-bg: rgba(2, 6, 23, 0.96);
         }
         :root[data-theme="light"] {
             --bg-gradient: radial-gradient(circle at 50% 0%, #f8fafc 0%, #cbd5e1 100%);
-            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-bg: rgba(255, 255, 255, 0.96);
             --card-border: 1px solid rgba(5, 150, 105, 0.3);
             --text-main: #0f172a;
             --text-muted: #64748b;
@@ -41,7 +41,7 @@
         }
         .app-container { max-width: 420px; margin: 0 auto; position: relative; }
         
-        /* FLYING MYSTERY BOX WITH 4H COOLDOWN */
+        /* FLYING MYSTERY BOX WITH SERVER 4H COOLDOWN */
         .flying-mystery-box {
             position: fixed; top: 115px; right: -90px; z-index: 997;
             background: linear-gradient(135deg, #fbbf24, #d97706);
@@ -97,7 +97,7 @@
             box-shadow: 0 12px 30px rgba(0,0,0,0.35);
         }
         
-        .title-header-box { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 8px 0; }
+        .title-header-box { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 6px 0 12px 0; }
         .app-title {
             font-size: 24px; font-weight: 900; margin: 0; letter-spacing: -0.5px;
             background: linear-gradient(135deg, #f8fafc 0%, #34d399 50%, #60a5fa 100%);
@@ -122,7 +122,7 @@
         .sub-balance { font-size: 11px; color: var(--text-muted); margin-bottom: 14px; font-weight: 700; }
         
         .mining-core-container {
-            width: 150px; height: 150px; margin: 14px auto; position: relative;
+            width: 145px; height: 145px; margin: 12px auto; position: relative;
             display: flex; align-items: center; justify-content: center;
         }
         .mining-core-ring {
@@ -134,7 +134,7 @@
         @keyframes spinCoreRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .mining-core-glow {
-            width: 120px; height: 120px; border-radius: 50%;
+            width: 115px; height: 115px; border-radius: 50%;
             background: radial-gradient(circle, rgba(16, 185, 129, 0.9) 0%, rgba(59, 130, 246, 0.65) 100%);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             box-shadow: inset 0 0 30px rgba(255,255,255,0.95), 0 0 70px rgba(52, 211, 153, 1);
@@ -143,7 +143,7 @@
         @keyframes pulseCoreGlow { 0%, 100% { transform: scale(1); box-shadow: 0 0 45px rgba(59, 130, 246, 0.6); } 50% { transform: scale(1.08); box-shadow: 0 0 90px rgba(16, 185, 129, 1); } }
         
         .css-3d-gem {
-            width: 65px; height: 65px; position: relative;
+            width: 62px; height: 62px; position: relative;
             transform-style: preserve-3d;
             animation: rotateGem3D 6s linear infinite, floatGem 3s ease-in-out infinite alternate;
             filter: drop-shadow(0 10px 18px rgba(0,0,0,0.7));
@@ -299,8 +299,8 @@
 
         .earner-card-item {
             display: flex; align-items: center; justify-content: space-between;
-            background: var(--card-bg); padding: 16px; border-radius: 18px;
-            margin-bottom: 12px; border: var(--card-border); box-shadow: 0 10px 25px rgba(0,0,0,0.45);
+            background: var(--card-bg); padding: 14px 16px; border-radius: 18px;
+            margin-bottom: 10px; border: var(--card-border); box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
         
         #qrcode { display: flex; justify-content: center; margin: 12px auto; background: white; padding: 12px; border-radius: 16px; width: fit-content; box-shadow: 0 12px 30px rgba(0,0,0,0.6); }
@@ -313,7 +313,7 @@
         .admin-pane.active { display: block; }
 
         .chat-container-modern {
-            display: flex; flex-direction: column; height: 280px; background: var(--input-bg);
+            display: flex; flex-direction: column; height: 310px; background: var(--input-bg);
             border-radius: 18px; border: var(--card-border); overflow: hidden; margin-bottom: 12px;
             box-shadow: inset 0 3px 10px rgba(0,0,0,0.6);
         }
@@ -368,7 +368,7 @@
         <div class="push-icon">⚡</div>
         <div>
             <div style="font-size: 10px; color: #34d399; font-weight: 800; text-transform: uppercase;">Mineral Mining Alert</div>
-            <div id="pushMsgText" style="font-size: 11px; color: #f8fafc; font-weight: 700;">Supabase Live Sync Connected!</div>
+            <div id="pushMsgText" style="font-size: 11px; color: #f8fafc; font-weight: 700;">Supabase Server-Sync Active!</div>
         </div>
     </div>
 
@@ -506,7 +506,7 @@
             <div id="vipCardsContainer" class="vip-list"></div>
         </div>
 
-        <!-- EARNERS TAB -->
+        <!-- EARNERS (LEADERBOARD) TAB - FULL 10 SIMULATED TOP MINERS -->
         <div id="earnersTab" class="tab-pane">
             <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 4px 0;">🏆 Top Miners Leaderboard</h2>
             <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 12px 0;">Global top investors with dynamic yield returns.</p>
@@ -530,25 +530,6 @@
                     <h3 style="font-size: 12px; margin: 0 0 10px 0; font-weight: 900; color: #34d399;">📋 Your Invited Friends</h3>
                     <div id="referredUsersListContainer" class="history-list" style="max-height: 160px;">
                         <div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">No referrals yet. Share your link to start earning!</div>
-                    </div>
-                </div>
-
-                <div style="margin-top: 16px; border-top: var(--card-border); padding-top: 14px;">
-                    <h3 style="font-size: 12px; margin: 0 0 12px 0; font-weight: 900; color: #fbbf24;">🏆 Milestone Bonuses</h3>
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 14px; border-radius: 16px; margin-bottom: 8px;">
-                        <div style="font-size: 11px; text-align: left;"><b>30 Friends</b><br><span style="color:#34d399;">Reward: $1.00</span></div>
-                        <button id="claimBtn30" class="btn-3d-success btn-sm btn-disabled" onclick="claimMilestone(30, 1.00)" disabled>Claim</button>
-                    </div>
-
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 14px; border-radius: 16px; margin-bottom: 8px;">
-                        <div style="font-size: 11px; text-align: left;"><b>50 Friends</b><br><span style="color:#34d399;">Reward: $2.00</span></div>
-                        <button id="claimBtn50" class="btn-3d-success btn-sm btn-disabled" onclick="claimMilestone(50, 2.00)" disabled>Claim</button>
-                    </div>
-
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 12px 14px; border-radius: 16px;">
-                        <div style="font-size: 11px; text-align: left;"><b>100 Friends</b><br><span style="color:#34d399;">Reward: $5.00</span></div>
-                        <button id="claimBtn100" class="btn-3d-success btn-sm btn-disabled" onclick="claimMilestone(100, 5.00)" disabled>Claim</button>
                     </div>
                 </div>
             </div>
@@ -649,7 +630,7 @@
         </div>
     </div>
 
-    <!-- MODERN TELEGRAM SUPPORT CHAT MODAL -->
+    <!-- MODERN PROFESSIONAL SUPPORT CHAT MODAL -->
     <div id="supportChatModal" class="modal">
         <div class="modal-content" style="max-width: 415px; padding: 20px;">
             <div class="chat-container-modern">
@@ -661,7 +642,7 @@
                     </div>
                 </div>
                 <div id="userChatHistory" class="chat-messages-scroll">
-                    <div style="color: var(--text-muted); font-size: 10px; text-align: center; margin: auto;">Loading secure chat...</div>
+                    <div class="chat-bubble-admin">Hello! Welcome to Mineral Mining Pro Support. How can our financial or technical team assist you today?</div>
                 </div>
                 <div class="chat-input-row">
                     <input type="text" id="userSupportMsgInput" placeholder="Type your message..." style="margin:0;">
@@ -822,10 +803,18 @@
             "James Miller", "William Davis", "Benjamin Garcia", "Lucas Rodriguez", "Henry Martinez"
         ];
 
+        // FULL 10 SIMULATED TOP MINERS LEADERBOARD
         const topEarnersData = [
             { rank: 1, name: "Alexander Smith", vip: "VIP 7 (Diamond)", invested: 1000.00, earned: 4850.20, badge: "🥇" },
             { rank: 2, name: "Liam Johnson", vip: "VIP 7 (Diamond)", invested: 1000.00, earned: 4620.00, badge: "🥈" },
-            { rank: 3, name: "Noah Williams", vip: "VIP 6 (Emerald)", invested: 500.00, earned: 2410.50, badge: "🥉" }
+            { rank: 3, name: "Noah Williams", vip: "VIP 6 (Emerald)", invested: 500.00, earned: 2410.50, badge: "🥉" },
+            { rank: 4, name: "Oliver Brown", vip: "VIP 5 (Sapphire)", invested: 100.00, earned: 1240.00, badge: "4" },
+            { rank: 5, name: "Elijah Jones", vip: "VIP 5 (Sapphire)", invested: 100.00, earned: 1150.80, badge: "5" },
+            { rank: 6, name: "James Miller", vip: "VIP 4 (Ruby)", invested: 50.00, earned: 890.40, badge: "6" },
+            { rank: 7, name: "William Davis", vip: "VIP 4 (Ruby)", invested: 50.00, earned: 760.20, badge: "7" },
+            { rank: 8, name: "Benjamin Garcia", vip: "VIP 3 (Platinum)", invested: 20.00, earned: 430.00, badge: "8" },
+            { rank: 9, name: "Lucas Rodriguez", vip: "VIP 2 (Gold)", invested: 10.00, earned: 210.50, badge: "9" },
+            { rank: 10, name: "Henry Martinez", vip: "VIP 1 (Silver)", invested: 5.00, earned: 95.00, badge: "10" }
         ];
 
         let telegramId = '';
@@ -1280,18 +1269,20 @@
             const historyEl = document.getElementById('userChatHistory');
             const { data } = await supabaseClient.from('support_tickets').select('*').eq('telegram_id', telegramId);
             if (!data || data.length === 0) {
-                historyEl.innerHTML = '<div style="font-size:10px; text-align:center; padding:20px;">No messages.</div>';
                 return;
             }
-            historyEl.innerHTML = data.map(t => `<div class="chat-bubble-user">${t.message}</div>${t.admin_reply ? `<div class="chat-bubble-admin">🛡️ ${t.admin_reply}</div>` : ''}`).join('');
+            let html = '<div class="chat-bubble-admin">Hello! Welcome to Mineral Mining Pro Support. How can our financial or technical team assist you today?</div>';
+            html += data.map(t => `<div class="chat-bubble-user">${t.message}</div>${t.admin_reply ? `<div class="chat-bubble-admin">🛡️ ${t.admin_reply}</div>` : ''}`).join('');
+            historyEl.innerHTML = html;
         }
 
         async function sendUserSupportTicket() {
             const input = document.getElementById('userSupportMsgInput');
             if (!input.value.trim()) return;
-            await supabaseClient.from('support_tickets').insert([{ telegram_id: telegramId, user_name: userName, message: input.value.trim(), status: 'PENDING' }]);
+            const msg = input.value.trim();
+            await supabaseClient.from('support_tickets').insert([{ telegram_id: telegramId, user_name: userName, message: msg, status: 'PENDING' }]);
             input.value = '';
-            showPushNotification('Sent!');
+            showPushNotification('Message sent to support!');
             loadUserSupportChats();
         }
 
