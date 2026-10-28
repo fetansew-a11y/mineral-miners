@@ -41,7 +41,7 @@
         }
         .app-container { max-width: 420px; margin: 0 auto; position: relative; }
         
-        /* 100% SECURE FLYING MYSTERY BOX ANIMATION (4H COOLDOWN) */
+        /* 100% SECURE 4H COOLDOWN MYSTERY BOX */
         .flying-mystery-box {
             position: fixed; top: 110px; right: -80px; z-index: 997;
             background: linear-gradient(135deg, #fbbf24, #d97706);
@@ -361,7 +361,7 @@
     </style>
 </head>
 <body>
-    <!-- SECURE FLYING MYSTERY GIFT BOX ELEMENT ($0.05 + 4H COOLDOWN) -->
+    <!-- SECURE 4H COOLDOWN MYSTERY BOX ($0.005 REWARD) -->
     <div id="flyingMysteryBox" class="flying-mystery-box" onclick="claimMysteryBox()" title="Bonus Mystery Box!">🎁</div>
 
     <div id="pushNotificationBar" class="push-notification-bar">
@@ -372,7 +372,7 @@
         </div>
     </div>
 
-    <!-- MANDATORY REAL-TIME JOIN CHANNELS MODAL -->
+    <!-- MANDATORY JOIN CHANNELS MODAL -->
     <div id="joinModal" class="modal" style="display: flex; background: rgba(3, 7, 18, 0.98); z-index: 99999;">
         <div class="modal-content" style="text-align: center; border: 2px solid rgba(16, 185, 129, 0.6); box-shadow: 0 0 50px rgba(16,185,129,0.3);">
             <div style="font-size: 42px; margin-bottom: 6px;">📢</div>
@@ -436,7 +436,7 @@
                 <h1 class="app-title">Mineral Mining Pro</h1>
             </div>
 
-            <!-- DAILY CHECK-IN BUTTON -->
+            <!-- DAILY CHECK-IN -->
             <div class="card" style="padding: 10px 14px; margin: 0 0 10px 0; background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(59, 130, 246, 0.18)); border: 1px solid rgba(168, 85, 247, 0.5); box-shadow: 0 8px 20px rgba(0,0,0,0.3);">
                 <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
                     <div style="display: flex; align-items: center; gap: 8px; text-align: left;">
@@ -649,7 +649,7 @@
         </div>
     </div>
 
-    <!-- MODERN TELEGRAM STYLE LIVE SUPPORT CHAT MODAL -->
+    <!-- MODERN TELEGRAM SUPPORT CHAT MODAL -->
     <div id="supportChatModal" class="modal">
         <div class="modal-content" style="max-width: 410px; padding: 18px;">
             <div class="chat-container-modern">
@@ -672,7 +672,7 @@
         </div>
     </div>
 
-    <!-- ULTIMATE MULTI-TAB ADMIN DASHBOARD MODAL -->
+    <!-- ADMIN DASHBOARD MODAL -->
     <div id="adminPanelModal" class="modal">
         <div class="modal-content" style="max-width: 415px;">
             <h3 style="margin-top:0; color:#fbbf24; font-size:16px; font-weight:900;">🛡️ Pro Admin Dashboard</h3>
@@ -1126,7 +1126,7 @@
             } catch(e) {}
         }
 
-        /* 100% SECURE 4-HOUR MYSTERY BOX LOGIC (+$0.005 REWARD) */
+        /* 100% SECURE 4-HOUR DATABASE COOLDOWN MYSTERY BOX (+$0.005) */
         function checkMysteryBoxVisibility() {
             const boxEl = document.getElementById('flyingMysteryBox');
             if (!boxEl) return;
