@@ -257,7 +257,7 @@
         .close-btn { background: #475569; width: 100%; margin-top: 10px; box-shadow: none; }
         
         .history-list, .admin-list {
-            max-height: 300px; overflow-y: auto; background: var(--input-bg);
+            max-height: 220px; overflow-y: auto; background: var(--input-bg);
             padding: 14px; border-radius: 20px; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: inset 0 3px 8px rgba(0,0,0,0.7);
         }
@@ -361,6 +361,12 @@
     </style>
 </head>
 <body>
+    <!-- LOADING OVERLAY TO ENSURE SERVER STATE SYNC BEFORE RENDER -->
+    <div id="loadingOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #030712; z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #34d399; font-weight: 900;">
+        <div style="font-size: 45px; animation: pulseCoreGlow 1.5s infinite;">💎</div>
+        <div style="margin-top: 14px; font-size: 14px; letter-spacing: 1px;">Syncing Server State...</div>
+    </div>
+
     <!-- SECURE 4H COOLDOWN MYSTERY BOX -->
     <div id="flyingMysteryBox" class="flying-mystery-box" onclick="claimMysteryBox()" title="Bonus Mystery Box!">🎁</div>
 
@@ -373,7 +379,7 @@
     </div>
 
     <!-- MANDATORY JOIN CHANNELS MODAL -->
-    <div id="joinModal" class="modal" style="display: flex; background: rgba(3, 7, 18, 0.98); z-index: 99999;">
+    <div id="joinModal" class="modal" style="display: none; background: rgba(3, 7, 18, 0.98); z-index: 99999;">
         <div class="modal-content" style="text-align: center; border: 2px solid rgba(16, 185, 129, 0.7); box-shadow: 0 0 60px rgba(16,185,129,0.35);">
             <div style="font-size: 45px; margin-bottom: 8px;">📢</div>
             <h3 style="margin-top:0; font-size: 19px; font-weight: 900; color: #f8fafc;">Join Channels Required</h3>
@@ -506,29 +512,64 @@
             <div id="vipCardsContainer" class="vip-list"></div>
         </div>
 
-        <!-- EARNERS (LEADERBOARD) TAB - FULL 10 SIMULATED TOP MINERS -->
+        <!-- EARNERS (LEADERBOARD) TAB -->
         <div id="earnersTab" class="tab-pane">
             <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 4px 0;">🏆 Top Miners Leaderboard</h2>
             <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 12px 0;">Global top investors with dynamic yield returns.</p>
             <div id="earnersContainer" class="earner-list"></div>
         </div>
 
-        <!-- REFERRAL TAB WITH REAL REFERRED LIST -->
+        <!-- REFERRAL TAB WITH 30, 50, 100 MILESTONE CLAIM & ANIMATED PROGRESS -->
         <div id="refTab" class="tab-pane">
             <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 12px 0;">👥 Referral System</h2>
             <div class="card" style="text-align: left;">
-                <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 12px 0;">Invite friends & earn direct rewards instantly!</p>
+                <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 12px 0;">Invite friends & unlock milestone cash rewards!</p>
                 <div style="font-size: 11px; margin: 10px 0; line-height: 1.6;">
-                    <p style="margin: 4px 0;">• Per Friend Referral: <b style="color:#34d399;">+$0.05</b></p>
-                    <p style="margin: 4px 0;">• Deposit Commission: <b style="color:#fbbf24;">10% Friend's Deposit</b></p>
+                    <p style="margin: 4px 0;">• Per Friend Direct: <b style="color:#34d399;">+$0.05</b></p>
                     <p style="margin: 4px 0;">• Total Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
                 </div>
+
+                <!-- MILESTONE CLAIM CARDS -->
+                <div style="background: var(--input-bg); padding: 14px; border-radius: 20px; margin: 12px 0; border: var(--card-border);">
+                    <h3 style="font-size: 12px; margin: 0 0 10px 0; font-weight: 900; color: #fbbf24;">🎯 Referral Milestone Rewards</h3>
+                    
+                    <!-- Milestone 30 -->
+                    <div style="margin-bottom: 12px;">
+                        <div style="display:flex; justify-content:space-between; font-size:10px; font-weight:800; margin-bottom:4px;">
+                            <span>Invite 30 Friends (Reward: $1.00)</span>
+                            <span id="m30Text">0 / 30 (0%)</span>
+                        </div>
+                        <div class="progress-bar-container" style="height:7px; margin-bottom:6px;"><div id="m30Bar" class="progress-bar" style="width:0%;"></div></div>
+                        <button id="claimM30Btn" class="btn-3d-success btn-sm btn-disabled" disabled onclick="claimReferralMilestone(30, 1.00, 'claimM30Btn')">Claim $1.00</button>
+                    </div>
+
+                    <!-- Milestone 50 -->
+                    <div style="margin-bottom: 12px;">
+                        <div style="display:flex; justify-content:space-between; font-size:10px; font-weight:800; margin-bottom:4px;">
+                            <span>Invite 50 Friends (Reward: $2.00)</span>
+                            <span id="m50Text">0 / 50 (0%)</span>
+                        </div>
+                        <div class="progress-bar-container" style="height:7px; margin-bottom:6px;"><div id="m50Bar" class="progress-bar" style="width:0%;"></div></div>
+                        <button id="claimM50Btn" class="btn-3d-success btn-sm btn-disabled" disabled onclick="claimReferralMilestone(50, 2.00, 'claimM50Btn')">Claim $2.00</button>
+                    </div>
+
+                    <!-- Milestone 100 -->
+                    <div>
+                        <div style="display:flex; justify-content:space-between; font-size:10px; font-weight:800; margin-bottom:4px;">
+                            <span>Invite 100 Friends (Reward: $3.00)</span>
+                            <span id="m100Text">0 / 100 (0%)</span>
+                        </div>
+                        <div class="progress-bar-container" style="height:7px; margin-bottom:6px;"><div id="m100Bar" class="progress-bar" style="width:0%;"></div></div>
+                        <button id="claimM100Btn" class="btn-3d-success btn-sm btn-disabled" disabled onclick="claimReferralMilestone(100, 3.00, 'claimM100Btn')">Claim $3.00</button>
+                    </div>
+                </div>
+
                 <input type="text" id="refLinkInput" readonly style="font-size: 11px;">
                 <button class="btn-3d-success btn-sm" onclick="copyRefLink()" style="width:100%; margin-top:6px;">🔗 Copy Referral Link</button>
 
                 <div style="margin-top: 18px; border-top: var(--card-border); padding-top: 14px;">
                     <h3 style="font-size: 12px; margin: 0 0 10px 0; font-weight: 900; color: #34d399;">📋 Your Invited Friends</h3>
-                    <div id="referredUsersListContainer" class="history-list" style="max-height: 180px;">
+                    <div id="referredUsersListContainer" class="history-list" style="max-height: 160px;">
                         <div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">Loading referrals...</div>
                     </div>
                 </div>
@@ -854,6 +895,7 @@
         let referralCount = 0;
         let lastCheckInTime = 0;
         let lastMysteryBoxTime = 0;
+        let claimedMilestones = [];
         let lastActiveTimestamp = Date.now();
         let isBanned = false;
         let historyLog = ["Welcome Bonus: +$1.00 starter capital"];
@@ -880,7 +922,6 @@
                     if (navBtn) navBtn.style.display = 'inline-block';
                 }
 
-                // Handle Referral Registration if startparam exists
                 if (startParamRef && startParamRef.startsWith('ref_')) {
                     const referrerId = startParamRef.replace('ref_', '');
                     if (referrerId !== telegramId) {
@@ -921,6 +962,7 @@
                     lastActiveTimestamp = Number(existingUser.last_active_timestamp ?? lastActiveTimestamp);
                     isBanned = Boolean(existingUser.is_banned ?? false);
                     if (existingUser.history && Array.isArray(existingUser.history)) historyLog = existingUser.history;
+                    if (existingUser.claimed_milestones && Array.isArray(existingUser.claimed_milestones)) claimedMilestones = existingUser.claimed_milestones;
                     userName = existingUser.user_name ?? userName;
                 } else {
                     const newUser = {
@@ -933,6 +975,7 @@
                         referral_count: referralCount,
                         last_check_in: lastCheckInTime,
                         last_mystery_box: lastMysteryBoxTime,
+                        claimed_milestones: claimedMilestones,
                         last_active_timestamp: Date.now(),
                         is_banned: false,
                         history: historyLog
@@ -951,6 +994,7 @@
 
                 if (isBanned) {
                     document.getElementById('banModal').style.display = 'flex';
+                    document.getElementById('loadingOverlay').style.display = 'none';
                     return;
                 }
 
@@ -965,10 +1009,19 @@
                 setInterval(liveTicker, 1000);
                 setInterval(bannerTicker, 3200);
                 setInterval(saveDataToSupabase, 5000);
+
+                // Hide loading overlay once state is fully synced
+                setTimeout(() => {
+                    const loader = document.getElementById('loadingOverlay');
+                    if (loader) loader.style.display = 'none';
+                }, 400);
+
             } catch (e) {
                 renderVipTiers();
                 renderEarnersLeaderboard();
                 updateUI();
+                const loader = document.getElementById('loadingOverlay');
+                if (loader) loader.style.display = 'none';
             }
         }
 
@@ -981,18 +1034,19 @@
                 if (isBanned || !telegramId) return;
                 lastActiveTimestamp = Date.now();
                 await supabaseClient.from('users').upsert([{
-                    telegram_id: telegramId,
-                    user_name: userName,
-                    balance: balance,
-                    active_investment: activeInvestment,
-                    vip_level: vipLevel,
-                    mined_accumulated: minedAccumulated,
-                    referral_count: referralCount,
-                    last_check_in: lastCheckInTime,
-                    last_mystery_box: lastMysteryBoxTime,
-                    last_active_timestamp: lastActiveTimestamp,
+                    telegram_id: String(telegramId),
+                    user_name: String(userName),
+                    balance: Number(balance),
+                    active_investment: Number(activeInvestment),
+                    vip_level: Number(vipLevel),
+                    mined_accumulated: Number(minedAccumulated),
+                    referral_count: Number(referralCount),
+                    last_check_in: Number(lastCheckInTime),
+                    last_mystery_box: Number(lastMysteryBoxTime),
+                    claimed_milestones: claimedMilestones,
+                    last_active_timestamp: Number(lastActiveTimestamp),
                     history: historyLog,
-                    is_banned: isBanned
+                    is_banned: Boolean(isBanned)
                 }], { onConflict: 'telegram_id' });
             } catch(e) {}
         }
@@ -1032,6 +1086,8 @@
                 const refInput = document.getElementById('refLinkInput');
                 if (refInput) refInput.value = "https://t.me/" + botUsername + "/mineral_mining?startapp=ref_" + telegramId;
 
+                updateReferralMilestoneUI();
+
                 const histHtml = historyLog.map(h => {
                     return `<div class="history-card-item">
                         <div class="history-icon-box" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;">📜</div>
@@ -1044,6 +1100,76 @@
                 if (hList) hList.innerHTML = histHtml;
                 if (pHList) pHList.innerHTML = histHtml;
             } catch(e) {}
+        }
+
+        function updateReferralMilestoneUI() {
+            // Milestone 30
+            const pct30 = Math.min(100, (referralCount / 30) * 100);
+            document.getElementById('m30Text').innerText = `${referralCount} / 30 (${pct30.toFixed(0)}%)`;
+            document.getElementById('m30Bar').style.width = pct30 + '%';
+            const btn30 = document.getElementById('claimM30Btn');
+            if (claimedMilestones.includes(30)) {
+                btn30.innerText = "Claimed ✓";
+                btn30.classList.add('btn-disabled');
+                btn30.disabled = true;
+            } else if (referralCount >= 30) {
+                btn30.innerText = "Claim $1.00";
+                btn30.classList.remove('btn-disabled');
+                btn30.disabled = false;
+            } else {
+                btn30.innerText = "Claim $1.00";
+                btn30.classList.add('btn-disabled');
+                btn30.disabled = true;
+            }
+
+            // Milestone 50
+            const pct50 = Math.min(100, (referralCount / 50) * 100);
+            document.getElementById('m50Text').innerText = `${referralCount} / 50 (${pct50.toFixed(0)}%)`;
+            document.getElementById('m50Bar').style.width = pct50 + '%';
+            const btn50 = document.getElementById('claimM50Btn');
+            if (claimedMilestones.includes(50)) {
+                btn50.innerText = "Claimed ✓";
+                btn50.classList.add('btn-disabled');
+                btn50.disabled = true;
+            } else if (referralCount >= 50) {
+                btn50.innerText = "Claim $2.00";
+                btn50.classList.remove('btn-disabled');
+                btn50.disabled = false;
+            } else {
+                btn50.innerText = "Claim $2.00";
+                btn50.classList.add('btn-disabled');
+                btn50.disabled = true;
+            }
+
+            // Milestone 100
+            const pct100 = Math.min(100, (referralCount / 100) * 100);
+            document.getElementById('m100Text').innerText = `${referralCount} / 100 (${pct100.toFixed(0)}%)`;
+            document.getElementById('m100Bar').style.width = pct100 + '%';
+            const btn100 = document.getElementById('claimM100Btn');
+            if (claimedMilestones.includes(100)) {
+                btn100.innerText = "Claimed ✓";
+                btn100.classList.add('btn-disabled');
+                btn100.disabled = true;
+            } else if (referralCount >= 100) {
+                btn100.innerText = "Claim $3.00";
+                btn100.classList.remove('btn-disabled');
+                btn100.disabled = false;
+            } else {
+                btn100.innerText = "Claim $3.00";
+                btn100.classList.add('btn-disabled');
+                btn100.disabled = true;
+            }
+        }
+
+        async function claimReferralMilestone(goal, rewardAmt, btnId) {
+            if (claimedMilestones.includes(goal) || referralCount < goal) return;
+            triggerHaptic();
+            claimedMilestones.push(goal);
+            balance += rewardAmt;
+            historyLog.unshift(`Milestone Reward (${goal} Friends): +$${rewardAmt.toFixed(2)}`);
+            updateUI();
+            showPushNotification(`Successfully claimed +$${rewardAmt.toFixed(2)} reward!`);
+            await saveDataToSupabase();
         }
 
         function checkMysteryBoxVisibility() {
@@ -1079,7 +1205,6 @@
             } catch(e) {}
         }
 
-        // LOAD REAL REFERRED USERS LIST FROM SUPABASE
         async function loadReferredUsersList() {
             const container = document.getElementById('referredUsersListContainer');
             if (!container) return;
@@ -1089,8 +1214,7 @@
                     container.innerHTML = '<div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">No referrals yet.</div>';
                     return;
                 }
-                // Simulate/filter realistic referred users for demonstration or matching
-                const referredItems = usersList.filter(u => u.telegram_id !== telegramId).slice(0, 5);
+                const referredItems = usersList.filter(u => u.telegram_id !== telegramId).slice(0, 10);
                 if (referredItems.length === 0) {
                     container.innerHTML = '<div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">No referrals yet. Share your link!</div>';
                     return;
@@ -1147,7 +1271,7 @@
             const c = document.getElementById('vipCardsContainer');
             if (!c) return;
             c.innerHTML = vipTiersData.map(t => {
-                const isCurr = vipLevel === t.level && activeInvestment > 0;
+                const isCurr = Number(vipLevel) === Number(t.level) && Number(activeInvestment) > 0;
                 const ratePct = (t.rate * 100).toFixed(0);
                 return `<div class="vip-card-item">
                     <div style="display:flex; align-items:center; gap:12px; text-align:left;">
@@ -1180,9 +1304,9 @@
                 const t = vipTiersData[lvl];
                 if (balance < t.price) { showPushNotification('Insufficient balance!'); return; }
                 
-                balance -= t.price;
-                activeInvestment = t.price; // FIXED: Updates active investment correctly to server
-                vipLevel = t.level;          // FIXED: Updates vip level correctly to server
+                balance = Number(balance) - Number(t.price);
+                activeInvestment = Number(t.price);
+                vipLevel = Number(t.level);
                 minedAccumulated = 0;
                 historyLog.unshift("Activated " + t.name);
                 
@@ -1274,10 +1398,10 @@
             if (amt < 5) { showPushNotification('Min deposit is $5'); return; }
 
             await supabaseClient.from('transactions').insert([{
-                telegram_id: telegramId,
-                user_name: userName,
+                telegram_id: String(telegramId),
+                user_name: String(userName),
                 type: 'DEPOSIT',
-                amount: amt,
+                amount: Number(amt),
                 network: net,
                 status: 'PENDING'
             }]);
@@ -1297,10 +1421,10 @@
 
             balance -= amt;
             await supabaseClient.from('transactions').insert([{
-                telegram_id: telegramId,
-                user_name: userName,
+                telegram_id: String(telegramId),
+                user_name: String(userName),
                 type: 'WITHDRAWAL',
-                amount: amt,
+                amount: Number(amt),
                 network: net,
                 status: 'PENDING'
             }]);
@@ -1332,7 +1456,7 @@
             const input = document.getElementById('userSupportMsgInput');
             if (!input.value.trim()) return;
             const msg = input.value.trim();
-            await supabaseClient.from('support_tickets').insert([{ telegram_id: telegramId, user_name: userName, message: msg, status: 'PENDING' }]);
+            await supabaseClient.from('support_tickets').insert([{ telegram_id: String(telegramId), user_name: String(userName), message: msg, status: 'PENDING' }]);
             input.value = '';
             showPushNotification('Message sent to support!');
             loadUserSupportChats();
