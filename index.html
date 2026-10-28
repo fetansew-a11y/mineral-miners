@@ -41,7 +41,6 @@
         }
         .app-container { max-width: 420px; margin: 0 auto; position: relative; }
         
-        /* FLYING MYSTERY BOX WITH SERVER 4H COOLDOWN */
         .flying-mystery-box {
             position: fixed; top: 115px; right: -90px; z-index: 997;
             background: linear-gradient(135deg, #fbbf24, #d97706);
@@ -361,13 +360,11 @@
     </style>
 </head>
 <body>
-    <!-- LOADING OVERLAY TO ENSURE SERVER STATE SYNC BEFORE RENDER -->
     <div id="loadingOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #030712; z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #34d399; font-weight: 900;">
         <div style="font-size: 45px; animation: pulseCoreGlow 1.5s infinite;">💎</div>
         <div style="margin-top: 14px; font-size: 14px; letter-spacing: 1px;">Syncing Server State...</div>
     </div>
 
-    <!-- SECURE 4H COOLDOWN MYSTERY BOX -->
     <div id="flyingMysteryBox" class="flying-mystery-box" onclick="claimMysteryBox()" title="Bonus Mystery Box!">🎁</div>
 
     <div id="pushNotificationBar" class="push-notification-bar">
@@ -378,7 +375,6 @@
         </div>
     </div>
 
-    <!-- MANDATORY JOIN CHANNELS MODAL -->
     <div id="joinModal" class="modal" style="display: none; background: rgba(3, 7, 18, 0.98); z-index: 99999;">
         <div class="modal-content" style="text-align: center; border: 2px solid rgba(16, 185, 129, 0.7); box-shadow: 0 0 60px rgba(16,185,129,0.35);">
             <div style="font-size: 45px; margin-bottom: 8px;">📢</div>
@@ -415,7 +411,6 @@
             </svg>
         </button>
 
-        <!-- HOME TAB -->
         <div id="homeTab" class="tab-pane active">
             <div class="header">
                 <div>VIP status: <span id="vipDisplay" style="color:#34d399; font-weight:900;">VIP 0</span></div>
@@ -442,7 +437,6 @@
                 <h1 class="app-title">Mineral Mining Pro</h1>
             </div>
 
-            <!-- DAILY CHECK-IN -->
             <div class="card" style="padding: 12px 16px; margin: 0 0 12px 0; background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2)); border: 1px solid rgba(168, 85, 247, 0.6); box-shadow: 0 10px 25px rgba(0,0,0,0.35);">
                 <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                     <div style="display: flex; align-items: center; gap: 10px; text-align: left;">
@@ -506,20 +500,17 @@
             </div>
         </div>
 
-        <!-- VIP TAB -->
         <div id="vipTab" class="tab-pane">
             <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 12px 0;">👑 VIP Mining Tiers</h2>
             <div id="vipCardsContainer" class="vip-list"></div>
         </div>
 
-        <!-- EARNERS (LEADERBOARD) TAB -->
         <div id="earnersTab" class="tab-pane">
             <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 4px 0;">🏆 Top Miners Leaderboard</h2>
             <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 12px 0;">Global top investors with dynamic yield returns.</p>
             <div id="earnersContainer" class="earner-list"></div>
         </div>
 
-        <!-- REFERRAL TAB WITH 30, 50, 100 MILESTONE CLAIM & ANIMATED PROGRESS -->
         <div id="refTab" class="tab-pane">
             <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 12px 0;">👥 Referral System</h2>
             <div class="card" style="text-align: left;">
@@ -529,11 +520,9 @@
                     <p style="margin: 4px 0;">• Total Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
                 </div>
 
-                <!-- MILESTONE CLAIM CARDS -->
                 <div style="background: var(--input-bg); padding: 14px; border-radius: 20px; margin: 12px 0; border: var(--card-border);">
                     <h3 style="font-size: 12px; margin: 0 0 10px 0; font-weight: 900; color: #fbbf24;">🎯 Referral Milestone Rewards</h3>
                     
-                    <!-- Milestone 30 -->
                     <div style="margin-bottom: 12px;">
                         <div style="display:flex; justify-content:space-between; font-size:10px; font-weight:800; margin-bottom:4px;">
                             <span>Invite 30 Friends (Reward: $1.00)</span>
@@ -543,7 +532,6 @@
                         <button id="claimM30Btn" class="btn-3d-success btn-sm btn-disabled" disabled onclick="claimReferralMilestone(30, 1.00, 'claimM30Btn')">Claim $1.00</button>
                     </div>
 
-                    <!-- Milestone 50 -->
                     <div style="margin-bottom: 12px;">
                         <div style="display:flex; justify-content:space-between; font-size:10px; font-weight:800; margin-bottom:4px;">
                             <span>Invite 50 Friends (Reward: $2.00)</span>
@@ -553,7 +541,6 @@
                         <button id="claimM50Btn" class="btn-3d-success btn-sm btn-disabled" disabled onclick="claimReferralMilestone(50, 2.00, 'claimM50Btn')">Claim $2.00</button>
                     </div>
 
-                    <!-- Milestone 100 -->
                     <div>
                         <div style="display:flex; justify-content:space-between; font-size:10px; font-weight:800; margin-bottom:4px;">
                             <span>Invite 100 Friends (Reward: $3.00)</span>
@@ -576,7 +563,6 @@
             </div>
         </div>
 
-        <!-- PROFILE TAB -->
         <div id="profileTab" class="tab-pane">
             <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 12px 0;">👤 Profile</h2>
             <div class="card" style="text-align: left;">
@@ -594,7 +580,6 @@
             </div>
         </div>
 
-        <!-- BOTTOM NAV -->
         <div class="bottom-nav">
             <button class="nav-item active" onclick="switchTabSafe('homeTab', this)">
                 <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span>
@@ -619,7 +604,6 @@
         </div>
     </div>
 
-    <!-- BAN MODAL -->
     <div id="banModal" class="modal" style="display: none; background: rgba(3, 7, 18, 0.96); z-index: 9999;">
         <div class="modal-content" style="text-align: center; border: 2px solid #ef4444;">
             <div style="font-size: 45px; margin-bottom: 10px;">🚫</div>
@@ -630,7 +614,6 @@
         </div>
     </div>
 
-    <!-- MODALS -->
     <div id="depositModal" class="modal">
         <div class="modal-content">
             <h3 style="margin-top:0; font-size:17px; font-weight:900;">Deposit Crypto</h3>
@@ -671,7 +654,6 @@
         </div>
     </div>
 
-    <!-- MODERN PROFESSIONAL SUPPORT CHAT MODAL -->
     <div id="supportChatModal" class="modal">
         <div class="modal-content" style="max-width: 415px; padding: 20px;">
             <div class="chat-container-modern">
@@ -694,7 +676,6 @@
         </div>
     </div>
 
-    <!-- ADMIN DASHBOARD MODAL -->
     <div id="adminPanelModal" class="modal">
         <div class="modal-content" style="max-width: 420px;">
             <h3 style="margin-top:0; color:#fbbf24; font-size:17px; font-weight:900;">🛡️ Pro Admin Dashboard</h3>
@@ -966,15 +947,15 @@
                     userName = existingUser.user_name ?? userName;
                 } else {
                     const newUser = {
-                        telegram_id: telegramId,
-                        user_name: userName,
-                        balance: balance,
-                        active_investment: activeInvestment,
-                        vip_level: vipLevel,
-                        mined_accumulated: minedAccumulated,
-                        referral_count: referralCount,
-                        last_check_in: lastCheckInTime,
-                        last_mystery_box: lastMysteryBoxTime,
+                        telegram_id: String(telegramId),
+                        user_name: String(userName),
+                        balance: Number(balance),
+                        active_investment: Number(activeInvestment),
+                        vip_level: Number(vipLevel),
+                        mined_accumulated: Number(minedAccumulated),
+                        referral_count: Number(referralCount),
+                        last_check_in: Number(lastCheckInTime),
+                        last_mystery_box: Number(lastMysteryBoxTime),
                         claimed_milestones: claimedMilestones,
                         last_active_timestamp: Date.now(),
                         is_banned: false,
@@ -1010,7 +991,6 @@
                 setInterval(bannerTicker, 3200);
                 setInterval(saveDataToSupabase, 5000);
 
-                // Hide loading overlay once state is fully synced
                 setTimeout(() => {
                     const loader = document.getElementById('loadingOverlay');
                     if (loader) loader.style.display = 'none';
@@ -1029,26 +1009,38 @@
         window.addEventListener('visibilitychange', () => { if (document.hidden) saveDataToSupabase(); });
         window.addEventListener('beforeunload', saveDataToSupabase);
 
+        // FIXED ROBUST SUPABASE UPSERT FUNCTION TO ENSURE DATA PERSISTENCE
         async function saveDataToSupabase() {
             try {
                 if (isBanned || !telegramId) return;
                 lastActiveTimestamp = Date.now();
-                await supabaseClient.from('users').upsert([{
+                
+                const payload = {
                     telegram_id: String(telegramId),
-                    user_name: String(userName),
-                    balance: Number(balance),
-                    active_investment: Number(activeInvestment),
-                    vip_level: Number(vipLevel),
-                    mined_accumulated: Number(minedAccumulated),
-                    referral_count: Number(referralCount),
-                    last_check_in: Number(lastCheckInTime),
-                    last_mystery_box: Number(lastMysteryBoxTime),
-                    claimed_milestones: claimedMilestones,
+                    user_name: String(userName || 'Miner'),
+                    balance: Number(balance || 0),
+                    active_investment: Number(activeInvestment || 0),
+                    vip_level: Number(vipLevel || 0),
+                    mined_accumulated: Number(minedAccumulated || 0),
+                    referral_count: Number(referralCount || 0),
+                    last_check_in: Number(lastCheckInTime || 0),
+                    last_mystery_box: Number(lastMysteryBoxTime || 0),
+                    claimed_milestones: claimedMilestones || [],
                     last_active_timestamp: Number(lastActiveTimestamp),
-                    history: historyLog,
+                    history: historyLog || [],
                     is_banned: Boolean(isBanned)
-                }], { onConflict: 'telegram_id' });
-            } catch(e) {}
+                };
+
+                const { data, error } = await supabaseClient
+                    .from('users')
+                    .upsert([payload], { onConflict: 'telegram_id' });
+
+                if (error) {
+                    console.error("Supabase Save Error:", error);
+                }
+            } catch(err) {
+                console.error("Network/Catch Error:", err);
+            }
         }
 
         function bannerTicker() {
@@ -1103,7 +1095,6 @@
         }
 
         function updateReferralMilestoneUI() {
-            // Milestone 30
             const pct30 = Math.min(100, (referralCount / 30) * 100);
             document.getElementById('m30Text').innerText = `${referralCount} / 30 (${pct30.toFixed(0)}%)`;
             document.getElementById('m30Bar').style.width = pct30 + '%';
@@ -1122,7 +1113,6 @@
                 btn30.disabled = true;
             }
 
-            // Milestone 50
             const pct50 = Math.min(100, (referralCount / 50) * 100);
             document.getElementById('m50Text').innerText = `${referralCount} / 50 (${pct50.toFixed(0)}%)`;
             document.getElementById('m50Bar').style.width = pct50 + '%';
@@ -1141,7 +1131,6 @@
                 btn50.disabled = true;
             }
 
-            // Milestone 100
             const pct100 = Math.min(100, (referralCount / 100) * 100);
             document.getElementById('m100Text').innerText = `${referralCount} / 100 (${pct100.toFixed(0)}%)`;
             document.getElementById('m100Bar').style.width = pct100 + '%';
@@ -1214,7 +1203,7 @@
                     container.innerHTML = '<div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">No referrals yet.</div>';
                     return;
                 }
-                const referredItems = usersList.filter(u => u.telegram_id !== telegramId).slice(0, 10);
+                const referredItems = usersList.filter(u => String(u.telegram_id) !== String(telegramId)).slice(0, 10);
                 if (referredItems.length === 0) {
                     container.innerHTML = '<div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">No referrals yet. Share your link!</div>';
                     return;
