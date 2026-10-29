@@ -338,8 +338,6 @@
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
         }
 
-
-    /* Premium mineral-console redesign: presentation layer only; existing IDs and actions preserved. */
     :root { color-scheme: dark; --accent-emerald:#55f0c0; --card-border:1px solid rgba(130, 211, 255, .16); }
     :root[data-theme="dark"] {
       --bg-gradient: radial-gradient(ellipse at 50% -12%, #183a50 0%, #0a1425 38%, #050914 78%, #03060d 100%);
@@ -399,8 +397,6 @@
     @media (max-width:360px) { .header { justify-content:center; } .vip-card-item { flex-wrap:wrap; } .tier-action { width:100%; flex-direction:row; justify-content:space-between; align-items:center; } .tier-action .btn-sm { max-width:none; } }
     @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important; } }
 
-
-    /* Premium refinement: direct entry, refined support chat and referral progress */
     .support-float-btn { transition: transform .18s ease, filter .18s ease; }
     .support-float-btn:hover { filter: brightness(1.12); transform: translateY(-2px); }
     .chat-container-modern { overflow:hidden; border:1px solid rgba(90,190,230,.25); border-radius:20px; background:linear-gradient(160deg,#0c1a2d,#07111f); box-shadow:0 24px 60px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.05); }
@@ -416,7 +412,6 @@
     button,.btn-sm { transition:transform .16s ease,filter .16s ease,box-shadow .16s ease; }
     button:hover,.btn-sm:hover { filter:brightness(1.08); }
 
-    /* Refined premium visual pass */
     .header { gap:10px!important; align-items:center!important; padding:12px 13px!important; border-radius:20px!important; backdrop-filter:blur(18px); }
     .lang-select { min-width:88px; max-width:125px; padding:9px 26px 9px 10px!important; border-radius:12px!important; font-weight:800!important; border:1px solid rgba(112,190,225,.22)!important; box-shadow:inset 0 1px rgba(255,255,255,.06),0 5px 16px #0002; }
     .theme-toggle-btn { width:38px!important;height:38px!important;flex-shrink:0; border-radius:13px!important; background:linear-gradient(145deg,rgba(92,130,166,.24),rgba(18,34,54,.82))!important; border:1px solid rgba(134,194,224,.24)!important; box-shadow:0 5px 14px #0003,inset 0 1px #ffffff12!important; }
@@ -461,7 +456,6 @@
     button:focus-visible,select:focus-visible,input:focus-visible { outline:2px solid rgba(94,234,212,.75);outline-offset:2px; }
     @media (prefers-reduced-motion:reduce) { .mining-core-ring,.mining-core-ring:before,.mining-core-glow,.push-notification-bar.show { animation:none!important; } * { scroll-behavior:auto!important; } }
 
-
     .referred-user-modern-item { display:flex!important;align-items:center;justify-content:space-between;gap:10px;padding:12px!important;margin:5px 0!important;border:1px solid rgba(125,185,220,.12)!important;background:linear-gradient(110deg,rgba(25,48,72,.58),rgba(10,23,39,.62))!important;border-radius:15px!important;box-shadow:inset 0 1px #ffffff08; }
     .referred-user-identity { display:flex;align-items:center;gap:10px;min-width:0; }
     .ref-user-avatar-img,.ref-user-avatar { width:40px;height:40px;flex:0 0 40px;border-radius:14px;object-fit:cover;display:grid;place-items:center;background:linear-gradient(145deg,#2dd4bf,#2563eb);color:white;font-size:14px;font-weight:900;box-shadow:0 5px 14px #0003;border:1px solid #ffffff20; }
@@ -476,8 +470,6 @@
     .referrals-empty-icon { width:42px;height:42px;display:grid;place-items:center;border-radius:15px;background:rgba(45,212,191,.12); }
     .referrals-empty-icon svg { width:22px;height:22px;fill:none;stroke:#75e9cb;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round; }
 
-
-    /* Mobile-first single-screen home layout: keep all four primary actions visible. */
     @media (max-width:480px) {
       body { padding: max(5px,env(safe-area-inset-top)) 8px calc(82px + env(safe-area-inset-bottom)); }
       .app-container { max-width:460px; }
@@ -533,7 +525,6 @@
     .payout-banner { overflow:hidden; }
     #payoutTickerText { display:inline-block; }
     @media (prefers-reduced-motion:reduce) { .mining-core-glow::before { animation:none!important; } }
-
     </style>
 </head>
 <body>
@@ -590,14 +581,6 @@
                     <select id="langSelector" class="lang-select" onchange="changeLanguage(this.value)">
                         <option value="en">English</option>
                         <option value="am">አማርኛ</option>
-                        <option value="ar">العربية</option>
-                        <option value="hi">हिन्दी</option>
-                        <option value="it">Italiano</option>
-                        <option value="es">Español</option>
-                        <option value="fr">Français</option>
-                        <option value="ru">Русский</option>
-                        <option value="tr">Türkçe</option>
-                        <option value="zh">中文</option>
                     </select>
                     <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeIconBtn">🌙</button>
                     <button class="btn-sm" onclick="switchTabSafe('profileTab', document.querySelectorAll('.nav-item')[4]); openModal('historyModal')" id="navHistoryBtn">History</button>
@@ -1007,7 +990,6 @@
             try { triggerHaptic(); const m = document.getElementById(id); if (m) m.style.display = 'none'; } catch(e) {}
         }
 
-        // 🛡️ Secure Server-Side Channel Membership Verification via Supabase Edge Function
         async function verifyChannelJoin() {
             triggerHaptic();
             const btn = document.getElementById('verifyJoinBtn');
@@ -1054,26 +1036,13 @@
 
         const globalNamesList = [
             "Alex Morgan", "Liam Johnson", "Noah Williams", "Oliver Brown", "Elijah Jones",
-            "James Miller", "William Davis", "Benjamin Garcia", "Lucas Rodriguez", "Henry Martinez",
-            "Ethan Wilson", "Mia Anderson", "David Thomas", "Lily Jackson", "Michael White",
-            "Adam Harris", "Zara Ahmed", "Nathan Clark", "Marta Silva", "Joseph Martin",
-            "Ava Thompson", "Owen Walker", "Grace Cooper", "Aaron Young", "Chloe Green",
-            "Sofia Rossi", "Mateo Garcia", "Isabella Costa", "Hiro Tanaka", "Priya Sharma",
-            "Daniel Kim", "Emma Laurent", "Oliver Smith", "Amara Bekele", "Hana Girma",
-            "Samuel Tesfaye", "Mekdes Alemu", "Abel Tadesse", "Ruth Solomon", "Yonas Worku"
+            "James Miller", "William Davis", "Benjamin Garcia", "Lucas Rodriguez", "Henry Martinez"
         ];
 
         const topEarnersData = [
             { rank: 1, name: "Alexander Smith", vip: "VIP 7 (Diamond)", earned: 4850.20, badge: "🥇" },
             { rank: 2, name: "Liam Johnson", vip: "VIP 7 (Diamond)", earned: 4620.00, badge: "🥈" },
-            { rank: 3, name: "Noah Williams", vip: "VIP 6 (Emerald)", earned: 2410.50, badge: "🥉" },
-            { rank: 4, name: "Oliver Brown", vip: "VIP 5 (Sapphire)", earned: 1240.00, badge: "4" },
-            { rank: 5, name: "Elijah Jones", vip: "VIP 5 (Sapphire)", earned: 1150.80, badge: "5" },
-            { rank: 6, name: "James Miller", vip: "VIP 4 (Ruby)", earned: 980.40, badge: "6" },
-            { rank: 7, name: "William Davis", vip: "VIP 3 (Platinum)", earned: 760.10, badge: "7" },
-            { rank: 8, name: "Benjamin Garcia", vip: "VIP 3 (Platinum)", earned: 620.00, badge: "8" },
-            { rank: 9, name: "Lucas Rodriguez", vip: "VIP 2 (Gold)", earned: 450.50, badge: "9" },
-            { rank: 10, name: "Henry Martinez", vip: "VIP 1 (Silver)", earned: 310.20, badge: "10" }
+            { rank: 3, name: "Noah Williams", vip: "VIP 6 (Emerald)", earned: 2410.50, badge: "🥉" }
         ];
 
         let telegramId = '';
@@ -1206,7 +1175,6 @@
                 setInterval(bannerTicker, 3200);
                 setInterval(saveDataToSupabase, 5000);
 
-
             } catch (e) {
                 renderVipTiers();
                 renderEarnersLeaderboard();
@@ -1263,16 +1231,16 @@
                 document.getElementById('balanceDisplay').innerText = balance.toFixed(2);
                 
                 let totalActiveCapital = 0;
-                let weightedRateSum = 0;
+                let totalWeightedRate = 0;
 
                 activeInvestments.forEach(inv => { 
                     const amt = Number(inv.amount);
                     const rate = Number(inv.daily_percent);
                     totalActiveCapital += amt;
-                    weightedRateSum += (amt * rate);
+                    totalWeightedRate += (amt * rate);
                 });
 
-                let combinedDailyRatePct = totalActiveCapital > 0 ? (weightedRateSum / totalActiveCapital) * 100 : 0;
+                let combinedDailyRatePct = totalActiveCapital > 0 ? (totalWeightedRate / totalActiveCapital) * 100 : 0;
 
                 document.getElementById('activeInvDisplay').innerText = totalActiveCapital.toFixed(2);
                 document.getElementById('activeRateDisplay').innerText = combinedDailyRatePct.toFixed(0) + '%';
@@ -1293,6 +1261,7 @@
 
                 checkMysteryBoxVisibility();
                 renderMilestones();
+                checkDailyCheckInState();
 
                 const histHtml = historyLog.map(h => {
                     return `<div class="history-card-item">
@@ -1387,23 +1356,18 @@
                     container.innerHTML = `<div class="referrals-empty-state"><span class="referrals-empty-icon"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M20 8v6M23 11h-6"/></svg></span><strong>No invited friends yet</strong><small>Share your referral link to see your invited friends here.</small></div>`;
                     return;
                 }
-                container.innerHTML = referredItems.map((ref, index) => {
+                container.innerHTML = referredItems.map((ref) => {
                     const displayName = String(ref.user_name || ref.first_name || ref.username || 'Miner').replace(/[<>&"'`]/g, '');
                     const id = String(ref.telegram_id || '').replace(/[<>&"'`]/g, '');
-                    const photo = ref.profile_photo_url || ref.avatar_url || ref.photo_url || ref.avatar || '';
-                    const safePhoto = typeof photo === 'string' && /^https:\/\/[^"'<>]+$/i.test(photo) ? photo : '';
-                    const avatar = safePhoto
-                        ? `<img class="ref-user-avatar-img" src="${safePhoto}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span class="ref-user-avatar ref-user-avatar-fallback" style="display:none">${displayName.charAt(0).toUpperCase()}</span>`
-                        : `<span class="ref-user-avatar">${displayName.charAt(0).toUpperCase()}</span>`;
                     return `<div class="referred-user-item referred-user-modern-item">
-                        <div class="referred-user-identity">${avatar}<div class="referred-user-meta">
+                        <div class="referred-user-identity"><span class="ref-user-avatar">${displayName.charAt(0).toUpperCase()}</span><div class="referred-user-meta">
                             <strong>${displayName}</strong><small>Telegram ID: ${id || 'Unavailable'}</small>
                         </div></div>
                         <div class="referred-user-status"><span class="ref-earned-amount">$0.05</span><small>Referral reward</small></div>
                     </div>`;
                 }).join('');
             } catch(e) {
-                container.innerHTML = '<div class="referrals-empty-state"><strong>Referral list unavailable</strong><small>Check the referral tracking fields in your database.</small></div>';
+                container.innerHTML = '<div class="referrals-empty-state"><strong>Referral list unavailable</strong></div>';
             }
         }
 
@@ -1447,14 +1411,14 @@
             if (!c) return;
             const tObj = translations[currentLang] || translations['en'];
             const mineralInfo = {
-                0: { mineral: 'Clear Quartz', icon: '✧', detail: 'Foundation crystal' },
-                1: { mineral: 'Silver Ore', icon: '◈', detail: 'Refined metal' },
-                2: { mineral: 'Gold Vein', icon: '✦', detail: 'Precious metal' },
-                3: { mineral: 'Platinum', icon: '⬡', detail: 'Rare element' },
-                4: { mineral: 'Ruby', icon: '◆', detail: 'Red gemstone' },
-                5: { mineral: 'Blue Sapphire', icon: '◇', detail: 'Blue gemstone' },
-                6: { mineral: 'Emerald', icon: '⬢', detail: 'Green gemstone' },
-                7: { mineral: 'Diamond', icon: '✧', detail: 'Elite crystal' }
+                0: { mineral: 'Clear Quartz', detail: 'Foundation crystal' },
+                1: { mineral: 'Silver Ore', detail: 'Refined metal' },
+                2: { mineral: 'Gold Vein', detail: 'Precious metal' },
+                3: { mineral: 'Platinum', detail: 'Rare element' },
+                4: { mineral: 'Ruby', detail: 'Red gemstone' },
+                5: { mineral: 'Blue Sapphire', detail: 'Blue gemstone' },
+                6: { mineral: 'Emerald', detail: 'Green gemstone' },
+                7: { mineral: 'Diamond', detail: 'Elite crystal' }
             };
             const gemSvg = (t, level) => `<svg class="vip-gem" viewBox="0 0 100 100" role="img" aria-label="${mineralInfo[level].mineral}">
                 <defs><linearGradient id="gem-${level}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".28" stop-color="${t.color1}"/><stop offset="1" stop-color="${t.color2}"/></linearGradient></defs>
@@ -1468,7 +1432,7 @@
                 const ratePct = (t.rate * 100).toFixed(0);
                 const mineral = mineralInfo[t.level] || mineralInfo[0];
                 const actionButtonHtml = alreadyPurchased
-                    ? '<span class="tier-status">✓ ACTIVE TIER</span>'
+                    ? '<span class="tier-status">✓ OWNED</span>'
                     : `<button class="btn-3d-success btn-sm" onclick="buyVip(${t.level})">${tObj.buy}</button>`;
                 return `<article class="vip-card-item" style="--tier-color:${t.color1}">
                     <div style="display:flex;align-items:center;gap:12px;text-align:left;flex:1;min-width:0">
@@ -1527,8 +1491,7 @@
                     vip_level: String(t.name), 
                     amount: Number(t.price),
                     daily_percent: Number(t.rate),
-                    status: 'active',
-                    created_at: new Date()
+                    status: 'active'
                 };
 
                 activeInvestments.push(newInv);
@@ -1724,7 +1687,16 @@
 
         async function loadAdminSupportTickets() {
             const { data } = await supabaseClient.from('support_tickets').select('*');
-            document.getElementById('adminSupportList').innerHTML = data && data.length ? data.map(t => `<div>${t.user_name}: ${t.message}</div>`).join('') : 'No tickets.';
+            document.getElementById('adminSupportList').innerHTML = data && data.length ? data.map(t => `<div style="margin-bottom:10px; border-bottom:1px solid #333; padding-bottom:8px;"><b>${t.user_name} (ID: ${t.telegram_id})</b>:<br>${t.message}<br><input type="text" id="reply_${t.id}" placeholder="Type reply..." style="margin:4px 0; font-size:10px;"><button onclick="sendAdminReply('${t.id}')" class="btn-sm btn-3d-success">Send Reply</button></div>`).join('') : 'No tickets.';
+        }
+
+        async function sendAdminReply(ticketId) {
+            const replyInput = document.getElementById(`reply_${ticketId}`);
+            if (!replyInput || !replyInput.value.trim()) return;
+            const replyText = replyInput.value.trim();
+            await supabaseClient.from('support_tickets').update({ admin_reply: replyText, status: 'RESOLVED' }).eq('id', ticketId);
+            showPushNotification('Reply sent to user!');
+            loadAdminSupportTickets();
         }
 
         async function approveTx(txId, userId, amount, type) {
@@ -1740,7 +1712,7 @@
         async function handleWithdrawalAction(txId, userId, amount, actionStatus) {
             await supabaseClient.from('transactions').update({ status: actionStatus }).eq('id', txId);
             if (actionStatus === 'REJECTED') {
-                const { data: usr } = await supabaseClient.from('users').select('*').eq('telegram_id', userId).maybeSingle();
+                const { data: usr } = await supabaseClient.from('users').select('*').eq('telegram_id`, userId).maybeSingle();
                 if (usr) {
                     const refundedBalance = Number(usr.balance || 0) + Number(amount);
                     await supabaseClient.from('users').update({ balance: refundedBalance }).eq('telegram_id', userId);
