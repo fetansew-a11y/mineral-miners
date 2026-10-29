@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mineral Mining Global Pro 2026 - Production Stable Edition</title>
+    <title>Mineral Mining Pro — Premium Mining Dashboard</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -337,14 +337,206 @@
             background: var(--input-bg); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 16px; padding: 12px; margin-top: 10px; text-align: left;
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
         }
+
+
+    /* Premium mineral-console redesign: presentation layer only; existing IDs and actions preserved. */
+    :root { color-scheme: dark; --accent-emerald:#55f0c0; --card-border:1px solid rgba(130, 211, 255, .16); }
+    :root[data-theme="dark"] {
+      --bg-gradient: radial-gradient(ellipse at 50% -12%, #183a50 0%, #0a1425 38%, #050914 78%, #03060d 100%);
+      --card-bg: rgba(12, 22, 39, .86); --card-border: 1px solid rgba(123, 193, 232, .16);
+      --text-main:#f2f7ff; --text-muted:#8fa4bd; --accent-emerald:#63f5c7;
+      --accent-glow:0 0 32px rgba(67,245,195,.22); --modal-bg:#081222; --input-bg:rgba(3,10,23,.92);
+    }
+    body { padding: max(10px, env(safe-area-inset-top)) 13px calc(108px + env(safe-area-inset-bottom)); letter-spacing:.01em; }
+    .app-container { max-width: 460px; }
+    .payout-banner { white-space:normal; border-radius:14px; background:linear-gradient(110deg,rgba(24,54,80,.9),rgba(12,26,46,.88)); border-color:rgba(105,190,238,.2); color:#b8d8f1; box-shadow:0 8px 30px #0003; letter-spacing:.04em; }
+    .card,.header,.vip-card-item,.earner-card-item,.history-card-item { border-color:rgba(128,190,225,.16); box-shadow:0 18px 45px rgba(0,0,0,.24), inset 0 1px rgba(255,255,255,.035); }
+    .card { border-radius:25px; background:linear-gradient(145deg,rgba(17,32,53,.96),rgba(8,17,32,.94)); padding:19px; }
+    .header { border-radius:18px; padding:11px 12px; background:rgba(9,19,35,.82); gap:8px; flex-wrap:wrap; }
+    .title-header-box { margin:14px 0 16px; gap:13px; }
+    .app-title { font-size:clamp(21px,5.5vw,27px); letter-spacing:-1.1px; background:linear-gradient(110deg,#fff 4%,#a4e9ff 43%,#69f2c3 86%); -webkit-background-clip:text; filter:drop-shadow(0 5px 18px rgba(82,219,210,.15)); }
+    .pro-logo-icon { filter:drop-shadow(0 0 13px rgba(78,220,209,.38)); animation:proLogoPulse 4s ease-in-out infinite; }
+    .balance-box { font-size:clamp(34px,9vw,43px); color:#8af5d4; text-shadow:0 0 26px rgba(71,237,190,.16); }
+    .mining-core-container { width:170px;height:170px;margin:19px auto; }
+    .mining-core-ring { border:1px solid rgba(126,220,255,.7); border-style:solid; box-shadow:0 0 34px rgba(67,183,233,.18),inset 0 0 24px rgba(67,183,233,.06); }
+    .mining-core-glow { width:137px;height:137px; background:radial-gradient(circle at 30% 24%,#5ef1ce 0%,#178c9c 39%,#173c70 78%,#0b1930 100%); box-shadow:inset 0 0 24px rgba(255,255,255,.18),0 0 50px rgba(42,200,192,.25); }
+    @keyframes pulseCoreGlow { 0%,100% { transform:scale(1);box-shadow:0 0 35px rgba(45,190,188,.2); } 50% { transform:scale(1.035);box-shadow:0 0 56px rgba(45,190,188,.36); } }
+    .vector-3d-gem-svg { filter:drop-shadow(0 10px 18px rgba(0,0,0,.5)); }
+    .live-mining-box { border:1px solid rgba(108,198,229,.15); border-radius:17px; background:rgba(2,10,22,.62); box-shadow:inset 0 1px 8px #0004; }
+    .progress-bar-container { height:7px; background:rgba(151,183,211,.12); }
+    .progress-bar { background:linear-gradient(90deg,#4ba6df,#55f0c0,#e1fffd); box-shadow:0 0 12px rgba(85,240,192,.36); }
+    button { border-radius:15px; background:linear-gradient(135deg,#328bb6,#2368a5); box-shadow:0 8px 22px rgba(21,91,145,.22),inset 0 1px rgba(255,255,255,.18); font-size:12px; min-height:42px; }
+    button:focus-visible, input:focus-visible, select:focus-visible { outline:2px solid #71e8d0; outline-offset:3px; }
+    .btn-3d-success { background:linear-gradient(135deg,#4ce2b4,#178d82); box-shadow:0 8px 22px rgba(24,159,133,.2),inset 0 1px rgba(255,255,255,.2); }
+    .btn-3d-warning { background:linear-gradient(135deg,#eacb7a,#a87836); box-shadow:0 8px 22px rgba(168,120,54,.2); }
+    .btn-3d-purple { background:linear-gradient(135deg,#a994ef,#6d63c8); box-shadow:0 8px 22px rgba(109,99,200,.2); }
+    .btn-sm { min-height:34px; padding:8px 11px; border-radius:12px; }
+    .bottom-nav { padding:10px 0 calc(9px + env(safe-area-inset-bottom)); background:rgba(5,12,24,.91); border-top:1px solid rgba(126,190,223,.17); box-shadow:0 -12px 32px rgba(0,0,0,.25); }
+    .nav-item { min-height:46px; color:#8396ad; font-size:10px; }
+    .nav-item.active { color:#72f0cc; text-shadow:0 0 12px rgba(114,240,204,.22); }
+    .nav-icon svg { width:22px;height:22px; }
+    .modal { background:rgba(1,6,14,.82); backdrop-filter:blur(18px); }
+    .modal-content { border:1px solid rgba(128,190,225,.2); border-radius:25px; box-shadow:0 28px 80px rgba(0,0,0,.52); }
+    input,select,textarea { border-radius:13px; border-color:rgba(128,190,225,.2); box-shadow:none; }
+    .vip-card-item { position:relative; overflow:hidden; align-items:stretch; padding:15px; border-radius:21px; background:linear-gradient(135deg,rgba(19,35,56,.98),rgba(8,17,31,.98)); transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease; }
+    .vip-card-item::before { content:""; position:absolute; inset:0 auto 0 0; width:3px; background:var(--tier-color,#63f5c7); opacity:.95; }
+    .vip-card-item:hover { transform:translateY(-2px); border-color:rgba(122,220,226,.38); box-shadow:0 20px 38px rgba(0,0,0,.32); }
+    .vip-badge-3d { width:66px;height:66px;border-radius:20px;border:1px solid color-mix(in srgb,var(--tier-color,#63f5c7) 55%,transparent); background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.12),rgba(3,10,22,.9) 72%); box-shadow:0 8px 24px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.08); }
+    .vip-gem { width:43px;height:43px; filter:drop-shadow(0 0 11px color-mix(in srgb,var(--tier-color,#63f5c7) 40%,transparent)); animation:gemFloat 3.8s ease-in-out infinite; }
+    @keyframes gemFloat { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-4px) rotate(2deg)} }
+    .tier-copy { min-width:0; flex:1; }
+    .tier-title { display:block; font-size:12px; font-weight:900; letter-spacing:.015em; color:#f3f8ff; }
+    .tier-mineral { display:block; margin-top:3px; font-size:9px; text-transform:uppercase; letter-spacing:.15em; color:var(--tier-color,#63f5c7); font-weight:800; }
+    .tier-metrics { display:flex; flex-wrap:wrap; gap:6px; margin-top:9px; }
+    .tier-metric { border:1px solid rgba(146,190,220,.13); background:rgba(3,10,21,.55); padding:5px 7px; border-radius:8px; font-size:9px; color:#9bb0c6; }
+    .tier-metric b { color:#e8f6ff; font-weight:800; }
+    .tier-action { display:flex; flex-direction:column; align-items:flex-end; justify-content:center; gap:7px; min-width:88px; }
+    .tier-action .btn-sm { max-width:105px; white-space:nowrap; }
+    .tier-status { font-size:9px; font-weight:900; color:#70edc6; text-align:right; }
+    .earner-card-item { border-radius:15px; background:rgba(12,24,42,.8); }
+    .history-card-item { border-radius:15px; background:rgba(12,24,42,.8); }
+    .support-float-btn { background:linear-gradient(145deg,#4aadd1,#2469a4); box-shadow:0 10px 28px rgba(24,111,163,.3); }
+    @media (max-width:360px) { .header { justify-content:center; } .vip-card-item { flex-wrap:wrap; } .tier-action { width:100%; flex-direction:row; justify-content:space-between; align-items:center; } .tier-action .btn-sm { max-width:none; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important; } }
+
+
+    /* Premium refinement: direct entry, refined support chat and referral progress */
+    .support-float-btn { transition: transform .18s ease, filter .18s ease; }
+    .support-float-btn:hover { filter: brightness(1.12); transform: translateY(-2px); }
+    .chat-container-modern { overflow:hidden; border:1px solid rgba(90,190,230,.25); border-radius:20px; background:linear-gradient(160deg,#0c1a2d,#07111f); box-shadow:0 24px 60px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.05); }
+    .chat-header-bar { padding:15px; background:linear-gradient(110deg,rgba(24,110,157,.35),rgba(16,185,129,.12)); border-bottom:1px solid rgba(255,255,255,.08); }
+    .chat-messages-scroll { min-height:180px; max-height:42vh; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:10px; }
+    .chat-input-row { display:flex; gap:8px; padding:12px; border-top:1px solid rgba(255,255,255,.08); background:rgba(2,8,20,.65); }
+    .chat-input-row input { min-width:0; flex:1; border-radius:13px!important; }
+    .chat-input-row button { border-radius:13px!important; padding:10px 16px; }
+    .milestone-progress { height:7px; margin-top:8px; border-radius:99px; overflow:hidden; background:rgba(148,163,184,.16); }
+    .milestone-progress-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,#35d5b0,#58a6ff,#b58cff); box-shadow:0 0 14px rgba(53,213,176,.35); transition:width .55s cubic-bezier(.2,.8,.2,1); }
+    .milestone-row { display:block; padding:12px!important; border:1px solid rgba(128,190,225,.14); background:linear-gradient(135deg,rgba(24,42,65,.8),rgba(10,22,38,.9))!important; border-radius:15px!important; }
+    .profile-avatar { width:64px;height:64px;border-radius:20px;object-fit:cover;background:linear-gradient(145deg,#1e7496,#1a9c7c);border:2px solid rgba(100,220,220,.55);box-shadow:0 8px 24px rgba(0,0,0,.25); }
+    button,.btn-sm { transition:transform .16s ease,filter .16s ease,box-shadow .16s ease; }
+    button:hover,.btn-sm:hover { filter:brightness(1.08); }
+
+    /* Refined premium visual pass */
+    .header { gap:10px!important; align-items:center!important; padding:12px 13px!important; border-radius:20px!important; backdrop-filter:blur(18px); }
+    .lang-select { min-width:88px; max-width:125px; padding:9px 26px 9px 10px!important; border-radius:12px!important; font-weight:800!important; border:1px solid rgba(112,190,225,.22)!important; box-shadow:inset 0 1px rgba(255,255,255,.06),0 5px 16px #0002; }
+    .theme-toggle-btn { width:38px!important;height:38px!important;flex-shrink:0; border-radius:13px!important; background:linear-gradient(145deg,rgba(92,130,166,.24),rgba(18,34,54,.82))!important; border:1px solid rgba(134,194,224,.24)!important; box-shadow:0 5px 14px #0003,inset 0 1px #ffffff12!important; }
+    #navHistoryBtn { min-height:38px; border-radius:12px!important; padding:8px 11px!important; font-weight:800; }
+    .referral-commission-card { display:flex;align-items:center;gap:12px;margin:10px 0;padding:13px;border-radius:17px;border:1px solid rgba(74,222,190,.2);background:linear-gradient(120deg,rgba(18,115,105,.15),rgba(24,40,65,.55));box-shadow:inset 0 1px #ffffff09,0 8px 20px #0002; }
+    .deposit-commission-card { border-color:rgba(96,165,250,.22);background:linear-gradient(120deg,rgba(37,99,235,.13),rgba(24,40,65,.55)); }
+    .commission-icon { display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#31d6ad,#087c79);box-shadow:0 7px 18px #10b98130,inset 0 1px #ffffff55; }
+    .commission-icon svg { width:21px;height:21px;fill:#f0fffc;stroke:#f0fffc;stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round; }
+    .deposit-commission-icon { background:linear-gradient(145deg,#60a5fa,#5751bd); }
+    .commission-title { color:var(--text-main);font-size:11px;font-weight:900;letter-spacing:.02em; }
+    .commission-subtitle { color:var(--text-muted);font-size:10px;line-height:1.5;margin-top:4px; }
+    .commission-subtitle strong { color:#75e9cb;font-weight:900; }
+    .deposit-commission-card .commission-subtitle strong { color:#93c5fd; }
+    .milestone-reward-box { margin-top:16px!important;padding:14px!important;border-radius:21px!important;border:1px solid rgba(169,139,255,.2)!important;background:linear-gradient(145deg,rgba(52,35,88,.24),rgba(13,26,45,.68))!important;box-shadow:inset 0 1px #ffffff08,0 14px 32px #0002; }
+    .milestone-heading { display:flex;align-items:center;gap:9px;margin-bottom:12px;color:var(--text-main);font-size:12px;font-weight:900;letter-spacing:.015em; }
+    .milestone-heading-icon { width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(145deg,#b58aff,#6d54c8);box-shadow:0 6px 16px #8b5cf630,inset 0 1px #ffffff60; }
+    .milestone-heading-icon svg { width:17px;height:17px;fill:#fff; }
+    .milestone-row { position:relative;overflow:hidden; }
+    .milestone-level-icon { width:23px;height:23px;flex:0 0 23px;display:grid;place-items:center;border-radius:8px;background:linear-gradient(145deg,#8b7cf6,#4f46a5);box-shadow:0 4px 10px #6366f130,inset 0 1px #ffffff55; }
+    .milestone-level-icon svg { width:13px;height:13px;fill:#fff; }
+    .milestone-row:before { content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(#5eead4,#818cf8);opacity:.85; }
+    .referred-users-modern { padding:8px!important;border-radius:18px!important;background:rgba(5,14,28,.35)!important;border:1px solid rgba(128,190,225,.12)!important; }
+    .referred-users-modern > * { border-radius:14px; }
+    .profile-history-link { width:100%;display:flex;align-items:center;gap:12px;text-align:left;margin-top:16px;padding:13px;border-radius:17px;border:1px solid rgba(114,182,220,.18);background:linear-gradient(130deg,rgba(32,67,96,.42),rgba(13,25,43,.65));color:var(--text-main);box-shadow:inset 0 1px #ffffff0b,0 8px 22px #0002; }
+    .profile-history-link:active { transform:scale(.985); }
+    .profile-history-icon { width:40px;height:40px;display:grid;place-items:center;flex-shrink:0;border-radius:13px;background:linear-gradient(145deg,#2abda0,#2469a4);box-shadow:0 6px 17px #0ea5a430; }
+    .profile-history-icon svg { width:21px;height:21px;fill:none;stroke:white;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round; }
+    .profile-history-copy { display:flex;flex:1;min-width:0;flex-direction:column;gap:4px; }
+    .profile-history-copy strong { font-size:11px;font-weight:900; }
+    .profile-history-copy small { font-size:9px;line-height:1.45;color:var(--text-muted); }
+    .profile-history-chevron { font-size:25px;color:#7dd3fc;line-height:1; }
+    .mining-core-container { width:184px!important;height:184px!important; margin:20px auto!important; isolation:isolate; }
+    .mining-core-ring { width:100%;height:100%;border:1px solid rgba(94,234,212,.72)!important;border-style:solid!important;box-shadow:0 0 32px rgba(45,212,191,.2),inset 0 0 24px rgba(96,165,250,.07)!important;animation:spinCoreRing 18s linear infinite!important; }
+    .mining-core-ring:before { content:"";position:absolute;inset:9px;border:1px dashed rgba(147,197,253,.42);border-radius:50%;animation:spinCoreRing 26s linear infinite reverse; }
+    .mining-core-glow { width:146px!important;height:146px!important;position:relative;z-index:1;background:radial-gradient(circle at 30% 22%,#75f5d8 0%,#20a9a5 28%,#17628a 59%,#101d3b 100%)!important;box-shadow:inset 0 0 24px #ffffff2b,0 0 48px rgba(45,212,191,.25),0 0 90px rgba(59,130,246,.13)!important; }
+    .vector-3d-gem-svg { filter:drop-shadow(0 0 10px rgba(125,249,235,.35)) drop-shadow(0 12px 8px rgba(0,0,0,.35)); }
+    .payout-banner { border-radius:13px!important;border:1px solid rgba(96,165,250,.16);background:linear-gradient(100deg,rgba(13,148,136,.10),rgba(37,99,235,.10))!important;box-shadow:inset 0 1px #ffffff08; }
+    .push-notification-bar { border:1px solid rgba(94,234,212,.24)!important;border-radius:19px!important;background:linear-gradient(135deg,rgba(11,27,45,.98),rgba(15,23,42,.98))!important;box-shadow:0 18px 55px #0007,0 0 25px rgba(45,212,191,.09)!important; }
+    .push-notification-bar.show { animation:notificationArrival .45s cubic-bezier(.2,.8,.2,1) both; }
+    @keyframes notificationArrival { from { opacity:0;transform:translateX(-50%) translateY(-24px) scale(.96); } to { opacity:1;transform:translateX(-50%) translateY(0) scale(1); } }
+    button { -webkit-tap-highlight-color:transparent; }
+    button:focus-visible,select:focus-visible,input:focus-visible { outline:2px solid rgba(94,234,212,.75);outline-offset:2px; }
+    @media (prefers-reduced-motion:reduce) { .mining-core-ring,.mining-core-ring:before,.mining-core-glow,.push-notification-bar.show { animation:none!important; } * { scroll-behavior:auto!important; } }
+
+
+    .referred-user-modern-item { display:flex!important;align-items:center;justify-content:space-between;gap:10px;padding:12px!important;margin:5px 0!important;border:1px solid rgba(125,185,220,.12)!important;background:linear-gradient(110deg,rgba(25,48,72,.58),rgba(10,23,39,.62))!important;border-radius:15px!important;box-shadow:inset 0 1px #ffffff08; }
+    .referred-user-identity { display:flex;align-items:center;gap:10px;min-width:0; }
+    .ref-user-avatar-img,.ref-user-avatar { width:40px;height:40px;flex:0 0 40px;border-radius:14px;object-fit:cover;display:grid;place-items:center;background:linear-gradient(145deg,#2dd4bf,#2563eb);color:white;font-size:14px;font-weight:900;box-shadow:0 5px 14px #0003;border:1px solid #ffffff20; }
+    .referred-user-meta { display:flex;flex-direction:column;gap:4px;min-width:0;text-align:left; }
+    .referred-user-meta strong { color:var(--text-main);font-size:11px;font-weight:900;overflow-wrap:anywhere; }
+    .referred-user-meta small,.referred-user-status small { color:var(--text-muted);font-size:9px; }
+    .referred-user-status { display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0; }
+    .ref-earned-amount { color:#75e9cb;font-size:11px;font-weight:900; }
+    .referrals-empty-state { display:flex;flex-direction:column;align-items:center;gap:7px;padding:24px 12px;text-align:center;color:var(--text-main); }
+    .referrals-empty-state strong { font-size:11px;font-weight:900; }
+    .referrals-empty-state small { max-width:230px;font-size:10px;line-height:1.5;color:var(--text-muted); }
+    .referrals-empty-icon { width:42px;height:42px;display:grid;place-items:center;border-radius:15px;background:rgba(45,212,191,.12); }
+    .referrals-empty-icon svg { width:22px;height:22px;fill:none;stroke:#75e9cb;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round; }
+
+
+    /* Mobile-first single-screen home layout: keep all four primary actions visible. */
+    @media (max-width:480px) {
+      body { padding: max(5px,env(safe-area-inset-top)) 8px calc(82px + env(safe-area-inset-bottom)); }
+      .app-container { max-width:460px; }
+      .payout-banner { margin:0 0 6px!important;padding:6px 8px!important;font-size:8px!important;line-height:1.25; }
+      .header { margin-bottom:6px!important;padding:6px 8px!important;gap:5px!important;border-radius:13px!important; }
+      .header > div:first-child { font-size:9px!important; }
+      .header > div:last-child { gap:4px!important; }
+      .lang-select { min-width:68px!important;max-width:82px!important;padding:6px 17px 6px 6px!important;font-size:9px!important; }
+      .theme-toggle-btn { width:29px!important;height:29px!important;min-height:29px!important;padding:4px!important;font-size:12px!important; }
+      #navHistoryBtn { min-height:29px!important;padding:5px 7px!important;font-size:9px!important; }
+      .title-header-box { margin:4px 0 6px!important;gap:7px!important; }
+      .pro-logo-icon { width:30px!important;height:30px!important; }
+      .app-title { font-size:clamp(16px,4.6vw,20px)!important;letter-spacing:-.6px!important; }
+      #homeTab > .card:nth-of-type(3) { padding:9px 10px!important;margin:0 0 8px!important;border-radius:17px!important; }
+      #homeTab > .card:nth-of-type(4) { padding:9px 11px!important;margin:0!important;border-radius:19px!important; }
+      #homeTab > .card:nth-of-type(4) > p { font-size:9px!important; }
+      .balance-box { margin:2px 0!important;font-size:clamp(27px,7.8vw,34px)!important;gap:6px!important; }
+      .balance-wallet-icon { width:25px!important;height:25px!important; }
+      .sub-balance { margin-bottom:5px!important;font-size:9px!important; }
+      .btn-grid { gap:7px!important;margin:5px 0 5px!important; }
+      .btn-grid button { min-height:35px!important;padding:7px!important;font-size:10px!important;border-radius:11px!important; }
+      .btn-icon svg { width:14px!important;height:14px!important; }
+      .mining-core-container { width:104px!important;height:104px!important;margin:6px auto!important; }
+      .mining-core-glow { width:82px!important;height:82px!important; }
+      .vector-3d-gem-svg { width:49px!important;height:49px!important; }
+      .mining-core-ring { border-width:2px!important;border-style:dotted!important;box-shadow:0 0 25px rgba(45,212,191,.28),inset 0 0 18px rgba(96,165,250,.09)!important;animation:spinCoreRing 7s linear infinite!important; }
+      .mining-core-ring:after { content:"";position:absolute;inset:17px;border:1px solid rgba(94,234,212,.28);border-radius:50%;box-shadow:0 0 16px rgba(94,234,212,.13); }
+      .live-mining-box { padding:7px 9px!important;margin:6px 0!important;border-radius:12px!important; }
+      .live-mining-box > div:first-child { font-size:9px!important; }
+      #miningTimerCountdown { margin-top:4px!important;font-size:8px!important; }
+      .progress-bar-container { margin-top:5px!important;height:5px!important; }
+      #homeTab button[onclick="claimMining()"] { min-height:36px!important;padding:8px!important;font-size:10px!important;border-radius:12px!important; }
+      .bottom-nav { padding:5px 0 calc(5px + env(safe-area-inset-bottom))!important; }
+      .nav-item { min-height:39px!important;font-size:9px!important; }
+      .nav-icon svg { width:19px!important;height:19px!important; }
+    }
+    @media (max-width:380px) and (max-height:760px) {
+      .payout-banner { font-size:7px!important;padding:5px 7px!important; }
+      .title-header-box { margin:2px 0 4px!important; }
+      .pro-logo-icon { width:26px!important;height:26px!important; }
+      .app-title { font-size:16px!important; }
+      #homeTab > .card:nth-of-type(3) { padding:7px 8px!important;margin-bottom:5px!important; }
+      #homeTab > .card:nth-of-type(4) { padding:7px 9px!important; }
+      .mining-core-container { width:88px!important;height:88px!important;margin:4px auto!important; }
+      .mining-core-glow { width:70px!important;height:70px!important; }
+      .vector-3d-gem-svg { width:42px!important;height:42px!important; }
+      .live-mining-box { margin:4px 0!important;padding:6px 8px!important; }
+    }
+    .mining-core-glow { position:relative;overflow:visible; }
+    .mining-core-glow::before { content:"";position:absolute;inset:-7px;border-radius:50%;border:1px solid rgba(125,249,235,.32);box-shadow:0 0 18px rgba(45,212,191,.18);animation:coreOrbitPulse 2.8s ease-in-out infinite;pointer-events:none; }
+    .mining-core-glow::after { content:"";position:absolute;inset:8px;border-radius:50%;border:1px solid rgba(255,255,255,.16);pointer-events:none; }
+    @keyframes coreOrbitPulse { 0%,100% { transform:scale(.96);opacity:.55; } 50% { transform:scale(1.06);opacity:1; } }
+    .payout-banner { overflow:hidden; }
+    #payoutTickerText { display:inline-block; }
+    @media (prefers-reduced-motion:reduce) { .mining-core-glow::before { animation:none!important; } }
+
     </style>
 </head>
 <body>
-    <div id="loadingOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #030712; z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #34d399; font-weight: 900;">
-        <div style="font-size: 45px; animation: pulseCoreGlow 1.5s infinite;">💎</div>
-        <div style="margin-top: 14px; font-size: 14px; letter-spacing: 1px;" id="syncText">Syncing Server State...</div>
-    </div>
-
     <div id="flyingMysteryBox" class="flying-mystery-box" onclick="claimMysteryBox()" title="Bonus Mystery Box!">🎁</div>
 
     <div id="pushNotificationBar" class="push-notification-bar">
@@ -382,7 +574,7 @@
     <div class="app-container">
         
         <div class="payout-banner">
-            <span id="payoutTickerText" class="payout-ticker-text">🔥 Alexander Smith successfully withdrawn $5.00 (BEP20)</span>
+            <span id="payoutTickerText" class="payout-ticker-text">⛏ Mineral Mining Pro • Mining dashboard and tier overview</span>
         </div>
 
         <button class="support-float-btn" onclick="openSupportChatModal()" title="Customer Support">
@@ -524,21 +716,29 @@
             <div class="card" style="text-align: left;">
                 <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 12px 0;" id="txtRefSub">Invite friends & unlock milestone cash rewards!</p>
                 <div style="font-size: 11px; margin: 10px 0; line-height: 1.6;">
-                    <p style="margin: 4px 0;">• <span id="txtRefPerFriend">Per Friend Direct</span>: <b style="color:#34d399;">+$0.05</b></p>
+                    <p style="margin: 4px 0;">• <span id="txtRefPerFriend">Per Friend Direct</span>: <b style="color:#34d399;">$0.05 per friend</b></p>
                     <p style="margin: 4px 0;">• <span id="txtRefTotal">Total Invited</span>: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
+                    <div class="referral-commission-card">
+                        <div class="commission-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 15 8l6.2.9-4.5 4.4 1.1 6.2L12 16.6l-5.8 2.9 1.1-6.2-4.5-4.4L9 8z"/></svg></div>
+                        <div><div class="commission-title">Direct Referral Reward</div><div class="commission-subtitle">Earn <strong>$0.05 per invited friend</strong>.</div></div>
+                    </div>
+                    <div class="referral-commission-card deposit-commission-card">
+                        <div class="commission-icon deposit-commission-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M17 6.5c0-1.7-2.2-3-5-3s-5 1.3-5 3 2.2 3 5 3 5 1.3 5 3-2.2 3-5 3-5-1.3-5-3"/></svg></div>
+                        <div><div class="commission-title">Direct Deposit Commission</div><div class="commission-subtitle">Earn <strong>10% of your direct referral’s first deposit</strong>.</div></div>
+                    </div>
                 </div>
 
                 <input type="text" id="refLinkInput" readonly style="font-size: 11px;">
                 <button class="btn-3d-success btn-sm" onclick="copyRefLink()" style="width:100%; margin-top:6px;" id="btnCopyRef">🔗 Copy Referral Link</button>
 
                 <div class="milestone-reward-box">
-                    <div style="font-size: 11px; font-weight: 900; color: #c084fc; margin-bottom: 6px;">🎯 Referral Milestones Bonuses</div>
+                    <div class="milestone-heading"><span class="milestone-heading-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 15 8l6.2.9-4.5 4.4 1.1 6.2L12 16.6l-5.8 2.9 1.1-6.2-4.5-4.4L9 8z"/></svg></span><span>Referral Milestone Rewards</span></div>
                     <div id="milestonesListContainer" style="font-size: 10px; display: flex; flex-direction: column; gap: 6px;"></div>
                 </div>
 
                 <div style="margin-top: 18px; border-top: var(--card-border); padding-top: 14px;">
                     <h3 style="font-size: 12px; margin: 0 0 10px 0; font-weight: 900; color: #34d399;" id="txtRefListTitle">📋 Your Invited Friends</h3>
-                    <div id="referredUsersListContainer" class="history-list" style="max-height: 160px;">
+                    <div id="referredUsersListContainer" class="history-list referred-users-modern" style="max-height: 300px;">
                         <div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">Loading referrals...</div>
                     </div>
                 </div>
@@ -549,8 +749,13 @@
             <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 12px 0;" id="txtProfileTitle">👤 Profile</h2>
             <div class="card" style="text-align: left;">
                 <p style="margin: 0 0 6px 0; font-size: 11px;"><b id="txtDisplayName">Display Name:</b></p>
-                <input type="text" id="profileNameInput" placeholder="Enter your name">
+                <div style="display:flex;align-items:center;gap:13px;margin:0 0 14px;padding:13px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(128,190,225,.15);"><img id="profileAvatarPreview" class="profile-avatar" alt="Profile photo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%231e7496'/%3E%3Ccircle cx='32' cy='23' r='12' fill='%23d7f3ff'/%3E%3Cpath d='M10 61c2-15 10-22 22-22s20 7 22 22' fill='%23d7f3ff'/%3E%3C/svg%3E"><div style="flex:1;min-width:0;"><div style="font-weight:900;font-size:12px;">Your profile</div><div style="font-size:10px;color:var(--text-muted);margin:4px 0 8px;">Choose a photo for this session</div><input type="file" id="profileAvatarInput" accept="image/*" style="font-size:10px;padding:6px;" onchange="previewProfileAvatar(event)"></div></div><input type="text" id="profileNameInput" placeholder="Enter your name">
                 <button class="btn-3d-success btn-sm" onclick="saveProfileName()" style="width:100%; margin-top:6px;" id="btnSaveName">💾 Save Name</button>
+                <button class="profile-history-link" onclick="openModal('historyModal')" type="button">
+                    <span class="profile-history-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.6-6.4L3 8m0-5v5h5M12 7v5l3.5 2"/></svg></span>
+                    <span class="profile-history-copy"><strong>Transaction History</strong><small>Daily check-ins, deposits, withdrawals and rewards</small></span>
+                    <span class="profile-history-chevron">›</span>
+                </button>
                 <p style="margin: 12px 0 6px 0; font-size: 11px;"><b>Telegram ID:</b> <span id="profileIdDisplay" style="color: var(--text-muted);">Loading...</span></p>
                 <p style="margin: 6px 0; font-size: 11px;"><b id="txtProfileTier">Current Tiers:</b> <span id="profileVipDisplay" style="color: #3b82f6;">None</span></p>
                 <p style="margin: 6px 0; font-size: 11px;"><b id="txtProfileCapital">Active Capital:</b> $<span id="profileInvDisplay" style="color: #34d399;">0.00</span></p>
@@ -664,10 +869,7 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnd3FsY3lhemFmZnhqbXJpYW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI5MTMyMzIsImV4cCI6MjEwODQ4OTIzMn0.I4gpUbJcqap7W73YfTzbX_5T10XhhAIWovGZRQ4rnzk';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const BOT_TOKEN = '8656362880:AAEnPXfuwxwiMLzH5z2yD1rN7IIfRJxzVFk';
         const botUsername = 'MineralMinerPro_bot';
-        const CHANNEL_1 = '@MineralMinerPro';
-        const CHANNEL_2 = '@MineralMinerPro_Payment';
         const ADMIN_TELEGRAM_ID = '7038584886'; 
 
         const translations = {
@@ -805,19 +1007,7 @@
             try { triggerHaptic(); const m = document.getElementById(id); if (m) m.style.display = 'none'; } catch(e) {}
         }
 
-        async function checkChannelMembership(channelUsername, userId) {
-            try {
-                const url = `https://api.telegram.org/bot${BOT_TOKEN}/getChatMember?chat_id=${channelUsername}&user_id=${userId}`;
-                const response = await fetch(url);
-                const data = await response.json();
-                if (data.ok && data.result) {
-                    const status = data.result.status;
-                    return (status === 'member' || status === 'administrator' || status === 'creator');
-                }
-                return false;
-            } catch (e) { return false; }
-        }
-
+        // 🛡️ Secure Server-Side Channel Membership Verification via Supabase Edge Function
         async function verifyChannelJoin() {
             triggerHaptic();
             const btn = document.getElementById('verifyJoinBtn');
@@ -831,18 +1021,28 @@
                 return;
             }
 
-            const joined1 = await checkChannelMembership(CHANNEL_1, telegramId);
-            const joined2 = await checkChannelMembership(CHANNEL_2, telegramId);
+            try {
+                const endpointUrl = 'https://egwqlcyazaffxjmriaop.supabase.co/functions/v1/smart-responder';
+                const apiCall = await fetch(endpointUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: telegramId })
+                });
+                const data = await apiCall.json();
 
-            if (joined1 && joined2) {
-                if (alertBox) alertBox.style.display = 'none';
-                document.getElementById('joinModal').style.display = 'none';
-                localStorage.setItem('channels_joined_verified', 'true');
-                showPushNotification('Channels verified successfully!');
-            } else {
-                if (alertBox) alertBox.style.display = 'block';
+                if (data.verified) {
+                    if (alertBox) alertBox.style.display = 'none';
+                    document.getElementById('joinModal').style.display = 'none';
+                    localStorage.setItem('channels_joined_verified', 'true');
+                    showPushNotification('Channels verified successfully!');
+                } else {
+                    if (alertBox) alertBox.style.display = 'block';
+                    if (btn) { btn.innerText = "🔍 Verify Join"; btn.disabled = false; }
+                    showPushNotification('Please join both channels first!');
+                }
+            } catch (e) {
                 if (btn) { btn.innerText = "🔍 Verify Join"; btn.disabled = false; }
-                showPushNotification('Please join both channels first!');
+                showPushNotification('Verification error. Try again.');
             }
         }
 
@@ -853,8 +1053,14 @@
         };
 
         const globalNamesList = [
-            "Alexander Smith", "Liam Johnson", "Noah Williams", "Oliver Brown", "Elijah Jones",
-            "James Miller", "William Davis", "Benjamin Garcia", "Lucas Rodriguez", "Henry Martinez"
+            "Alex Morgan", "Liam Johnson", "Noah Williams", "Oliver Brown", "Elijah Jones",
+            "James Miller", "William Davis", "Benjamin Garcia", "Lucas Rodriguez", "Henry Martinez",
+            "Ethan Wilson", "Mia Anderson", "David Thomas", "Lily Jackson", "Michael White",
+            "Adam Harris", "Zara Ahmed", "Nathan Clark", "Marta Silva", "Joseph Martin",
+            "Ava Thompson", "Owen Walker", "Grace Cooper", "Aaron Young", "Chloe Green",
+            "Sofia Rossi", "Mateo Garcia", "Isabella Costa", "Hiro Tanaka", "Priya Sharma",
+            "Daniel Kim", "Emma Laurent", "Oliver Smith", "Amara Bekele", "Hana Girma",
+            "Samuel Tesfaye", "Mekdes Alemu", "Abel Tadesse", "Ruth Solomon", "Yonas Worku"
         ];
 
         const topEarnersData = [
@@ -911,14 +1117,14 @@
         let historyLog = ["Welcome Bonus: +$1.00 starter capital"];
 
         const vipTiersData = [
-            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.00, daily: 0.00, color1: "#94a3b8", color2: "#475569" },
+            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.05, daily: 0.05, color1: "#94a3b8", color2: "#475569" },
             { level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, color1: "#cbd5e1", color2: "#64748b" },
-            { level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.08, daily: 0.80, color1: "#fde047", color2: "#ca8a04" },
-            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.10, daily: 2.00, color1: "#38bdf8", color2: "#0284c7" },
-            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.12, daily: 6.00, color1: "#f43f5e", color2: "#be123c" },
-            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.14, daily: 14.00, color1: "#6366f1", color2: "#3730a3" },
-            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.16, daily: 80.00, color1: "#34d399", color2: "#047857" },
-            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, color1: "#a5f3fc", color2: "#0891b2" }
+            { level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.07, daily: 0.70, color1: "#fde047", color2: "#ca8a04" },
+            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.08, daily: 1.60, color1: "#38bdf8", color2: "#0284c7" },
+            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.09, daily: 4.50, color1: "#f43f5e", color2: "#be123c" },
+            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.10, daily: 10.00, color1: "#6366f1", color2: "#3730a3" },
+            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.11, daily: 55.00, color1: "#34d399", color2: "#047857" },
+            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.12, daily: 120.00, color1: "#a5f3fc", color2: "#0891b2" }
         ];
 
         async function initSupabaseCloudApp() {
@@ -976,7 +1182,6 @@
                     activeInvestments = invData;
                 }
 
-                // Accurate offline mining progress calculation based on elapsed time
                 const now = Date.now();
                 const elapsedSeconds = Math.floor((now - lastActiveTimestamp) / 1000);
                 if (elapsedSeconds > 2 && activeInvestments.length > 0) {
@@ -1001,20 +1206,21 @@
                 setInterval(bannerTicker, 3200);
                 setInterval(saveDataToSupabase, 5000);
 
-                setTimeout(() => {
-                    const loader = document.getElementById('loadingOverlay');
-                    if (loader) loader.style.display = 'none';
-                }, 400);
 
             } catch (e) {
                 renderVipTiers();
                 renderEarnersLeaderboard();
                 renderMilestones();
                 updateUI();
-                const loader = document.getElementById('loadingOverlay');
-                if (loader) loader.style.display = 'none';
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const supportInput = document.getElementById('userSupportMsgInput');
+            if (supportInput) supportInput.addEventListener('keydown', event => {
+                if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); if (typeof sendUserSupportTicket === 'function') sendUserSupportTicket(); }
+            });
+        });
 
         window.addEventListener("DOMContentLoaded", initSupabaseCloudApp);
         window.addEventListener('visibilitychange', () => { if (document.hidden) saveDataToSupabase(); });
@@ -1043,18 +1249,12 @@
             } catch(err) {}
         }
 
+        let bannerMessageIndex = 0;
         function bannerTicker() {
-            try {
-                if (isBanned) return;
-                const randomName = globalNamesList[Math.floor(Math.random() * globalNamesList.length)];
-                let amt = 5.00;
-                const networks = ["BEP20", "TON", "ERC20"];
-                const net = networks[Math.floor(Math.random() * networks.length)];
-                const el = document.getElementById('payoutTickerText');
-                if (el) {
-                    el.innerText = "🔥 " + randomName + " successfully withdrawn $" + amt.toFixed(2) + " (" + net + ")";
-                }
-            } catch(e) {}
+            const el = document.getElementById('payoutTickerText');
+            if (!el) return;
+            const i = bannerMessageIndex++ % globalNamesList.length;
+            el.innerText = `✦ Welcome • ${globalNamesList[i]} • Mineral Mining Pro`;
         }
 
         function updateUI() {
@@ -1072,7 +1272,6 @@
                     weightedRateSum += (amt * rate);
                 });
 
-                // Calculate weighted average daily percentage across all active VIPs
                 let combinedDailyRatePct = totalActiveCapital > 0 ? (weightedRateSum / totalActiveCapital) * 100 : 0;
 
                 document.getElementById('activeInvDisplay').innerText = totalActiveCapital.toFixed(2);
@@ -1141,10 +1340,9 @@
         }
 
         const milestoneRules = [
-            { count: 20, reward: 2.00, label: "20 Friends ($2.00)" },
-            { count: 30, reward: 4.00, label: "30 Friends ($4.00)" },
-            { count: 50, reward: 8.00, label: "50 Friends ($8.00)" },
-            { count: 100, reward: 20.00, label: "100 Friends ($20.00)" }
+            { count: 30, reward: 2.00, label: "30 Friends — $2.00" },
+            { count: 50, reward: 3.00, label: "50 Friends — $3.00" },
+            { count: 100, reward: 5.00, label: "100 Friends — $5.00" }
         ];
 
         function renderMilestones() {
@@ -1152,19 +1350,13 @@
             if (!container) return;
             container.innerHTML = milestoneRules.map(m => {
                 const isClaimed = claimedMilestones.includes(m.count);
-                const canClaim = referralCount >= m.count && !isClaimed;
+                const progress = Math.min(100, Math.round((Number(referralCount || 0) / m.count) * 100));
+                const canClaim = Number(referralCount || 0) >= m.count && !isClaimed;
                 let btnHtml = '';
-                if (isClaimed) {
-                    btnHtml = '<span style="color: #34d399; font-weight: 800;">Claimed ✅</span>';
-                } else if (canClaim) {
-                    btnHtml = `<button class="btn-3d-success btn-sm" style="padding: 4px 10px; font-size: 9px;" onclick="claimMilestone(${m.count}, ${m.reward})">Claim $${m.reward}</button>`;
-                } else {
-                    btnHtml = `<span style="color: var(--text-muted);">(${referralCount}/${m.count})</span>`;
-                }
-                return `<div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 12px;">
-                    <span>🎁 Milestone: <b>${m.label}</b></span>
-                    <span>${btnHtml}</span>
-                </div>`;
+                if (isClaimed) btnHtml = '<span style="color:#6ee7b7;font-weight:900;">Reward claimed ✓</span>';
+                else if (canClaim) btnHtml = `<button class="btn-3d-success btn-sm" style="padding:7px 13px;font-size:10px;" onclick="claimMilestone(${m.count}, ${m.reward})">Claim $${m.reward.toFixed(2)}</button>`;
+                else btnHtml = `<span style="color:var(--text-muted);font-size:10px;font-weight:800;">${Math.max(0, m.count - Number(referralCount || 0))} more to unlock</span>`;
+                return `<div class="milestone-row"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;"><div><div style="display:flex;align-items:center;gap:7px;font-size:11px;font-weight:900;color:var(--text-main);"><span class="milestone-level-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 15 8l6.2.9-4.5 4.4 1.1 6.2L12 16.6l-5.8 2.9 1.1-6.2-4.5-4.4L9 8z"/></svg></span>${m.label}</div><div style="font-size:10px;color:var(--text-muted);margin-top:4px;">${Math.min(Number(referralCount || 0),m.count)} of ${m.count} invited users</div></div><div style="flex-shrink:0;">${btnHtml}</div></div><div class="milestone-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}"><div class="milestone-progress-fill" style="width:${progress}%"></div></div></div>`;
             }).join('');
         }
 
@@ -1183,34 +1375,35 @@
             const container = document.getElementById('referredUsersListContainer');
             if (!container) return;
             try {
-                const { data: usersList } = await supabaseClient.from('users').select('*');
-                if (!usersList || usersList.length === 0) {
-                    container.innerHTML = '<div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">No referrals yet.</div>';
+                const { data: usersList, error } = await supabaseClient.from('users').select('*');
+                if (error) throw error;
+                const allUsers = Array.isArray(usersList) ? usersList : [];
+                const inviterFields = ['referred_by', 'referrer_id', 'referrer_telegram_id', 'inviter_id', 'inviter_telegram_id', 'referral_parent_id', 'parent_referral_id'];
+                const referredItems = allUsers.filter(u => {
+                    if (String(u.telegram_id) === String(telegramId)) return false;
+                    return inviterFields.some(field => u[field] != null && String(u[field]) === String(telegramId));
+                });
+                if (!referredItems.length) {
+                    container.innerHTML = `<div class="referrals-empty-state"><span class="referrals-empty-icon"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M20 8v6M23 11h-6"/></svg></span><strong>No invited friends yet</strong><small>Share your referral link to see your invited friends here.</small></div>`;
                     return;
                 }
-                const referredItems = usersList.filter(u => String(u.telegram_id) !== String(telegramId)).slice(0, 15);
-                if (referredItems.length === 0) {
-                    container.innerHTML = '<div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">No referrals yet. Share your link!</div>';
-                    return;
-                }
-
-                container.innerHTML = referredItems.map(ref => `
-                    <div class="referred-user-item">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <div class="ref-user-avatar">${(ref.user_name || 'M')[0].toUpperCase()}</div>
-                            <div style="text-align: left;">
-                                <div style="font-size: 11px; font-weight: 800; color: var(--text-main);">${ref.user_name || 'Miner'}</div>
-                                <div style="font-size: 9px; color: var(--text-muted);">ID: ${ref.telegram_id}</div>
-                            </div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div style="font-size: 11px; font-weight: 900; color: #34d399;">+$0.05</div>
-                            <div style="font-size: 9px; color: #fbbf24;">Active</div>
-                        </div>
-                    </div>
-                `).join('');
+                container.innerHTML = referredItems.map((ref, index) => {
+                    const displayName = String(ref.user_name || ref.first_name || ref.username || 'Miner').replace(/[<>&"'`]/g, '');
+                    const id = String(ref.telegram_id || '').replace(/[<>&"'`]/g, '');
+                    const photo = ref.profile_photo_url || ref.avatar_url || ref.photo_url || ref.avatar || '';
+                    const safePhoto = typeof photo === 'string' && /^https:\/\/[^"'<>]+$/i.test(photo) ? photo : '';
+                    const avatar = safePhoto
+                        ? `<img class="ref-user-avatar-img" src="${safePhoto}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span class="ref-user-avatar ref-user-avatar-fallback" style="display:none">${displayName.charAt(0).toUpperCase()}</span>`
+                        : `<span class="ref-user-avatar">${displayName.charAt(0).toUpperCase()}</span>`;
+                    return `<div class="referred-user-item referred-user-modern-item">
+                        <div class="referred-user-identity">${avatar}<div class="referred-user-meta">
+                            <strong>${displayName}</strong><small>Telegram ID: ${id || 'Unavailable'}</small>
+                        </div></div>
+                        <div class="referred-user-status"><span class="ref-earned-amount">$0.05</span><small>Referral reward</small></div>
+                    </div>`;
+                }).join('');
             } catch(e) {
-                container.innerHTML = '<div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">Failed to load referrals.</div>';
+                container.innerHTML = '<div class="referrals-empty-state"><strong>Referral list unavailable</strong><small>Check the referral tracking fields in your database.</small></div>';
             }
         }
 
@@ -1231,6 +1424,14 @@
             }
         }
 
+        function previewProfileAvatar(event) {
+            const file = event && event.target && event.target.files && event.target.files[0];
+            if (!file || !file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = () => { const img = document.getElementById('profileAvatarPreview'); if (img) img.src = reader.result; };
+            reader.readAsDataURL(file);
+        }
+
         function saveProfileName() {
             const input = document.getElementById('profileNameInput');
             if (input && input.value.trim()) {
@@ -1245,30 +1446,45 @@
             const c = document.getElementById('vipCardsContainer');
             if (!c) return;
             const tObj = translations[currentLang] || translations['en'];
-            
+            const mineralInfo = {
+                0: { mineral: 'Clear Quartz', icon: '✧', detail: 'Foundation crystal' },
+                1: { mineral: 'Silver Ore', icon: '◈', detail: 'Refined metal' },
+                2: { mineral: 'Gold Vein', icon: '✦', detail: 'Precious metal' },
+                3: { mineral: 'Platinum', icon: '⬡', detail: 'Rare element' },
+                4: { mineral: 'Ruby', icon: '◆', detail: 'Red gemstone' },
+                5: { mineral: 'Blue Sapphire', icon: '◇', detail: 'Blue gemstone' },
+                6: { mineral: 'Emerald', icon: '⬢', detail: 'Green gemstone' },
+                7: { mineral: 'Diamond', icon: '✧', detail: 'Elite crystal' }
+            };
+            const gemSvg = (t, level) => `<svg class="vip-gem" viewBox="0 0 100 100" role="img" aria-label="${mineralInfo[level].mineral}">
+                <defs><linearGradient id="gem-${level}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".28" stop-color="${t.color1}"/><stop offset="1" stop-color="${t.color2}"/></linearGradient></defs>
+                <polygon points="24,8 76,8 96,34 50,94 4,34" fill="url(#gem-${level})" stroke="rgba(255,255,255,.65)" stroke-width="2"/>
+                <polygon points="24,8 50,34 4,34" fill="#fff" opacity=".34"/><polygon points="76,8 50,34 96,34" fill="#fff" opacity=".17"/>
+                <polygon points="4,34 50,34 50,94" fill="#061426" opacity=".17"/><polygon points="96,34 50,34 50,94" fill="#061426" opacity=".28"/>
+                <path d="M24 8 L50 34 L76 8 M4 34 L96 34 M50 34 L50 94" fill="none" stroke="rgba(255,255,255,.42)" stroke-width="1.5"/>
+              </svg>`;
             c.innerHTML = vipTiersData.map(t => {
                 const alreadyPurchased = activeInvestments.some(inv => inv.vip_level === t.name);
                 const ratePct = (t.rate * 100).toFixed(0);
-
-                let actionButtonHtml = '';
-                if (alreadyPurchased) {
-                    actionButtonHtml = '<span style="color:#34d399; font-size:11px; font-weight:900;">Purchased (Locked)</span>';
-                } else {
-                    actionButtonHtml = `<button class="btn-3d-success btn-sm" onclick="buyVip(${t.level})">${tObj.buy}</button>`;
-                }
-
-                return `<div class="vip-card-item">
-                    <div style="display:flex; align-items:center; gap:12px; text-align:left;">
-                        <div class="vip-badge-3d">
-                            <svg width="32" height="32" viewBox="0 0 100 100">
-                                <polygon points="50,5 88,30 50,95 12,30" fill="${t.color1}"/>
-                                <polygon points="50,5 88,30 50,38 12,30" fill="#ffffff" opacity="0.6"/>
-                            </svg>
+                const mineral = mineralInfo[t.level] || mineralInfo[0];
+                const actionButtonHtml = alreadyPurchased
+                    ? '<span class="tier-status">✓ ACTIVE TIER</span>'
+                    : `<button class="btn-3d-success btn-sm" onclick="buyVip(${t.level})">${tObj.buy}</button>`;
+                return `<article class="vip-card-item" style="--tier-color:${t.color1}">
+                    <div style="display:flex;align-items:center;gap:12px;text-align:left;flex:1;min-width:0">
+                        <div class="vip-badge-3d">${gemSvg(t,t.level)}</div>
+                        <div class="tier-copy">
+                            <span class="tier-title">${t.name}</span>
+                            <span class="tier-mineral">${mineral.mineral}</span>
+                            <div class="tier-metrics">
+                                <span class="tier-metric">Entry <b>$${Number(t.price).toFixed(2)}</b></span>
+                                <span class="tier-metric">Daily rate <b>${ratePct}%</b></span>
+                                <span class="tier-metric">Listed daily <b>$${Number(t.daily).toFixed(2)}</b></span>
+                            </div>
                         </div>
-                        <div><b>${t.name}</b><br><span style="font-size:10px; color:var(--text-muted)">Price: $${t.price} | Daily: $${t.daily.toFixed(2)} (${ratePct}%)</span></div>
                     </div>
-                    <div>${actionButtonHtml}</div>
-                </div>`;
+                    <div class="tier-action">${actionButtonHtml}<span style="font-size:8px;color:var(--text-muted);text-align:right">${mineral.detail}</span></div>
+                </article>`;
             }).join('');
         }
 
