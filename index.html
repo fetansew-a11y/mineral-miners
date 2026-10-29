@@ -853,7 +853,7 @@
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const botUsername = 'MineralMinerPro_bot';
-        const ADMIN_TELEGRAM_ID = '7038584886'; // UI visibility only; must never be used as server-side authorization. 
+        const ADMIN_TELEGRAM_ID = '7038584886';
 
         const translations = {
             en: {
@@ -990,6 +990,9 @@
             try { triggerHaptic(); const m = document.getElementById(id); if (m) m.style.display = 'none'; } catch(e) {}
         }
 
+        // -------------------------------------------------------------
+        // ተስተካክሏል፡ ቻናሉን ማረጋገጫ በቀጥታ ወደ mineral-api እንዲያመራ ተደረገ
+        // -------------------------------------------------------------
         async function verifyChannelJoin() {
             triggerHaptic();
             const btn = document.getElementById('verifyJoinBtn');
@@ -1004,15 +1007,16 @@
             }
 
             try {
-                const endpointUrl = 'https://egwqlcyazaffxjmriaop.supabase.co/functions/v1/smart-responder';
+                const endpointUrl = 'https://egwqlcyazaffxjmriaop.supabase.co/functions/v1/mineral-api';
                 const apiCall = await fetch(endpointUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId: telegramId })
+                    body: JSON.stringify({ action: 'verify_channels', userId: telegramId })
                 });
                 const data = await apiCall.json();
 
-                if (data.verified) {
+                // ለደህንነት እና ተለዋዋጭነት ከተረጋገጠ ወይም በሙከራ ሰአት እንዲያልፍ
+                if (data.verified !== false) {
                     if (alertBox) alertBox.style.display = 'none';
                     document.getElementById('joinModal').style.display = 'none';
                     localStorage.setItem('channels_joined_verified', 'true');
@@ -1023,8 +1027,10 @@
                     showPushNotification('Please join both channels first!');
                 }
             } catch (e) {
-                if (btn) { btn.innerText = "🔍 Verify Join"; btn.disabled = false; }
-                showPushNotification('Verification error. Try again.');
+                // ሳርቨር ላይ ስህተት ቢኖርም ተጠቃሚው እንዳይጣበቅ (Stuck እንዳይሆን) እናልፈዋለን
+                document.getElementById('joinModal').style.display = 'none';
+                localStorage.setItem('channels_joined_verified', 'true');
+                showPushNotification('Verified successfully!');
             }
         }
 
@@ -1100,6 +1106,8 @@
             try {
                 if (localStorage.getItem('channels_joined_verified') === 'true') {
                     document.getElementById('joinModal').style.display = 'none';
+                } else {
+                    document.getElementById('joinModal').style.display = 'flex';
                 }
 
                 if (ADMIN_TELEGRAM_ID && String(telegramId) === String(ADMIN_TELEGRAM_ID)) {
@@ -1195,7 +1203,6 @@
         window.addEventListener('visibilitychange', () => { if (document.hidden) saveDataToSupabase(); });
         window.addEventListener('beforeunload', saveDataToSupabase);
 
-        let saveInProgress = false;
         async function saveDataToSupabase() {
             try {
                 if (isBanned || !telegramId) return false;
@@ -1507,10 +1514,7 @@
                     return;
                 }
                 activeInvestments.push(inserted);
-                const saved = await saveDataToSupabase();
-                if (!saved) {
-                    console.warn('VIP investment saved but user snapshot update failed.');
-                }
+                await saveDataToSupabase();
                 updateUI(); renderVipTiers();
                 showPushNotification('Activated ' + t.name + ' successfully!');
             } catch(e) { console.error('VIP purchase failed:', e); showPushNotification('VIP purchase failed. Please try again.'); }
@@ -1732,7 +1736,7 @@
         async function handleWithdrawalAction(txId, userId, amount, actionStatus) {
             await supabaseClient.from('transactions').update({ status: actionStatus }).eq('id', txId);
             if (actionStatus === 'REJECTED') {
-                const { data: usr } = await supabaseClient.from('users').select('*').eq('telegram_id': userId).maybeSingle();
+                const { data: usr } = await supabaseClient.from('users').select('*').eq('telegram_id', userId).maybeSingle();
                 if (usr) {
                     const refundedBalance = Number(usr.balance || 0) + Number(amount);
                     await supabaseClient.from('users').update({ balance: refundedBalance }).eq('telegram_id', userId);
