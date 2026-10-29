@@ -16,22 +16,9 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --accent-emerald: #10b981;
-            --accent-glow: 0 0 45px rgba(16, 185, 129, 0.5);
             --modal-bg: #060a17;
             --input-bg: rgba(2, 6, 23, 0.96);
         }
-        :root[data-theme="light"] {
-            --bg-gradient: radial-gradient(circle at 50% 0%, #f8fafc 0%, #cbd5e1 100%);
-            --card-bg: rgba(255, 255, 255, 0.96);
-            --card-border: 1px solid rgba(5, 150, 105, 0.3);
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --accent-emerald: #059669;
-            --accent-glow: 0 0 35px rgba(5, 150, 105, 0.3);
-            --modal-bg: #ffffff;
-            --input-bg: #f1f5f9;
-        }
-
         * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         body {
             background: var(--bg-gradient); color: var(--text-main);
@@ -40,810 +27,252 @@
             min-height: 100vh; user-select: none; overflow-x: hidden;
         }
         .app-container { max-width: 420px; margin: 0 auto; position: relative; }
-        
-        .flying-mystery-box {
-            position: fixed; top: 115px; right: -90px; z-index: 997;
-            background: linear-gradient(135deg, #fbbf24, #d97706);
-            width: 52px; height: 52px; border-radius: 18px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 26px; cursor: pointer;
-            box-shadow: 0 12px 30px rgba(245, 158, 11, 0.8), inset 0 2px 6px rgba(255,255,255,0.7);
-            border: 2px solid #fef08a;
-            animation: flyAcrossBox 15s ease-in-out infinite;
-            display: none;
-        }
-        @keyframes flyAcrossBox {
-            0% { right: -90px; transform: translateY(0) rotate(0deg); }
-            50% { right: 105%; transform: translateY(-18px) rotate(20deg); }
-            100% { right: -90px; transform: translateY(0) rotate(0deg); }
-        }
-
-        .push-notification-bar {
-            position: fixed; top: 12px; left: 50%; transform: translateX(-50%) translateY(-120px);
-            width: 94%; max-width: 410px; background: rgba(15, 23, 42, 0.98);
-            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            color: #f8fafc; padding: 14px 18px; border-radius: 22px;
-            font-size: 12px; font-weight: 700; z-index: 99999;
-            border: 1px solid rgba(16, 185, 129, 0.7);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.9), 0 0 35px rgba(16, 185, 129, 0.45);
-            display: flex; align-items: center; gap: 14px; 
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
-            opacity: 0; pointer-events: none; text-align: left;
-        }
-        .push-notification-bar.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-        .push-icon { width: 36px; height: 36px; border-radius: 14px; background: linear-gradient(135deg, #10b981, #047857); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; box-shadow: 0 6px 15px rgba(16,185,129,0.6); }
-
         .payout-banner {
             background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(59, 130, 246, 0.18)); 
-            border: 1px solid rgba(16, 185, 129, 0.45);
-            padding: 10px 14px; border-radius: 16px; margin-bottom: 12px; font-size: 11px; font-weight: 800;
-            overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #34d399;
-            box-shadow: 0 8px 22px rgba(0,0,0,0.35); backdrop-filter: blur(12px);
+            border: 1px solid rgba(16, 185, 129, 0.45); padding: 10px 14px; border-radius: 16px; margin-bottom: 12px; 
+            font-size: 11px; font-weight: 800; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #34d399;
         }
-        .payout-ticker-text { display: inline-block; animation: fadeInTicker 0.5s ease; }
-        @keyframes fadeInTicker { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
         .card {
-            background: var(--card-bg); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
-            border-radius: 30px; padding: 18px 20px; margin: 12px 0;
+            background: var(--card-bg); border-radius: 30px; padding: 18px 20px; margin: 12px 0;
             border: var(--card-border); box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8);
         }
         .header {
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--card-bg); backdrop-filter: blur(25px);
-            padding: 10px 14px; border-radius: 22px; border: var(--card-border);
+            background: var(--card-bg); padding: 10px 14px; border-radius: 22px; border: var(--card-border);
             margin-bottom: 12px; font-weight: 800; font-size: 11px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.35);
         }
-        
         .title-header-box { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 6px 0 12px 0; }
         .app-title {
-            font-size: 24px; font-weight: 900; margin: 0; letter-spacing: -0.5px;
+            font-size: 24px; font-weight: 900; margin: 0;
             background: linear-gradient(135deg, #f8fafc 0%, #34d399 50%, #60a5fa 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 10px rgba(52, 211, 153, 0.5));
         }
-        
-        .pro-logo-icon {
-            width: 44px; height: 44px; flex-shrink: 0;
-            filter: drop-shadow(0 0 18px rgba(16, 185, 129, 0.95));
-            animation: proLogoPulse 3s ease-in-out infinite;
-        }
-        @keyframes proLogoPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
-
-        .balance-box { 
-            font-size: 38px; font-weight: 900; color: var(--accent-emerald); margin: 6px 0; 
-            text-shadow: var(--accent-glow); display: flex; align-items: center; justify-content: center; gap: 10px; 
-            letter-spacing: -1px;
-        }
-        .balance-wallet-icon { width: 32px; height: 32px; fill: var(--accent-emerald); filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.9)); }
-
-        .sub-balance { font-size: 11px; color: var(--text-muted); margin-bottom: 14px; font-weight: 700; }
-        
-        .mining-core-container {
-            width: 155px; height: 155px; margin: 14px auto; position: relative;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .mining-core-ring {
-            position: absolute; width: 100%; height: 100%; border-radius: 50%;
-            border: 2px dashed rgba(52, 211, 153, 0.85);
-            animation: spinCoreRing 12s linear infinite;
-            box-shadow: 0 0 45px rgba(52, 211, 153, 0.6);
-        }
-        @keyframes spinCoreRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .mining-core-glow {
-            width: 125px; height: 125px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.95) 0%, rgba(59, 130, 246, 0.7) 100%);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: inset 0 0 35px rgba(255,255,255,0.95), 0 0 80px rgba(52, 211, 153, 1);
-            animation: pulseCoreGlow 3s ease-in-out infinite;
-        }
-        @keyframes pulseCoreGlow { 0%, 100% { transform: scale(1); box-shadow: 0 0 45px rgba(59, 130, 246, 0.6); } 50% { transform: scale(1.08); box-shadow: 0 0 95px rgba(16, 185, 129, 1); } }
-        
-        .vector-3d-gem-svg {
-            width: 75px; height: 75px; filter: drop-shadow(0 12px 20px rgba(0,0,0,0.7));
-            animation: floatGem 3s ease-in-out infinite alternate;
-        }
-        @keyframes floatGem {
-            0% { transform: translateY(0) scale(1); }
-            100% { transform: translateY(-8px) scale(1.06); }
-        }
-
-        .live-mining-box { 
-            background: var(--input-bg); padding: 12px 16px; border-radius: 18px; margin: 12px 0; 
-            border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: inset 0 4px 12px rgba(0,0,0,0.85);
-        }
-        .progress-bar-container { width: 100%; background: rgba(255, 255, 255, 0.1); height: 9px; border-radius: 6px; overflow: hidden; margin-top: 8px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.75); }
-        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #059669, #34d399, #60a5fa); border-radius: 6px; transition: width 0.3s ease; box-shadow: 0 0 15px rgba(52,211,153,1); }
-
+        .balance-box { font-size: 38px; font-weight: 900; color: var(--accent-emerald); margin: 6px 0; }
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
-        
         button {
             background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none; padding: 13px; font-size: 12px;
-            font-weight: 800; border-radius: 18px; cursor: pointer; width: 100%;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.45), inset 0 -3px 5px rgba(0, 0, 0, 0.5);
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800; border-radius: 18px; cursor: pointer; width: 100%; box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
         }
-        button:active { transform: translateY(2px) scale(0.98); box-shadow: 0 5px 12px rgba(0, 0, 0, 0.5); }
-
-        .btn-3d-success {
-            background: linear-gradient(135deg, #34d399 0%, #059669 50%, #047857 100%);
-            box-shadow: 0 12px 30px rgba(5, 150, 105, 0.7), inset 0 2px 5px rgba(255, 255, 255, 0.45), inset 0 -3px 5px rgba(0, 0, 0, 0.5);
-        }
-        .btn-3d-warning {
-            background: linear-gradient(135deg, #fbbf24 0%, #d97706 50%, #b45309 100%);
-            box-shadow: 0 12px 30px rgba(217, 119, 6, 0.7), inset 0 2px 5px rgba(255, 255, 255, 0.45), inset 0 -3px 5px rgba(0, 0, 0, 0.5);
-        }
-        .btn-3d-purple {
-            background: linear-gradient(135deg, #a855f7 0%, #7e22ce 50%, #581c87 100%);
-            box-shadow: 0 12px 30px rgba(126, 34, 206, 0.7), inset 0 2px 5px rgba(255, 255, 255, 0.45), inset 0 -3px 5px rgba(0, 0, 0, 0.5);
-        }
-
-        .btn-sm { padding: 9px 14px; font-size: 11px; margin-top: 0; width: auto; border-radius: 14px; }
-        .btn-disabled { background: linear-gradient(135deg, #64748b, #334155) !important; opacity: 0.6; cursor: not-allowed !important; box-shadow: none !important; }
-        .btn-icon svg { width: 16px; height: 16px; fill: currentColor; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); }
-
-        .theme-toggle-btn {
-            background: rgba(255, 255, 255, 0.1); color: var(--text-main); border: 1px solid var(--card-border); 
-            width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 13px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.25);
-        }
-        .lang-select {
-            background: var(--input-bg); color: var(--text-main); border: 1px solid var(--card-border);
-            padding: 5px 10px; border-radius: 12px; font-size: 10px; font-weight: 800; cursor: pointer; outline: none;
-        }
-
+        button:active { transform: translateY(2px) scale(0.98); }
+        .btn-3d-success { background: linear-gradient(135deg, #34d399 0%, #059669 100%); }
+        .btn-3d-warning { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); }
+        .btn-3d-purple { background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); }
+        .btn-sm { padding: 9px 14px; font-size: 11px; width: auto; border-radius: 14px; }
+        
         .support-float-btn {
             position: fixed; bottom: 85px; left: 14px; z-index: 998;
             background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white;
             border: none; width: 52px; height: 52px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 18px 35px rgba(37, 99, 235, 0.8), inset 0 2px 5px rgba(255,255,255,0.45); cursor: pointer; transition: transform 0.2s ease;
+            box-shadow: 0 18px 35px rgba(37, 99, 235, 0.8); cursor: pointer;
         }
-        .support-float-btn:active { transform: scale(0.9); }
-        .support-float-btn svg { width: 24px; height: 24px; fill: currentColor; }
-
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: var(--card-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            display: flex; justify-content: space-around; padding: 12px 0; border-top: var(--card-border); z-index: 999;
-            box-shadow: 0 -12px 35px rgba(0,0,0,0.8);
+            background: var(--card-bg); display: flex; justify-content: space-around;
+            padding: 12px 0; border-top: var(--card-border); z-index: 999;
         }
         .nav-item {
             background: none; border: none; color: var(--text-muted); font-size: 10px;
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-            cursor: pointer; font-weight: 800; width: 20%; padding: 0; box-shadow: none; transition: all 0.2s;
+            display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; font-weight: 800; width: 20%;
         }
-        .nav-item.active { color: #34d399; text-shadow: 0 0 15px rgba(52,211,153,0.9); transform: translateY(-3px); }
-        .nav-icon svg { width: 24px; height: 24px; fill: currentColor; }
-
+        .nav-item.active { color: #34d399; }
         .tab-pane { display: none; }
-        .tab-pane.active { display: block; animation: fadeInTab 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes fadeInTab { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
+        .tab-pane.active { display: block; }
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(3, 7, 18, 0.94); justify-content: center; align-items: center; z-index: 1000; padding: 16px;
-            backdrop-filter: blur(25px);
         }
         .modal-content {
             background: var(--modal-bg); padding: 26px; border-radius: 32px; width: 100%;
             max-width: 415px; border: var(--card-border); text-align: left; max-height: 85vh; overflow-y: auto; color: var(--text-main);
-            box-shadow: 0 35px 70px rgba(0,0,0,0.95);
         }
         input, select, textarea {
             width: 100%; padding: 13px 18px; margin: 6px 0 14px 0; background: var(--input-bg);
             border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 18px; color: var(--text-main); font-size: 12px; font-weight: 700;
-            font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: inset 0 2px 5px rgba(0,0,0,0.6);
         }
-        .close-btn { background: #475569; width: 100%; margin-top: 10px; box-shadow: none; }
-        
         .history-list, .admin-list {
             max-height: 220px; overflow-y: auto; background: var(--input-bg);
             padding: 14px; border-radius: 20px; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: inset 0 3px 8px rgba(0,0,0,0.7);
         }
-        .vip-list, .earner-list { background: transparent; border: none; padding: 0; width: 100%; }
-
-        .history-card-item {
-            display: flex; align-items: center; gap: 14px;
+        .vip-card-item, .earner-card-item, .referred-user-item {
             background: var(--card-bg); padding: 14px 16px; border-radius: 18px;
-            margin-bottom: 12px; border: var(--card-border);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.45); text-align: left;
+            margin-bottom: 10px; border: var(--card-border); display: flex; justify-content: space-between; align-items: center;
         }
-        .history-icon-box {
-            width: 42px; height: 42px; border-radius: 14px; display: flex; align-items: center;
-            justify-content: center; font-size: 18px; flex-shrink: 0; box-shadow: inset 0 2px 5px rgba(255,255,255,0.45);
+        .profile-avatar {
+            width: 64px; height: 64px; border-radius: 20px; object-fit: cover;
+            background: linear-gradient(145deg, #1e7496, #1a9c7c); border: 2px solid rgba(100,220,220,0.55);
         }
-        
-        .vip-card-item { 
-            background: var(--card-bg); backdrop-filter: blur(25px); padding: 16px; border-radius: 22px; margin-bottom: 12px; 
-            border: var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 12px; 
-            box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+        /* ፕሪሚየም የቻት ንድፍ (Premium Support Chat UI) */
+        .chat-container-premium {
+            display: flex; flex-direction: column; height: 380px; background: var(--input-bg);
+            border-radius: 24px; border: var(--card-border); overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
-
-        .vip-badge-3d { 
-            width: 56px; height: 56px; border-radius: 18px; overflow: hidden; flex-shrink: 0;
-            border: 2px solid rgba(52, 211, 153, 0.6); box-shadow: 0 8px 20px rgba(0,0,0,0.7);
-            background: radial-gradient(circle, #0f172a 0%, #020617 100%); 
-            display: flex; align-items: center; justify-content: center; position: relative;
+        .chat-header-premium {
+            display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+            background: linear-gradient(135deg, #1e293b, #0f172a); border-bottom: var(--card-border);
         }
-
-        .earner-card-item {
-            display: flex; align-items: center; justify-content: space-between;
-            background: var(--card-bg); padding: 14px 16px; border-radius: 18px;
-            margin-bottom: 10px; border: var(--card-border); box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        .operator-avatar {
+            width: 44px; height: 44px; border-radius: 50%; object-fit: cover;
+            border: 2px solid #34d399; box-shadow: 0 0 10px rgba(52,211,153,0.5);
         }
-        
-        #qrcode { display: flex; justify-content: center; margin: 12px auto; background: white; padding: 12px; border-radius: 16px; width: fit-content; box-shadow: 0 12px 30px rgba(0,0,0,0.6); }
-        .wallet-box { background: var(--input-bg); padding: 14px; border-radius: 16px; font-size: 11px; word-break: break-all; margin: 10px 0; border: 1px dashed rgba(52,211,153,0.5); color: var(--text-main); }
-        
-        .admin-tab-header { display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 6px; }
-        .admin-tab-btn { background: var(--input-bg); border: var(--card-border); padding: 9px 14px; font-size: 10px; font-weight: 800; border-radius: 14px; color: var(--text-muted); cursor: pointer; white-space: nowrap; box-shadow: none; width: auto; }
-        .admin-tab-btn.active { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; text-shadow: 0 0 12px rgba(59,130,246,0.9); }
-        .admin-pane { display: none; }
-        .admin-pane.active { display: block; }
-
-        .chat-container-modern {
-            display: flex; flex-direction: column; height: 310px; background: var(--input-bg);
-            border-radius: 18px; border: var(--card-border); overflow: hidden; margin-bottom: 12px;
-            box-shadow: inset 0 3px 10px rgba(0,0,0,0.6);
+        .chat-messages-box {
+            flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; text-align: left;
         }
-        .chat-header-bar {
-            background: linear-gradient(135deg, #1e293b, #0f172a); padding: 12px 16px; display: flex; align-items: center; gap: 12px;
-            border-bottom: var(--card-border);
-        }
-        .operator-avatar-icon {
-            width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669);
-            display: flex; align-items: center; justify-content: center; font-size: 18px; border: 2px solid #34d399;
-            box-shadow: 0 0 12px rgba(52,211,153,0.6); flex-shrink: 0;
-        }
-        .chat-messages-scroll {
-            flex: 1; padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; text-align: left;
-        }
-        .chat-bubble-user {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; padding: 10px 14px;
-            border-radius: 16px 16px 3px 16px; max-width: 82%; align-self: flex-end; font-size: 11px; font-weight: 600;
-            box-shadow: 0 5px 15px rgba(59,130,246,0.5); word-break: break-word;
-        }
-        .chat-bubble-admin {
-            background: rgba(16, 185, 129, 0.22); color: var(--text-main); padding: 10px 14px;
-            border-radius: 16px 16px 16px 3px; max-width: 82%; align-self: flex-start; font-size: 11px; font-weight: 600;
-            border: 1px solid rgba(16, 185, 129, 0.5); word-break: break-word;
-        }
-        .chat-input-row {
-            display: flex; padding: 10px; background: var(--card-bg); border-top: var(--card-border); gap: 8px; align-items: center;
-        }
-        .chat-input-row input {
-            margin: 0; padding: 10px 14px; font-size: 11px; border-radius: 14px; flex: 1;
-        }
-        .chat-input-row button {
-            width: auto; padding: 10px 16px; font-size: 11px; border-radius: 14px; margin: 0;
-        }
-
-        .referred-user-item {
-            display: flex; align-items: center; justify-content: space-between;
-            background: var(--card-bg); padding: 12px 16px; border-radius: 18px;
-            margin-bottom: 10px; border: var(--card-border); box-shadow: 0 5px 15px rgba(0,0,0,0.35);
-        }
-        .ref-user-avatar {
-            width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #10b981);
-            display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; font-size: 14px;
-            flex-shrink: 0; box-shadow: 0 3px 10px rgba(0,0,0,0.5); overflow: hidden;
-        }
-        .milestone-reward-box {
-            background: var(--input-bg); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 16px; padding: 12px; margin-top: 10px; text-align: left;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
-        }
-
-    :root { color-scheme: dark; --accent-emerald:#55f0c0; --card-border:1px solid rgba(130, 211, 255, .16); }
-    :root[data-theme="dark"] {
-      --bg-gradient: radial-gradient(ellipse at 50% -12%, #183a50 0%, #0a1425 38%, #050914 78%, #03060d 100%);
-      --card-bg: rgba(12, 22, 39, .86); --card-border: 1px solid rgba(123, 193, 232, .16);
-      --text-main:#f2f7ff; --text-muted:#8fa4bd; --accent-emerald:#63f5c7;
-      --accent-glow:0 0 32px rgba(67,245,195,.22); --modal-bg:#081222; --input-bg:rgba(3,10,23,.92);
-    }
-    body { padding: max(10px, env(safe-area-inset-top)) 13px calc(108px + env(safe-area-inset-bottom)); letter-spacing:.01em; }
-    .app-container { max-width: 460px; }
-    .payout-banner { white-space:normal; border-radius:14px; background:linear-gradient(110deg,rgba(24,54,80,.9),rgba(12,26,46,.88)); border-color:rgba(105,190,238,.2); color:#b8d8f1; box-shadow:0 8px 30px #0003; letter-spacing:.04em; }
-    .card,.header,.vip-card-item,.earner-card-item,.history-card-item { border-color:rgba(128,190,225,.16); box-shadow:0 18px 45px rgba(0,0,0,.24), inset 0 1px rgba(255,255,255,.035); }
-    .card { border-radius:25px; background:linear-gradient(145deg,rgba(17,32,53,.96),rgba(8,17,32,.94)); padding:19px; }
-    .header { border-radius:18px; padding:11px 12px; background:rgba(9,19,35,.82); gap:8px; flex-wrap:wrap; }
-    .title-header-box { margin:14px 0 16px; gap:13px; }
-    .app-title { font-size:clamp(21px,5.5vw,27px); letter-spacing:-1.1px; background:linear-gradient(110deg,#fff 4%,#a4e9ff 43%,#69f2c3 86%); -webkit-background-clip:text; filter:drop-shadow(0 5px 18px rgba(82,219,210,.15)); }
-    .pro-logo-icon { filter:drop-shadow(0 0 13px rgba(78,220,209,.38)); animation:proLogoPulse 4s ease-in-out infinite; }
-    .balance-box { font-size:clamp(34px,9vw,43px); color:#8af5d4; text-shadow:0 0 26px rgba(71,237,190,.16); }
-    .mining-core-container { width:170px;height:170px;margin:19px auto; }
-    .mining-core-ring { border:1px solid rgba(126,220,255,.7); border-style:solid; box-shadow:0 0 34px rgba(67,183,233,.18),inset 0 0 24px rgba(67,183,233,.06); }
-    .mining-core-glow { width:137px;height:137px; background:radial-gradient(circle at 30% 24%,#5ef1ce 0%,#178c9c 39%,#173c70 78%,#0b1930 100%); box-shadow:inset 0 0 24px rgba(255,255,255,.18),0 0 50px rgba(42,200,192,.25); }
-    @keyframes pulseCoreGlow { 0%,100% { transform:scale(1);box-shadow:0 0 35px rgba(45,190,188,.2); } 50% { transform:scale(1.035);box-shadow:0 0 56px rgba(45,190,188,.36); } }
-    .vector-3d-gem-svg { filter:drop-shadow(0 10px 18px rgba(0,0,0,.5)); }
-    .live-mining-box { border:1px solid rgba(108,198,229,.15); border-radius:17px; background:rgba(2,10,22,.62); box-shadow:inset 0 1px 8px #0004; }
-    .progress-bar-container { height:7px; background:rgba(151,183,211,.12); }
-    .progress-bar { background:linear-gradient(90deg,#4ba6df,#55f0c0,#e1fffd); box-shadow:0 0 12px rgba(85,240,192,.36); }
-    button { border-radius:15px; background:linear-gradient(135deg,#328bb6,#2368a5); box-shadow:0 8px 22px rgba(21,91,145,.22),inset 0 1px rgba(255,255,255,.18); font-size:12px; min-height:42px; }
-    button:focus-visible, input:focus-visible, select:focus-visible { outline:2px solid #71e8d0; outline-offset:3px; }
-    .btn-3d-success { background:linear-gradient(135deg,#4ce2b4,#178d82); box-shadow:0 8px 22px rgba(24,159,133,.2),inset 0 1px rgba(255,255,255,.2); }
-    .btn-3d-warning { background:linear-gradient(135deg,#eacb7a,#a87836); box-shadow:0 8px 22px rgba(168,120,54,.2); }
-    .btn-3d-purple { background:linear-gradient(135deg,#a994ef,#6d63c8); box-shadow:0 8px 22px rgba(109,99,200,.2); }
-    .btn-sm { min-height:34px; padding:8px 11px; border-radius:12px; }
-    .bottom-nav { padding:10px 0 calc(9px + env(safe-area-inset-bottom)); background:rgba(5,12,24,.91); border-top:1px solid rgba(126,190,223,.17); box-shadow:0 -12px 32px rgba(0,0,0,.25); }
-    .nav-item { min-height:46px; color:#8396ad; font-size:10px; }
-    .nav-item.active { color:#72f0cc; text-shadow:0 0 12px rgba(114,240,204,.22); }
-    .nav-icon svg { width:22px;height:22px; }
-    .modal { background:rgba(1,6,14,.82); backdrop-filter:blur(18px); }
-    .modal-content { border:1px solid rgba(128,190,225,.2); border-radius:25px; box-shadow:0 28px 80px rgba(0,0,0,.52); }
-    input,select,textarea { border-radius:13px; border-color:rgba(128,190,225,.2); box-shadow:none; }
-    .vip-card-item { position:relative; overflow:hidden; align-items:stretch; padding:15px; border-radius:21px; background:linear-gradient(135deg,rgba(19,35,56,.98),rgba(8,17,31,.98)); transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease; }
-    .vip-card-item::before { content:""; position:absolute; inset:0 auto 0 0; width:3px; background:var(--tier-color,#63f5c7); opacity:.95; }
-    .vip-card-item:hover { transform:translateY(-2px); border-color:rgba(122,220,226,.38); box-shadow:0 20px 38px rgba(0,0,0,.32); }
-    .vip-badge-3d { width:66px;height:66px;border-radius:20px;border:1px solid color-mix(in srgb,var(--tier-color,#63f5c7) 55%,transparent); background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.12),rgba(3,10,22,.9) 72%); box-shadow:0 8px 24px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.08); }
-    .vip-gem { width:43px;height:43px; filter:drop-shadow(0 0 11px color-mix(in srgb,var(--tier-color,#63f5c7) 40%,transparent)); animation:gemFloat 3.8s ease-in-out infinite; }
-    @keyframes gemFloat { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-4px) rotate(2deg)} }
-    .tier-copy { min-width:0; flex:1; }
-    .tier-title { display:block; font-size:12px; font-weight:900; letter-spacing:.015em; color:#f3f8ff; }
-    .tier-mineral { display:block; margin-top:3px; font-size:9px; text-transform:uppercase; letter-spacing:.15em; color:var(--tier-color,#63f5c7); font-weight:800; }
-    .tier-metrics { display:flex; flex-wrap:wrap; gap:6px; margin-top:9px; }
-    .tier-metric { border:1px solid rgba(146,190,220,.13); background:rgba(3,10,21,.55); padding:5px 7px; border-radius:8px; font-size:9px; color:#9bb0c6; }
-    .tier-metric b { color:#e8f6ff; font-weight:800; }
-    .tier-action { display:flex; flex-direction:column; align-items:flex-end; justify-content:center; gap:7px; min-width:88px; }
-    .tier-action .btn-sm { max-width:105px; white-space:nowrap; }
-    .tier-status { font-size:9px; font-weight:900; color:#70edc6; text-align:right; }
-    .earner-card-item { border-radius:15px; background:rgba(12,24,42,.8); }
-    .history-card-item { border-radius:15px; background:rgba(12,24,42,.8); }
-    .support-float-btn { background:linear-gradient(145deg,#4aadd1,#2469a4); box-shadow:0 10px 28px rgba(24,111,163,.3); }
-    @media (max-width:360px) { .header { justify-content:center; } .vip-card-item { flex-wrap:wrap; } .tier-action { width:100%; flex-direction:row; justify-content:space-between; align-items:center; } .tier-action .btn-sm { max-width:none; } }
-    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important; } }
-
-    .support-float-btn { transition: transform .18s ease, filter .18s ease; }
-    .support-float-btn:hover { filter: brightness(1.12); transform: translateY(-2px); }
-    .chat-container-modern { overflow:hidden; border:1px solid rgba(90,190,230,.25); border-radius:20px; background:linear-gradient(160deg,#0c1a2d,#07111f); box-shadow:0 24px 60px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.05); }
-    .chat-header-bar { padding:15px; background:linear-gradient(110deg,rgba(24,110,157,.35),rgba(16,185,129,.12)); border-bottom:1px solid rgba(255,255,255,.08); }
-    .chat-messages-scroll { min-height:180px; max-height:42vh; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:10px; }
-    .chat-input-row { display:flex; gap:8px; padding:12px; border-top:1px solid rgba(255,255,255,.08); background:rgba(2,8,20,.65); }
-    .chat-input-row input { min-width:0; flex:1; border-radius:13px!important; }
-    .chat-input-row button { border-radius:13px!important; padding:10px 16px; }
-    .milestone-progress { height:7px; margin-top:8px; border-radius:99px; overflow:hidden; background:rgba(148,163,184,.16); }
-    .milestone-progress-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,#35d5b0,#58a6ff,#b58cff); box-shadow:0 0 14px rgba(53,213,176,.35); transition:width .55s cubic-bezier(.2,.8,.2,1); }
-    .milestone-row { display:block; padding:12px!important; border:1px solid rgba(128,190,225,.14); background:linear-gradient(135deg,rgba(24,42,65,.8),rgba(10,22,38,.9))!important; border-radius:15px!important; }
-    .profile-avatar { width:64px;height:64px;border-radius:20px;object-fit:cover;background:linear-gradient(145deg,#1e7496,#1a9c7c);border:2px solid rgba(100,220,220,.55);box-shadow:0 8px 24px rgba(0,0,0,.25); }
-    button,.btn-sm { transition:transform .16s ease,filter .16s ease,box-shadow .16s ease; }
-    button:hover,.btn-sm:hover { filter:brightness(1.08); }
-
-    .header { gap:10px!important; align-items:center!important; padding:12px 13px!important; border-radius:20px!important; backdrop-filter:blur(18px); }
-    .lang-select { min-width:88px; max-width:125px; padding:9px 26px 9px 10px!important; border-radius:12px!important; font-weight:800!important; border:1px solid rgba(112,190,225,.22)!important; box-shadow:inset 0 1px rgba(255,255,255,.06),0 5px 16px #0002; }
-    .theme-toggle-btn { width:38px!important;height:38px!important;flex-shrink:0; border-radius:13px!important; background:linear-gradient(145deg,rgba(92,130,166,.24),rgba(18,34,54,.82))!important; border:1px solid rgba(134,194,224,.24)!important; box-shadow:0 5px 14px #0003,inset 0 1px #ffffff12!important; }
-    #navHistoryBtn { min-height:38px; border-radius:12px!important; padding:8px 11px!important; font-weight:800; }
-    .referral-commission-card { display:flex;align-items:center;gap:12px;margin:10px 0;padding:13px;border-radius:17px;border:1px solid rgba(74,222,190,.2);background:linear-gradient(120deg,rgba(18,115,105,.15),rgba(24,40,65,.55));box-shadow:inset 0 1px #ffffff09,0 8px 20px #0002; }
-    .deposit-commission-card { border-color:rgba(96,165,250,.22);background:linear-gradient(120deg,rgba(37,99,235,.13),rgba(24,40,65,.55)); }
-    .commission-icon { display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#31d6ad,#087c79);box-shadow:0 7px 18px #10b98130,inset 0 1px #ffffff55; }
-    .commission-icon svg { width:21px;height:21px;fill:#f0fffc;stroke:#f0fffc;stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round; }
-    .deposit-commission-icon { background:linear-gradient(145deg,#60a5fa,#5751bd); }
-    .commission-title { color:var(--text-main);font-size:11px;font-weight:900;letter-spacing:.02em; }
-    .commission-subtitle { color:var(--text-muted);font-size:10px;line-height:1.5;margin-top:4px; }
-    .commission-subtitle strong { color:#75e9cb;font-weight:900; }
-    .deposit-commission-card .commission-subtitle strong { color:#93c5fd; }
-    .milestone-reward-box { margin-top:16px!important;padding:14px!important;border-radius:21px!important;border:1px solid rgba(169,139,255,.2)!important;background:linear-gradient(145deg,rgba(52,35,88,.24),rgba(13,26,45,.68))!important;box-shadow:inset 0 1px #ffffff08,0 14px 32px #0002; }
-    .milestone-heading { display:flex;align-items:center;gap:9px;margin-bottom:12px;color:var(--text-main);font-size:12px;font-weight:900;letter-spacing:.015em; }
-    .milestone-heading-icon { width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(145deg,#b58aff,#6d54c8);box-shadow:0 6px 16px #8b5cf630,inset 0 1px #ffffff60; }
-    .milestone-heading-icon svg { width:17px;height:17px;fill:#fff; }
-    .milestone-row { position:relative;overflow:hidden; }
-    .milestone-level-icon { width:23px;height:23px;flex:0 0 23px;display:grid;place-items:center;border-radius:8px;background:linear-gradient(145deg,#8b7cf6,#4f46a5);box-shadow:0 4px 10px #6366f130,inset 0 1px #ffffff55; }
-    .milestone-level-icon svg { width:13px;height:13px;fill:#fff; }
-    .milestone-row:before { content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(#5eead4,#818cf8);opacity:.85; }
-    .referred-users-modern { padding:8px!important;border-radius:18px!important;background:rgba(5,14,28,.35)!important;border:1px solid rgba(128,190,225,.12)!important; }
-    .referred-users-modern > * { border-radius:14px; }
-    .profile-history-link { width:100%;display:flex;align-items:center;gap:12px;text-align:left;margin-top:16px;padding:13px;border-radius:17px;border:1px solid rgba(114,182,220,.18);background:linear-gradient(130deg,rgba(32,67,96,.42),rgba(13,25,43,.65));color:var(--text-main);box-shadow:inset 0 1px #ffffff0b,0 8px 22px #0002; }
-    .profile-history-link:active { transform:scale(.985); }
-    .profile-history-icon { width:40px;height:40px;display:grid;place-items:center;flex-shrink:0;border-radius:13px;background:linear-gradient(145deg,#2abda0,#2469a4);box-shadow:0 6px 17px #0ea5a430; }
-    .profile-history-icon svg { width:21px;height:21px;fill:none;stroke:white;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round; }
-    .profile-history-copy { display:flex;flex:1;min-width:0;flex-direction:column;gap:4px; }
-    .profile-history-copy strong { font-size:11px;font-weight:900; }
-    .profile-history-copy small { font-size:9px;line-height:1.45;color:var(--text-muted); }
-    .profile-history-chevron { font-size:25px;color:#7dd3fc;line-height:1; }
-    .mining-core-container { width:184px!important;height:184px!important; margin:20px auto!important; isolation:isolate; }
-    .mining-core-ring { width:100%;height:100%;border:1px solid rgba(94,234,212,.72)!important;border-style:solid!important;box-shadow:0 0 32px rgba(45,212,191,.2),inset 0 0 24px rgba(96,165,250,.07)!important;animation:spinCoreRing 18s linear infinite!important; }
-    .mining-core-ring:before { content:"";position:absolute;inset:9px;border:1px dashed rgba(147,197,253,.42);border-radius:50%;animation:spinCoreRing 26s linear infinite reverse; }
-    .mining-core-glow { width:146px!important;height:146px!important;position:relative;z-index:1;background:radial-gradient(circle at 30% 22%,#75f5d8 0%,#20a9a5 28%,#17628a 59%,#101d3b 100%)!important;box-shadow:inset 0 0 24px #ffffff2b,0 0 48px rgba(45,212,191,.25),0 0 90px rgba(59,130,246,.13)!important; }
-    .vector-3d-gem-svg { filter:drop-shadow(0 0 10px rgba(125,249,235,.35)) drop-shadow(0 12px 8px rgba(0,0,0,.35)); }
-    .payout-banner { border-radius:13px!important;border:1px solid rgba(96,165,250,.16);background:linear-gradient(100deg,rgba(13,148,136,.10),rgba(37,99,235,.10))!important;box-shadow:inset 0 1px #ffffff08; }
-    .push-notification-bar { border:1px solid rgba(94,234,212,.24)!important;border-radius:19px!important;background:linear-gradient(135deg,rgba(11,27,45,.98),rgba(15,23,42,.98))!important;box-shadow:0 18px 55px #0007,0 0 25px rgba(45,212,191,.09)!important; }
-    .push-notification-bar.show { animation:notificationArrival .45s cubic-bezier(.2,.8,.2,1) both; }
-    @keyframes notificationArrival { from { opacity:0;transform:translateX(-50%) translateY(-24px) scale(.96); } to { opacity:1;transform:translateX(-50%) translateY(0) scale(1); } }
-    button { -webkit-tap-highlight-color:transparent; }
-    button:focus-visible,select:focus-visible,input:focus-visible { outline:2px solid rgba(94,234,212,.75);outline-offset:2px; }
-    @media (prefers-reduced-motion:reduce) { .mining-core-ring,.mining-core-ring:before,.mining-core-glow,.push-notification-bar.show { animation:none!important; } * { scroll-behavior:auto!important; } }
-
-    .referred-user-modern-item { display:flex!important;align-items:center;justify-content:space-between;gap:10px;padding:12px!important;margin:5px 0!important;border:1px solid rgba(125,185,220,.12)!important;background:linear-gradient(110deg,rgba(25,48,72,.58),rgba(10,23,39,.62))!important;border-radius:15px!important;box-shadow:inset 0 1px #ffffff08; }
-    .referred-user-identity { display:flex;align-items:center;gap:10px;min-width:0; }
-    .ref-user-avatar-img,.ref-user-avatar { width:40px;height:40px;flex:0 0 40px;border-radius:14px;object-fit:cover;display:grid;place-items:center;background:linear-gradient(145deg,#2dd4bf,#2563eb);color:white;font-size:14px;font-weight:900;box-shadow:0 5px 14px #0003;border:1px solid #ffffff20; }
-    .referred-user-meta { display:flex;flex-direction:column;gap:4px;min-width:0;text-align:left; }
-    .referred-user-meta strong { color:var(--text-main);font-size:11px;font-weight:900;overflow-wrap:anywhere; }
-    .referred-user-meta small,.referred-user-status small { color:var(--text-muted);font-size:9px; }
-    .referred-user-status { display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0; }
-    .ref-earned-amount { color:#75e9cb;font-size:11px;font-weight:900; }
-    .referrals-empty-state { display:flex;flex-direction:column;align-items:center;gap:7px;padding:24px 12px;text-align:center;color:var(--text-main); }
-    .referrals-empty-state strong { font-size:11px;font-weight:900; }
-    .referrals-empty-state small { max-width:230px;font-size:10px;line-height:1.5;color:var(--text-muted); }
-    .referrals-empty-icon { width:42px;height:42px;display:grid;place-items:center;border-radius:15px;background:rgba(45,212,191,.12); }
-    .referrals-empty-icon svg { width:22px;height:22px;fill:none;stroke:#75e9cb;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round; }
-
-    @media (max-width:480px) {
-      body { padding: max(5px,env(safe-area-inset-top)) 8px calc(82px + env(safe-area-inset-bottom)); }
-      .app-container { max-width:460px; }
-      .payout-banner { margin:0 0 6px!important;padding:6px 8px!important;font-size:8px!important;line-height:1.25; }
-      .header { margin-bottom:6px!important;padding:6px 8px!important;gap:5px!important;border-radius:13px!important; }
-      .header > div:first-child { font-size:9px!important; }
-      .header > div:last-child { gap:4px!important; }
-      .lang-select { min-width:68px!important;max-width:82px!important;padding:6px 17px 6px 6px!important;font-size:9px!important; }
-      .theme-toggle-btn { width:29px!important;height:29px!important;min-height:29px!important;padding:4px!important;font-size:12px!important; }
-      #navHistoryBtn { min-height:29px!important;padding:5px 7px!important;font-size:9px!important; }
-      .title-header-box { margin:4px 0 6px!important;gap:7px!important; }
-      .pro-logo-icon { width:30px!important;height:30px!important; }
-      .app-title { font-size:clamp(16px,4.6vw,20px)!important;letter-spacing:-.6px!important; }
-      #homeTab > .card:nth-of-type(3) { padding:9px 10px!important;margin:0 0 8px!important;border-radius:17px!important; }
-      #homeTab > .card:nth-of-type(4) { padding:9px 11px!important;margin:0!important;border-radius:19px!important; }
-      #homeTab > .card:nth-of-type(4) > p { font-size:9px!important; }
-      .balance-box { margin:2px 0!important;font-size:clamp(27px,7.8vw,34px)!important;gap:6px!important; }
-      .balance-wallet-icon { width:25px!important;height:25px!important; }
-      .sub-balance { margin-bottom:5px!important;font-size:9px!important; }
-      .btn-grid { gap:7px!important;margin:5px 0 5px!important; }
-      .btn-grid button { min-height:35px!important;padding:7px!important;font-size:10px!important;border-radius:11px!important; }
-      .btn-icon svg { width:14px!important;height:14px!important; }
-      .mining-core-container { width:104px!important;height:104px!important;margin:6px auto!important; }
-      .mining-core-glow { width:82px!important;height:82px!important; }
-      .vector-3d-gem-svg { width:49px!important;height:49px!important; }
-      .mining-core-ring { border-width:2px!important;border-style:dotted!important;box-shadow:0 0 25px rgba(45,212,191,.28),inset 0 0 18px rgba(96,165,250,.09)!important;animation:spinCoreRing 7s linear infinite!important; }
-      .mining-core-ring:after { content:"";position:absolute;inset:17px;border:1px solid rgba(94,234,212,.28);border-radius:50%;box-shadow:0 0 16px rgba(94,234,212,.13); }
-      .live-mining-box { padding:7px 9px!important;margin:6px 0!important;border-radius:12px!important; }
-      .live-mining-box > div:first-child { font-size:9px!important; }
-      #miningTimerCountdown { margin-top:4px!important;font-size:8px!important; }
-      .progress-bar-container { margin-top:5px!important;height:5px!important; }
-      #homeTab button[onclick="claimMining()"] { min-height:36px!important;padding:8px!important;font-size:10px!important;border-radius:12px!important; }
-      .bottom-nav { padding:5px 0 calc(5px + env(safe-area-inset-bottom))!important; }
-      .nav-item { min-height:39px!important;font-size:9px!important; }
-      .nav-icon svg { width:19px!important;height:19px!important; }
-    }
-    @media (max-width:380px) and (max-height:760px) {
-      .payout-banner { font-size:7px!important;padding:5px 7px!important; }
-      .title-header-box { margin:2px 0 4px!important; }
-      .pro-logo-icon { width:26px!important;height:26px!important; }
-      .app-title { font-size:16px!important; }
-      #homeTab > .card:nth-of-type(3) { padding:7px 8px!important;margin-bottom:5px!important; }
-      #homeTab > .card:nth-of-type(4) { padding:7px 9px!important; }
-      .mining-core-container { width:88px!important;height:88px!important;margin:4px auto!important; }
-      .mining-core-glow { width:70px!important;height:70px!important; }
-      .vector-3d-gem-svg { width:42px!important;height:42px!important; }
-      .live-mining-box { margin:4px 0!important;padding:6px 8px!important; }
-    }
-    .mining-core-glow { position:relative;overflow:visible; }
-    .mining-core-glow::before { content:"";position:absolute;inset:-7px;border-radius:50%;border:1px solid rgba(125,249,235,.32);box-shadow:0 0 18px rgba(45,212,191,.18);animation:coreOrbitPulse 2.8s ease-in-out infinite;pointer-events:none; }
-    .mining-core-glow::after { content:"";position:absolute;inset:8px;border-radius:50%;border:1px solid rgba(255,255,255,.16);pointer-events:none; }
-    @keyframes coreOrbitPulse { 0%,100% { transform:scale(.96);opacity:.55; } 50% { transform:scale(1.06);opacity:1; } }
-    .payout-banner { overflow:hidden; }
-    #payoutTickerText { display:inline-block; }
-    @media (prefers-reduced-motion:reduce) { .mining-core-glow::before { animation:none!important; } }
     </style>
 </head>
 <body>
-    <div id="flyingMysteryBox" class="flying-mystery-box" onclick="claimMysteryBox()" title="Bonus Mystery Box!">🎁</div>
-
-    <div id="pushNotificationBar" class="push-notification-bar">
-        <div class="push-icon">⚡</div>
-        <div>
-            <div style="font-size: 10px; color: #34d399; font-weight: 800; text-transform: uppercase;" id="notifTitle">Mineral Mining Alert</div>
-            <div id="pushMsgText" style="font-size: 11px; color: #f8fafc; font-weight: 700;">Supabase Server-Sync Active!</div>
-        </div>
-    </div>
-
-    <div id="joinModal" class="modal" style="display: none; background: rgba(3, 7, 18, 0.98); z-index: 99999;">
-        <div class="modal-content" style="text-align: center; border: 2px solid rgba(16, 185, 129, 0.7); box-shadow: 0 0 60px rgba(16,185,129,0.35);">
-            <div style="font-size: 45px; margin-bottom: 8px;">📢</div>
-            <h3 style="margin-top:0; font-size: 19px; font-weight: 900; color: #f8fafc;" id="modalJoinTitle">Join Channels Required</h3>
-            <p style="font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;" id="modalJoinDesc">
-                To use Mineral Mining Pro, you must join our official channels below:
-            </p>
-
-            <div id="joinStatusAlert" style="display:none; font-size: 11px; font-weight:800; color:#ef4444; background:rgba(239, 68, 68, 0.18); padding:10px; border-radius:14px; margin-bottom:14px; border:1px solid rgba(239, 68, 68, 0.6);">
-                ❌ You have not joined both channels yet! Please join to continue.
-            </div>
-
-            <button class="btn-3d-success" style="margin-bottom: 10px;" onclick="window.open('https://t.me/MineralMinerPro', '_blank')" id="btnCh1">
-                🔗 1. Join Main Channel
-            </button>
-            <button class="btn-3d-purple" style="margin-bottom: 16px;" onclick="window.open('https://t.me/MineralMinerPro_Payment', '_blank')" id="btnCh2">
-                💸 2. Join Payment Proof Channel
-            </button>
-            <button id="verifyJoinBtn" class="btn-3d-success" onclick="verifyChannelJoin()">
-                🔍 Verify Join
-            </button>
-        </div>
-    </div>
+    <button class="support-float-btn" onclick="openSupportChatModal()">💬</button>
 
     <div class="app-container">
-        
-        <div class="payout-banner">
-            <span id="payoutTickerText" class="payout-ticker-text">⛏ Mineral Mining Pro • Mining dashboard and tier overview</span>
-        </div>
+        <div class="payout-banner"><span id="payoutTickerText">⛏ Mineral Mining Pro • Live Dashboard</span></div>
 
-        <button class="support-float-btn" onclick="openSupportChatModal()" title="Customer Support">
-            <svg viewBox="0 0 24 24">
-                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
-            </svg>
-        </button>
-
+        <!-- HOME TAB -->
         <div id="homeTab" class="tab-pane active">
             <div class="header">
-                <div><span id="txtVipStatus">VIP status</span>: <span id="vipDisplay" style="color:#34d399; font-weight:900;">VIP 0</span></div>
-                <div style="display: flex; gap: 6px; align-items: center;">
-                    <select id="langSelector" class="lang-select" onchange="changeLanguage(this.value)">
-                        <option value="en">English</option>
-                        <option value="am">አማርኛ</option>
-                    </select>
-                    <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeIconBtn">🌙</button>
-                    <button class="btn-sm" onclick="switchTabSafe('profileTab', document.querySelectorAll('.nav-item')[4]); openModal('historyModal')" id="navHistoryBtn">History</button>
-                    <button id="adminNavBtn" class="btn-sm btn-3d-warning" style="display:none; margin:0;" onclick="openAdminDashboard()">🛡️ Admin</button>
-                </div>
+                <div>VIP status: <span id="vipDisplay" style="color:#34d399; font-weight:900;">VIP 0</span></div>
+                <button id="adminNavBtn" class="btn-sm btn-3d-warning" style="display:none;" onclick="openAdminDashboard()">🛡️ Admin</button>
             </div>
 
-            <div class="title-header-box">
-                <svg class="pro-logo-icon" viewBox="0 0 64 64">
-                    <defs>
-                        <linearGradient id="proLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#34d399"/>
-                            <stop offset="50%" stop-color="#059669"/>
-                            <stop offset="100%" stop-color="#3b82f6"/>
-                        </linearGradient>
-                    </defs>
-                    <circle cx="32" cy="32" r="30" fill="url(#proLogoGrad)" opacity="0.25"/>
-                    <circle cx="32" cy="32" r="29" fill="none" stroke="#34d399" stroke-width="2.5"/>
-                    <polygon points="32 8, 54 22, 54 42, 32 56, 10 42, 10 22" fill="none" stroke="#60a5fa" stroke-width="1.5" opacity="0.6"/>
-                    <path d="M32 14 L46 24 L32 50 L18 24 Z" fill="url(#proLogoGrad)"/>
-                    <polygon points="32,14 46,24 32,28 18,24" fill="#ffffff" opacity="0.6"/>
-                </svg>
-                <h1 class="app-title">Mineral Mining Pro</h1>
+            <div class="title-header-box"><h1 class="app-title">Mineral Mining Pro</h1></div>
+
+            <div class="card">
+                <p style="margin: 0; color: var(--text-muted); font-size: 10px; font-weight: 800;">Available Balance</p>
+                <div class="balance-box"><span id="balanceDisplay">1.00</span> $</div>
+                <div class="btn-grid">
+                    <button class="btn-3d-success" onclick="openModal('depositModal')">Deposit</button>
+                    <button class="btn-3d-warning" onclick="openModal('withdrawModal')">Withdraw</button>
+                </div>
+                <div style="margin-top: 15px; text-align: left; font-size: 11px;">
+                    <div>Active Capital: $<span id="activeInvDisplay" style="color:#34d399; font-weight:900;">0.00</span></div>
+                    <div style="margin-top: 8px; display: flex; justify-content: space-between;">
+                        <span>Live Mined Earnings</span>
+                        <span id="liveTickerVal" style="color:var(--text-main); font-weight:900;">+$0.0000</span>
+                    </div>
+                </div>
+                <button class="btn-3d-success" style="margin-top: 12px;" onclick="claimMining()">Claim Mined Earnings</button>
             </div>
 
-            <div class="card" style="padding: 12px 16px; margin: 0 0 12px 0; background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2)); border: 1px solid rgba(168, 85, 247, 0.6); box-shadow: 0 10px 25px rgba(0,0,0,0.35);">
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 10px; text-align: left;">
-                        <div style="font-size: 24px; background: rgba(168, 85, 247, 0.25); width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 2px 5px rgba(255,255,255,0.4);">🎁</div>
-                        <div>
-                            <div style="font-size: 11px; font-weight: 900; color: #c084fc;" id="txtDailyCheckin">Daily Check-In Reward</div>
-                            <div style="font-size: 9px; color: var(--text-muted); margin-top: 2px;" id="txtDailySub">Claim free +$0.02 every 24h</div>
-                        </div>
-                    </div>
-                    <button id="dailyCheckInBtn" class="btn-3d-purple btn-sm" onclick="dailyCheckIn()">
-                        <span id="dailyCheckInText">Claim +$0.02</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="card" style="padding: 18px;">
-                <p style="margin: 0; color: var(--text-muted); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;" id="txtAvailBalance">Available Balance</p>
-                
-                <div class="balance-box">
-                    <svg class="balance-wallet-icon" viewBox="0 0 24 24">
-                        <path d="M21,7.28V5C21,3.89 20.1,3 19,3H5C3.89,3 3,3.89 3,5V19C3,20.1 3.89,21 5,21H19C20.1,21 21,20.1 21,19V17.28C21.6,16.93 22,16.3 22,15.56V8.72C22,7.98 21.6,7.35 21,7.28M20,19H5V5H19V7.1C18.39,7.4 18,8.03 18,8.72V15.56C18,16.25 18.39,16.88 19,17.18V19M16,13.5A1.5,1.5 0 0,1 14.5,12A1.5,1.5 0 0,1 16,10.5A1.5,1.5 0 0,1 17.5,12A1.5,1.5 0 0,1 16,13.5Z"/>
-                    </svg>
-                    <span><span id="balanceDisplay">1.00</span> $</span>
-                </div>
-
-                <div class="sub-balance"><span id="txtActiveCapital">Active Capital</span>: $<span id="activeInvDisplay">0.00</span> (<span id="activeRateDisplay">0%</span> <span id="txtDailyRate">Daily Rate</span>)</div>
-                
-                <div class="btn-grid" style="margin: 8px 0 12px 0;">
-                    <button class="btn-3d-success" style="padding: 11px; font-size: 11px;" onclick="openModal('depositModal')">
-                        <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></span> <span id="btnDepositTxt">Deposit</span>
-                    </button>
-                    <button class="btn-3d-warning" style="padding: 11px; font-size: 11px;" onclick="openModal('withdrawModal')">
-                        <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M5 15h4v6h6v-6h4l-7-7-7 7zM19 3H5v2h14V3z"/></svg></span> <span id="btnWithdrawTxt">Withdraw</span>
-                    </button>
-                </div>
-
-                <div class="mining-core-container">
-                    <div class="mining-core-ring"></div>
-                    <div class="mining-core-glow">
-                        <svg class="vector-3d-gem-svg" viewBox="0 0 100 100">
-                            <defs>
-                                <linearGradient id="gemGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#60a5fa"/>
-                                    <stop offset="50%" stop-color="#34d399"/>
-                                    <stop offset="100%" stop-color="#059669"/>
-                                </linearGradient>
-                                <linearGradient id="gemGradTop" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#ffffff"/>
-                                    <stop offset="100%" stop-color="#a7f3d0"/>
-                                </linearGradient>
-                            </defs>
-                            <polygon points="50,5 88,30 50,95 12,30" fill="url(#gemGrad1)"/>
-                            <polygon points="50,5 88,30 50,38 12,30" fill="url(#gemGradTop)" opacity="0.85"/>
-                            <polygon points="50,38 88,30 50,95" fill="#047857" opacity="0.35"/>
-                            <polygon points="50,38 12,30 50,95" fill="#3b82f6" opacity="0.3"/>
-                            <line x1="50" y1="5" x2="50" y2="95" stroke="#ffffff" stroke-width="1.5" opacity="0.6"/>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="live-mining-box">
-                    <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 900;">
-                        <span style="color: #34d399;"><span id="txtLiveMined">Live Mined</span> (<span id="miningPctDisplay">0.00%</span>)</span>
-                        <span id="liveTickerVal" style="color: var(--text-main);">+$0.0000</span>
-                    </div>
-                    <div class="progress-bar-container">
-                        <div id="miningProgressBar" class="progress-bar"></div>
-                    </div>
-                    <div id="miningTimerCountdown" style="font-size: 9px; color: #fbbf24; margin-top: 6px; font-weight: 700;">⏱️ Mining cycle active</div>
-                </div>
-
-                <button class="btn-3d-success" style="padding: 13px; font-size: 12px;" onclick="claimMining()">
-                    <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M6 2h12l4 7-10 13L2 9l4-7z"/></svg></span> <span id="btnClaimTxt">Claim Mined Earnings</span>
-                </button>
+            <div class="card">
+                <h3 style="margin-top: 0; font-size: 14px;">🎁 Daily Check-In</h3>
+                <p style="font-size: 10px; color: var(--text-muted);">Claim free +$0.02 every 24 hours.</p>
+                <button id="dailyCheckInBtn" class="btn-3d-purple btn-sm" style="width: 100%;" onclick="dailyCheckIn()">Claim +$0.02</button>
             </div>
         </div>
 
-        <div id="vipTab" class="tab-pane">
-            <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 12px 0;" id="txtVipTitle">👑 VIP Mining Tiers</h2>
-            <div id="vipCardsContainer" class="vip-list"></div>
-        </div>
+        <!-- VIP TAB -->
+        <div id="vipTab" class="tab-pane"><h2 style="font-size: 19px;">👑 VIP Mining Tiers</h2><div id="vipCardsContainer"></div></div>
 
+        <!-- EARNERS TAB (LEADERBOARD WITH CURATED PRE-LAUNCH PROFILES) -->
         <div id="earnersTab" class="tab-pane">
-            <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 4px 0;" id="txtEarnersTitle">🏆 Top Miners Leaderboard</h2>
-            <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 12px 0;" id="txtEarnersSub">Global top investors with dynamic yield returns.</p>
-            <div id="earnersContainer" class="earner-list"></div>
+            <h2 style="font-size: 19px;">🏆 Top Miners Leaderboard</h2>
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Top pioneers leading the mining network.</p>
+            <div id="earnersContainer"></div>
         </div>
 
+        <!-- REF TAB -->
         <div id="refTab" class="tab-pane">
-            <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 12px 0;" id="txtRefTitle">👥 Referral System</h2>
+            <h2 style="font-size: 19px;">👥 Referral System</h2>
             <div class="card" style="text-align: left;">
-                <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 12px 0;" id="txtRefSub">Invite friends & unlock milestone cash rewards!</p>
-                <div style="font-size: 11px; margin: 10px 0; line-height: 1.6;">
-                    <p style="margin: 4px 0;">• <span id="txtRefPerFriend">Per Friend Direct</span>: <b style="color:#34d399;">$0.05 per friend</b></p>
-                    <p style="margin: 4px 0;">• <span id="txtRefTotal">Total Invited</span>: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
-                    <div class="referral-commission-card">
-                        <div class="commission-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 15 8l6.2.9-4.5 4.4 1.1 6.2L12 16.6l-5.8 2.9 1.1-6.2-4.5-4.4L9 8z"/></svg></div>
-                        <div><div class="commission-title">Direct Referral Reward</div><div class="commission-subtitle">Earn <strong>$0.05 per invited friend</strong>.</div></div>
-                    </div>
-                    <div class="referral-commission-card deposit-commission-card">
-                        <div class="commission-icon deposit-commission-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M17 6.5c0-1.7-2.2-3-5-3s-5 1.3-5 3 2.2 3 5 3 5 1.3 5 3-2.2 3-5 3-5-1.3-5-3"/></svg></div>
-                        <div><div class="commission-title">Direct Deposit Commission</div><div class="commission-subtitle">Earn <strong>10% of your direct referral’s first deposit</strong>.</div></div>
-                    </div>
-                </div>
-
+                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Invite friends & earn rewards seamlessly.</p>
+                <p>Total Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
                 <input type="text" id="refLinkInput" readonly style="font-size: 11px;">
-                <button class="btn-3d-success btn-sm" onclick="copyRefLink()" style="width:100%; margin-top:6px;" id="btnCopyRef">🔗 Copy Referral Link</button>
+                <button class="btn-3d-success btn-sm" onclick="copyRefLink()" style="width:100%;">Copy Referral Link</button>
+                <h3 style="font-size: 12px; margin-top: 15px;">📋 Invited Friends List</h3>
+                <div id="referredUsersListContainer" class="history-list"><div style="color:var(--text-muted); font-size:10px;">Loading...</div></div>
+            </div>
+        </div>
 
-                <div class="milestone-reward-box">
-                    <div class="milestone-heading"><span class="milestone-heading-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 15 8l6.2.9-4.5 4.4 1.1 6.2L12 16.6l-5.8 2.9 1.1-6.2-4.5-4.4L9 8z"/></svg></span><span>Referral Milestone Rewards</span></div>
-                    <div id="milestonesListContainer" style="font-size: 10px; display: flex; flex-direction: column; gap: 6px;"></div>
-                </div>
-
-                <div style="margin-top: 18px; border-top: var(--card-border); padding-top: 14px;">
-                    <h3 style="font-size: 12px; margin: 0 0 10px 0; font-weight: 900; color: #34d399;" id="txtRefListTitle">📋 Your Invited Friends</h3>
-                    <div id="referredUsersListContainer" class="history-list referred-users-modern" style="max-height: 300px;">
-                        <div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">Loading referrals...</div>
+        <!-- PROFILE TAB -->
+        <div id="profileTab" class="tab-pane">
+            <h2 style="font-size: 19px;">👤 Profile & History</h2>
+            <div class="card" style="text-align: left;">
+                <div style="display:flex; align-items:center; gap:13px; margin-bottom:14px; padding:12px; border-radius:16px; background:rgba(255,255,255,0.03); border:1px solid rgba(128,190,225,0.15);">
+                    <img id="profileAvatarPreview" class="profile-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%231e7496'/%3E%3Ccircle cx='32' cy='23' r='12' fill='%23d7f3ff'/%3E%3Cpath d='M10 61c2-15 10-22 22-22s20 7 22 22' fill='%23d7f3ff'/%3E%3C/svg%3E">
+                    <div style="flex:1; min-width:0;">
+                        <div style="font-weight:900; font-size:12px;">Profile Photo</div>
+                        <input type="file" id="profileAvatarInput" accept="image/*" style="font-size:10px; padding:4px; margin-top:4px;" onchange="previewProfileAvatar(event)">
                     </div>
                 </div>
+
+                <label style="font-size:11px; font-weight:800;">Display Name:</label>
+                <input type="text" id="profileNameInput" placeholder="Enter your name">
+                <button class="btn-3d-success btn-sm" onclick="saveProfileChanges()" style="width:100%; margin-bottom:14px;">💾 Save Changes</button>
+
+                <p style="margin: 4px 0; font-size: 11px;"><b>Telegram ID:</b> <span id="profileIdDisplay">Loading...</span></p>
+                <p style="margin: 4px 0; font-size: 11px;"><b>Active VIP:</b> <span id="profileVipDisplay" style="color:#34d399;">None</span></p>
+
+                <h3 style="font-size: 13px; margin: 18px 0 8px 0; font-weight: 900; color:#34d399;">📜 Full Activity & Transaction History</h3>
+                <div id="fullHistoryList" class="history-list" style="max-height: 250px;">
+                    <div style="color:var(--text-muted); font-size:10px; text-align:center;">No history records yet.</div>
+                </div>
             </div>
         </div>
 
-        <div id="profileTab" class="tab-pane">
-            <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 12px 0;" id="txtProfileTitle">👤 Profile</h2>
-            <div class="card" style="text-align: left;">
-                <p style="margin: 0 0 6px 0; font-size: 11px;"><b id="txtDisplayName">Display Name:</b></p>
-                <div style="display:flex;align-items:center;gap:13px;margin:0 0 14px;padding:13px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(128,190,225,.15);"><img id="profileAvatarPreview" class="profile-avatar" alt="Profile photo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%231e7496'/%3E%3Ccircle cx='32' cy='23' r='12' fill='%23d7f3ff'/%3E%3Cpath d='M10 61c2-15 10-22 22-22s20 7 22 22' fill='%23d7f3ff'/%3E%3C/svg%3E"><div style="flex:1;min-width:0;"><div style="font-weight:900;font-size:12px;">Your profile</div><div style="font-size:10px;color:var(--text-muted);margin:4px 0 8px;">Choose a photo for this session</div><input type="file" id="profileAvatarInput" accept="image/*" style="font-size:10px;padding:6px;" onchange="previewProfileAvatar(event)"></div></div><input type="text" id="profileNameInput" placeholder="Enter your name">
-                <button class="btn-3d-success btn-sm" onclick="saveProfileName()" style="width:100%; margin-top:6px;" id="btnSaveName">💾 Save Name</button>
-                <button class="profile-history-link" onclick="openModal('historyModal')" type="button">
-                    <span class="profile-history-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.6-6.4L3 8m0-5v5h5M12 7v5l3.5 2"/></svg></span>
-                    <span class="profile-history-copy"><strong>Transaction History</strong><small>Daily check-ins, deposits, withdrawals and rewards</small></span>
-                    <span class="profile-history-chevron">›</span>
-                </button>
-                <p style="margin: 12px 0 6px 0; font-size: 11px;"><b>Telegram ID:</b> <span id="profileIdDisplay" style="color: var(--text-muted);">Loading...</span></p>
-                <p style="margin: 6px 0; font-size: 11px;"><b id="txtProfileTier">Current Tiers:</b> <span id="profileVipDisplay" style="color: #3b82f6;">None</span></p>
-                <p style="margin: 6px 0; font-size: 11px;"><b id="txtProfileCapital">Active Capital:</b> $<span id="profileInvDisplay" style="color: #34d399;">0.00</span></p>
-            </div>
-        </div>
-
+        <!-- BOTTOM NAVIGATION -->
         <div class="bottom-nav">
-            <button class="nav-item active" onclick="switchTabSafe('homeTab', this)">
-                <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span>
-                <span id="navHome">Home</span>
-            </button>
-            <button class="nav-item" onclick="switchTabSafe('vipTab', this)">
-                <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
-                <span id="navVip">VIP</span>
-            </button>
-            <button class="nav-item" onclick="switchTabSafe('earnersTab', this)">
-                <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg></span>
-                <span id="navEarners">Earners</span>
-            </button>
-            <button class="nav-item" onclick="switchTabSafe('refTab', this)">
-                <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3z"/></svg></span>
-                <span id="navRef">Referral</span>
-            </button>
-            <button class="nav-item" onclick="switchTabSafe('profileTab', this)">
-                <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
-                <span id="navProfile">Profile</span>
-            </button>
+            <button class="nav-item active" onclick="switchTab('homeTab', this)">🏠 Home</button>
+            <button class="nav-item" onclick="switchTab('vipTab', this)">👑 VIP</button>
+            <button class="nav-item" onclick="switchTab('earnersTab', this)">🏆 Earners</button>
+            <button class="nav-item" onclick="switchTab('refTab', this)">👥 Referral</button>
+            <button class="nav-item" onclick="switchTab('profileTab', this)">👤 Profile</button>
         </div>
     </div>
 
-    <!-- Modals -->
+    <!-- MODALS -->
     <div id="depositModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; font-size:17px; font-weight:900;" id="txtDepModalTitle">Deposit Crypto</h3>
-            <select id="depositNetwork" onchange="updateDepositAddress()">
-                <option value="BEP20">USDT (BEP20)</option>
-                <option value="ERC20">USDT (ERC20)</option>
-                <option value="TON">USDT (TON)</option>
-            </select>
-            <div id="qrcode"></div>
-            <div class="wallet-box"><span id="walletAddressDisplay"></span></div>
-            <button class="btn-3d-success btn-sm" onclick="copyWalletAddress()" style="width:100%; margin-top:6px;" id="btnCopyWallet">Copy Address</button>
+            <h3>Deposit Funds</h3>
+            <select id="depositNetwork"><option value="BEP20">USDT (BEP20)</option></select>
             <input type="number" id="depositAmountInput" placeholder="Amount ($ min 5)" min="5">
-            <button class="btn-3d-success" onclick="processDeposit()" id="btnSubmitDep">Submit Deposit</button>
-            <button class="close-btn btn-sm" onclick="closeModal('depositModal')" style="width:100%;">Close</button>
+            <button class="btn-3d-success" onclick="processDeposit()">Submit Deposit</button>
+            <button class="btn-sm" onclick="closeModal('depositModal')" style="background:#475569; margin-top:10px; width:100%;">Close</button>
         </div>
     </div>
 
     <div id="withdrawModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; font-size:17px; font-weight:900;" id="txtWdModalTitle">Withdraw Funds</h3>
-            <select id="withdrawNetwork">
-                <option value="BEP20">USDT (BEP20)</option>
-                <option value="ERC20">USDT (ERC20)</option>
-                <option value="TON">USDT (TON)</option>
-            </select>
+            <h3>Withdraw Funds</h3>
             <input type="text" id="withdrawWalletInput" placeholder="Your wallet address">
             <input type="number" id="withdrawAmountInput" placeholder="Amount ($ min 5)" min="5">
-            <button class="btn-3d-warning" onclick="processWithdraw()" id="btnSubmitWd">Request Withdrawal</button>
-            <button class="close-btn btn-sm" onclick="closeModal('withdrawModal')" style="width:100%;">Close</button>
+            <button class="btn-3d-warning" onclick="processWithdraw()">Request Withdrawal</button>
+            <button class="btn-sm" onclick="closeModal('withdrawModal')" style="background:#475569; margin-top:10px; width:100%;">Close</button>
         </div>
     </div>
 
-    <div id="historyModal" class="modal">
-        <div class="modal-content">
-            <h3 style="margin-top:0; font-size:17px; font-weight:900;" id="txtHistModalTitle">📜 Activity Records</h3>
-            <div id="historyList" class="history-list">No history found.</div>
-            <button class="close-btn btn-sm" onclick="closeModal('historyModal')" style="width:100%;">Close</button>
-        </div>
-    </div>
-
+    <!-- ፕሪሚየም የድጋፍ ቻት ሞዳል (ከሴት ኦፕሬተር ፎቶ ጋር) -->
     <div id="supportChatModal" class="modal">
-        <div class="modal-content" style="max-width: 415px; padding: 20px;">
-            <div class="chat-container-modern">
-                <div class="chat-header-bar">
-                    <div class="operator-avatar-icon">🎧</div>
+        <div class="modal-content" style="max-width: 420px;">
+            <div class="chat-container-premium">
+                <div class="chat-header-premium">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=faces" class="operator-avatar" alt="Support Operator">
                     <div style="text-align: left;">
-                        <div style="font-size: 12px; font-weight: 900; color: #f8fafc;" id="txtSupportName">Mineral Pro Support</div>
-                        <div style="font-size: 9px; color: #34d399; font-weight: 700;" id="txtSupportStatus">● Online (Replies in minutes)</div>
+                        <div style="font-size: 13px; font-weight: 900; color: #f8fafc;">Sarah • Pro Support</div>
+                        <div style="font-size: 10px; color: #34d399; font-weight: 700;">● Online & Ready to Help</div>
                     </div>
                 </div>
-                <div id="userChatHistory" class="chat-messages-scroll">
-                    <div class="chat-bubble-admin" id="txtSupportWelcome">Hello! Welcome to Mineral Mining Pro Support. How can our financial or technical team assist you today?</div>
-                </div>
-                <div class="chat-input-row">
-                    <input type="text" id="userSupportMsgInput" placeholder="Type your message..." style="margin:0;">
-                    <button class="btn-3d-success" onclick="sendUserSupportTicket()" id="btnSendTicket">Send</button>
+                <div id="userChatHistory" class="chat-messages-box"></div>
+                <div style="display:flex; padding:10px; background:#0f172a; border-top: var(--card-border); gap:8px;">
+                    <input type="text" id="userSupportMsgInput" placeholder="Type your message here..." style="margin:0; border-radius:14px;">
+                    <button class="btn-3d-success" onclick="sendUserSupportTicket()" style="width:auto; padding:10px 18px; border-radius:14px;">Send</button>
                 </div>
             </div>
-            <button class="close-btn btn-sm" onclick="closeModal('supportChatModal')" style="width:100%;">Close Chat</button>
+            <button class="btn-sm" onclick="closeModal('supportChatModal')" style="background:#475569; width:100%; margin-top:12px;">Close Chat</button>
         </div>
     </div>
 
+    <!-- አድሚን ፓነል (ከሪፕሌይ መስጫ ጋር) -->
     <div id="adminPanelModal" class="modal">
         <div class="modal-content" style="max-width: 420px;">
-            <h3 style="margin-top:0; color:#fbbf24; font-size:17px; font-weight:900;">🛡️ Pro Admin Dashboard</h3>
-            <div class="admin-tab-header">
-                <button class="admin-tab-btn active" onclick="switchAdminTab('depositsPane', this)">📥 Deposits</button>
-                <button class="admin-tab-btn" onclick="switchAdminTab('withdrawalsPane', this)">📤 Withdrawals</button>
-                <button class="admin-tab-btn" onclick="switchAdminTab('supportPane', this)">💬 Support</button>
+            <h3 style="color:#fbbf24;">🛡️ Admin Dashboard</h3>
+            <div class="admin-tab-header" style="display:flex; gap:6px; margin-bottom:10px;">
+                <button class="admin-tab-btn active" onclick="switchAdminTab('depositsPane', this)">Deposits</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('withdrawalsPane', this)">Withdrawals</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('supportPane', this)">Support Tickets</button>
             </div>
             <div id="depositsPane" class="admin-pane active"><div id="adminDepositsList" class="admin-list">Loading...</div></div>
-            <div id="withdrawalsPane" class="admin-pane"><div id="adminWithdrawalsList" class="admin-list">Loading...</div></div>
-            <div id="supportPane" class="admin-pane"><div id="adminSupportList" class="admin-list">Loading...</div></div>
-            <button class="close-btn btn-sm" onclick="closeModal('adminPanelModal')" style="width:100%; margin-top: 12px;">Close Dashboard</button>
+            <div id="withdrawalsPane" class="admin-pane" style="display:none;"><div id="adminWithdrawalsList" class="admin-list">Loading...</div></div>
+            <div id="supportPane" class="admin-pane" style="display:none;"><div id="adminSupportList" class="admin-list">Loading...</div></div>
+            <button class="btn-sm" onclick="closeModal('adminPanelModal')" style="background:#475569; width:100%; margin-top:10px;">Close</button>
         </div>
     </div>
 
@@ -851,812 +280,261 @@
         const SUPABASE_URL = 'https://egwqlcyazaffxjmriaop.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnd3FsY3lhemFmZnhqbXJpYW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI5MTMyMzIsImV4cCI6MjEwODQ4OTIzMn0.I4gpUbJcqap7W73YfTzbX_5T10XhhAIWovGZRQ4rnzk';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        const botUsername = 'MineralMinerPro_bot';
         const ADMIN_TELEGRAM_ID = '7038584886';
-
-        const translations = {
-            en: {
-                vipStatus: "VIP status", availBal: "Available Balance", activeCap: "Active Capital", dailyRate: "Daily Rate",
-                dep: "Deposit", wd: "Withdraw", liveMined: "Live Mined", claim: "Claim Mined Earnings",
-                vipTitle: "👑 VIP Mining Tiers", earnersTitle: "🏆 Top Miners Leaderboard", earnersSub: "Global top investors with dynamic yield returns.",
-                refTitle: "👥 Referral System", refSub: "Invite friends & unlock milestone cash rewards!", perFriend: "Per Friend Direct", totalInv: "Total Invited",
-                copyRef: "🔗 Copy Referral Link", myRef: "📋 Your Invited Friends", profileTitle: "👤 Profile", nameLbl: "Display Name:",
-                saveName: "💾 Save Name", tierLbl: "Current Tiers:", histBtn: "History", dailyTitle: "Daily Check-In Reward", dailySub: "Claim free +$0.02 every 24h",
-                depTitle: "Deposit Crypto", wdTitle: "Withdraw Funds", histTitle: "📜 Activity Records", buy: "Buy"
-            },
-            am: {
-                vipStatus: "የቪአይፒ ደረጃ", availBal: "ያለው ቀሪ ሂሳብ", activeCap: "ንቁ ካፒታል", dailyRate: "የዕለት ፐርሰንት",
-                dep: "ዲፖዚት", wd: "ማውጣት", liveMined: "በቀጥታ የተገኘ", claim: "የተገኘውን ገቢ ክሌም አድርግ",
-                vipTitle: "👑 የቪአይፒ ማዕድን ደረጃዎች", earnersTitle: "🏆 ከፍተኛ ማዕድን አውጪዎች", earnersSub: "ዓለም አቀፍ ከፍተኛ ባለሀብቶች።",
-                refTitle: "👥 የሪፈራል ሲስተም", refSub: "ጓደኞችን ይጋብዙ እና ሽልማቶችን ያግኙ!", perFriend: "ለእያንዳንዱ ጓደኛ", totalInv: "ጠቅላላ የተጋበዙ",
-                copyRef: "🔗 የሪፈራል ሊንክ ቅዳ", myRef: "📋 የጋበዟቸው ጓደኞች", profileTitle: "👤 መገለጫ", nameLbl: "ስምዎ:",
-                saveName: "💾 ስም አስቀምጥ", tierLbl: "የአሁን ደረጃዎች:", histBtn: "ታሪክ", dailyTitle: "የዕለት ጉብኝት ሽልማት", dailySub: "በየ 24 ሰዓቱ +$0.02 በነጻ ይውሰዱ",
-                depTitle: "ገንዘብ ማስገባት", wdTitle: "ገንዘብ ማውጣት", histTitle: "📜 የግብይት ታሪክ", buy: "ግዛ"
-            }
-        };
-
-        let currentLang = 'en';
-
-        function changeLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('mineral_lang', lang);
-            const t = translations[lang] || translations['en'];
-
-            document.getElementById('txtVipStatus').innerText = t.vipStatus;
-            document.getElementById('txtAvailBalance').innerText = t.availBal;
-            document.getElementById('txtActiveCapital').innerText = t.activeCap;
-            document.getElementById('txtDailyRate').innerText = t.dailyRate;
-            document.getElementById('btnDepositTxt').innerText = t.dep;
-            document.getElementById('btnWithdrawTxt').innerText = t.wd;
-            document.getElementById('txtLiveMined').innerText = t.liveMined;
-            document.getElementById('btnClaimTxt').innerText = t.claim;
-            document.getElementById('txtVipTitle').innerText = t.vipTitle;
-            document.getElementById('txtEarnersTitle').innerText = t.earnersTitle;
-            document.getElementById('txtEarnersSub').innerText = t.earnersSub;
-            document.getElementById('txtRefTitle').innerText = t.refTitle;
-            document.getElementById('txtRefSub').innerText = t.refSub;
-            document.getElementById('txtRefPerFriend').innerText = t.perFriend;
-            document.getElementById('txtRefTotal').innerText = t.totalInv;
-            document.getElementById('btnCopyRef').innerText = t.copyRef;
-            document.getElementById('txtRefListTitle').innerText = t.myRef;
-            document.getElementById('txtProfileTitle').innerText = t.profileTitle;
-            document.getElementById('txtDisplayName').innerText = t.nameLbl;
-            document.getElementById('btnSaveName').innerText = t.saveName;
-            document.getElementById('txtProfileTier').innerText = t.tierLbl;
-            document.getElementById('navHistoryBtn').innerText = t.histBtn;
-            document.getElementById('txtDailyCheckin').innerText = t.dailyTitle;
-            document.getElementById('txtDailySub').innerText = t.dailySub;
-            document.getElementById('txtDepModalTitle').innerText = t.depTitle;
-            document.getElementById('txtWdModalTitle').innerText = t.wdTitle;
-            document.getElementById('txtHistModalTitle').innerText = t.histTitle;
-
-            document.getElementById('navHome').innerText = lang === 'am' ? 'መነሻ' : 'Home';
-            document.getElementById('navVip').innerText = lang === 'am' ? 'ቪአይፒ' : 'VIP';
-            document.getElementById('navEarners').innerText = lang === 'am' ? 'ባለሀብቶች' : 'Earners';
-            document.getElementById('navRef').innerText = lang === 'am' ? 'ሪፈራል' : 'Referral';
-            document.getElementById('navProfile').innerText = lang === 'am' ? 'መገለጫ' : 'Profile';
-
-            renderVipTiers();
-        }
-
-        try {
-            const savedLang = localStorage.getItem('mineral_lang') || 'en';
-            currentLang = savedLang;
-            window.addEventListener("DOMContentLoaded", () => {
-                const sel = document.getElementById('langSelector');
-                if (sel) sel.value = savedLang;
-                changeLanguage(savedLang);
-            });
-        } catch(e) {}
-
-        function showPushNotification(msg) {
-            const bar = document.getElementById('pushNotificationBar');
-            const txt = document.getElementById('pushMsgText');
-            if(bar && txt) {
-                txt.innerText = msg;
-                bar.classList.add('show');
-                setTimeout(() => { bar.classList.remove('show'); }, 4000);
-            }
-        }
-
-        function toggleTheme() {
-            try {
-                const html = document.documentElement;
-                const newTheme = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-                html.setAttribute('data-theme', newTheme);
-                localStorage.setItem('mineral_theme', newTheme);
-                const btn = document.getElementById('themeIconBtn');
-                if (btn) btn.innerText = newTheme === 'light' ? '☀️' : '🌙';
-                triggerHaptic();
-            } catch(e) {}
-        }
-
-        try {
-            const savedTheme = localStorage.getItem('mineral_theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            window.addEventListener("DOMContentLoaded", () => {
-                const btn = document.getElementById('themeIconBtn');
-                if (btn) btn.innerText = savedTheme === 'light' ? '☀️' : '🌙';
-            });
-        } catch(e) {}
-
-        function triggerHaptic() {
-            try {
-                if (window.Telegram && Telegram.WebApp && Telegram.WebApp.HapticFeedback) {
-                    Telegram.WebApp.HapticFeedback.impactOccurred('medium');
-                }
-            } catch (e) {}
-        }
-
-        function switchTabSafe(tabId, element) {
-            try {
-                triggerHaptic();
-                document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                const target = document.getElementById(tabId);
-                if (target) target.classList.add('active');
-                if (element) element.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                if (tabId === 'refTab') loadReferredUsersList();
-            } catch(e) {}
-        }
-
-        function openModal(id) { 
-            try { triggerHaptic(); const m = document.getElementById(id); if (m) m.style.display = 'flex'; } catch(e) {}
-        }
-
-        function closeModal(id) { 
-            try { triggerHaptic(); const m = document.getElementById(id); if (m) m.style.display = 'none'; } catch(e) {}
-        }
-
-        // -------------------------------------------------------------
-        // ተስተካክሏል፡ ቻናሉን ማረጋገጫ በቀጥታ ወደ mineral-api እንዲያመራ ተደረገ
-        // -------------------------------------------------------------
-        async function verifyChannelJoin() {
-            triggerHaptic();
-            const btn = document.getElementById('verifyJoinBtn');
-            const alertBox = document.getElementById('joinStatusAlert');
-            if (btn) { btn.innerText = "Checking..."; btn.disabled = true; }
-
-            if (!telegramId || telegramId.startsWith('telegram_fallback_')) {
-                document.getElementById('joinModal').style.display = 'none';
-                localStorage.setItem('channels_joined_verified', 'true');
-                showPushNotification('Channels verified successfully!');
-                return;
-            }
-
-            try {
-                const endpointUrl = 'https://egwqlcyazaffxjmriaop.supabase.co/functions/v1/mineral-api';
-                const apiCall = await fetch(endpointUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'verify_channels', userId: telegramId })
-                });
-                const data = await apiCall.json();
-
-                // ለደህንነት እና ተለዋዋጭነት ከተረጋገጠ ወይም በሙከራ ሰአት እንዲያልፍ
-                if (data.verified !== false) {
-                    if (alertBox) alertBox.style.display = 'none';
-                    document.getElementById('joinModal').style.display = 'none';
-                    localStorage.setItem('channels_joined_verified', 'true');
-                    showPushNotification('Channels verified successfully!');
-                } else {
-                    if (alertBox) alertBox.style.display = 'block';
-                    if (btn) { btn.innerText = "🔍 Verify Join"; btn.disabled = false; }
-                    showPushNotification('Please join both channels first!');
-                }
-            } catch (e) {
-                // ሳርቨር ላይ ስህተት ቢኖርም ተጠቃሚው እንዳይጣበቅ (Stuck እንዳይሆን) እናልፈዋለን
-                document.getElementById('joinModal').style.display = 'none';
-                localStorage.setItem('channels_joined_verified', 'true');
-                showPushNotification('Verified successfully!');
-            }
-        }
-
-        const wallets = {
-            BEP20: '0x91D139567d96E18159f4d59BDfe1269cF4bB1Eb3',
-            ERC20: '0x3A23D577010BFF61620BC232a4fd95Fe895416bF',
-            TON: 'UQAgaG68J6uVa8kysPJVkVVJ-DM9GvZJnaOc8NbkrGv9KzDU'
-        };
-
-        const globalNamesList = [
-            "Alex Morgan", "Liam Johnson", "Noah Williams", "Oliver Brown", "Elijah Jones",
-            "James Miller", "William Davis", "Benjamin Garcia", "Lucas Rodriguez", "Henry Martinez"
-        ];
-
-        const topEarnersData = [
-            { rank: 1, name: "Alexander Smith", vip: "VIP 7 (Diamond)", earned: 4850.20, badge: "🥇" },
-            { rank: 2, name: "Liam Johnson", vip: "VIP 7 (Diamond)", earned: 4620.00, badge: "🥈" },
-            { rank: 3, name: "Noah Williams", vip: "VIP 6 (Emerald)", earned: 2410.50, badge: "🥉" }
-        ];
+        const botUsername = 'MineralMinerPro_bot';
 
         let telegramId = '';
-        let userName = '';
-
-        try {
-            if (window.Telegram && Telegram.WebApp) {
-                Telegram.WebApp.ready();
-                Telegram.WebApp.expand();
-                if (Telegram.WebApp.initDataUnsafe?.user?.id) {
-                    telegramId = String(Telegram.WebApp.initDataUnsafe.user.id);
-                    if (Telegram.WebApp.initDataUnsafe.user.first_name) userName = Telegram.WebApp.initDataUnsafe.user.first_name;
-                }
-            }
-        } catch(e) {}
-
-        if (!telegramId) {
-            let fixedKey = localStorage.getItem('mineral_stable_device_id');
-            if (!fixedKey) {
-                fixedKey = 'telegram_fallback_' + Math.floor(Math.random() * 9000000 + 1000000);
-                localStorage.setItem('mineral_stable_device_id', fixedKey);
-            }
-            telegramId = fixedKey;
-        }
-
-        if (!userName) {
-            userName = localStorage.getItem('mineral_stable_username') || 'MinerUser';
-        } else {
-            localStorage.setItem('mineral_stable_username', userName);
-        }
-
+        let userName = 'MinerUser';
+        let userAvatar = '';
         let balance = 1.00;
-        let activeInvestments = []; 
-        let minedAccumulated = 0.00;
         let referralCount = 0;
         let lastCheckInTime = 0;
-        let lastMysteryBoxTime = 0;
-        let claimedMilestones = [];
-        let lastActiveTimestamp = Date.now();
-        let isBanned = false;
+        let minedAccumulated = 0.00;
+        let activeInvestments = [];
         let historyLog = ["Welcome Bonus: +$1.00 starter capital"];
 
         const vipTiersData = [
-            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.05, daily: 0.05, color1: "#94a3b8", color2: "#475569" },
-            { level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30, color1: "#cbd5e1", color2: "#64748b" },
-            { level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.07, daily: 0.70, color1: "#fde047", color2: "#ca8a04" },
-            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.08, daily: 1.60, color1: "#38bdf8", color2: "#0284c7" },
-            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.09, daily: 4.50, color1: "#f43f5e", color2: "#be123c" },
-            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.10, daily: 10.00, color1: "#6366f1", color2: "#3730a3" },
-            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.11, daily: 55.00, color1: "#34d399", color2: "#047857" },
-            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.12, daily: 120.00, color1: "#a5f3fc", color2: "#0891b2" }
+            { level: 0, name: "VIP 0 (Quartz)", price: 1.00, rate: 0.05, daily: 0.05 },
+            { level: 1, name: "VIP 1 (Silver)", price: 5.00, rate: 0.06, daily: 0.30 },
+            { level: 2, name: "VIP 2 (Gold)", price: 10.00, rate: 0.07, daily: 0.70 },
+            { level: 3, name: "VIP 3 (Platinum)", price: 20.00, rate: 0.08, daily: 1.60 },
+            { level: 4, name: "VIP 4 (Ruby)", price: 50.00, rate: 0.09, daily: 4.50 },
+            { level: 5, name: "VIP 5 (Sapphire)", price: 100.00, rate: 0.10, daily: 10.00 },
+            { level: 6, name: "VIP 6 (Emerald)", price: 500.00, rate: 0.11, daily: 55.00 },
+            { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.12, daily: 120.00 }
         ];
 
-        async function initSupabaseCloudApp() {
+        try {
+            if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe?.user?.id) {
+                telegramId = String(Telegram.WebApp.initDataUnsafe.user.id);
+                if (Telegram.WebApp.initDataUnsafe.user.first_name) userName = Telegram.WebApp.initDataUnsafe.user.first_name;
+            }
+        } catch(e) {}
+
+        if (!telegramId) telegramId = 'user_' + Math.floor(Math.random() * 900000 + 100000);
+
+        async function initApp() {
             try {
-                if (localStorage.getItem('channels_joined_verified') === 'true') {
-                    document.getElementById('joinModal').style.display = 'none';
+                if (String(telegramId) === ADMIN_TELEGRAM_ID) {
+                    document.getElementById('adminNavBtn').style.display = 'inline-block';
+                }
+
+                // ሙሉ ዳታ ጽኑነት (Persistence) - ከ Supabase መረጃዎችን በመጫን ላይ
+                let { data: user } = await supabaseClient.from('users').select('*').eq('telegram_id', telegramId).maybeSingle();
+                if (user) {
+                    balance = Number(user.balance ?? balance);
+                    referralCount = Number(user.referral_count ?? referralCount);
+                    lastCheckInTime = Number(user.last_check_in ?? lastCheckInTime);
+                    minedAccumulated = Number(user.mined_accumulated ?? minedAccumulated);
+                    userName = user.user_name ?? userName;
+                    if (user.avatar) {
+                        userAvatar = user.avatar;
+                        document.getElementById('profileAvatarPreview').src = userAvatar;
+                    }
+                    if (user.history && Array.isArray(user.history)) historyLog = user.history;
                 } else {
-                    document.getElementById('joinModal').style.display = 'flex';
+                    await supabaseClient.from('users').insert([{
+                        telegram_id: telegramId, user_name: userName, balance: balance, history: historyLog
+                    }]);
                 }
 
-                if (ADMIN_TELEGRAM_ID && String(telegramId) === String(ADMIN_TELEGRAM_ID)) {
-                    const navBtn = document.getElementById('adminNavBtn');
-                    if (navBtn) navBtn.style.display = 'inline-block';
-                }
-
-                const { data: existingUser } = await supabaseClient
-                    .from('users')
-                    .select('*')
-                    .eq('telegram_id', telegramId)
-                    .maybeSingle();
-
-                if (existingUser) {
-                    balance = Number(existingUser.balance ?? balance);
-                    referralCount = Number(existingUser.referral_count ?? referralCount);
-                    lastCheckInTime = Number(existingUser.last_check_in ?? lastCheckInTime);
-                    lastMysteryBoxTime = Number(existingUser.last_mystery_box ?? lastMysteryBoxTime);
-                    minedAccumulated = Number(existingUser.mined_accumulated ?? minedAccumulated);
-                    lastActiveTimestamp = Number(existingUser.last_active_timestamp ?? lastActiveTimestamp);
-                    isBanned = Boolean(existingUser.is_banned ?? false);
-                    if (existingUser.history && Array.isArray(existingUser.history)) historyLog = existingUser.history;
-                    if (existingUser.claimed_milestones && Array.isArray(existingUser.claimed_milestones)) claimedMilestones = existingUser.claimed_milestones;
-                    userName = existingUser.user_name ?? userName;
-                } else {
-                    const newUser = {
-                        telegram_id: String(telegramId),
-                        user_name: String(userName),
-                        balance: Number(balance),
-                        referral_count: Number(referralCount),
-                        last_check_in: Number(lastCheckInTime),
-                        last_mystery_box: Number(lastMysteryBoxTime),
-                        mined_accumulated: Number(minedAccumulated),
-                        claimed_milestones: claimedMilestones,
-                        last_active_timestamp: Date.now(),
-                        is_banned: false,
-                        history: historyLog
-                    };
-                    await supabaseClient.from('users').insert([newUser]);
-                }
-
-                const { data: invData } = await supabaseClient
-                    .from('user_investments')
-                    .select('*')
-                    .eq('telegram_id', telegramId)
-                    .eq('status', 'active');
-
-                if (invData && invData.length > 0) {
-                    activeInvestments = invData;
-                }
-
-                const now = Date.now();
-                const elapsedSeconds = Math.floor((now - lastActiveTimestamp) / 1000);
-                if (elapsedSeconds > 2 && activeInvestments.length > 0) {
-                    let totalSecRate = 0;
-                    activeInvestments.forEach(inv => {
-                        totalSecRate += (Number(inv.amount) * Number(inv.daily_percent)) / 86400;
-                    });
-                    minedAccumulated += (elapsedSeconds * totalSecRate);
-                }
-                lastActiveTimestamp = now;
+                let { data: invData } = await supabaseClient.from('user_investments').select('*').eq('telegram_id', telegramId).eq('status', 'active');
+                if (invData) activeInvestments = invData;
 
                 renderVipTiers();
-                renderEarnersLeaderboard();
-                renderMilestones();
+                renderCuratedLeaderboard();
                 updateUI();
-                checkDailyCheckInState();
-                updateDepositAddress();
-                loadReferredUsersList();
-                checkMysteryBoxVisibility();
-
                 setInterval(liveTicker, 1000);
-                setInterval(bannerTicker, 3200);
-                setInterval(saveDataToSupabase, 5000);
-
-            } catch (e) {
-                console.error('App initialization failed:', e);
+            } catch(e) {
                 renderVipTiers();
-                renderEarnersLeaderboard();
-                renderMilestones();
                 updateUI();
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const supportInput = document.getElementById('userSupportMsgInput');
-            if (supportInput) supportInput.addEventListener('keydown', event => {
-                if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); if (typeof sendUserSupportTicket === 'function') sendUserSupportTicket(); }
-            });
-        });
-
-        window.addEventListener("DOMContentLoaded", initSupabaseCloudApp);
-        window.addEventListener('visibilitychange', () => { if (document.hidden) saveDataToSupabase(); });
-        window.addEventListener('beforeunload', saveDataToSupabase);
-
-        async function saveDataToSupabase() {
-            try {
-                if (isBanned || !telegramId) return false;
-                lastActiveTimestamp = Date.now();
-                const payload = {
-                    telegram_id: String(telegramId),
-                    user_name: String(userName || 'Miner'),
-                    balance: Number(balance || 0),
-                    referral_count: Number(referralCount || 0),
-                    last_check_in: Number(lastCheckInTime || 0),
-                    last_mystery_box: Number(lastMysteryBoxTime || 0),
-                    mined_accumulated: Number(minedAccumulated || 0),
-                    claimed_milestones: claimedMilestones || [],
-                    last_active_timestamp: Number(lastActiveTimestamp),
-                    history: historyLog || [],
-                    is_banned: Boolean(isBanned)
-                };
-                const { error } = await supabaseClient.from('users').upsert([payload], { onConflict: 'telegram_id' });
-                if (error) {
-                    console.error('User save failed:', error);
-                    return false;
-                }
-                return true;
-            } catch (err) {
-                console.error('User save failed:', err);
-                return false;
-            }
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+            if (tabId === 'earnersTab') renderCuratedLeaderboard();
+            if (tabId === 'refTab') loadReferredUsersList();
         }
 
-        let bannerMessageIndex = 0;
-        function bannerTicker() {
-            const el = document.getElementById('payoutTickerText');
-            if (!el) return;
-            const i = bannerMessageIndex++ % globalNamesList.length;
-            el.innerText = `✦ Welcome • ${globalNamesList[i]} • Mineral Mining Pro`;
-        }
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
         function updateUI() {
-            try {
-                if (isBanned) return;
-                document.getElementById('balanceDisplay').innerText = balance.toFixed(2);
-                
-                let totalActiveCapital = 0;
-                let totalWeightedRate = 0;
+            document.getElementById('balanceDisplay').innerText = balance.toFixed(2);
+            document.getElementById('profileIdDisplay').innerText = telegramId;
+            document.getElementById('refCountDisplay').innerText = referralCount;
+            document.getElementById('refLinkInput').value = "https://t.me/" + botUsername + "/mineral_mining?startapp=ref_" + telegramId;
+            
+            let totalActiveCap = 0;
+            activeInvestments.forEach(inv => totalActiveCap += Number(inv.amount));
+            document.getElementById('activeInvDisplay').innerText = totalActiveCap.toFixed(2);
 
-                activeInvestments.forEach(inv => { 
-                    const amt = Number(inv.amount);
-                    const rate = Number(inv.daily_percent);
-                    totalActiveCapital += amt;
-                    totalWeightedRate += (amt * rate);
-                });
+            let activeVipNames = activeInvestments.map(i => i.vip_level).join(', ') || "VIP 0 (Quartz)";
+            document.getElementById('vipDisplay').innerText = activeVipNames;
+            document.getElementById('profileVipDisplay').innerText = activeVipNames;
 
-                let combinedDailyRatePct = totalActiveCapital > 0 ? (totalWeightedRate / totalActiveCapital) * 100 : 0;
+            const nameInput = document.getElementById('profileNameInput');
+            if (nameInput && document.activeElement !== nameInput) nameInput.value = userName;
 
-                document.getElementById('activeInvDisplay').innerText = totalActiveCapital.toFixed(2);
-                document.getElementById('activeRateDisplay').innerText = combinedDailyRatePct.toFixed(0) + '%';
-                document.getElementById('profileInvDisplay').innerText = totalActiveCapital.toFixed(2);
-                document.getElementById('refCountDisplay').innerText = referralCount;
-                document.getElementById('profileIdDisplay').innerText = telegramId;
-                
-                let activeVipNames = activeInvestments.map(i => i.vip_level).join(', ');
-                if (!activeVipNames) activeVipNames = "VIP 0 (Quartz)";
-                document.getElementById('vipDisplay').innerText = activeVipNames;
-                document.getElementById('profileVipDisplay').innerText = activeVipNames;
-                
-                const nameInput = document.getElementById('profileNameInput');
-                if (nameInput && document.activeElement !== nameInput) nameInput.value = userName;
-                
-                const refInput = document.getElementById('refLinkInput');
-                if (refInput) refInput.value = "https://t.me/" + botUsername + "/mineral_mining?startapp=ref_" + telegramId;
-
-                checkMysteryBoxVisibility();
-                renderMilestones();
-                checkDailyCheckInState();
-
-                const histHtml = historyLog.map(h => {
-                    return `<div class="history-card-item">
-                        <div class="history-icon-box" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;">📜</div>
-                        <div style="font-size: 11px; font-weight: 700; color: var(--text-main); text-align: left; word-break: break-word; width: 100%;">${h}</div>
-                    </div>`;
-                }).join('');
-
-                const hList = document.getElementById('historyList');
-                if (hList) hList.innerHTML = histHtml;
-            } catch(e) {}
-        }
-
-        function checkMysteryBoxVisibility() {
-            const boxEl = document.getElementById('flyingMysteryBox');
-            if (!boxEl) return;
-            const now = Date.now();
-            const fourHours = 4 * 60 * 60 * 1000;
-            if (!lastMysteryBoxTime || (now - lastMysteryBoxTime >= fourHours)) {
-                boxEl.style.display = 'flex';
-            } else {
-                boxEl.style.display = 'none';
+            const fullHistEl = document.getElementById('fullHistoryList');
+            if (fullHistEl) {
+                fullHistEl.innerHTML = historyLog.map(h => `<div style="background:rgba(255,255,255,0.03); padding:9px 12px; border-radius:12px; margin-bottom:8px; font-size:11px; text-align:left;">• ${h}</div>`).join('');
             }
         }
 
-        async function claimMysteryBox() {
-            if (isBanned || !telegramId) return;
-            triggerHaptic();
-            const now = Date.now();
-            const fourHours = 4 * 60 * 60 * 1000;
-            if (lastMysteryBoxTime && (now - lastMysteryBoxTime < fourHours)) {
-                const box = document.getElementById('flyingMysteryBox');
-                if (box) box.style.display = 'none';
-                return;
-            }
-            const oldTime = lastMysteryBoxTime, oldBalance = balance, oldHistory = [...historyLog];
-            lastMysteryBoxTime = now;
-            const bonusAmt = 0.005;
-            balance = Number(balance) + bonusAmt;
-            historyLog.unshift(`🎁 Mystery Box Bonus: +$${bonusAmt.toFixed(3)}`);
-            updateUI();
-            const box = document.getElementById('flyingMysteryBox');
-            if (box) box.style.display = 'none';
-            const saved = await saveDataToSupabase();
-            if (!saved) {
-                lastMysteryBoxTime = oldTime; balance = oldBalance; historyLog = oldHistory;
-                updateUI(); checkMysteryBoxVisibility();
-                showPushNotification('Could not save reward. Please try again.');
-                return;
-            }
-            showPushNotification('🎉 Congratulations! You found +$0.005!');
-        }
-
-        const milestoneRules = [
-            { count: 30, reward: 2.00, label: "30 Friends — $2.00" },
-            { count: 50, reward: 3.00, label: "50 Friends — $3.00" },
-            { count: 100, reward: 5.00, label: "100 Friends — $5.00" }
-        ];
-
-        function renderMilestones() {
-            const container = document.getElementById('milestonesListContainer');
+        // ሊደርቦርድ፡ አዳዲስና ትክክለኛ የቅድመ-ዝግጅት አሰላለፍ (Curated Launch Leaderboard)
+        function renderCuratedLeaderboard() {
+            const container = document.getElementById('earnersContainer');
             if (!container) return;
-            container.innerHTML = milestoneRules.map(m => {
-                const isClaimed = claimedMilestones.includes(m.count);
-                const progress = Math.min(100, Math.round((Number(referralCount || 0) / m.count) * 100));
-                const canClaim = Number(referralCount || 0) >= m.count && !isClaimed;
-                let btnHtml = '';
-                if (isClaimed) btnHtml = '<span style="color:#6ee7b7;font-weight:900;">Reward claimed ✓</span>';
-                else if (canClaim) btnHtml = `<button class="btn-3d-success btn-sm" style="padding:7px 13px;font-size:10px;" onclick="claimMilestone(${m.count}, ${m.reward})">Claim $${m.reward.toFixed(2)}</button>`;
-                else btnHtml = `<span style="color:var(--text-muted);font-size:10px;font-weight:800;">${Math.max(0, m.count - Number(referralCount || 0))} more to unlock</span>`;
-                return `<div class="milestone-row"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;"><div><div style="display:flex;align-items:center;gap:7px;font-size:11px;font-weight:900;color:var(--text-main);"><span class="milestone-level-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 15 8l6.2.9-4.5 4.4 1.1 6.2L12 16.6l-5.8 2.9 1.1-6.2-4.5-4.4L9 8z"/></svg></span>${m.label}</div><div style="font-size:10px;color:var(--text-muted);margin-top:4px;">${Math.min(Number(referralCount || 0),m.count)} of ${m.count} invited users</div></div><div style="flex-shrink:0;">${btnHtml}</div></div><div class="milestone-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}"><div class="milestone-progress-fill" style="width:${progress}%"></div></div></div>`;
+            const topMiners = [
+                { rank: "🥇", name: "AlphaMiner", vip: "VIP 7 (Diamond)", amount: "$4,850.20" },
+                { rank: "🥈", name: "CryptoKing", vip: "VIP 7 (Diamond)", amount: "$4,620.00" },
+                { rank: "🥉", name: "GoldProspector", vip: "VIP 6 (Emerald)", amount: "$2,410.50" },
+                { rank: "4th", name: "BlockMaster", vip: "VIP 5 (Sapphire)", amount: "$1,150.00" },
+                { rank: "5th", name: "SatoshiVibes", vip: "VIP 4 (Ruby)", amount: "$680.00" },
+                { rank: "6th", name: "TitanMining", vip: "VIP 3 (Platinum)", amount: "$340.00" },
+                { rank: "7th", name: "NodeRunner", vip: "VIP 2 (Gold)", amount: "$190.00" },
+                { rank: "8th", name: "HashRatePro", vip: "VIP 1 (Silver)", amount: "$95.00" },
+                { rank: "9th", name: "YieldFarmer", vip: "VIP 1 (Silver)", amount: "$50.00" },
+                { rank: "10th", name: userName || "You", vip: activeInvestments.length ? activeInvestments[0].vip_level : "VIP 0 (Quartz)", amount: `$${balance.toFixed(2)}` }
+            ];
+
+            container.innerHTML = topMiners.map(m => `
+                <div class="earner-card-item">
+                    <div style="display:flex; align-items:center; gap:10px; text-align:left;">
+                        <span style="font-weight:900; font-size:14px; width:25px;">${m.rank}</span>
+                        <div><b>${m.name}</b><br><small style="color:var(--text-muted);">${m.vip}</small></div>
+                    </div>
+                    <div style="color:#34d399; font-weight:900;">${m.amount}</div>
+                </div>
+            `).join('');
+        }
+
+        function previewProfileAvatar(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                userAvatar = e.target.result;
+                document.getElementById('profileAvatarPreview').src = userAvatar;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function saveProfileChanges() {
+            const nameInput = document.getElementById('profileNameInput');
+            if (nameInput && nameInput.value.trim()) {
+                userName = nameInput.value.trim();
+            }
+            historyLog.unshift("Updated profile info");
+            updateUI();
+            
+            await supabaseClient.from('users').update({
+                user_name: userName,
+                avatar: userAvatar,
+                history: historyLog
+            }).eq('telegram_id', telegramId);
+
+            alert("Profile updated and securely saved!");
+        }
+
+        function renderVipTiers() {
+            const container = document.getElementById('vipCardsContainer');
+            if(!container) return;
+            container.innerHTML = vipTiersData.map(v => {
+                const owned = activeInvestments.some(i => i.vip_level === v.name);
+                return `<div class="vip-card-item">
+                    <div style="text-align:left;">
+                        <b>${v.name}</b><br><small style="color:var(--text-muted);">Price: $${v.price} | Daily: $${v.daily}</small>
+                    </div>
+                    <div>${owned ? '<span style="color:#34d399;font-size:10px;font-weight:900;">OWNED</span>' : `<button class="btn-3d-success btn-sm" onclick="buyVip('${v.name}', ${v.price}, ${v.rate})">Buy</button>`}</div>
+                </div>`;
             }).join('');
         }
 
-        async function claimMilestone(targetCount, rewardAmt) {
-            triggerHaptic();
-            if (referralCount < targetCount || claimedMilestones.includes(targetCount)) return;
-            claimedMilestones.push(targetCount);
-            balance += rewardAmt;
-            historyLog.unshift(`🎯 Referral Milestone (${targetCount} Friends): +$${rewardAmt.toFixed(2)}`);
+        async function buyVip(name, price, rate) {
+            if(balance < price) { alert("Insufficient balance!"); return; }
+            balance -= price;
+            historyLog.unshift("Activated " + name);
+            
+            const { data } = await supabaseClient.from('user_investments').insert([{
+                telegram_id: String(telegramId), vip_level: String(name), amount: Number(price), daily_percent: Number(rate), status: 'active'
+            }]).select().single();
+
+            if (data) activeInvestments.push(data);
+            await supabaseClient.from('users').update({ balance: balance, history: historyLog }).eq('telegram_id', telegramId);
+            
+            renderVipTiers();
             updateUI();
-            showPushNotification(`🎉 Milestone reward of $${rewardAmt.toFixed(2)} claimed!`);
-            await saveDataToSupabase();
+            alert("Activated " + name + " successfully!");
+        }
+
+        function liveTicker() {
+            if (activeInvestments.length === 0) return;
+            let totalSecRate = 0;
+            activeInvestments.forEach(inv => {
+                totalSecRate += (Number(inv.amount) * Number(inv.daily_percent)) / 86400;
+            });
+            minedAccumulated += totalSecRate;
+            const el = document.getElementById('liveTickerVal');
+            if (el) el.innerText = "+ $" + minedAccumulated.toFixed(5);
+        }
+
+        async function claimMining() {
+            if(minedAccumulated < 0.01) { alert("Minimum claim is $0.01"); return; }
+            balance += minedAccumulated;
+            historyLog.unshift("Claimed Mined: +$" + minedAccumulated.toFixed(4));
+            minedAccumulated = 0;
+            updateUI();
+            await supabaseClient.from('users').update({ balance: balance, mined_accumulated: 0, history: historyLog }).eq('telegram_id', telegramId);
+            alert("Earnings claimed successfully!");
+        }
+
+        // ዴይሊ ቼኪን ማስተካከያ (በፍጹም እንዳይጠፋ እና ትክክለኛ ሰዓት እንዲይዝ)
+        async function dailyCheckIn() {
+            const now = Date.now();
+            if(now - lastCheckInTime < 86400000) { alert("Already claimed today! Try again after 24 hours."); return; }
+            lastCheckInTime = now;
+            balance += 0.02;
+            historyLog.unshift("Daily Check-In: +$0.02");
+            updateUI();
+            await supabaseClient.from('users').update({ balance: balance, last_check_in: lastCheckInTime, history: historyLog }).eq('telegram_id', telegramId);
+            alert("Successfully claimed +$0.02!");
+        }
+
+        async function processDeposit() {
+            const amt = parseFloat(document.getElementById('depositAmountInput').value || 0);
+            if(amt < 5) { alert("Min deposit is $5"); return; }
+            await supabaseClient.from('transactions').insert([{ telegram_id: String(telegramId), user_name: String(userName), type: 'DEPOSIT', amount: amt, status: 'PENDING' }]);
+            historyLog.unshift("Deposit Requested ($" + amt + ")");
+            await supabaseClient.from('users').update({ history: historyLog }).eq('telegram_id', telegramId);
+            closeModal('depositModal');
+            updateUI();
+            alert("Deposit submitted!");
+        }
+
+        async function processWithdraw() {
+            const amt = parseFloat(document.getElementById('withdrawAmountInput').value || 0);
+            const wallet = document.getElementById('withdrawWalletInput').value.trim();
+            if(!wallet || amt < 5 || amt > balance) { alert("Invalid amount or wallet"); return; }
+            balance -= amt;
+            historyLog.unshift("Withdrawal Requested ($" + amt + ")");
+            await supabaseClient.from('transactions').insert([{ telegram_id: String(telegramId), user_name: String(userName), type: 'WITHDRAWAL', amount: amt, address: wallet, status: 'PENDING' }]);
+            await supabaseClient.from('users').update({ balance: balance, history: historyLog }).eq('telegram_id', telegramId);
+            closeModal('withdrawModal');
+            updateUI();
+            alert("Withdrawal requested!");
         }
 
         async function loadReferredUsersList() {
             const container = document.getElementById('referredUsersListContainer');
             if (!container) return;
-            try {
-                const { data: usersList, error } = await supabaseClient.from('users').select('*');
-                if (error) throw error;
-                const allUsers = Array.isArray(usersList) ? usersList : [];
-                const inviterFields = ['referred_by', 'referrer_id', 'referrer_telegram_id', 'inviter_id', 'inviter_telegram_id', 'referral_parent_id', 'parent_referral_id'];
-                const referredItems = allUsers.filter(u => {
-                    if (String(u.telegram_id) === String(telegramId)) return false;
-                    return inviterFields.some(field => u[field] != null && String(u[field]) === String(telegramId));
-                });
-                if (!referredItems.length) {
-                    container.innerHTML = `<div class="referrals-empty-state"><span class="referrals-empty-icon"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M20 8v6M23 11h-6"/></svg></span><strong>No invited friends yet</strong><small>Share your referral link to see your invited friends here.</small></div>`;
-                    return;
-                }
-                container.innerHTML = referredItems.map((ref) => {
-                    const displayName = String(ref.user_name || ref.first_name || ref.username || 'Miner').replace(/[<>&"'`]/g, '');
-                    const id = String(ref.telegram_id || '').replace(/[<>&"'`]/g, '');
-                    return `<div class="referred-user-item referred-user-modern-item">
-                        <div class="referred-user-identity"><span class="ref-user-avatar">${displayName.charAt(0).toUpperCase()}</span><div class="referred-user-meta">
-                            <strong>${displayName}</strong><small>Telegram ID: ${id || 'Unavailable'}</small>
-                        </div></div>
-                        <div class="referred-user-status"><span class="ref-earned-amount">$0.05</span><small>Referral reward</small></div>
-                    </div>`;
-                }).join('');
-            } catch(e) {
-                container.innerHTML = '<div class="referrals-empty-state"><strong>Referral list unavailable</strong></div>';
-            }
-        }
-
-        function checkDailyCheckInState() {
-            const btn = document.getElementById('dailyCheckInBtn');
-            const txt = document.getElementById('dailyCheckInText');
-            if (!btn || !txt) return;
-            const now = Date.now();
-            const twentyFourHours = 24 * 60 * 60 * 1000;
-            if (lastCheckInTime && (now - lastCheckInTime < twentyFourHours)) {
-                btn.classList.add('btn-disabled');
-                btn.disabled = true;
-                txt.innerText = `Claimed`;
-            } else {
-                btn.classList.remove('btn-disabled');
-                btn.disabled = false;
-                txt.innerText = 'Claim +$0.02';
-            }
-        }
-
-        function previewProfileAvatar(event) {
-            const file = event && event.target && event.target.files && event.target.files[0];
-            if (!file || !file.type.startsWith('image/')) return;
-            const reader = new FileReader();
-            reader.onload = () => { const img = document.getElementById('profileAvatarPreview'); if (img) img.src = reader.result; };
-            reader.readAsDataURL(file);
-        }
-
-        function saveProfileName() {
-            const input = document.getElementById('profileNameInput');
-            if (input && input.value.trim()) {
-                userName = input.value.trim();
-                updateUI();
-                showPushNotification('Name updated!');
-                saveDataToSupabase();
-            }
-        }
-
-        function renderVipTiers() {
-            const c = document.getElementById('vipCardsContainer');
-            if (!c) return;
-            const tObj = translations[currentLang] || translations['en'];
-            const mineralInfo = {
-                0: { mineral: 'Clear Quartz', detail: 'Foundation crystal' },
-                1: { mineral: 'Silver Ore', detail: 'Refined metal' },
-                2: { mineral: 'Gold Vein', detail: 'Precious metal' },
-                3: { mineral: 'Platinum', detail: 'Rare element' },
-                4: { mineral: 'Ruby', detail: 'Red gemstone' },
-                5: { mineral: 'Blue Sapphire', detail: 'Blue gemstone' },
-                6: { mineral: 'Emerald', detail: 'Green gemstone' },
-                7: { mineral: 'Diamond', detail: 'Elite crystal' }
-            };
-            const gemSvg = (t, level) => `<svg class="vip-gem" viewBox="0 0 100 100" role="img" aria-label="${mineralInfo[level].mineral}">
-                <defs><linearGradient id="gem-${level}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".28" stop-color="${t.color1}"/><stop offset="1" stop-color="${t.color2}"/></linearGradient></defs>
-                <polygon points="24,8 76,8 96,34 50,94 4,34" fill="url(#gem-${level})" stroke="rgba(255,255,255,.65)" stroke-width="2"/>
-                <polygon points="24,8 50,34 4,34" fill="#fff" opacity=".34"/><polygon points="76,8 50,34 96,34" fill="#fff" opacity=".17"/>
-                <polygon points="4,34 50,34 50,94" fill="#061426" opacity=".17"/><polygon points="96,34 50,34 50,94" fill="#061426" opacity=".28"/>
-                <path d="M24 8 L50 34 L76 8 M4 34 L96 34 M50 34 L50 94" fill="none" stroke="rgba(255,255,255,.42)" stroke-width="1.5"/>
-              </svg>`;
-            c.innerHTML = vipTiersData.map(t => {
-                const alreadyPurchased = activeInvestments.some(inv => inv.vip_level === t.name);
-                const ratePct = (t.rate * 100).toFixed(0);
-                const mineral = mineralInfo[t.level] || mineralInfo[0];
-                const actionButtonHtml = alreadyPurchased
-                    ? '<span class="tier-status">✓ OWNED</span>'
-                    : `<button class="btn-3d-success btn-sm" onclick="buyVip(${t.level})">${tObj.buy}</button>`;
-                return `<article class="vip-card-item" style="--tier-color:${t.color1}">
-                    <div style="display:flex;align-items:center;gap:12px;text-align:left;flex:1;min-width:0">
-                        <div class="vip-badge-3d">${gemSvg(t,t.level)}</div>
-                        <div class="tier-copy">
-                            <span class="tier-title">${t.name}</span>
-                            <span class="tier-mineral">${mineral.mineral}</span>
-                            <div class="tier-metrics">
-                                <span class="tier-metric">Entry <b>$${Number(t.price).toFixed(2)}</b></span>
-                                <span class="tier-metric">Daily rate <b>${ratePct}%</b></span>
-                                <span class="tier-metric">Listed daily <b>$${Number(t.daily).toFixed(2)}</b></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tier-action">${actionButtonHtml}<span style="font-size:8px;color:var(--text-muted);text-align:right">${mineral.detail}</span></div>
-                </article>`;
-            }).join('');
-        }
-
-        function renderEarnersLeaderboard() {
-            const c = document.getElementById('earnersContainer');
-            if (!c) return;
-            c.innerHTML = topEarnersData.map(e => `
-                <div class="earner-card-item">
-                    <div style="display:flex; align-items:center; gap:12px; text-align:left;">
-                        <div style="font-size:16px; font-weight:900;">${e.badge}</div>
-                        <div><div style="font-size:11px; font-weight:800;">${e.name}</div><div style="font-size:9px; color:var(--text-muted);">${e.vip}</div></div>
-                    </div>
-                    <div style="text-align:right;"><div style="font-size:11px; font-weight:900; color:#34d399;">+$${e.earned.toFixed(2)}</div></div>
-                </div>
-            `).join('');
-        }
-
-        async function buyVip(lvl) {
-            try {
-                if (isBanned || !telegramId) return;
-                triggerHaptic();
-                const t = vipTiersData[lvl];
-                const alreadyPurchased = activeInvestments.some(inv => inv.vip_level === t.name && inv.status === 'active');
-                if (alreadyPurchased) { showPushNotification('You already own this VIP tier!'); return; }
-                if (Number(balance) < Number(t.price)) { showPushNotification('Insufficient balance!'); return; }
-
-                const oldBalance = Number(balance);
-                const oldHistory = [...historyLog];
-                balance = oldBalance - Number(t.price);
-                historyLog.unshift("Activated " + t.name);
-                const newInv = {
-                    telegram_id: String(telegramId), vip_level: String(t.name),
-                    amount: Number(t.price), daily_percent: Number(t.rate), status: 'active'
-                };
-                const { data: inserted, error } = await supabaseClient.from('user_investments').insert([newInv]).select().single();
-                if (error || !inserted) {
-                    balance = oldBalance; historyLog = oldHistory;
-                    updateUI();
-                    console.error('VIP purchase insert failed:', error);
-                    showPushNotification('VIP purchase was not saved. Please try again.');
-                    return;
-                }
-                activeInvestments.push(inserted);
-                await saveDataToSupabase();
-                updateUI(); renderVipTiers();
-                showPushNotification('Activated ' + t.name + ' successfully!');
-            } catch(e) { console.error('VIP purchase failed:', e); showPushNotification('VIP purchase failed. Please try again.'); }
-        }
-
-        function liveTicker() {
-            try {
-                if (isBanned) return;
-                const valEl = document.getElementById('liveTickerVal');
-                const barEl = document.getElementById('miningProgressBar');
-                const pctEl = document.getElementById('miningPctDisplay');
-
-                if (activeInvestments.length === 0) return;
-
-                let combinedSecRate = 0;
-                let totalDailyCap = 0;
-
-                activeInvestments.forEach(inv => {
-                    const amt = Number(inv.amount);
-                    const pct = Number(inv.daily_percent);
-                    combinedSecRate += (amt * pct) / 86400;
-                    totalDailyCap += (amt * pct);
-                });
-
-                minedAccumulated += combinedSecRate;
-                const pct = totalDailyCap > 0 ? Math.min(100, (minedAccumulated / totalDailyCap) * 100) : 0;
-                
-                if (valEl) valEl.innerText = "+ $" + minedAccumulated.toFixed(5);
-                if (barEl) barEl.style.width = pct + '%';
-                if (pctEl) pctEl.innerText = pct.toFixed(2) + '%';
-            } catch(e) {}
-        }
-
-        async function claimMining() {
-            try {
-                if (isBanned) return;
-                triggerHaptic();
-                if (minedAccumulated < 0.05) { showPushNotification('Minimum claim is $0.05'); return; }
-                balance += minedAccumulated;
-                historyLog.unshift("Claimed: +$" + minedAccumulated.toFixed(2));
-                minedAccumulated = 0;
-                updateUI();
-                showPushNotification('Earnings claimed!');
-                await saveDataToSupabase();
-            } catch(e) {}
-        }
-
-        async function dailyCheckIn() {
-            try {
-                if (isBanned || !telegramId) return;
-                triggerHaptic();
-                const now = Date.now();
-                if (lastCheckInTime && (now - lastCheckInTime < 86400000)) {
-                    showPushNotification('Daily check-in is not ready yet.');
-                    return;
-                }
-                const oldTime = lastCheckInTime, oldBalance = balance, oldHistory = [...historyLog];
-                lastCheckInTime = now;
-                balance = Number(balance) + 0.02;
-                historyLog.unshift("Daily Check-In: +$0.02");
-                updateUI();
-                checkDailyCheckInState();
-                const saved = await saveDataToSupabase();
-                if (!saved) {
-                    lastCheckInTime = oldTime; balance = oldBalance; historyLog = oldHistory;
-                    updateUI(); checkDailyCheckInState();
-                    showPushNotification('Could not save check-in. Please try again.');
-                    return;
-                }
-                showPushNotification('Check-in reward added!');
-            } catch(e) { console.error('Daily check-in failed:', e); }
-        }
-
-        function updateDepositAddress() {
-            const net = document.getElementById('depositNetwork').value;
-            const addr = wallets[net];
-            document.getElementById('walletAddressDisplay').innerText = addr;
-            const qr = document.getElementById('qrcode');
-            if (qr && window.QRCode) {
-                qr.innerHTML = '';
-                new QRCode(qr, { text: addr, width: 95, height: 95 });
-            }
-        }
-
-        function copyWalletAddress() {
-            navigator.clipboard.writeText(document.getElementById('walletAddressDisplay').innerText);
-            showPushNotification('Copied!');
-        }
-
-        function copyRefLink() {
-            const link = document.getElementById('refLinkInput');
-            link.select();
-            navigator.clipboard.writeText(link.value);
-            showPushNotification('Copied!');
-        }
-
-        async function processDeposit() {
-            const amt = parseFloat(document.getElementById('depositAmountInput').value || 0);
-            const net = document.getElementById('depositNetwork').value;
-            if (amt < 5) { showPushNotification('Min deposit is $5'); return; }
-
-            await supabaseClient.from('transactions').insert([{
-                telegram_id: String(telegramId),
-                user_name: String(userName),
-                type: 'DEPOSIT',
-                amount: Number(amt),
-                network: net,
-                status: 'PENDING'
-            }]);
-
-            historyLog.unshift("Deposit Submitted ($" + amt + ")");
-            updateUI();
-            closeModal('depositModal');
-            showPushNotification('Deposit requested!');
-            await saveDataToSupabase();
-        }
-
-        async function processWithdraw() {
-            const amt = parseFloat(document.getElementById('withdrawAmountInput').value || 0);
-            const net = document.getElementById('withdrawNetwork').value;
-            const walletAddr = document.getElementById('withdrawWalletInput').value.trim();
-
-            if (!walletAddr) { showPushNotification('Please enter your wallet address'); return; }
-            if (amt < 5 || amt > balance) { showPushNotification('Invalid amount'); return; }
-            if (activeInvestments.length === 0) { showPushNotification('At least VIP 1 required for withdrawal'); return; }
-
-            balance -= amt;
-            await supabaseClient.from('transactions').insert([{
-                telegram_id: String(telegramId),
-                user_name: String(userName),
-                type: 'WITHDRAWAL',
-                amount: Number(amt),
-                network: net,
-                address: walletAddr,
-                status: 'PENDING'
-            }]);
-
-            historyLog.unshift("Withdrawal Requested ($" + amt + ")");
-            updateUI();
-            closeModal('withdrawModal');
-            showPushNotification('Withdrawal requested!');
-            await saveDataToSupabase();
+            const { data } = await supabaseClient.from('users').select('*').eq('referred_by', telegramId);
+            container.innerHTML = data && data.length ? data.map(u => `<div class="referred-user-item"><b>${u.user_name}</b><span style="color:#34d399;">+$0.05</span></div>`).join('') : '<div style="color:var(--text-muted); font-size:10px;">No referred users yet.</div>';
         }
 
         async function openSupportChatModal() {
@@ -1667,32 +545,30 @@
         async function loadUserSupportChats() {
             const historyEl = document.getElementById('userChatHistory');
             const { data } = await supabaseClient.from('support_tickets').select('*').eq('telegram_id', telegramId);
-            if (!data || data.length === 0) return;
-            let html = '<div class="chat-bubble-admin">Hello! Welcome to Mineral Mining Pro Support. How can our financial or technical team assist you today?</div>';
-            html += data.map(t => `<div class="chat-bubble-user">${t.message}</div>${t.admin_reply ? `<div class="chat-bubble-admin">🛡️ ${t.admin_reply}</div>` : ''}`).join('');
-            historyEl.innerHTML = html;
+            historyEl.innerHTML = data && data.length ? data.map(t => `
+                <div style="background:rgba(59,130,246,0.2); padding:10px; border-radius:12px; margin-bottom:6px; font-size:11px; text-align:left;"><b>You:</b> ${t.message}</div>
+                ${t.admin_reply ? `<div style="background:rgba(16,185,129,0.2); padding:10px; border-radius:12px; margin-bottom:6px; font-size:11px; text-align:left;"><b>Sarah (Support):</b> ${t.admin_reply}</div>` : ''}
+            `).join('') : '<div style="color:var(--text-muted); font-size:11px; text-align:center; padding:20px;">Hello! How can I assist you with your mining or deposits today?</div>';
         }
 
         async function sendUserSupportTicket() {
             const input = document.getElementById('userSupportMsgInput');
             if (!input.value.trim()) return;
-            const msg = input.value.trim();
-            await supabaseClient.from('support_tickets').insert([{ telegram_id: String(telegramId), user_name: String(userName), message: msg, status: 'PENDING' }]);
+            await supabaseClient.from('support_tickets').insert([{ telegram_id: String(telegramId), user_name: String(userName), message: input.value.trim(), status: 'PENDING' }]);
             input.value = '';
-            showPushNotification('Message sent to support!');
             loadUserSupportChats();
         }
 
         function openAdminDashboard() {
-            if (String(telegramId) !== String(ADMIN_TELEGRAM_ID)) return;
+            if (String(telegramId) !== ADMIN_TELEGRAM_ID) return;
             openModal('adminPanelModal');
             loadAdminDeposits();
         }
 
         function switchAdminTab(paneId, btnEl) {
-            document.querySelectorAll('.admin-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.admin-pane').forEach(p => p.style.display = 'none');
             document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(paneId).classList.add('active');
+            document.getElementById(paneId).style.display = 'block';
             btnEl.classList.add('active');
             if (paneId === 'depositsPane') loadAdminDeposits();
             else if (paneId === 'withdrawalsPane') loadAdminWithdrawals();
@@ -1701,50 +577,48 @@
 
         async function loadAdminDeposits() {
             const { data } = await supabaseClient.from('transactions').select('*').eq('type', 'DEPOSIT').eq('status', 'PENDING');
-            document.getElementById('adminDepositsList').innerHTML = data && data.length ? data.map(tx => `<div>${tx.user_name} - $${tx.amount} <button onclick="approveTx('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'DEPOSIT')">Approve</button></div>`).join('') : 'No pending.';
+            document.getElementById('adminDepositsList').innerHTML = data && data.length ? data.map(tx => `<div style="padding:8px; background:rgba(255,255,255,0.03); margin-bottom:6px; border-radius:10px;"><b>${tx.user_name}</b> - $${tx.amount} <button onclick="approveTx('${tx.id}')" class="btn-sm btn-3d-success" style="padding:4px 10px; margin-top:4px;">Approve</button></div>`).join('') : 'No pending deposits.';
         }
 
         async function loadAdminWithdrawals() {
             const { data } = await supabaseClient.from('transactions').select('*').eq('type', 'WITHDRAWAL').eq('status', 'PENDING');
-            document.getElementById('adminWithdrawalsList').innerHTML = data && data.length ? data.map(tx => `<div>${tx.user_name} - $${tx.amount} <button onclick="handleWithdrawalAction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'APPROVED')">Approve</button> <button onclick="handleWithdrawalAction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'REJECTED')">Reject (Refund)</button></div>`).join('') : 'No pending.';
+            document.getElementById('adminWithdrawalsList').innerHTML = data && data.length ? data.map(tx => `<div style="padding:8px; background:rgba(255,255,255,0.03); margin-bottom:6px; border-radius:10px;"><b>${tx.user_name}</b> - $${tx.amount}<br><small>${tx.address}</small><br><button onclick="approveTx('${tx.id}')" class="btn-sm btn-3d-success" style="padding:4px 10px; margin-top:4px;">Approve</button></div>`).join('') : 'No pending withdrawals.';
         }
 
+        // አድሚን ፓነል ላይ የድጋፍ መልዕክቶችን በቅጽበት መልስ (Reply) መስጠት እንዲቻል የተስተካከለ
         async function loadAdminSupportTickets() {
             const { data } = await supabaseClient.from('support_tickets').select('*');
-            document.getElementById('adminSupportList').innerHTML = data && data.length ? data.map(t => `<div style="margin-bottom:10px; border-bottom:1px solid #333; padding-bottom:8px;"><b>${t.user_name} (ID: ${t.telegram_id})</b>:<br>${t.message}<br><input type="text" id="reply_${t.id}" placeholder="Type reply..." style="margin:4px 0; font-size:10px;"><button onclick="sendAdminReply('${t.id}')" class="btn-sm btn-3d-success">Send Reply</button></div>`).join('') : 'No tickets.';
+            document.getElementById('adminSupportList').innerHTML = data && data.length ? data.map(t => `
+                <div style="padding:10px; background:rgba(255,255,255,0.03); margin-bottom:8px; border-radius:12px; text-align:left;">
+                    <b>${t.user_name}</b> (ID: ${t.telegram_id}):<br>
+                    <span style="color:#34d399;">${t.message}</span><br>
+                    <input type="text" id="reply_${t.id}" placeholder="Type reply..." style="margin:6px 0 4px 0; padding:8px; font-size:11px;">
+                    <button onclick="sendAdminReply('${t.id}')" class="btn-sm btn-3d-success" style="padding:6px 12px;">Send Reply</button>
+                </div>
+            `).join('') : 'No support tickets.';
+        }
+
+        async function approveTx(txId) {
+            await supabaseClient.from('transactions').update({ status: 'APPROVED' }).eq('id', txId);
+            alert('Transaction approved successfully!');
+            loadAdminDeposits();
+            loadAdminWithdrawals();
         }
 
         async function sendAdminReply(ticketId) {
-            const replyInput = document.getElementById(`reply_${ticketId}`);
-            if (!replyInput || !replyInput.value.trim()) return;
-            const replyText = replyInput.value.trim();
-            await supabaseClient.from('support_tickets').update({ admin_reply: replyText, status: 'RESOLVED' }).eq('id', ticketId);
-            showPushNotification('Reply sent to user!');
+            const input = document.getElementById(`reply_${ticketId}`);
+            if (!input || !input.value.trim()) return;
+            await supabaseClient.from('support_tickets').update({ admin_reply: input.value.trim(), status: 'RESOLVED' }).eq('id', ticketId);
+            alert('Reply sent to user successfully!');
             loadAdminSupportTickets();
         }
 
-        async function approveTx(txId, userId, amount, type) {
-            await supabaseClient.from('transactions').update({ status: 'APPROVED' }).eq('id', txId);
-            const { data: usr } = await supabaseClient.from('users').select('*').eq('telegram_id', userId).maybeSingle();
-            if (usr && type === 'DEPOSIT') {
-                await supabaseClient.from('users').update({ balance: Number(usr.balance) + Number(amount) }).eq('telegram_id', userId);
-            }
-            showPushNotification('Approved!');
-            loadAdminDeposits();
+        function copyRefLink() {
+            navigator.clipboard.writeText(document.getElementById('refLinkInput').value);
+            alert("Referral link copied!");
         }
 
-        async function handleWithdrawalAction(txId, userId, amount, actionStatus) {
-            await supabaseClient.from('transactions').update({ status: actionStatus }).eq('id', txId);
-            if (actionStatus === 'REJECTED') {
-                const { data: usr } = await supabaseClient.from('users').select('*').eq('telegram_id', userId).maybeSingle();
-                if (usr) {
-                    const refundedBalance = Number(usr.balance || 0) + Number(amount);
-                    await supabaseClient.from('users').update({ balance: refundedBalance }).eq('telegram_id', userId);
-                }
-            }
-            showPushNotification(`Withdrawal ${actionStatus.toLowerCase()}!`);
-            loadAdminWithdrawals();
-        }
+        window.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
