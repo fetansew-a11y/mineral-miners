@@ -11,7 +11,7 @@
     <style>
         :root[data-theme="dark"] {
             --bg-gradient: radial-gradient(circle at 50% 0%, #0c1322 0%, #030712 100%);
-            --card-bg: rgba(15, 23, 42, 0.90);
+            --card-bg: rgba(15, 23, 42, 0.92);
             --card-border: 1px solid rgba(52, 211, 153, 0.35);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
@@ -105,11 +105,11 @@
         }
         
         .pro-logo-icon {
-            width: 42px; height: 42px; flex-shrink: 0;
+            width: 44px; height: 44px; flex-shrink: 0;
             filter: drop-shadow(0 0 18px rgba(16, 185, 129, 0.95));
             animation: proLogoPulse 3s ease-in-out infinite;
         }
-        @keyframes proLogoPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        @keyframes proLogoPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
 
         .balance-box { 
             font-size: 38px; font-weight: 900; color: var(--accent-emerald); margin: 6px 0; 
@@ -121,52 +121,33 @@
         .sub-balance { font-size: 11px; color: var(--text-muted); margin-bottom: 14px; font-weight: 700; }
         
         .mining-core-container {
-            width: 145px; height: 145px; margin: 12px auto; position: relative;
+            width: 155px; height: 155px; margin: 14px auto; position: relative;
             display: flex; align-items: center; justify-content: center;
         }
         .mining-core-ring {
             position: absolute; width: 100%; height: 100%; border-radius: 50%;
             border: 2px dashed rgba(52, 211, 153, 0.85);
             animation: spinCoreRing 12s linear infinite;
-            box-shadow: 0 0 40px rgba(52, 211, 153, 0.6);
+            box-shadow: 0 0 45px rgba(52, 211, 153, 0.6);
         }
         @keyframes spinCoreRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .mining-core-glow {
-            width: 115px; height: 115px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.9) 0%, rgba(59, 130, 246, 0.65) 100%);
+            width: 125px; height: 125px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.95) 0%, rgba(59, 130, 246, 0.7) 100%);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: inset 0 0 30px rgba(255,255,255,0.95), 0 0 70px rgba(52, 211, 153, 1);
+            box-shadow: inset 0 0 35px rgba(255,255,255,0.95), 0 0 80px rgba(52, 211, 153, 1);
             animation: pulseCoreGlow 3s ease-in-out infinite;
         }
-        @keyframes pulseCoreGlow { 0%, 100% { transform: scale(1); box-shadow: 0 0 45px rgba(59, 130, 246, 0.6); } 50% { transform: scale(1.08); box-shadow: 0 0 90px rgba(16, 185, 129, 1); } }
+        @keyframes pulseCoreGlow { 0%, 100% { transform: scale(1); box-shadow: 0 0 45px rgba(59, 130, 246, 0.6); } 50% { transform: scale(1.08); box-shadow: 0 0 95px rgba(16, 185, 129, 1); } }
         
-        .css-3d-gem {
-            width: 62px; height: 62px; position: relative;
-            transform-style: preserve-3d;
-            animation: rotateGem3D 6s linear infinite, floatGem 3s ease-in-out infinite alternate;
-            filter: drop-shadow(0 10px 18px rgba(0,0,0,0.7));
-        }
-        @keyframes rotateGem3D {
-            0% { transform: rotateY(0deg) rotateX(15deg); }
-            100% { transform: rotateY(360deg) rotateX(15deg); }
+        .vector-3d-gem-svg {
+            width: 75px; height: 75px; filter: drop-shadow(0 12px 20px rgba(0,0,0,0.7));
+            animation: floatGem 3s ease-in-out infinite alternate;
         }
         @keyframes floatGem {
             0% { transform: translateY(0) scale(1); }
-            100% { transform: translateY(-6px) scale(1.05); }
-        }
-        .gem-facet {
-            position: absolute; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #34d399 0%, #059669 50%, #60a5fa 100%);
-            clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 20% 100%, 0% 35%);
-            border: 1px solid rgba(255,255,255,0.7);
-            box-shadow: inset 0 0 15px rgba(255,255,255,0.9);
-        }
-        .gem-facet-top {
-            position: absolute; width: 50%; height: 35%; top: 0; left: 25%;
-            background: linear-gradient(135deg, #ffffff 0%, #34d399 100%);
-            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-            opacity: 0.95;
+            100% { transform: translateY(-8px) scale(1.06); }
         }
 
         .live-mining-box { 
@@ -289,16 +270,6 @@
             background: radial-gradient(circle, #0f172a 0%, #020617 100%); 
             display: flex; align-items: center; justify-content: center; position: relative;
         }
-        .mini-crystal {
-            width: 30px; height: 30px; position: relative; transform-style: preserve-3d;
-            animation: spinMiniGem 5s linear infinite;
-        }
-        @keyframes spinMiniGem { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
-        .crystal-core {
-            position: absolute; width: 100%; height: 100%;
-            clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 20% 100%, 0% 35%);
-            box-shadow: inset 0 0 10px rgba(255,255,255,0.95);
-        }
 
         .earner-card-item {
             display: flex; align-items: center; justify-content: space-between;
@@ -324,9 +295,10 @@
             background: linear-gradient(135deg, #1e293b, #0f172a); padding: 12px 16px; display: flex; align-items: center; gap: 12px;
             border-bottom: var(--card-border);
         }
-        .operator-avatar {
-            width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #34d399;
-            box-shadow: 0 0 12px rgba(52,211,153,0.6);
+        .operator-avatar-icon {
+            width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669);
+            display: flex; align-items: center; justify-content: center; font-size: 18px; border: 2px solid #34d399;
+            box-shadow: 0 0 12px rgba(52,211,153,0.6); flex-shrink: 0;
         }
         .chat-messages-scroll {
             flex: 1; padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; text-align: left;
@@ -360,6 +332,10 @@
             width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #10b981);
             display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; font-size: 14px;
             flex-shrink: 0; box-shadow: 0 3px 10px rgba(0,0,0,0.5); overflow: hidden;
+        }
+        .milestone-reward-box {
+            background: var(--input-bg); border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 16px; padding: 12px; margin-top: 10px; text-align: left;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
         }
     </style>
 </head>
@@ -442,13 +418,15 @@
                     <defs>
                         <linearGradient id="proLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" stop-color="#34d399"/>
-                            <stop offset="100%" stop-color="#059669"/>
+                            <stop offset="50%" stop-color="#059669"/>
+                            <stop offset="100%" stop-color="#3b82f6"/>
                         </linearGradient>
                     </defs>
-                    <circle cx="32" cy="32" r="30" fill="url(#proLogoGrad)" opacity="0.3"/>
-                    <circle cx="32" cy="32" r="30" fill="none" stroke="#34d399" stroke-width="3"/>
-                    <path d="M18 18 L46 46 M46 18 L18 46" stroke="#34d399" stroke-width="5" stroke-linecap="round"/>
-                    <polygon points="46,18 52,14 48,22" fill="#ffffff"/>
+                    <circle cx="32" cy="32" r="30" fill="url(#proLogoGrad)" opacity="0.25"/>
+                    <circle cx="32" cy="32" r="29" fill="none" stroke="#34d399" stroke-width="2.5"/>
+                    <polygon points="32 8, 54 22, 54 42, 32 56, 10 42, 10 22" fill="none" stroke="#60a5fa" stroke-width="1.5" opacity="0.6"/>
+                    <path d="M32 14 L46 24 L32 50 L18 24 Z" fill="url(#proLogoGrad)"/>
+                    <polygon points="32,14 46,24 32,28 18,24" fill="#ffffff" opacity="0.6"/>
                 </svg>
                 <h1 class="app-title">Mineral Mining Pro</h1>
             </div>
@@ -492,10 +470,24 @@
                 <div class="mining-core-container">
                     <div class="mining-core-ring"></div>
                     <div class="mining-core-glow">
-                        <div class="css-3d-gem">
-                            <div class="gem-facet-top"></div>
-                            <div class="gem-facet"></div>
-                        </div>
+                        <svg class="vector-3d-gem-svg" viewBox="0 0 100 100">
+                            <defs>
+                                <linearGradient id="gemGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#60a5fa"/>
+                                    <stop offset="50%" stop-color="#34d399"/>
+                                    <stop offset="100%" stop-color="#059669"/>
+                                </linearGradient>
+                                <linearGradient id="gemGradTop" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#ffffff"/>
+                                    <stop offset="100%" stop-color="#a7f3d0"/>
+                                </linearGradient>
+                            </defs>
+                            <polygon points="50,5 88,30 50,95 12,30" fill="url(#gemGrad1)"/>
+                            <polygon points="50,5 88,30 50,38 12,30" fill="url(#gemGradTop)" opacity="0.85"/>
+                            <polygon points="50,38 88,30 50,95" fill="#047857" opacity="0.35"/>
+                            <polygon points="50,38 12,30 50,95" fill="#3b82f6" opacity="0.3"/>
+                            <line x1="50" y1="5" x2="50" y2="95" stroke="#ffffff" stroke-width="1.5" opacity="0.6"/>
+                        </svg>
                     </div>
                 </div>
 
@@ -539,6 +531,12 @@
                 <input type="text" id="refLinkInput" readonly style="font-size: 11px;">
                 <button class="btn-3d-success btn-sm" onclick="copyRefLink()" style="width:100%; margin-top:6px;" id="btnCopyRef">🔗 Copy Referral Link</button>
 
+                <!-- Milestone Rewards Section -->
+                <div class="milestone-reward-box">
+                    <div style="font-size: 11px; font-weight: 900; color: #c084fc; margin-bottom: 6px;">🎯 Referral Milestones Bonuses</div>
+                    <div id="milestonesListContainer" style="font-size: 10px; display: flex; flex-direction: column; gap: 6px;"></div>
+                </div>
+
                 <div style="margin-top: 18px; border-top: var(--card-border); padding-top: 14px;">
                     <h3 style="font-size: 12px; margin: 0 0 10px 0; font-weight: 900; color: #34d399;" id="txtRefListTitle">📋 Your Invited Friends</h3>
                     <div id="referredUsersListContainer" class="history-list" style="max-height: 160px;">
@@ -555,7 +553,7 @@
                 <input type="text" id="profileNameInput" placeholder="Enter your name">
                 <button class="btn-3d-success btn-sm" onclick="saveProfileName()" style="width:100%; margin-top:6px;" id="btnSaveName">💾 Save Name</button>
                 <p style="margin: 12px 0 6px 0; font-size: 11px;"><b>Telegram ID:</b> <span id="profileIdDisplay" style="color: var(--text-muted);">Loading...</span></p>
-                <p style="margin: 6px 0; font-size: 11px;"><b id="txtProfileTier">Current Tier:</b> <span id="profileVipDisplay" style="color: #3b82f6;">VIP 0</span></p>
+                <p style="margin: 6px 0; font-size: 11px;"><b id="txtProfileTier">Current Tiers:</b> <span id="profileVipDisplay" style="color: #3b82f6;">None</span></p>
                 <p style="margin: 6px 0; font-size: 11px;"><b id="txtProfileCapital">Active Capital:</b> $<span id="profileInvDisplay" style="color: #34d399;">0.00</span></p>
             </div>
         </div>
@@ -629,7 +627,7 @@
         <div class="modal-content" style="max-width: 415px; padding: 20px;">
             <div class="chat-container-modern">
                 <div class="chat-header-bar">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="operator-avatar" alt="Operator">
+                    <div class="operator-avatar-icon">🎧</div>
                     <div style="text-align: left;">
                         <div style="font-size: 12px; font-weight: 900; color: #f8fafc;" id="txtSupportName">Mineral Pro Support</div>
                         <div style="font-size: 9px; color: #34d399; font-weight: 700;" id="txtSupportStatus">● Online (Replies in minutes)</div>
@@ -673,7 +671,6 @@
         const CHANNEL_2 = '@MineralMinerPro_Payment';
         const ADMIN_TELEGRAM_ID = '7038584886'; 
 
-        // 10+ Languages Dictionary (English default)
         const translations = {
             en: {
                 vipStatus: "VIP status", availBal: "Available Balance", activeCap: "Active Capital", dailyRate: "Daily Rate",
@@ -681,7 +678,7 @@
                 vipTitle: "👑 VIP Mining Tiers", earnersTitle: "🏆 Top Miners Leaderboard", earnersSub: "Global top investors with dynamic yield returns.",
                 refTitle: "👥 Referral System", refSub: "Invite friends & unlock milestone cash rewards!", perFriend: "Per Friend Direct", totalInv: "Total Invited",
                 copyRef: "🔗 Copy Referral Link", myRef: "📋 Your Invited Friends", profileTitle: "👤 Profile", nameLbl: "Display Name:",
-                saveName: "💾 Save Name", tierLbl: "Current Tier:", histBtn: "History", dailyTitle: "Daily Check-In Reward", dailySub: "Claim free +$0.02 every 24h",
+                saveName: "💾 Save Name", tierLbl: "Current Tiers:", histBtn: "History", dailyTitle: "Daily Check-In Reward", dailySub: "Claim free +$0.02 every 24h",
                 depTitle: "Deposit Crypto", wdTitle: "Withdraw Funds", histTitle: "📜 Activity Records", buy: "Buy"
             },
             am: {
@@ -690,80 +687,8 @@
                 vipTitle: "👑 የቪአይፒ ማዕድን ደረጃዎች", earnersTitle: "🏆 ከፍተኛ ማዕድን አውጪዎች", earnersSub: "ዓለም አቀፍ ከፍተኛ ባለሀብቶች።",
                 refTitle: "👥 የሪፈራል ሲስተም", refSub: "ጓደኞችን ይጋብዙ እና ሽልማቶችን ያግኙ!", perFriend: "ለእያንዳንዱ ጓደኛ", totalInv: "ጠቅላላ የተጋበዙ",
                 copyRef: "🔗 የሪፈራል ሊንክ ቅዳ", myRef: "📋 የጋበዟቸው ጓደኞች", profileTitle: "👤 መገለጫ", nameLbl: "ስምዎ:",
-                saveName: "💾 ስም አስቀምጥ", tierLbl: "የአሁን ደረጃ:", histBtn: "ታሪክ", dailyTitle: "የዕለት ጉብኝት ሽልማት", dailySub: "በየ 24 ሰዓቱ +$0.02 በነጻ ይውሰዱ",
+                saveName: "💾 ስም አስቀምጥ", tierLbl: "የአሁን ደረጃዎች:", histBtn: "ታሪክ", dailyTitle: "የዕለት ጉብኝት ሽልማት", dailySub: "በየ 24 ሰዓቱ +$0.02 በነጻ ይውሰዱ",
                 depTitle: "ገንዘብ ማስገባት", wdTitle: "ገንዘብ ማውጣት", histTitle: "📜 የግብይት ታሪክ", buy: "ግዛ"
-            },
-            ar: {
-                vipStatus: "حالة VIP", availBal: "الرصيد المتاح", activeCap: "الرأس المال النشط", dailyRate: "المعدل اليومي",
-                dep: "إيداع", wd: "سحب", liveMined: "التعدين المباشر", claim: "مطالبة الأرباح",
-                vipTitle: "👑 مستويات التعدين", earnersTitle: "🏆 لوحة المتصدرين", earnersSub: "أفضل المستثمرين العالميين.",
-                refTitle: "👥 نظام الإحالة", refSub: "دعوة الأصدقاء وكسب المكافآت!", perFriend: "لكل صديق", totalInv: "إجمالي المدعوين",
-                copyRef: "🔗 نسخ رابط الإحالة", myRef: "📋 أصدقاؤك المدعوون", profileTitle: "👤 الملف الشخصي", nameLbl: "اسم العرض:",
-                saveName: "💾 حفظ الاسم", tierTier: "المستوى الحالي:", histBtn: "السجل", dailyTitle: "مكافأة تسجيل الدخول", dailySub: "احصل على +$0.02 مجاناً",
-                depTitle: "إيداع العملات", wdTitle: "سحب الأموال", histTitle: "📜 سجل النشاطات", buy: "شراء"
-            },
-            hi: {
-                vipStatus: "VIP स्थिति", availBal: "उपलब्ध शेष राशि", activeCap: "सक्रिय पूंजी", dailyRate: "दैनिक दर",
-                dep: "जमा करें", wd: "निकासी", liveMined: "लाइव माइनिंग", claim: "आय का दावा करें",
-                vipTitle: "👑 वीआईपी माइनिंग टियर", earnersTitle: "🏆 शीर्ष खनिक", earnersSub: "वैश्विक शीर्ष निवेशक।",
-                refTitle: "👥 रेफरल प्रणाली", refSub: "दोस्तों को आमंत्रित करें!", perFriend: "प्रति मित्र", totalInv: "कुल आमंत्रित",
-                copyRef: "🔗 रेफरल लिंक कॉपी करें", myRef: "📋 आपके आमंत्रित मित्र", profileTitle: "👤 प्रोफ़ाइल", nameLbl: "प्रदर्शन नाम:",
-                saveName: "💾 नाम सहेजें", tierLbl: "वर्तमान टियर:", histBtn: "इतिहास", dailyTitle: "दैनिक चेक-इन पुरस्कार", dailySub: "हर 24 घंटे में +$0.02 प्राप्त करें",
-                depTitle: "क्रिप्टो जमा करें", wdTitle: "धन निकासी", histTitle: "📜 गतिविधि रिकॉर्ड", buy: "खरीदें"
-            },
-            it: {
-                vipStatus: "Stato VIP", availBal: "Saldo Disponibile", activeCap: "Capitale Attivo", dailyRate: "Tasso Giornaliero",
-                dep: "Deposito", wd: "Preleva", liveMined: "Minato dal vivo", claim: "Riscatta Guadagni",
-                vipTitle: "👑 Livelli VIP", earnersTitle: "🏆 Classifica Miner", earnersSub: "I migliori investitori globali.",
-                refTitle: "👥 Sistema Referral", refSub: "Invita amici e guadagna!", perFriend: "Per amico", totalInv: "Totale Invitati",
-                copyRef: "🔗 Copia Link", myRef: "📋 Amici Invitati", profileTitle: "👤 Profilo", nameLbl: "Nome Visualizzato:",
-                saveName: "💾 Salva Nome", tierLbl: "Livello Attuale:", histBtn: "Cronologia", dailyTitle: "Premio Accesso Giornaliero", dailySub: "Riscatta +$0.02",
-                depTitle: "Deposita", wdTitle: "Preleva Fondi", histTitle: "📜 Record Attività", buy: "Acquista"
-            },
-            es: {
-                vipStatus: "Estado VIP", availBal: "Saldo Disponible", activeCap: "Capital Activo", dailyRate: "Tasa Diaria",
-                dep: "Depositar", wd: "Retirar", liveMined: "Minado en vivo", claim: "Reclamar Ganancias",
-                vipTitle: "👑 Niveles VIP", earnersTitle: "🏆 Top Mineros", earnersSub: "Principales inversores globales.",
-                refTitle: "👥 Sistema de Referidos", refSub: "¡Invita amigos y gana!", perFriend: "Por amigo", totalInv: "Total Invitados",
-                copyRef: "🔗 Copiar Enlace", myRef: "📋 Amigos Invitados", profileTitle: "👤 Perfil", nameLbl: "Nombre:",
-                saveName: "💾 Guardar Nombre", tierLbl: "Nivel Actual:", histBtn: "Historial", dailyTitle: "Recompensa Diaria", dailySub: "Reclama +$0.02 gratis",
-                depTitle: "Depositar Crypto", wdTitle: "Retirar Fondos", histTitle: "📜 Registros", buy: "Comprar"
-            },
-            fr: {
-                vipStatus: "Statut VIP", availBal: "Solde Disponible", activeCap: "Capital Actif", dailyRate: "Taux Journalier",
-                dep: "Déposer", wd: "Retirer", liveMined: "Miné en direct", claim: "Réclamer",
-                vipTitle: "👑 Niveaux VIP", earnersTitle: "🏆 Top Mineurs", earnersSub: "Meilleurs investisseurs mondiaux.",
-                refTitle: "👥 Système de Parrainage", refSub: "Invitez des amis !", perFriend: "Par ami", totalInv: "Total Invités",
-                copyRef: "🔗 Copier le lien", myRef: "📋 Amis Invités", profileTitle: "👤 Profil", nameLbl: "Nom d'affichage:",
-                saveName: "💾 Enregistrer", tierLbl: "Niveau Actuel:", histBtn: "Historique", dailyTitle: "Récompense Quotidienne", dailySub: "Réclamez +$0.02",
-                depTitle: "Déposer", wdTitle: "Retirer des fonds", histTitle: "📜 Historique", buy: "Acheter"
-            },
-            ru: {
-                vipStatus: "VIP статус", availBal: "Баланс", activeCap: "Активный капитал", dailyRate: "Дневная ставка",
-                dep: "Депозит", wd: "Вывод", liveMined: "Добыто", claim: "Собрать доход",
-                vipTitle: "👑 VIP Уровни", earnersTitle: "🏆 Топ Майнеров", earnersSub: "Лучшие инвесторы.",
-                refTitle: "👥 Реферальная система", refSub: "Приглашайте друзей!", perFriend: "За друга", totalInv: "Всего приглашено",
-                copyRef: "🔗 Скопировать ссылку", myRef: "📋 Ваши друзья", profileTitle: "👤 Профиль", nameLbl: "Имя:",
-                saveName: "💾 Сохранить", tierLbl: "Уровень:", histBtn: "История", dailyTitle: "Ежедневный бонус", dailySub: "Получите +$0.02",
-                depTitle: "Пополнить", wdTitle: "Вывести средства", histTitle: "📜 Записи", buy: "Купить"
-            },
-            tr: {
-                vipStatus: "VIP Durumu", availBal: "Mevcut Bakiye", activeCap: "Aktif Sermaye", dailyRate: "Günlük Oran",
-                dep: "Yatırım", wd: "Çekim", liveMined: "Canlı Madencilik", claim: "Kazancı Al",
-                vipTitle: "👑 VIP Seviyeleri", earnersTitle: "🏆 En İyi Madenciler", earnersSub: "Küresel yatırımcılar.",
-                refTitle: "👥 Referans Sistemi", refSub: "Arkadaşlarını davet et!", perFriend: "Kişi başı", totalInv: "Toplam Davet",
-                copyRef: "🔗 Bağlantıyı Kopyala", myRef: "📋 Davet Edilenler", profileTitle: "👤 Profil", nameLbl: "Görünen Ad:",
-                saveName: "💾 Adı Kaydet", tierLbl: "Mevcut Seviye:", histBtn: "Geçmiş", dailyTitle: "Günlük Giriş Ödülü", dailySub: "Her gün +$0.02 al",
-                depTitle: "Kripto Yatır", wdTitle: "Para Çek", histTitle: "📜 İşlem Geçmişi", buy: "Satın Al"
-            },
-            zh: {
-                vipStatus: "VIP 状态", availBal: "可用余额", activeCap: "活跃资本", dailyRate: "日收益率",
-                dep: "存款", wd: "提现", liveMined: "实时挖矿", claim: "领取收益",
-                vipTitle: "👑 VIP 矿业等级", earnersTitle: "🏆 顶级矿工排行榜", earnersSub: "全球顶尖投资者。",
-                refTitle: "👥 推荐系统", refSub: "邀请好友赢取奖励！", perFriend: "每位好友", totalInv: "总邀请人数",
-                copyRef: "🔗 复制推荐链接", myRef: "📋 您邀请的好友", profileTitle: "👤 个人资料", nameLbl: "显示名称:",
-                saveName: "💾 保存名称", tierLbl: "当前等级:", histBtn: "历史", dailyTitle: "每日签到奖励", dailySub: "每24小时领取 +$0.02",
-                depTitle: "存款", wdTitle: "提现资金", histTitle: "📜 活动记录", buy: "购买"
             }
         };
 
@@ -802,11 +727,11 @@
             document.getElementById('txtWdModalTitle').innerText = t.wdTitle;
             document.getElementById('txtHistModalTitle').innerText = t.histTitle;
 
-            document.getElementById('navHome').innerText = lang === 'am' ? 'መነሻ' : (lang === 'ar' ? 'الرئيسية' : 'Home');
-            document.getElementById('navVip').innerText = lang === 'am' ? 'ቪአይፒ' : (lang === 'ar' ? 'VIP' : 'VIP');
-            document.getElementById('navEarners').innerText = lang === 'am' ? 'ባለሀብቶች' : (lang === 'ar' ? 'الأرباح' : 'Earners');
-            document.getElementById('navRef').innerText = lang === 'am' ? 'ሪፈራል' : (lang === 'ar' ? 'الإحالة' : 'Referral');
-            document.getElementById('navProfile').innerText = lang === 'am' ? 'መገለጫ' : (lang === 'ar' ? 'الملف' : 'Profile');
+            document.getElementById('navHome').innerText = lang === 'am' ? 'መነሻ' : 'Home';
+            document.getElementById('navVip').innerText = lang === 'am' ? 'ቪአይፒ' : 'VIP';
+            document.getElementById('navEarners').innerText = lang === 'am' ? 'ባለሀብቶች' : 'Earners';
+            document.getElementById('navRef').innerText = lang === 'am' ? 'ሪፈራል' : 'Referral';
+            document.getElementById('navProfile').innerText = lang === 'am' ? 'መገለጫ' : 'Profile';
 
             renderVipTiers();
         }
@@ -933,17 +858,22 @@
             "James Miller", "William Davis", "Benjamin Garcia", "Lucas Rodriguez", "Henry Martinez"
         ];
 
+        // Leaderboard expanded to 10 top miners as requested
         const topEarnersData = [
             { rank: 1, name: "Alexander Smith", vip: "VIP 7 (Diamond)", earned: 4850.20, badge: "🥇" },
             { rank: 2, name: "Liam Johnson", vip: "VIP 7 (Diamond)", earned: 4620.00, badge: "🥈" },
             { rank: 3, name: "Noah Williams", vip: "VIP 6 (Emerald)", earned: 2410.50, badge: "🥉" },
             { rank: 4, name: "Oliver Brown", vip: "VIP 5 (Sapphire)", earned: 1240.00, badge: "4" },
-            { rank: 5, name: "Elijah Jones", vip: "VIP 5 (Sapphire)", earned: 1150.80, badge: "5" }
+            { rank: 5, name: "Elijah Jones", vip: "VIP 5 (Sapphire)", earned: 1150.80, badge: "5" },
+            { rank: 6, name: "James Miller", vip: "VIP 4 (Ruby)", earned: 980.40, badge: "6" },
+            { rank: 7, name: "William Davis", vip: "VIP 3 (Platinum)", earned: 760.10, badge: "7" },
+            { rank: 8, name: "Benjamin Garcia", vip: "VIP 3 (Platinum)", earned: 620.00, badge: "8" },
+            { rank: 9, name: "Lucas Rodriguez", vip: "VIP 2 (Gold)", earned: 450.50, badge: "9" },
+            { rank: 10, name: "Henry Martinez", vip: "VIP 1 (Silver)", earned: 310.20, badge: "10" }
         ];
 
         let telegramId = '';
         let userName = '';
-        let startParamRef = '';
 
         try {
             if (window.Telegram && Telegram.WebApp) {
@@ -953,7 +883,6 @@
                     telegramId = String(Telegram.WebApp.initDataUnsafe.user.id);
                     if (Telegram.WebApp.initDataUnsafe.user.first_name) userName = Telegram.WebApp.initDataUnsafe.user.first_name;
                 }
-                if (Telegram.WebApp.initDataUnsafe?.start_param) startParamRef = Telegram.WebApp.initDataUnsafe.start_param;
             }
         } catch(e) {}
 
@@ -973,8 +902,7 @@
         }
 
         let balance = 1.00;
-        let activeInvestment = 0.00;
-        let vipLevel = 0;
+        let activeInvestments = []; // Array of active VIP purchases (Supports multiple different VIPs simultaneously)
         let minedAccumulated = 0.00;
         let referralCount = 0;
         let lastCheckInTime = 0;
@@ -995,7 +923,6 @@
             { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, color1: "#a5f3fc", color2: "#0891b2" }
         ];
 
-        // ROCK-SOLID SERVER SYNCED INITIALIZATION (ZERO DATA LOSS ON REFRESH)
         async function initSupabaseCloudApp() {
             try {
                 if (localStorage.getItem('channels_joined_verified') === 'true') {
@@ -1007,7 +934,8 @@
                     if (navBtn) navBtn.style.display = 'inline-block';
                 }
 
-                const { data: existingUser, error } = await supabaseClient
+                // Fetch user profile from Supabase
+                const { data: existingUser } = await supabaseClient
                     .from('users')
                     .select('*')
                     .eq('telegram_id', telegramId)
@@ -1015,12 +943,10 @@
 
                 if (existingUser) {
                     balance = Number(existingUser.balance ?? balance);
-                    activeInvestment = Number(existingUser.active_investment ?? activeInvestment);
-                    vipLevel = Number(existingUser.vip_level ?? vipLevel);
-                    minedAccumulated = Number(existingUser.mined_accumulated ?? minedAccumulated);
                     referralCount = Number(existingUser.referral_count ?? referralCount);
                     lastCheckInTime = Number(existingUser.last_check_in ?? lastCheckInTime);
                     lastMysteryBoxTime = Number(existingUser.last_mystery_box ?? lastMysteryBoxTime);
+                    minedAccumulated = Number(existingUser.mined_accumulated ?? minedAccumulated);
                     lastActiveTimestamp = Number(existingUser.last_active_timestamp ?? lastActiveTimestamp);
                     isBanned = Boolean(existingUser.is_banned ?? false);
                     if (existingUser.history && Array.isArray(existingUser.history)) historyLog = existingUser.history;
@@ -1031,12 +957,10 @@
                         telegram_id: String(telegramId),
                         user_name: String(userName),
                         balance: Number(balance),
-                        active_investment: Number(activeInvestment),
-                        vip_level: Number(vipLevel),
-                        mined_accumulated: Number(minedAccumulated),
                         referral_count: Number(referralCount),
                         last_check_in: Number(lastCheckInTime),
                         last_mystery_box: Number(lastMysteryBoxTime),
+                        mined_accumulated: Number(minedAccumulated),
                         claimed_milestones: claimedMilestones,
                         last_active_timestamp: Date.now(),
                         is_banned: false,
@@ -1045,23 +969,31 @@
                     await supabaseClient.from('users').insert([newUser]);
                 }
 
+                // Fetch active investments for this user from user_investments table
+                const { data: invData } = await supabaseClient
+                    .from('user_investments')
+                    .select('*')
+                    .eq('telegram_id', telegramId)
+                    .eq('status', 'active');
+
+                if (invData && invData.length > 0) {
+                    activeInvestments = invData;
+                }
+
                 const now = Date.now();
                 const elapsedSeconds = Math.floor((now - lastActiveTimestamp) / 1000);
-                if (elapsedSeconds > 2 && activeInvestment > 0) {
-                    const currentRate = vipTiersData[vipLevel]?.rate || 0.06;
-                    const ratePerSecond = (activeInvestment * currentRate) / 86400;
-                    minedAccumulated += (elapsedSeconds * ratePerSecond);
+                if (elapsedSeconds > 2 && activeInvestments.length > 0) {
+                    let totalSecRate = 0;
+                    activeInvestments.forEach(inv => {
+                        totalSecRate += (Number(inv.amount) * Number(inv.daily_percent)) / 86400;
+                    });
+                    minedAccumulated += (elapsedSeconds * totalSecRate);
                 }
                 lastActiveTimestamp = now;
 
-                if (isBanned) {
-                    document.getElementById('banModal').style.display = 'flex';
-                    document.getElementById('loadingOverlay').style.display = 'none';
-                    return;
-                }
-
                 renderVipTiers();
                 renderEarnersLeaderboard();
+                renderMilestones();
                 updateUI();
                 checkDailyCheckInState();
                 updateDepositAddress();
@@ -1080,6 +1012,7 @@
             } catch (e) {
                 renderVipTiers();
                 renderEarnersLeaderboard();
+                renderMilestones();
                 updateUI();
                 const loader = document.getElementById('loadingOverlay');
                 if (loader) loader.style.display = 'none';
@@ -1099,12 +1032,10 @@
                     telegram_id: String(telegramId),
                     user_name: String(userName || 'Miner'),
                     balance: Number(balance || 0),
-                    active_investment: Number(activeInvestment || 0),
-                    vip_level: Number(vipLevel || 0),
-                    mined_accumulated: Number(minedAccumulated || 0),
                     referral_count: Number(referralCount || 0),
                     last_check_in: Number(lastCheckInTime || 0),
                     last_mystery_box: Number(lastMysteryBoxTime || 0),
+                    mined_accumulated: Number(minedAccumulated || 0),
                     claimed_milestones: claimedMilestones || [],
                     last_active_timestamp: Number(lastActiveTimestamp),
                     history: historyLog || [],
@@ -1133,24 +1064,28 @@
             try {
                 if (isBanned) return;
                 document.getElementById('balanceDisplay').innerText = balance.toFixed(2);
-                document.getElementById('activeInvDisplay').innerText = activeInvestment.toFixed(2);
-                document.getElementById('profileInvDisplay').innerText = activeInvestment.toFixed(2);
-                document.getElementById('vipDisplay').innerText = vipTiersData[vipLevel].name;
+                
+                let totalActiveCapital = 0;
+                activeInvestments.forEach(inv => { totalActiveCapital += Number(inv.amount); });
+
+                document.getElementById('activeInvDisplay').innerText = totalActiveCapital.toFixed(2);
+                document.getElementById('profileInvDisplay').innerText = totalActiveCapital.toFixed(2);
                 document.getElementById('refCountDisplay').innerText = referralCount;
                 document.getElementById('profileIdDisplay').innerText = telegramId;
-                document.getElementById('profileVipDisplay').innerText = vipTiersData[vipLevel].name;
+                
+                let activeVipNames = activeInvestments.map(i => i.vip_level).join(', ');
+                if (!activeVipNames) activeVipNames = "VIP 0 (Quartz)";
+                document.getElementById('vipDisplay').innerText = activeVipNames;
+                document.getElementById('profileVipDisplay').innerText = activeVipNames;
                 
                 const nameInput = document.getElementById('profileNameInput');
                 if (nameInput && document.activeElement !== nameInput) nameInput.value = userName;
                 
-                const currentRatePct = (vipTiersData[vipLevel].rate * 100).toFixed(0) + '%';
-                const rateEl = document.getElementById('activeRateDisplay');
-                if (rateEl) rateEl.innerText = currentRatePct;
-
                 const refInput = document.getElementById('refLinkInput');
                 if (refInput) refInput.value = "https://t.me/" + botUsername + "/mineral_mining?startapp=ref_" + telegramId;
 
                 checkMysteryBoxVisibility();
+                renderMilestones();
 
                 const histHtml = historyLog.map(h => {
                     return `<div class="history-card-item">
@@ -1160,9 +1095,7 @@
                 }).join('');
 
                 const hList = document.getElementById('historyList');
-                const pHList = document.getElementById('profileHistoryList');
                 if (hList) hList.innerHTML = histHtml;
-                if (pHList) pHList.innerHTML = histHtml;
             } catch(e) {}
         }
 
@@ -1199,6 +1132,46 @@
             } catch(e) {}
         }
 
+        // Milestone rewards (20, 30, 50, 100 referrals)
+        const milestoneRules = [
+            { count: 20, reward: 2.00, label: "20 Friends ($2.00)" },
+            { count: 30, reward: 4.00, label: "30 Friends ($4.00)" },
+            { count: 50, reward: 8.00, label: "50 Friends ($8.00)" },
+            { count: 100, reward: 20.00, label: "100 Friends ($20.00)" }
+        ];
+
+        function renderMilestones() {
+            const container = document.getElementById('milestonesListContainer');
+            if (!container) return;
+            container.innerHTML = milestoneRules.map(m => {
+                const isClaimed = claimedMilestones.includes(m.count);
+                const canClaim = referralCount >= m.count && !isClaimed;
+                let btnHtml = '';
+                if (isClaimed) {
+                    btnHtml = '<span style="color: #34d399; font-weight: 800;">Claimed ✅</span>';
+                } else if (canClaim) {
+                    btnHtml = `<button class="btn-3d-success btn-sm" style="padding: 4px 10px; font-size: 9px;" onclick="claimMilestone(${m.count}, ${m.reward})">Claim $${m.reward}</button>`;
+                } else {
+                    btnHtml = `<span style="color: var(--text-muted);">(${referralCount}/${m.count})</span>`;
+                }
+                return `<div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 12px;">
+                    <span>🎁 Milestone: <b>${m.label}</b></span>
+                    <span>${btnHtml}</span>
+                </div>`;
+            }).join('');
+        }
+
+        async function claimMilestone(targetCount, rewardAmt) {
+            triggerHaptic();
+            if (referralCount < targetCount || claimedMilestones.includes(targetCount)) return;
+            claimedMilestones.push(targetCount);
+            balance += rewardAmt;
+            historyLog.unshift(`🎯 Referral Milestone (${targetCount} Friends): +$${rewardAmt.toFixed(2)}`);
+            updateUI();
+            showPushNotification(`🎉 Milestone reward of $${rewardAmt.toFixed(2)} claimed!`);
+            await saveDataToSupabase();
+        }
+
         async function loadReferredUsersList() {
             const container = document.getElementById('referredUsersListContainer');
             if (!container) return;
@@ -1208,7 +1181,7 @@
                     container.innerHTML = '<div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">No referrals yet.</div>';
                     return;
                 }
-                const referredItems = usersList.filter(u => String(u.telegram_id) !== String(telegramId)).slice(0, 10);
+                const referredItems = usersList.filter(u => String(u.telegram_id) !== String(telegramId)).slice(0, 15);
                 if (referredItems.length === 0) {
                     container.innerHTML = '<div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">No referrals yet. Share your link!</div>';
                     return;
@@ -1265,15 +1238,30 @@
             const c = document.getElementById('vipCardsContainer');
             if (!c) return;
             const tObj = translations[currentLang] || translations['en'];
+            
             c.innerHTML = vipTiersData.map(t => {
-                const isCurr = Number(vipLevel) === Number(t.level) && Number(activeInvestment) > 0;
+                // Check if user already owns this specific VIP tier
+                const alreadyPurchased = activeInvestments.some(inv => inv.vip_level === t.name);
                 const ratePct = (t.rate * 100).toFixed(0);
+
+                let actionButtonHtml = '';
+                if (alreadyPurchased) {
+                    actionButtonHtml = '<span style="color:#34d399; font-size:11px; font-weight:900;">Purchased (Locked)</span>';
+                } else {
+                    actionButtonHtml = `<button class="btn-3d-success btn-sm" onclick="buyVip(${t.level})">${tObj.buy}</button>`;
+                }
+
                 return `<div class="vip-card-item">
                     <div style="display:flex; align-items:center; gap:12px; text-align:left;">
-                        <div class="vip-badge-3d"><div class="mini-crystal"><div class="crystal-core" style="background: linear-gradient(135deg, ${t.color1}, ${t.color2});"></div></div></div>
+                        <div class="vip-badge-3d">
+                            <svg width="32" height="32" viewBox="0 0 100 100">
+                                <polygon points="50,5 88,30 50,95 12,30" fill="${t.color1}"/>
+                                <polygon points="50,5 88,30 50,38 12,30" fill="#ffffff" opacity="0.6"/>
+                            </svg>
+                        </div>
                         <div><b>${t.name}</b><br><span style="font-size:10px; color:var(--text-muted)">Price: $${t.price} | Daily: $${t.daily.toFixed(2)} (${ratePct}%)</span></div>
                     </div>
-                    <div>${isCurr ? '<span style="color:#34d399; font-size:11px; font-weight:900;">Active</span>' : `<button class="btn-3d-success btn-sm" onclick="buyVip(${t.level})">${tObj.buy}</button>`}</div>
+                    <div>${actionButtonHtml}</div>
                 </div>`;
             }).join('');
         }
@@ -1297,6 +1285,13 @@
                 if (isBanned) return;
                 triggerHaptic();
                 const t = vipTiersData[lvl];
+
+                // Check if already bought
+                const alreadyPurchased = activeInvestments.some(inv => inv.vip_level === t.name);
+                if (alreadyPurchased) {
+                    showPushNotification('You already own this VIP tier!');
+                    return;
+                }
                 
                 if (balance < t.price) { 
                     showPushNotification('Insufficient balance!'); 
@@ -1304,21 +1299,20 @@
                 }
                 
                 balance = Number(balance) - Number(t.price);
-                activeInvestment = Number(t.price);
-                vipLevel = Number(t.level);
-                minedAccumulated = 0;
                 historyLog.unshift("Activated " + t.name);
 
-                await supabaseClient.from('user_investments').insert([
-                    { 
-                        telegram_id: String(telegramId), 
-                        vip_level: String(t.name), 
-                        amount: Number(t.price),
-                        daily_percent: Number(t.rate),
-                        status: 'active',
-                        created_at: new Date()
-                    }
-                ]);
+                const newInv = { 
+                    telegram_id: String(telegramId), 
+                    vip_level: String(t.name), 
+                    amount: Number(t.price),
+                    daily_percent: Number(t.rate),
+                    status: 'active',
+                    created_at: new Date()
+                };
+
+                activeInvestments.push(newInv);
+
+                await supabaseClient.from('user_investments').insert([newInv]);
                 
                 updateUI();
                 renderVipTiers();
@@ -1334,13 +1328,20 @@
                 const barEl = document.getElementById('miningProgressBar');
                 const pctEl = document.getElementById('miningPctDisplay');
 
-                if (activeInvestment <= 0) return;
+                if (activeInvestments.length === 0) return;
 
-                const currentRate = vipTiersData[vipLevel]?.rate || 0.06;
-                const rate = (activeInvestment * currentRate) / 86400;
-                minedAccumulated += rate;
-                const daily = activeInvestment * currentRate;
-                const pct = Math.min(100, (minedAccumulated / daily) * 100);
+                let combinedSecRate = 0;
+                let totalDailyCap = 0;
+
+                activeInvestments.forEach(inv => {
+                    const amt = Number(inv.amount);
+                    const pct = Number(inv.daily_percent);
+                    combinedSecRate += (amt * pct) / 86400;
+                    totalDailyCap += (amt * pct);
+                });
+
+                minedAccumulated += combinedSecRate;
+                const pct = totalDailyCap > 0 ? Math.min(100, (minedAccumulated / totalDailyCap) * 100) : 0;
                 
                 if (valEl) valEl.innerText = "+ $" + minedAccumulated.toFixed(5);
                 if (barEl) barEl.style.width = pct + '%';
@@ -1427,7 +1428,7 @@
             const amt = parseFloat(document.getElementById('withdrawAmountInput').value || 0);
             const net = document.getElementById('withdrawNetwork').value;
             if (amt < 5 || amt > balance) { showPushNotification('Invalid amount'); return; }
-            if (vipLevel < 1) { showPushNotification('VIP 1 required for withdrawal'); return; }
+            if (activeInvestments.length === 0) { showPushNotification('At least VIP 1 required for withdrawal'); return; }
 
             balance -= amt;
             await supabaseClient.from('transactions').insert([{
