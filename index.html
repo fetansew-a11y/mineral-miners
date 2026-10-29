@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mineral Mining Global Pro 2026 - Ultimate Edition</title>
+    <title>Mineral Mining Global Pro 2026 - Production Stable Edition</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -456,7 +456,7 @@
                     <span><span id="balanceDisplay">1.00</span> $</span>
                 </div>
 
-                <div class="sub-balance"><span id="txtActiveCapital">Active Capital</span>: $<span id="activeInvDisplay">0.00</span> (<span id="activeRateDisplay">6%</span> <span id="txtDailyRate">Daily Rate</span>)</div>
+                <div class="sub-balance"><span id="txtActiveCapital">Active Capital</span>: $<span id="activeInvDisplay">0.00</span> (<span id="activeRateDisplay">0%</span> <span id="txtDailyRate">Daily Rate</span>)</div>
                 
                 <div class="btn-grid" style="margin: 8px 0 12px 0;">
                     <button class="btn-3d-success" style="padding: 11px; font-size: 11px;" onclick="openModal('depositModal')">
@@ -531,7 +531,6 @@
                 <input type="text" id="refLinkInput" readonly style="font-size: 11px;">
                 <button class="btn-3d-success btn-sm" onclick="copyRefLink()" style="width:100%; margin-top:6px;" id="btnCopyRef">🔗 Copy Referral Link</button>
 
-                <!-- Milestone Rewards Section -->
                 <div class="milestone-reward-box">
                     <div style="font-size: 11px; font-weight: 900; color: #c084fc; margin-bottom: 6px;">🎯 Referral Milestones Bonuses</div>
                     <div id="milestonesListContainer" style="font-size: 10px; display: flex; flex-direction: column; gap: 6px;"></div>
@@ -858,7 +857,6 @@
             "James Miller", "William Davis", "Benjamin Garcia", "Lucas Rodriguez", "Henry Martinez"
         ];
 
-        // Leaderboard expanded to 10 top miners as requested
         const topEarnersData = [
             { rank: 1, name: "Alexander Smith", vip: "VIP 7 (Diamond)", earned: 4850.20, badge: "🥇" },
             { rank: 2, name: "Liam Johnson", vip: "VIP 7 (Diamond)", earned: 4620.00, badge: "🥈" },
@@ -902,7 +900,7 @@
         }
 
         let balance = 1.00;
-        let activeInvestments = []; // Array of active VIP purchases (Supports multiple different VIPs simultaneously)
+        let activeInvestments = []; 
         let minedAccumulated = 0.00;
         let referralCount = 0;
         let lastCheckInTime = 0;
@@ -934,7 +932,6 @@
                     if (navBtn) navBtn.style.display = 'inline-block';
                 }
 
-                // Fetch user profile from Supabase
                 const { data: existingUser } = await supabaseClient
                     .from('users')
                     .select('*')
@@ -969,7 +966,6 @@
                     await supabaseClient.from('users').insert([newUser]);
                 }
 
-                // Fetch active investments for this user from user_investments table
                 const { data: invData } = await supabaseClient
                     .from('user_investments')
                     .select('*')
@@ -980,6 +976,7 @@
                     activeInvestments = invData;
                 }
 
+                // Accurate offline mining progress calculation based on elapsed time
                 const now = Date.now();
                 const elapsedSeconds = Math.floor((now - lastActiveTimestamp) / 1000);
                 if (elapsedSeconds > 2 && activeInvestments.length > 0) {
@@ -1066,9 +1063,20 @@
                 document.getElementById('balanceDisplay').innerText = balance.toFixed(2);
                 
                 let totalActiveCapital = 0;
-                activeInvestments.forEach(inv => { totalActiveCapital += Number(inv.amount); });
+                let weightedRateSum = 0;
+
+                activeInvestments.forEach(inv => { 
+                    const amt = Number(inv.amount);
+                    const rate = Number(inv.daily_percent);
+                    totalActiveCapital += amt;
+                    weightedRateSum += (amt * rate);
+                });
+
+                // Calculate weighted average daily percentage across all active VIPs
+                let combinedDailyRatePct = totalActiveCapital > 0 ? (weightedRateSum / totalActiveCapital) * 100 : 0;
 
                 document.getElementById('activeInvDisplay').innerText = totalActiveCapital.toFixed(2);
+                document.getElementById('activeRateDisplay').innerText = combinedDailyRatePct.toFixed(0) + '%';
                 document.getElementById('profileInvDisplay').innerText = totalActiveCapital.toFixed(2);
                 document.getElementById('refCountDisplay').innerText = referralCount;
                 document.getElementById('profileIdDisplay').innerText = telegramId;
@@ -1132,7 +1140,6 @@
             } catch(e) {}
         }
 
-        // Milestone rewards (20, 30, 50, 100 referrals)
         const milestoneRules = [
             { count: 20, reward: 2.00, label: "20 Friends ($2.00)" },
             { count: 30, reward: 4.00, label: "30 Friends ($4.00)" },
@@ -1240,7 +1247,6 @@
             const tObj = translations[currentLang] || translations['en'];
             
             c.innerHTML = vipTiersData.map(t => {
-                // Check if user already owns this specific VIP tier
                 const alreadyPurchased = activeInvestments.some(inv => inv.vip_level === t.name);
                 const ratePct = (t.rate * 100).toFixed(0);
 
@@ -1286,7 +1292,6 @@
                 triggerHaptic();
                 const t = vipTiersData[lvl];
 
-                // Check if already bought
                 const alreadyPurchased = activeInvestments.some(inv => inv.vip_level === t.name);
                 if (alreadyPurchased) {
                     showPushNotification('You already own this VIP tier!');
@@ -1427,6 +1432,9 @@
         async function processWithdraw() {
             const amt = parseFloat(document.getElementById('withdrawAmountInput').value || 0);
             const net = document.getElementById('withdrawNetwork').value;
+            const walletAddr = document.getElementById('withdrawWalletInput').value.trim();
+
+            if (!walletAddr) { showPushNotification('Please enter your wallet address'); return; }
             if (amt < 5 || amt > balance) { showPushNotification('Invalid amount'); return; }
             if (activeInvestments.length === 0) { showPushNotification('At least VIP 1 required for withdrawal'); return; }
 
@@ -1437,6 +1445,7 @@
                 type: 'WITHDRAWAL',
                 amount: Number(amt),
                 network: net,
+                address: walletAddr,
                 status: 'PENDING'
             }]);
 
@@ -1494,7 +1503,7 @@
 
         async function loadAdminWithdrawals() {
             const { data } = await supabaseClient.from('transactions').select('*').eq('type', 'WITHDRAWAL').eq('status', 'PENDING');
-            document.getElementById('adminWithdrawalsList').innerHTML = data && data.length ? data.map(tx => `<div>${tx.user_name} - $${tx.amount} <button onclick="approveTx('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'WITHDRAWAL')">Approve</button></div>`).join('') : 'No pending.';
+            document.getElementById('adminWithdrawalsList').innerHTML = data && data.length ? data.map(tx => `<div>${tx.user_name} - $${tx.amount} <button onclick="handleWithdrawalAction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'APPROVED')">Approve</button> <button onclick="handleWithdrawalAction('${tx.id}', '${tx.telegram_id}', ${tx.amount}, 'REJECTED')">Reject (Refund)</button></div>`).join('') : 'No pending.';
         }
 
         async function loadAdminSupportTickets() {
@@ -1510,6 +1519,19 @@
             }
             showPushNotification('Approved!');
             loadAdminDeposits();
+        }
+
+        async function handleWithdrawalAction(txId, userId, amount, actionStatus) {
+            await supabaseClient.from('transactions').update({ status: actionStatus }).eq('id', txId);
+            if (actionStatus === 'REJECTED') {
+                const { data: usr } = await supabaseClient.from('users').select('*').eq('telegram_id', userId).maybeSingle();
+                if (usr) {
+                    const refundedBalance = Number(usr.balance || 0) + Number(amount);
+                    await supabaseClient.from('users').update({ balance: refundedBalance }).eq('telegram_id', userId);
+                }
+            }
+            showPushNotification(`Withdrawal ${actionStatus.toLowerCase()}!`);
+            loadAdminWithdrawals();
         }
     </script>
 </body>
