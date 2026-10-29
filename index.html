@@ -1712,7 +1712,7 @@
         async function handleWithdrawalAction(txId, userId, amount, actionStatus) {
             await supabaseClient.from('transactions').update({ status: actionStatus }).eq('id', txId);
             if (actionStatus === 'REJECTED') {
-                const { data: usr } = await supabaseClient.from('users').select('*').eq('telegram_id`, userId).maybeSingle();
+                const { data: usr } = await supabaseClient.from('users').select('*').eq('telegram_id', userId).maybeSingle();
                 if (usr) {
                     const refundedBalance = Number(usr.balance || 0) + Number(amount);
                     await supabaseClient.from('users').update({ balance: refundedBalance }).eq('telegram_id', userId);
