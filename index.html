@@ -853,7 +853,7 @@
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const botUsername = 'MineralMinerPro_bot';
-        const ADMIN_TELEGRAM_ID = '7038584886'; 
+        const ADMIN_TELEGRAM_ID = '7038584886'; // UI visibility only; must never be used as server-side authorization. 
 
         const translations = {
             en: {
@@ -1176,6 +1176,7 @@
                 setInterval(saveDataToSupabase, 5000);
 
             } catch (e) {
+                console.error('App initialization failed:', e);
                 renderVipTiers();
                 renderEarnersLeaderboard();
                 renderMilestones();
@@ -1194,11 +1195,11 @@
         window.addEventListener('visibilitychange', () => { if (document.hidden) saveDataToSupabase(); });
         window.addEventListener('beforeunload', saveDataToSupabase);
 
+        let saveInProgress = false;
         async function saveDataToSupabase() {
             try {
-                if (isBanned || !telegramId) return;
+                if (isBanned || !telegramId) return false;
                 lastActiveTimestamp = Date.now();
-                
                 const payload = {
                     telegram_id: String(telegramId),
                     user_name: String(userName || 'Miner'),
@@ -1212,9 +1213,16 @@
                     history: historyLog || [],
                     is_banned: Boolean(isBanned)
                 };
-
-                await supabaseClient.from('users').upsert([payload], { onConflict: 'telegram_id' });
-            } catch(err) {}
+                const { error } = await supabaseClient.from('users').upsert([payload], { onConflict: 'telegram_id' });
+                if (error) {
+                    console.error('User save failed:', error);
+                    return false;
+                }
+                return true;
+            } catch (err) {
+                console.error('User save failed:', err);
+                return false;
+            }
         }
 
         let bannerMessageIndex = 0;
@@ -1288,24 +1296,31 @@
         }
 
         async function claimMysteryBox() {
-            try {
-                triggerHaptic();
-                const now = Date.now();
-                const fourHours = 4 * 60 * 60 * 1000;
-                if (lastMysteryBoxTime && (now - lastMysteryBoxTime < fourHours)) {
-                    document.getElementById('flyingMysteryBox').style.display = 'none';
-                    return;
-                }
-
-                lastMysteryBoxTime = now;
-                const bonusAmt = 0.005;
-                balance += bonusAmt;
-                historyLog.unshift(`🎁 Mystery Box Bonus: +$${bonusAmt.toFixed(3)}`);
-                updateUI();
-                document.getElementById('flyingMysteryBox').style.display = 'none';
-                showPushNotification('🎉 Congratulations! You found +$0.005!');
-                await saveDataToSupabase();
-            } catch(e) {}
+            if (isBanned || !telegramId) return;
+            triggerHaptic();
+            const now = Date.now();
+            const fourHours = 4 * 60 * 60 * 1000;
+            if (lastMysteryBoxTime && (now - lastMysteryBoxTime < fourHours)) {
+                const box = document.getElementById('flyingMysteryBox');
+                if (box) box.style.display = 'none';
+                return;
+            }
+            const oldTime = lastMysteryBoxTime, oldBalance = balance, oldHistory = [...historyLog];
+            lastMysteryBoxTime = now;
+            const bonusAmt = 0.005;
+            balance = Number(balance) + bonusAmt;
+            historyLog.unshift(`🎁 Mystery Box Bonus: +$${bonusAmt.toFixed(3)}`);
+            updateUI();
+            const box = document.getElementById('flyingMysteryBox');
+            if (box) box.style.display = 'none';
+            const saved = await saveDataToSupabase();
+            if (!saved) {
+                lastMysteryBoxTime = oldTime; balance = oldBalance; historyLog = oldHistory;
+                updateUI(); checkMysteryBoxVisibility();
+                showPushNotification('Could not save reward. Please try again.');
+                return;
+            }
+            showPushNotification('🎉 Congratulations! You found +$0.005!');
         }
 
         const milestoneRules = [
@@ -1468,41 +1483,37 @@
 
         async function buyVip(lvl) {
             try {
-                if (isBanned) return;
+                if (isBanned || !telegramId) return;
                 triggerHaptic();
                 const t = vipTiersData[lvl];
+                const alreadyPurchased = activeInvestments.some(inv => inv.vip_level === t.name && inv.status === 'active');
+                if (alreadyPurchased) { showPushNotification('You already own this VIP tier!'); return; }
+                if (Number(balance) < Number(t.price)) { showPushNotification('Insufficient balance!'); return; }
 
-                const alreadyPurchased = activeInvestments.some(inv => inv.vip_level === t.name);
-                if (alreadyPurchased) {
-                    showPushNotification('You already own this VIP tier!');
+                const oldBalance = Number(balance);
+                const oldHistory = [...historyLog];
+                balance = oldBalance - Number(t.price);
+                historyLog.unshift("Activated " + t.name);
+                const newInv = {
+                    telegram_id: String(telegramId), vip_level: String(t.name),
+                    amount: Number(t.price), daily_percent: Number(t.rate), status: 'active'
+                };
+                const { data: inserted, error } = await supabaseClient.from('user_investments').insert([newInv]).select().single();
+                if (error || !inserted) {
+                    balance = oldBalance; historyLog = oldHistory;
+                    updateUI();
+                    console.error('VIP purchase insert failed:', error);
+                    showPushNotification('VIP purchase was not saved. Please try again.');
                     return;
                 }
-                
-                if (balance < t.price) { 
-                    showPushNotification('Insufficient balance!'); 
-                    return; 
+                activeInvestments.push(inserted);
+                const saved = await saveDataToSupabase();
+                if (!saved) {
+                    console.warn('VIP investment saved but user snapshot update failed.');
                 }
-                
-                balance = Number(balance) - Number(t.price);
-                historyLog.unshift("Activated " + t.name);
-
-                const newInv = { 
-                    telegram_id: String(telegramId), 
-                    vip_level: String(t.name), 
-                    amount: Number(t.price),
-                    daily_percent: Number(t.rate),
-                    status: 'active'
-                };
-
-                activeInvestments.push(newInv);
-
-                await supabaseClient.from('user_investments').insert([newInv]);
-                
-                updateUI();
-                renderVipTiers();
+                updateUI(); renderVipTiers();
                 showPushNotification('Activated ' + t.name + ' successfully!');
-                await saveDataToSupabase();
-            } catch(e) {}
+            } catch(e) { console.error('VIP purchase failed:', e); showPushNotification('VIP purchase failed. Please try again.'); }
         }
 
         function liveTicker() {
@@ -1549,19 +1560,28 @@
 
         async function dailyCheckIn() {
             try {
-                if (isBanned) return;
+                if (isBanned || !telegramId) return;
                 triggerHaptic();
                 const now = Date.now();
-                if (lastCheckInTime && (now - lastCheckInTime < 86400000)) return;
-
+                if (lastCheckInTime && (now - lastCheckInTime < 86400000)) {
+                    showPushNotification('Daily check-in is not ready yet.');
+                    return;
+                }
+                const oldTime = lastCheckInTime, oldBalance = balance, oldHistory = [...historyLog];
                 lastCheckInTime = now;
-                balance += 0.02;
+                balance = Number(balance) + 0.02;
                 historyLog.unshift("Daily Check-In: +$0.02");
                 updateUI();
                 checkDailyCheckInState();
+                const saved = await saveDataToSupabase();
+                if (!saved) {
+                    lastCheckInTime = oldTime; balance = oldBalance; historyLog = oldHistory;
+                    updateUI(); checkDailyCheckInState();
+                    showPushNotification('Could not save check-in. Please try again.');
+                    return;
+                }
                 showPushNotification('Check-in reward added!');
-                await saveDataToSupabase();
-            } catch(e) {}
+            } catch(e) { console.error('Daily check-in failed:', e); }
         }
 
         function updateDepositAddress() {
@@ -1712,7 +1732,7 @@
         async function handleWithdrawalAction(txId, userId, amount, actionStatus) {
             await supabaseClient.from('transactions').update({ status: actionStatus }).eq('id', txId);
             if (actionStatus === 'REJECTED') {
-                const { data: usr } = await supabaseClient.from('users').select('*').eq('telegram_id', userId).maybeSingle();
+                const { data: usr } = await supabaseClient.from('users').select('*').eq('telegram_id': userId).maybeSingle();
                 if (usr) {
                     const refundedBalance = Number(usr.balance || 0) + Number(amount);
                     await supabaseClient.from('users').update({ balance: refundedBalance }).eq('telegram_id', userId);
