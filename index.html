@@ -365,6 +365,7 @@
         <div style="margin-top: 14px; font-size: 14px; letter-spacing: 1px;">Syncing Server State...</div>
     </div>
 
+    <!-- FIXED MYSTERY BOX WITH 4-HOUR COOLDOWN -->
     <div id="flyingMysteryBox" class="flying-mystery-box" onclick="claimMysteryBox()" title="Bonus Mystery Box!">🎁</div>
 
     <div id="pushNotificationBar" class="push-notification-bar">
@@ -1009,7 +1010,6 @@
         window.addEventListener('visibilitychange', () => { if (document.hidden) saveDataToSupabase(); });
         window.addEventListener('beforeunload', saveDataToSupabase);
 
-        // FIXED ROBUST SUPABASE UPSERT FUNCTION TO ENSURE DATA PERSISTENCE
         async function saveDataToSupabase() {
             try {
                 if (isBanned || !telegramId) return;
@@ -1031,7 +1031,7 @@
                     is_banned: Boolean(isBanned)
                 };
 
-                const { data, error } = await supabaseClient
+                const { error } = await supabaseClient
                     .from('users')
                     .upsert([payload], { onConflict: 'telegram_id' });
 
@@ -1079,6 +1079,7 @@
                 if (refInput) refInput.value = "https://t.me/" + botUsername + "/mineral_mining?startapp=ref_" + telegramId;
 
                 updateReferralMilestoneUI();
+                checkMysteryBoxVisibility();
 
                 const histHtml = historyLog.map(h => {
                     return `<div class="history-card-item">
@@ -1161,12 +1162,13 @@
             await saveDataToSupabase();
         }
 
+        // FIXED MYSTERY BOX LOGIC WITH EXACT 4-HOUR COOLDOWN
         function checkMysteryBoxVisibility() {
             const boxEl = document.getElementById('flyingMysteryBox');
             if (!boxEl) return;
             const now = Date.now();
             const fourHours = 4 * 60 * 60 * 1000;
-            if (!lastMysteryBoxTime || (now - lastMysteryBoxTime > fourHours)) {
+            if (!lastMysteryBoxTime || (now - lastMysteryBoxTime >= fourHours)) {
                 boxEl.style.display = 'flex';
             } else {
                 boxEl.style.display = 'none';
@@ -1286,24 +1288,50 @@
             `).join('');
         }
 
+        // FIXED MULTIPLE VIP PURCHASES & INDEPENDENT PERSISTENCE
         async function buyVip(lvl) {
             try {
                 if (isBanned) return;
                 triggerHaptic();
                 const t = vipTiersData[lvl];
-                if (balance < t.price) { showPushNotification('Insufficient balance!'); return; }
+                
+                if (balance < t.price) { 
+                    showPushNotification('Insufficient balance!'); 
+                    return; 
+                }
                 
                 balance = Number(balance) - Number(t.price);
                 activeInvestment = Number(t.price);
                 vipLevel = Number(t.level);
                 minedAccumulated = 0;
                 historyLog.unshift("Activated " + t.name);
+
+                const { error: investmentError } = await supabaseClient
+                    .from('user_investments')
+                    .insert([
+                        { 
+                            telegram_id: String(telegramId), 
+                            vip_level: String(t.name), 
+                            amount: Number(t.price),
+                            daily_percent: Number(t.rate),
+                            status: 'active',
+                            created_at: new Date()
+                        }
+                    ]);
+
+                if (investmentError) {
+                    console.error("Error saving VIP investment to Supabase:", investmentError);
+                    showPushNotification('Error saving investment to database!');
+                    return;
+                }
                 
                 updateUI();
                 renderVipTiers();
                 showPushNotification('Activated ' + t.name + ' successfully!');
                 await saveDataToSupabase();
-            } catch(e) {}
+            } catch(e) {
+                console.error("Unexpected error during VIP purchase:", e);
+            }
         }
 
         function liveTicker() {
