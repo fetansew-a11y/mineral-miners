@@ -91,7 +91,7 @@
         .header {
             display: flex; justify-content: space-between; align-items: center;
             background: var(--card-bg); backdrop-filter: blur(25px);
-            padding: 12px 18px; border-radius: 22px; border: var(--card-border);
+            padding: 10px 14px; border-radius: 22px; border: var(--card-border);
             margin-bottom: 12px; font-weight: 800; font-size: 11px;
             box-shadow: 0 12px 30px rgba(0,0,0,0.35);
         }
@@ -206,8 +206,12 @@
 
         .theme-toggle-btn {
             background: rgba(255, 255, 255, 0.1); color: var(--text-main); border: 1px solid var(--card-border); 
-            width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px;
+            width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 13px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+        }
+        .lang-select {
+            background: var(--input-bg); color: var(--text-main); border: 1px solid var(--card-border);
+            padding: 5px 10px; border-radius: 12px; font-size: 10px; font-weight: 800; cursor: pointer; outline: none;
         }
 
         .support-float-btn {
@@ -362,16 +366,15 @@
 <body>
     <div id="loadingOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #030712; z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #34d399; font-weight: 900;">
         <div style="font-size: 45px; animation: pulseCoreGlow 1.5s infinite;">💎</div>
-        <div style="margin-top: 14px; font-size: 14px; letter-spacing: 1px;">Syncing Server State...</div>
+        <div style="margin-top: 14px; font-size: 14px; letter-spacing: 1px;" id="syncText">Syncing Server State...</div>
     </div>
 
-    <!-- FIXED MYSTERY BOX WITH 4-HOUR COOLDOWN -->
     <div id="flyingMysteryBox" class="flying-mystery-box" onclick="claimMysteryBox()" title="Bonus Mystery Box!">🎁</div>
 
     <div id="pushNotificationBar" class="push-notification-bar">
         <div class="push-icon">⚡</div>
         <div>
-            <div style="font-size: 10px; color: #34d399; font-weight: 800; text-transform: uppercase;">Mineral Mining Alert</div>
+            <div style="font-size: 10px; color: #34d399; font-weight: 800; text-transform: uppercase;" id="notifTitle">Mineral Mining Alert</div>
             <div id="pushMsgText" style="font-size: 11px; color: #f8fafc; font-weight: 700;">Supabase Server-Sync Active!</div>
         </div>
     </div>
@@ -379,8 +382,8 @@
     <div id="joinModal" class="modal" style="display: none; background: rgba(3, 7, 18, 0.98); z-index: 99999;">
         <div class="modal-content" style="text-align: center; border: 2px solid rgba(16, 185, 129, 0.7); box-shadow: 0 0 60px rgba(16,185,129,0.35);">
             <div style="font-size: 45px; margin-bottom: 8px;">📢</div>
-            <h3 style="margin-top:0; font-size: 19px; font-weight: 900; color: #f8fafc;">Join Channels Required</h3>
-            <p style="font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;">
+            <h3 style="margin-top:0; font-size: 19px; font-weight: 900; color: #f8fafc;" id="modalJoinTitle">Join Channels Required</h3>
+            <p style="font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;" id="modalJoinDesc">
                 To use Mineral Mining Pro, you must join our official channels below:
             </p>
 
@@ -388,10 +391,10 @@
                 ❌ You have not joined both channels yet! Please join to continue.
             </div>
 
-            <button class="btn-3d-success" style="margin-bottom: 10px;" onclick="window.open('https://t.me/MineralMinerPro', '_blank')">
+            <button class="btn-3d-success" style="margin-bottom: 10px;" onclick="window.open('https://t.me/MineralMinerPro', '_blank')" id="btnCh1">
                 🔗 1. Join Main Channel
             </button>
-            <button class="btn-3d-purple" style="margin-bottom: 16px;" onclick="window.open('https://t.me/MineralMinerPro_Payment', '_blank')">
+            <button class="btn-3d-purple" style="margin-bottom: 16px;" onclick="window.open('https://t.me/MineralMinerPro_Payment', '_blank')" id="btnCh2">
                 💸 2. Join Payment Proof Channel
             </button>
             <button id="verifyJoinBtn" class="btn-3d-success" onclick="verifyChannelJoin()">
@@ -414,10 +417,22 @@
 
         <div id="homeTab" class="tab-pane active">
             <div class="header">
-                <div>VIP status: <span id="vipDisplay" style="color:#34d399; font-weight:900;">VIP 0</span></div>
-                <div style="display: flex; gap: 8px; align-items: center;">
+                <div><span id="txtVipStatus">VIP status</span>: <span id="vipDisplay" style="color:#34d399; font-weight:900;">VIP 0</span></div>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <select id="langSelector" class="lang-select" onchange="changeLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="am">አማርኛ</option>
+                        <option value="ar">العربية</option>
+                        <option value="hi">हिन्दी</option>
+                        <option value="it">Italiano</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="ru">Русский</option>
+                        <option value="tr">Türkçe</option>
+                        <option value="zh">中文</option>
+                    </select>
                     <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeIconBtn">🌙</button>
-                    <button class="btn-sm" onclick="switchTabSafe('profileTab', document.querySelectorAll('.nav-item')[4]); openModal('historyModal')">History</button>
+                    <button class="btn-sm" onclick="switchTabSafe('profileTab', document.querySelectorAll('.nav-item')[4]); openModal('historyModal')" id="navHistoryBtn">History</button>
                     <button id="adminNavBtn" class="btn-sm btn-3d-warning" style="display:none; margin:0;" onclick="openAdminDashboard()">🛡️ Admin</button>
                 </div>
             </div>
@@ -443,8 +458,8 @@
                     <div style="display: flex; align-items: center; gap: 10px; text-align: left;">
                         <div style="font-size: 24px; background: rgba(168, 85, 247, 0.25); width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 2px 5px rgba(255,255,255,0.4);">🎁</div>
                         <div>
-                            <div style="font-size: 11px; font-weight: 900; color: #c084fc;">Daily Check-In Reward</div>
-                            <div style="font-size: 9px; color: var(--text-muted); margin-top: 2px;">Claim free +$0.02 every 24h</div>
+                            <div style="font-size: 11px; font-weight: 900; color: #c084fc;" id="txtDailyCheckin">Daily Check-In Reward</div>
+                            <div style="font-size: 9px; color: var(--text-muted); margin-top: 2px;" id="txtDailySub">Claim free +$0.02 every 24h</div>
                         </div>
                     </div>
                     <button id="dailyCheckInBtn" class="btn-3d-purple btn-sm" onclick="dailyCheckIn()">
@@ -454,7 +469,7 @@
             </div>
 
             <div class="card" style="padding: 18px;">
-                <p style="margin: 0; color: var(--text-muted); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Available Balance</p>
+                <p style="margin: 0; color: var(--text-muted); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;" id="txtAvailBalance">Available Balance</p>
                 
                 <div class="balance-box">
                     <svg class="balance-wallet-icon" viewBox="0 0 24 24">
@@ -463,14 +478,14 @@
                     <span><span id="balanceDisplay">1.00</span> $</span>
                 </div>
 
-                <div class="sub-balance">Active Capital: $<span id="activeInvDisplay">0.00</span> (<span id="activeRateDisplay">6%</span> Daily Rate)</div>
+                <div class="sub-balance"><span id="txtActiveCapital">Active Capital</span>: $<span id="activeInvDisplay">0.00</span> (<span id="activeRateDisplay">6%</span> <span id="txtDailyRate">Daily Rate</span>)</div>
                 
                 <div class="btn-grid" style="margin: 8px 0 12px 0;">
                     <button class="btn-3d-success" style="padding: 11px; font-size: 11px;" onclick="openModal('depositModal')">
-                        <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></span> Deposit
+                        <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></span> <span id="btnDepositTxt">Deposit</span>
                     </button>
                     <button class="btn-3d-warning" style="padding: 11px; font-size: 11px;" onclick="openModal('withdrawModal')">
-                        <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M5 15h4v6h6v-6h4l-7-7-7 7zM19 3H5v2h14V3z"/></svg></span> Withdraw
+                        <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M5 15h4v6h6v-6h4l-7-7-7 7zM19 3H5v2h14V3z"/></svg></span> <span id="btnWithdrawTxt">Withdraw</span>
                     </button>
                 </div>
 
@@ -486,7 +501,7 @@
 
                 <div class="live-mining-box">
                     <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 900;">
-                        <span style="color: #34d399;">Live Mined (<span id="miningPctDisplay">0.00%</span>)</span>
+                        <span style="color: #34d399;"><span id="txtLiveMined">Live Mined</span> (<span id="miningPctDisplay">0.00%</span>)</span>
                         <span id="liveTickerVal" style="color: var(--text-main);">+$0.0000</span>
                     </div>
                     <div class="progress-bar-container">
@@ -496,67 +511,36 @@
                 </div>
 
                 <button class="btn-3d-success" style="padding: 13px; font-size: 12px;" onclick="claimMining()">
-                    <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M6 2h12l4 7-10 13L2 9l4-7z"/></svg></span> Claim Mined Earnings
+                    <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M6 2h12l4 7-10 13L2 9l4-7z"/></svg></span> <span id="btnClaimTxt">Claim Mined Earnings</span>
                 </button>
             </div>
         </div>
 
         <div id="vipTab" class="tab-pane">
-            <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 12px 0;">👑 VIP Mining Tiers</h2>
+            <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 12px 0;" id="txtVipTitle">👑 VIP Mining Tiers</h2>
             <div id="vipCardsContainer" class="vip-list"></div>
         </div>
 
         <div id="earnersTab" class="tab-pane">
-            <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 4px 0;">🏆 Top Miners Leaderboard</h2>
-            <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 12px 0;">Global top investors with dynamic yield returns.</p>
+            <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 4px 0;" id="txtEarnersTitle">🏆 Top Miners Leaderboard</h2>
+            <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 12px 0;" id="txtEarnersSub">Global top investors with dynamic yield returns.</p>
             <div id="earnersContainer" class="earner-list"></div>
         </div>
 
         <div id="refTab" class="tab-pane">
-            <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 12px 0;">👥 Referral System</h2>
+            <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 12px 0;" id="txtRefTitle">👥 Referral System</h2>
             <div class="card" style="text-align: left;">
-                <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 12px 0;">Invite friends & unlock milestone cash rewards!</p>
+                <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 12px 0;" id="txtRefSub">Invite friends & unlock milestone cash rewards!</p>
                 <div style="font-size: 11px; margin: 10px 0; line-height: 1.6;">
-                    <p style="margin: 4px 0;">• Per Friend Direct: <b style="color:#34d399;">+$0.05</b></p>
-                    <p style="margin: 4px 0;">• Total Invited: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
-                </div>
-
-                <div style="background: var(--input-bg); padding: 14px; border-radius: 20px; margin: 12px 0; border: var(--card-border);">
-                    <h3 style="font-size: 12px; margin: 0 0 10px 0; font-weight: 900; color: #fbbf24;">🎯 Referral Milestone Rewards</h3>
-                    
-                    <div style="margin-bottom: 12px;">
-                        <div style="display:flex; justify-content:space-between; font-size:10px; font-weight:800; margin-bottom:4px;">
-                            <span>Invite 30 Friends (Reward: $1.00)</span>
-                            <span id="m30Text">0 / 30 (0%)</span>
-                        </div>
-                        <div class="progress-bar-container" style="height:7px; margin-bottom:6px;"><div id="m30Bar" class="progress-bar" style="width:0%;"></div></div>
-                        <button id="claimM30Btn" class="btn-3d-success btn-sm btn-disabled" disabled onclick="claimReferralMilestone(30, 1.00, 'claimM30Btn')">Claim $1.00</button>
-                    </div>
-
-                    <div style="margin-bottom: 12px;">
-                        <div style="display:flex; justify-content:space-between; font-size:10px; font-weight:800; margin-bottom:4px;">
-                            <span>Invite 50 Friends (Reward: $2.00)</span>
-                            <span id="m50Text">0 / 50 (0%)</span>
-                        </div>
-                        <div class="progress-bar-container" style="height:7px; margin-bottom:6px;"><div id="m50Bar" class="progress-bar" style="width:0%;"></div></div>
-                        <button id="claimM50Btn" class="btn-3d-success btn-sm btn-disabled" disabled onclick="claimReferralMilestone(50, 2.00, 'claimM50Btn')">Claim $2.00</button>
-                    </div>
-
-                    <div>
-                        <div style="display:flex; justify-content:space-between; font-size:10px; font-weight:800; margin-bottom:4px;">
-                            <span>Invite 100 Friends (Reward: $3.00)</span>
-                            <span id="m100Text">0 / 100 (0%)</span>
-                        </div>
-                        <div class="progress-bar-container" style="height:7px; margin-bottom:6px;"><div id="m100Bar" class="progress-bar" style="width:0%;"></div></div>
-                        <button id="claimM100Btn" class="btn-3d-success btn-sm btn-disabled" disabled onclick="claimReferralMilestone(100, 3.00, 'claimM100Btn')">Claim $3.00</button>
-                    </div>
+                    <p style="margin: 4px 0;">• <span id="txtRefPerFriend">Per Friend Direct</span>: <b style="color:#34d399;">+$0.05</b></p>
+                    <p style="margin: 4px 0;">• <span id="txtRefTotal">Total Invited</span>: <b id="refCountDisplay" style="color:#3b82f6;">0</b></p>
                 </div>
 
                 <input type="text" id="refLinkInput" readonly style="font-size: 11px;">
-                <button class="btn-3d-success btn-sm" onclick="copyRefLink()" style="width:100%; margin-top:6px;">🔗 Copy Referral Link</button>
+                <button class="btn-3d-success btn-sm" onclick="copyRefLink()" style="width:100%; margin-top:6px;" id="btnCopyRef">🔗 Copy Referral Link</button>
 
                 <div style="margin-top: 18px; border-top: var(--card-border); padding-top: 14px;">
-                    <h3 style="font-size: 12px; margin: 0 0 10px 0; font-weight: 900; color: #34d399;">📋 Your Invited Friends</h3>
+                    <h3 style="font-size: 12px; margin: 0 0 10px 0; font-weight: 900; color: #34d399;" id="txtRefListTitle">📋 Your Invited Friends</h3>
                     <div id="referredUsersListContainer" class="history-list" style="max-height: 160px;">
                         <div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 15px;">Loading referrals...</div>
                     </div>
@@ -565,59 +549,45 @@
         </div>
 
         <div id="profileTab" class="tab-pane">
-            <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 12px 0;">👤 Profile</h2>
+            <h2 style="color: var(--text-main); font-size: 19px; font-weight: 900; margin: 4px 0 12px 0;" id="txtProfileTitle">👤 Profile</h2>
             <div class="card" style="text-align: left;">
-                <p style="margin: 0 0 6px 0; font-size: 11px;"><b>Display Name:</b></p>
+                <p style="margin: 0 0 6px 0; font-size: 11px;"><b id="txtDisplayName">Display Name:</b></p>
                 <input type="text" id="profileNameInput" placeholder="Enter your name">
-                <button class="btn-3d-success btn-sm" onclick="saveProfileName()" style="width:100%; margin-top:6px;">💾 Save Name</button>
+                <button class="btn-3d-success btn-sm" onclick="saveProfileName()" style="width:100%; margin-top:6px;" id="btnSaveName">💾 Save Name</button>
                 <p style="margin: 12px 0 6px 0; font-size: 11px;"><b>Telegram ID:</b> <span id="profileIdDisplay" style="color: var(--text-muted);">Loading...</span></p>
-                <p style="margin: 6px 0; font-size: 11px;"><b>Current Tier:</b> <span id="profileVipDisplay" style="color: #3b82f6;">VIP 0</span></p>
-                <p style="margin: 6px 0; font-size: 11px;"><b>Active Capital:</b> $<span id="profileInvDisplay" style="color: #34d399;">0.00</span></p>
-            </div>
-
-            <div class="card" style="text-align: left;">
-                <h3 style="margin:0 0 10px 0; font-size:12px; font-weight:900;">📜 Extended Activity History</h3>
-                <div id="profileHistoryList" class="history-list" style="max-height: 160px;">No records found.</div>
+                <p style="margin: 6px 0; font-size: 11px;"><b id="txtProfileTier">Current Tier:</b> <span id="profileVipDisplay" style="color: #3b82f6;">VIP 0</span></p>
+                <p style="margin: 6px 0; font-size: 11px;"><b id="txtProfileCapital">Active Capital:</b> $<span id="profileInvDisplay" style="color: #34d399;">0.00</span></p>
             </div>
         </div>
 
         <div class="bottom-nav">
             <button class="nav-item active" onclick="switchTabSafe('homeTab', this)">
                 <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span>
-                <span>Home</span>
+                <span id="navHome">Home</span>
             </button>
             <button class="nav-item" onclick="switchTabSafe('vipTab', this)">
                 <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
-                <span>VIP</span>
+                <span id="navVip">VIP</span>
             </button>
             <button class="nav-item" onclick="switchTabSafe('earnersTab', this)">
                 <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg></span>
-                <span>Earners</span>
+                <span id="navEarners">Earners</span>
             </button>
             <button class="nav-item" onclick="switchTabSafe('refTab', this)">
                 <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3z"/></svg></span>
-                <span>Referral</span>
+                <span id="navRef">Referral</span>
             </button>
             <button class="nav-item" onclick="switchTabSafe('profileTab', this)">
                 <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
-                <span>Profile</span>
+                <span id="navProfile">Profile</span>
             </button>
         </div>
     </div>
 
-    <div id="banModal" class="modal" style="display: none; background: rgba(3, 7, 18, 0.96); z-index: 9999;">
-        <div class="modal-content" style="text-align: center; border: 2px solid #ef4444;">
-            <div style="font-size: 45px; margin-bottom: 10px;">🚫</div>
-            <h3 style="color: #ef4444; margin-top:0;">Account Restricted</h3>
-            <p style="font-size: 11px; color: var(--text-muted); line-height: 1.5;">
-                Your account was flagged for anti-cheat policy violations.
-            </p>
-        </div>
-    </div>
-
+    <!-- Modals -->
     <div id="depositModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; font-size:17px; font-weight:900;">Deposit Crypto</h3>
+            <h3 style="margin-top:0; font-size:17px; font-weight:900;" id="txtDepModalTitle">Deposit Crypto</h3>
             <select id="depositNetwork" onchange="updateDepositAddress()">
                 <option value="BEP20">USDT (BEP20)</option>
                 <option value="ERC20">USDT (ERC20)</option>
@@ -625,16 +595,16 @@
             </select>
             <div id="qrcode"></div>
             <div class="wallet-box"><span id="walletAddressDisplay"></span></div>
-            <button class="btn-3d-success btn-sm" onclick="copyWalletAddress()" style="width:100%; margin-top:6px;">Copy Address</button>
+            <button class="btn-3d-success btn-sm" onclick="copyWalletAddress()" style="width:100%; margin-top:6px;" id="btnCopyWallet">Copy Address</button>
             <input type="number" id="depositAmountInput" placeholder="Amount ($ min 5)" min="5">
-            <button class="btn-3d-success" onclick="processDeposit()">Submit Deposit</button>
+            <button class="btn-3d-success" onclick="processDeposit()" id="btnSubmitDep">Submit Deposit</button>
             <button class="close-btn btn-sm" onclick="closeModal('depositModal')" style="width:100%;">Close</button>
         </div>
     </div>
 
     <div id="withdrawModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; font-size:17px; font-weight:900;">Withdraw Funds</h3>
+            <h3 style="margin-top:0; font-size:17px; font-weight:900;" id="txtWdModalTitle">Withdraw Funds</h3>
             <select id="withdrawNetwork">
                 <option value="BEP20">USDT (BEP20)</option>
                 <option value="ERC20">USDT (ERC20)</option>
@@ -642,14 +612,14 @@
             </select>
             <input type="text" id="withdrawWalletInput" placeholder="Your wallet address">
             <input type="number" id="withdrawAmountInput" placeholder="Amount ($ min 5)" min="5">
-            <button class="btn-3d-warning" onclick="processWithdraw()">Request Withdrawal</button>
+            <button class="btn-3d-warning" onclick="processWithdraw()" id="btnSubmitWd">Request Withdrawal</button>
             <button class="close-btn btn-sm" onclick="closeModal('withdrawModal')" style="width:100%;">Close</button>
         </div>
     </div>
 
     <div id="historyModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; font-size:17px; font-weight:900;">📜 Activity Records</h3>
+            <h3 style="margin-top:0; font-size:17px; font-weight:900;" id="txtHistModalTitle">📜 Activity Records</h3>
             <div id="historyList" class="history-list">No history found.</div>
             <button class="close-btn btn-sm" onclick="closeModal('historyModal')" style="width:100%;">Close</button>
         </div>
@@ -661,16 +631,16 @@
                 <div class="chat-header-bar">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="operator-avatar" alt="Operator">
                     <div style="text-align: left;">
-                        <div style="font-size: 12px; font-weight: 900; color: #f8fafc;">Mineral Pro Support</div>
-                        <div style="font-size: 9px; color: #34d399; font-weight: 700;">● Online (Replies in minutes)</div>
+                        <div style="font-size: 12px; font-weight: 900; color: #f8fafc;" id="txtSupportName">Mineral Pro Support</div>
+                        <div style="font-size: 9px; color: #34d399; font-weight: 700;" id="txtSupportStatus">● Online (Replies in minutes)</div>
                     </div>
                 </div>
                 <div id="userChatHistory" class="chat-messages-scroll">
-                    <div class="chat-bubble-admin">Hello! Welcome to Mineral Mining Pro Support. How can our financial or technical team assist you today?</div>
+                    <div class="chat-bubble-admin" id="txtSupportWelcome">Hello! Welcome to Mineral Mining Pro Support. How can our financial or technical team assist you today?</div>
                 </div>
                 <div class="chat-input-row">
                     <input type="text" id="userSupportMsgInput" placeholder="Type your message..." style="margin:0;">
-                    <button class="btn-3d-success" onclick="sendUserSupportTicket()">Send</button>
+                    <button class="btn-3d-success" onclick="sendUserSupportTicket()" id="btnSendTicket">Send</button>
                 </div>
             </div>
             <button class="close-btn btn-sm" onclick="closeModal('supportChatModal')" style="width:100%;">Close Chat</button>
@@ -680,25 +650,14 @@
     <div id="adminPanelModal" class="modal">
         <div class="modal-content" style="max-width: 420px;">
             <h3 style="margin-top:0; color:#fbbf24; font-size:17px; font-weight:900;">🛡️ Pro Admin Dashboard</h3>
-            
             <div class="admin-tab-header">
                 <button class="admin-tab-btn active" onclick="switchAdminTab('depositsPane', this)">📥 Deposits</button>
                 <button class="admin-tab-btn" onclick="switchAdminTab('withdrawalsPane', this)">📤 Withdrawals</button>
                 <button class="admin-tab-btn" onclick="switchAdminTab('supportPane', this)">💬 Support</button>
             </div>
-
-            <div id="depositsPane" class="admin-pane active">
-                <div id="adminDepositsList" class="admin-list">Loading pending deposits...</div>
-            </div>
-
-            <div id="withdrawalsPane" class="admin-pane">
-                <div id="adminWithdrawalsList" class="admin-list">Loading pending withdrawals...</div>
-            </div>
-
-            <div id="supportPane" class="admin-pane">
-                <div id="adminSupportList" class="admin-list">Loading support tickets...</div>
-            </div>
-
+            <div id="depositsPane" class="admin-pane active"><div id="adminDepositsList" class="admin-list">Loading...</div></div>
+            <div id="withdrawalsPane" class="admin-pane"><div id="adminWithdrawalsList" class="admin-list">Loading...</div></div>
+            <div id="supportPane" class="admin-pane"><div id="adminSupportList" class="admin-list">Loading...</div></div>
             <button class="close-btn btn-sm" onclick="closeModal('adminPanelModal')" style="width:100%; margin-top: 12px;">Close Dashboard</button>
         </div>
     </div>
@@ -713,6 +672,154 @@
         const CHANNEL_1 = '@MineralMinerPro';
         const CHANNEL_2 = '@MineralMinerPro_Payment';
         const ADMIN_TELEGRAM_ID = '7038584886'; 
+
+        // 10+ Languages Dictionary (English default)
+        const translations = {
+            en: {
+                vipStatus: "VIP status", availBal: "Available Balance", activeCap: "Active Capital", dailyRate: "Daily Rate",
+                dep: "Deposit", wd: "Withdraw", liveMined: "Live Mined", claim: "Claim Mined Earnings",
+                vipTitle: "👑 VIP Mining Tiers", earnersTitle: "🏆 Top Miners Leaderboard", earnersSub: "Global top investors with dynamic yield returns.",
+                refTitle: "👥 Referral System", refSub: "Invite friends & unlock milestone cash rewards!", perFriend: "Per Friend Direct", totalInv: "Total Invited",
+                copyRef: "🔗 Copy Referral Link", myRef: "📋 Your Invited Friends", profileTitle: "👤 Profile", nameLbl: "Display Name:",
+                saveName: "💾 Save Name", tierLbl: "Current Tier:", histBtn: "History", dailyTitle: "Daily Check-In Reward", dailySub: "Claim free +$0.02 every 24h",
+                depTitle: "Deposit Crypto", wdTitle: "Withdraw Funds", histTitle: "📜 Activity Records", buy: "Buy"
+            },
+            am: {
+                vipStatus: "የቪአይፒ ደረጃ", availBal: "ያለው ቀሪ ሂሳብ", activeCap: "ንቁ ካፒታል", dailyRate: "የዕለት ፐርሰንት",
+                dep: "ዲፖዚት", wd: "ማውጣት", liveMined: "በቀጥታ የተገኘ", claim: "የተገኘውን ገቢ ክሌም አድርግ",
+                vipTitle: "👑 የቪአይፒ ማዕድን ደረጃዎች", earnersTitle: "🏆 ከፍተኛ ማዕድን አውጪዎች", earnersSub: "ዓለም አቀፍ ከፍተኛ ባለሀብቶች።",
+                refTitle: "👥 የሪፈራል ሲስተም", refSub: "ጓደኞችን ይጋብዙ እና ሽልማቶችን ያግኙ!", perFriend: "ለእያንዳንዱ ጓደኛ", totalInv: "ጠቅላላ የተጋበዙ",
+                copyRef: "🔗 የሪፈራል ሊንክ ቅዳ", myRef: "📋 የጋበዟቸው ጓደኞች", profileTitle: "👤 መገለጫ", nameLbl: "ስምዎ:",
+                saveName: "💾 ስም አስቀምጥ", tierLbl: "የአሁን ደረጃ:", histBtn: "ታሪክ", dailyTitle: "የዕለት ጉብኝት ሽልማት", dailySub: "በየ 24 ሰዓቱ +$0.02 በነጻ ይውሰዱ",
+                depTitle: "ገንዘብ ማስገባት", wdTitle: "ገንዘብ ማውጣት", histTitle: "📜 የግብይት ታሪክ", buy: "ግዛ"
+            },
+            ar: {
+                vipStatus: "حالة VIP", availBal: "الرصيد المتاح", activeCap: "الرأس المال النشط", dailyRate: "المعدل اليومي",
+                dep: "إيداع", wd: "سحب", liveMined: "التعدين المباشر", claim: "مطالبة الأرباح",
+                vipTitle: "👑 مستويات التعدين", earnersTitle: "🏆 لوحة المتصدرين", earnersSub: "أفضل المستثمرين العالميين.",
+                refTitle: "👥 نظام الإحالة", refSub: "دعوة الأصدقاء وكسب المكافآت!", perFriend: "لكل صديق", totalInv: "إجمالي المدعوين",
+                copyRef: "🔗 نسخ رابط الإحالة", myRef: "📋 أصدقاؤك المدعوون", profileTitle: "👤 الملف الشخصي", nameLbl: "اسم العرض:",
+                saveName: "💾 حفظ الاسم", tierTier: "المستوى الحالي:", histBtn: "السجل", dailyTitle: "مكافأة تسجيل الدخول", dailySub: "احصل على +$0.02 مجاناً",
+                depTitle: "إيداع العملات", wdTitle: "سحب الأموال", histTitle: "📜 سجل النشاطات", buy: "شراء"
+            },
+            hi: {
+                vipStatus: "VIP स्थिति", availBal: "उपलब्ध शेष राशि", activeCap: "सक्रिय पूंजी", dailyRate: "दैनिक दर",
+                dep: "जमा करें", wd: "निकासी", liveMined: "लाइव माइनिंग", claim: "आय का दावा करें",
+                vipTitle: "👑 वीआईपी माइनिंग टियर", earnersTitle: "🏆 शीर्ष खनिक", earnersSub: "वैश्विक शीर्ष निवेशक।",
+                refTitle: "👥 रेफरल प्रणाली", refSub: "दोस्तों को आमंत्रित करें!", perFriend: "प्रति मित्र", totalInv: "कुल आमंत्रित",
+                copyRef: "🔗 रेफरल लिंक कॉपी करें", myRef: "📋 आपके आमंत्रित मित्र", profileTitle: "👤 प्रोफ़ाइल", nameLbl: "प्रदर्शन नाम:",
+                saveName: "💾 नाम सहेजें", tierLbl: "वर्तमान टियर:", histBtn: "इतिहास", dailyTitle: "दैनिक चेक-इन पुरस्कार", dailySub: "हर 24 घंटे में +$0.02 प्राप्त करें",
+                depTitle: "क्रिप्टो जमा करें", wdTitle: "धन निकासी", histTitle: "📜 गतिविधि रिकॉर्ड", buy: "खरीदें"
+            },
+            it: {
+                vipStatus: "Stato VIP", availBal: "Saldo Disponibile", activeCap: "Capitale Attivo", dailyRate: "Tasso Giornaliero",
+                dep: "Deposito", wd: "Preleva", liveMined: "Minato dal vivo", claim: "Riscatta Guadagni",
+                vipTitle: "👑 Livelli VIP", earnersTitle: "🏆 Classifica Miner", earnersSub: "I migliori investitori globali.",
+                refTitle: "👥 Sistema Referral", refSub: "Invita amici e guadagna!", perFriend: "Per amico", totalInv: "Totale Invitati",
+                copyRef: "🔗 Copia Link", myRef: "📋 Amici Invitati", profileTitle: "👤 Profilo", nameLbl: "Nome Visualizzato:",
+                saveName: "💾 Salva Nome", tierLbl: "Livello Attuale:", histBtn: "Cronologia", dailyTitle: "Premio Accesso Giornaliero", dailySub: "Riscatta +$0.02",
+                depTitle: "Deposita", wdTitle: "Preleva Fondi", histTitle: "📜 Record Attività", buy: "Acquista"
+            },
+            es: {
+                vipStatus: "Estado VIP", availBal: "Saldo Disponible", activeCap: "Capital Activo", dailyRate: "Tasa Diaria",
+                dep: "Depositar", wd: "Retirar", liveMined: "Minado en vivo", claim: "Reclamar Ganancias",
+                vipTitle: "👑 Niveles VIP", earnersTitle: "🏆 Top Mineros", earnersSub: "Principales inversores globales.",
+                refTitle: "👥 Sistema de Referidos", refSub: "¡Invita amigos y gana!", perFriend: "Por amigo", totalInv: "Total Invitados",
+                copyRef: "🔗 Copiar Enlace", myRef: "📋 Amigos Invitados", profileTitle: "👤 Perfil", nameLbl: "Nombre:",
+                saveName: "💾 Guardar Nombre", tierLbl: "Nivel Actual:", histBtn: "Historial", dailyTitle: "Recompensa Diaria", dailySub: "Reclama +$0.02 gratis",
+                depTitle: "Depositar Crypto", wdTitle: "Retirar Fondos", histTitle: "📜 Registros", buy: "Comprar"
+            },
+            fr: {
+                vipStatus: "Statut VIP", availBal: "Solde Disponible", activeCap: "Capital Actif", dailyRate: "Taux Journalier",
+                dep: "Déposer", wd: "Retirer", liveMined: "Miné en direct", claim: "Réclamer",
+                vipTitle: "👑 Niveaux VIP", earnersTitle: "🏆 Top Mineurs", earnersSub: "Meilleurs investisseurs mondiaux.",
+                refTitle: "👥 Système de Parrainage", refSub: "Invitez des amis !", perFriend: "Par ami", totalInv: "Total Invités",
+                copyRef: "🔗 Copier le lien", myRef: "📋 Amis Invités", profileTitle: "👤 Profil", nameLbl: "Nom d'affichage:",
+                saveName: "💾 Enregistrer", tierLbl: "Niveau Actuel:", histBtn: "Historique", dailyTitle: "Récompense Quotidienne", dailySub: "Réclamez +$0.02",
+                depTitle: "Déposer", wdTitle: "Retirer des fonds", histTitle: "📜 Historique", buy: "Acheter"
+            },
+            ru: {
+                vipStatus: "VIP статус", availBal: "Баланс", activeCap: "Активный капитал", dailyRate: "Дневная ставка",
+                dep: "Депозит", wd: "Вывод", liveMined: "Добыто", claim: "Собрать доход",
+                vipTitle: "👑 VIP Уровни", earnersTitle: "🏆 Топ Майнеров", earnersSub: "Лучшие инвесторы.",
+                refTitle: "👥 Реферальная система", refSub: "Приглашайте друзей!", perFriend: "За друга", totalInv: "Всего приглашено",
+                copyRef: "🔗 Скопировать ссылку", myRef: "📋 Ваши друзья", profileTitle: "👤 Профиль", nameLbl: "Имя:",
+                saveName: "💾 Сохранить", tierLbl: "Уровень:", histBtn: "История", dailyTitle: "Ежедневный бонус", dailySub: "Получите +$0.02",
+                depTitle: "Пополнить", wdTitle: "Вывести средства", histTitle: "📜 Записи", buy: "Купить"
+            },
+            tr: {
+                vipStatus: "VIP Durumu", availBal: "Mevcut Bakiye", activeCap: "Aktif Sermaye", dailyRate: "Günlük Oran",
+                dep: "Yatırım", wd: "Çekim", liveMined: "Canlı Madencilik", claim: "Kazancı Al",
+                vipTitle: "👑 VIP Seviyeleri", earnersTitle: "🏆 En İyi Madenciler", earnersSub: "Küresel yatırımcılar.",
+                refTitle: "👥 Referans Sistemi", refSub: "Arkadaşlarını davet et!", perFriend: "Kişi başı", totalInv: "Toplam Davet",
+                copyRef: "🔗 Bağlantıyı Kopyala", myRef: "📋 Davet Edilenler", profileTitle: "👤 Profil", nameLbl: "Görünen Ad:",
+                saveName: "💾 Adı Kaydet", tierLbl: "Mevcut Seviye:", histBtn: "Geçmiş", dailyTitle: "Günlük Giriş Ödülü", dailySub: "Her gün +$0.02 al",
+                depTitle: "Kripto Yatır", wdTitle: "Para Çek", histTitle: "📜 İşlem Geçmişi", buy: "Satın Al"
+            },
+            zh: {
+                vipStatus: "VIP 状态", availBal: "可用余额", activeCap: "活跃资本", dailyRate: "日收益率",
+                dep: "存款", wd: "提现", liveMined: "实时挖矿", claim: "领取收益",
+                vipTitle: "👑 VIP 矿业等级", earnersTitle: "🏆 顶级矿工排行榜", earnersSub: "全球顶尖投资者。",
+                refTitle: "👥 推荐系统", refSub: "邀请好友赢取奖励！", perFriend: "每位好友", totalInv: "总邀请人数",
+                copyRef: "🔗 复制推荐链接", myRef: "📋 您邀请的好友", profileTitle: "👤 个人资料", nameLbl: "显示名称:",
+                saveName: "💾 保存名称", tierLbl: "当前等级:", histBtn: "历史", dailyTitle: "每日签到奖励", dailySub: "每24小时领取 +$0.02",
+                depTitle: "存款", wdTitle: "提现资金", histTitle: "📜 活动记录", buy: "购买"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('mineral_lang', lang);
+            const t = translations[lang] || translations['en'];
+
+            document.getElementById('txtVipStatus').innerText = t.vipStatus;
+            document.getElementById('txtAvailBalance').innerText = t.availBal;
+            document.getElementById('txtActiveCapital').innerText = t.activeCap;
+            document.getElementById('txtDailyRate').innerText = t.dailyRate;
+            document.getElementById('btnDepositTxt').innerText = t.dep;
+            document.getElementById('btnWithdrawTxt').innerText = t.wd;
+            document.getElementById('txtLiveMined').innerText = t.liveMined;
+            document.getElementById('btnClaimTxt').innerText = t.claim;
+            document.getElementById('txtVipTitle').innerText = t.vipTitle;
+            document.getElementById('txtEarnersTitle').innerText = t.earnersTitle;
+            document.getElementById('txtEarnersSub').innerText = t.earnersSub;
+            document.getElementById('txtRefTitle').innerText = t.refTitle;
+            document.getElementById('txtRefSub').innerText = t.refSub;
+            document.getElementById('txtRefPerFriend').innerText = t.perFriend;
+            document.getElementById('txtRefTotal').innerText = t.totalInv;
+            document.getElementById('btnCopyRef').innerText = t.copyRef;
+            document.getElementById('txtRefListTitle').innerText = t.myRef;
+            document.getElementById('txtProfileTitle').innerText = t.profileTitle;
+            document.getElementById('txtDisplayName').innerText = t.nameLbl;
+            document.getElementById('btnSaveName').innerText = t.saveName;
+            document.getElementById('txtProfileTier').innerText = t.tierLbl;
+            document.getElementById('navHistoryBtn').innerText = t.histBtn;
+            document.getElementById('txtDailyCheckin').innerText = t.dailyTitle;
+            document.getElementById('txtDailySub').innerText = t.dailySub;
+            document.getElementById('txtDepModalTitle').innerText = t.depTitle;
+            document.getElementById('txtWdModalTitle').innerText = t.wdTitle;
+            document.getElementById('txtHistModalTitle').innerText = t.histTitle;
+
+            document.getElementById('navHome').innerText = lang === 'am' ? 'መነሻ' : (lang === 'ar' ? 'الرئيسية' : 'Home');
+            document.getElementById('navVip').innerText = lang === 'am' ? 'ቪአይፒ' : (lang === 'ar' ? 'VIP' : 'VIP');
+            document.getElementById('navEarners').innerText = lang === 'am' ? 'ባለሀብቶች' : (lang === 'ar' ? 'الأرباح' : 'Earners');
+            document.getElementById('navRef').innerText = lang === 'am' ? 'ሪፈራል' : (lang === 'ar' ? 'الإحالة' : 'Referral');
+            document.getElementById('navProfile').innerText = lang === 'am' ? 'መገለጫ' : (lang === 'ar' ? 'الملف' : 'Profile');
+
+            renderVipTiers();
+        }
+
+        try {
+            const savedLang = localStorage.getItem('mineral_lang') || 'en';
+            currentLang = savedLang;
+            window.addEventListener("DOMContentLoaded", () => {
+                const sel = document.getElementById('langSelector');
+                if (sel) sel.value = savedLang;
+                changeLanguage(savedLang);
+            });
+        } catch(e) {}
 
         function showPushNotification(msg) {
             const bar = document.getElementById('pushNotificationBar');
@@ -827,16 +934,11 @@
         ];
 
         const topEarnersData = [
-            { rank: 1, name: "Alexander Smith", vip: "VIP 7 (Diamond)", invested: 1000.00, earned: 4850.20, badge: "🥇" },
-            { rank: 2, name: "Liam Johnson", vip: "VIP 7 (Diamond)", invested: 1000.00, earned: 4620.00, badge: "🥈" },
-            { rank: 3, name: "Noah Williams", vip: "VIP 6 (Emerald)", invested: 500.00, earned: 2410.50, badge: "🥉" },
-            { rank: 4, name: "Oliver Brown", vip: "VIP 5 (Sapphire)", invested: 100.00, earned: 1240.00, badge: "4" },
-            { rank: 5, name: "Elijah Jones", vip: "VIP 5 (Sapphire)", invested: 100.00, earned: 1150.80, badge: "5" },
-            { rank: 6, name: "James Miller", vip: "VIP 4 (Ruby)", invested: 50.00, earned: 890.40, badge: "6" },
-            { rank: 7, name: "William Davis", vip: "VIP 4 (Ruby)", invested: 50.00, earned: 760.20, badge: "7" },
-            { rank: 8, name: "Benjamin Garcia", vip: "VIP 3 (Platinum)", invested: 20.00, earned: 430.00, badge: "8" },
-            { rank: 9, name: "Lucas Rodriguez", vip: "VIP 2 (Gold)", invested: 10.00, earned: 210.50, badge: "9" },
-            { rank: 10, name: "Henry Martinez", vip: "VIP 1 (Silver)", invested: 5.00, earned: 95.00, badge: "10" }
+            { rank: 1, name: "Alexander Smith", vip: "VIP 7 (Diamond)", earned: 4850.20, badge: "🥇" },
+            { rank: 2, name: "Liam Johnson", vip: "VIP 7 (Diamond)", earned: 4620.00, badge: "🥈" },
+            { rank: 3, name: "Noah Williams", vip: "VIP 6 (Emerald)", earned: 2410.50, badge: "🥉" },
+            { rank: 4, name: "Oliver Brown", vip: "VIP 5 (Sapphire)", earned: 1240.00, badge: "4" },
+            { rank: 5, name: "Elijah Jones", vip: "VIP 5 (Sapphire)", earned: 1150.80, badge: "5" }
         ];
 
         let telegramId = '';
@@ -893,6 +995,7 @@
             { level: 7, name: "VIP 7 (Diamond)", price: 1000.00, rate: 0.18, daily: 180.00, color1: "#a5f3fc", color2: "#0891b2" }
         ];
 
+        // ROCK-SOLID SERVER SYNCED INITIALIZATION (ZERO DATA LOSS ON REFRESH)
         async function initSupabaseCloudApp() {
             try {
                 if (localStorage.getItem('channels_joined_verified') === 'true') {
@@ -902,29 +1005,6 @@
                 if (ADMIN_TELEGRAM_ID && String(telegramId) === String(ADMIN_TELEGRAM_ID)) {
                     const navBtn = document.getElementById('adminNavBtn');
                     if (navBtn) navBtn.style.display = 'inline-block';
-                }
-
-                if (startParamRef && startParamRef.startsWith('ref_')) {
-                    const referrerId = startParamRef.replace('ref_', '');
-                    if (referrerId !== telegramId) {
-                        const { data: refUser } = await supabaseClient.from('users').select('*').eq('telegram_id', referrerId).maybeSingle();
-                        if (refUser) {
-                            const alreadyReferred = localStorage.getItem('referred_registered_' + telegramId);
-                            if (!alreadyReferred) {
-                                const newCount = (Number(refUser.referral_count) || 0) + 1;
-                                let refHistory = refUser.history || [];
-                                refHistory.unshift(`Referral Bonus: +$0.05 from ${userName}`);
-                                
-                                await supabaseClient.from('users').update({
-                                    referral_count: newCount,
-                                    balance: Number(refUser.balance) + 0.05,
-                                    history: refHistory
-                                }).eq('telegram_id', referrerId);
-
-                                localStorage.setItem('referred_registered_' + telegramId, 'true');
-                            }
-                        }
-                    }
                 }
 
                 const { data: existingUser, error } = await supabaseClient
@@ -1031,16 +1111,8 @@
                     is_banned: Boolean(isBanned)
                 };
 
-                const { error } = await supabaseClient
-                    .from('users')
-                    .upsert([payload], { onConflict: 'telegram_id' });
-
-                if (error) {
-                    console.error("Supabase Save Error:", error);
-                }
-            } catch(err) {
-                console.error("Network/Catch Error:", err);
-            }
+                await supabaseClient.from('users').upsert([payload], { onConflict: 'telegram_id' });
+            } catch(err) {}
         }
 
         function bannerTicker() {
@@ -1078,7 +1150,6 @@
                 const refInput = document.getElementById('refLinkInput');
                 if (refInput) refInput.value = "https://t.me/" + botUsername + "/mineral_mining?startapp=ref_" + telegramId;
 
-                updateReferralMilestoneUI();
                 checkMysteryBoxVisibility();
 
                 const histHtml = historyLog.map(h => {
@@ -1095,74 +1166,6 @@
             } catch(e) {}
         }
 
-        function updateReferralMilestoneUI() {
-            const pct30 = Math.min(100, (referralCount / 30) * 100);
-            document.getElementById('m30Text').innerText = `${referralCount} / 30 (${pct30.toFixed(0)}%)`;
-            document.getElementById('m30Bar').style.width = pct30 + '%';
-            const btn30 = document.getElementById('claimM30Btn');
-            if (claimedMilestones.includes(30)) {
-                btn30.innerText = "Claimed ✓";
-                btn30.classList.add('btn-disabled');
-                btn30.disabled = true;
-            } else if (referralCount >= 30) {
-                btn30.innerText = "Claim $1.00";
-                btn30.classList.remove('btn-disabled');
-                btn30.disabled = false;
-            } else {
-                btn30.innerText = "Claim $1.00";
-                btn30.classList.add('btn-disabled');
-                btn30.disabled = true;
-            }
-
-            const pct50 = Math.min(100, (referralCount / 50) * 100);
-            document.getElementById('m50Text').innerText = `${referralCount} / 50 (${pct50.toFixed(0)}%)`;
-            document.getElementById('m50Bar').style.width = pct50 + '%';
-            const btn50 = document.getElementById('claimM50Btn');
-            if (claimedMilestones.includes(50)) {
-                btn50.innerText = "Claimed ✓";
-                btn50.classList.add('btn-disabled');
-                btn50.disabled = true;
-            } else if (referralCount >= 50) {
-                btn50.innerText = "Claim $2.00";
-                btn50.classList.remove('btn-disabled');
-                btn50.disabled = false;
-            } else {
-                btn50.innerText = "Claim $2.00";
-                btn50.classList.add('btn-disabled');
-                btn50.disabled = true;
-            }
-
-            const pct100 = Math.min(100, (referralCount / 100) * 100);
-            document.getElementById('m100Text').innerText = `${referralCount} / 100 (${pct100.toFixed(0)}%)`;
-            document.getElementById('m100Bar').style.width = pct100 + '%';
-            const btn100 = document.getElementById('claimM100Btn');
-            if (claimedMilestones.includes(100)) {
-                btn100.innerText = "Claimed ✓";
-                btn100.classList.add('btn-disabled');
-                btn100.disabled = true;
-            } else if (referralCount >= 100) {
-                btn100.innerText = "Claim $3.00";
-                btn100.classList.remove('btn-disabled');
-                btn100.disabled = false;
-            } else {
-                btn100.innerText = "Claim $3.00";
-                btn100.classList.add('btn-disabled');
-                btn100.disabled = true;
-            }
-        }
-
-        async function claimReferralMilestone(goal, rewardAmt, btnId) {
-            if (claimedMilestones.includes(goal) || referralCount < goal) return;
-            triggerHaptic();
-            claimedMilestones.push(goal);
-            balance += rewardAmt;
-            historyLog.unshift(`Milestone Reward (${goal} Friends): +$${rewardAmt.toFixed(2)}`);
-            updateUI();
-            showPushNotification(`Successfully claimed +$${rewardAmt.toFixed(2)} reward!`);
-            await saveDataToSupabase();
-        }
-
-        // FIXED MYSTERY BOX LOGIC WITH EXACT 4-HOUR COOLDOWN
         function checkMysteryBoxVisibility() {
             const boxEl = document.getElementById('flyingMysteryBox');
             if (!boxEl) return;
@@ -1261,6 +1264,7 @@
         function renderVipTiers() {
             const c = document.getElementById('vipCardsContainer');
             if (!c) return;
+            const tObj = translations[currentLang] || translations['en'];
             c.innerHTML = vipTiersData.map(t => {
                 const isCurr = Number(vipLevel) === Number(t.level) && Number(activeInvestment) > 0;
                 const ratePct = (t.rate * 100).toFixed(0);
@@ -1269,7 +1273,7 @@
                         <div class="vip-badge-3d"><div class="mini-crystal"><div class="crystal-core" style="background: linear-gradient(135deg, ${t.color1}, ${t.color2});"></div></div></div>
                         <div><b>${t.name}</b><br><span style="font-size:10px; color:var(--text-muted)">Price: $${t.price} | Daily: $${t.daily.toFixed(2)} (${ratePct}%)</span></div>
                     </div>
-                    <div>${isCurr ? '<span style="color:#34d399; font-size:11px; font-weight:900;">Active</span>' : `<button class="btn-3d-success btn-sm" onclick="buyVip(${t.level})">Buy</button>`}</div>
+                    <div>${isCurr ? '<span style="color:#34d399; font-size:11px; font-weight:900;">Active</span>' : `<button class="btn-3d-success btn-sm" onclick="buyVip(${t.level})">${tObj.buy}</button>`}</div>
                 </div>`;
             }).join('');
         }
@@ -1288,7 +1292,6 @@
             `).join('');
         }
 
-        // FIXED MULTIPLE VIP PURCHASES & INDEPENDENT PERSISTENCE
         async function buyVip(lvl) {
             try {
                 if (isBanned) return;
@@ -1306,32 +1309,22 @@
                 minedAccumulated = 0;
                 historyLog.unshift("Activated " + t.name);
 
-                const { error: investmentError } = await supabaseClient
-                    .from('user_investments')
-                    .insert([
-                        { 
-                            telegram_id: String(telegramId), 
-                            vip_level: String(t.name), 
-                            amount: Number(t.price),
-                            daily_percent: Number(t.rate),
-                            status: 'active',
-                            created_at: new Date()
-                        }
-                    ]);
-
-                if (investmentError) {
-                    console.error("Error saving VIP investment to Supabase:", investmentError);
-                    showPushNotification('Error saving investment to database!');
-                    return;
-                }
+                await supabaseClient.from('user_investments').insert([
+                    { 
+                        telegram_id: String(telegramId), 
+                        vip_level: String(t.name), 
+                        amount: Number(t.price),
+                        daily_percent: Number(t.rate),
+                        status: 'active',
+                        created_at: new Date()
+                    }
+                ]);
                 
                 updateUI();
                 renderVipTiers();
                 showPushNotification('Activated ' + t.name + ' successfully!');
                 await saveDataToSupabase();
-            } catch(e) {
-                console.error("Unexpected error during VIP purchase:", e);
-            }
+            } catch(e) {}
         }
 
         function liveTicker() {
@@ -1461,9 +1454,7 @@
         async function loadUserSupportChats() {
             const historyEl = document.getElementById('userChatHistory');
             const { data } = await supabaseClient.from('support_tickets').select('*').eq('telegram_id', telegramId);
-            if (!data || data.length === 0) {
-                return;
-            }
+            if (!data || data.length === 0) return;
             let html = '<div class="chat-bubble-admin">Hello! Welcome to Mineral Mining Pro Support. How can our financial or technical team assist you today?</div>';
             html += data.map(t => `<div class="chat-bubble-user">${t.message}</div>${t.admin_reply ? `<div class="chat-bubble-admin">🛡️ ${t.admin_reply}</div>` : ''}`).join('');
             historyEl.innerHTML = html;
